@@ -1,7 +1,11 @@
-package com.stamp20.app;
+package com.stamp20.app.activity;
+
+import com.stamp20.app.base.BaseTitleActivity;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.stamp20.app.R;
 
 public class MainActivity extends BaseTitleActivity implements View.OnClickListener {
 

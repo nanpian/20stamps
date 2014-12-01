@@ -1,4 +1,4 @@
-package com.stamp20.app;
+package com.stamp20.app.base;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.stamp20.app.R;
 
 public class BaseTitleActivity extends Activity {
 
