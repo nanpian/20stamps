@@ -2,8 +2,6 @@ package com.stamp20.app;
 
 import java.io.FileNotFoundException;
 
-import com.stamp20.filter.IImageFilter;
-import com.stamp20.filter.Image;
 import com.stamp20.app.R;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -19,6 +17,8 @@ import android.widget.Button;
 import android.widget.Gallery;
 
 import com.stamp20.app.adapter.ImageFilterAdapter;
+import com.stamp20.app.filter.IImageFilter;
+import com.stamp20.app.filter.Image;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.StampView;
 
@@ -29,7 +29,7 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
     private Button btnSelect;
     private Button btnViewCard;
     private StampView mStampView;
-	private Bitmap bitmapSource;
+    private Bitmap bitmapSource;
 
     private static final int SELECT_PIC = 1;
 
@@ -45,28 +45,26 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
 
         getActionBar().hide();
         setTitle(titleName);
-        
+
         LoadImageFilter();
     }
 
-    
     private void LoadImageFilter() {
-		// TODO Auto-generated method stub
-		Gallery gallery = (Gallery) findViewById(R.id.galleryFilter);
-		final ImageFilterAdapter filterAdapter = new ImageFilterAdapter(
-				MainActivity.this);
-		gallery.setAdapter(new ImageFilterAdapter(this));
-		gallery.setSelection(2);
-		gallery.setAnimationDuration(3000);
-		gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-				IImageFilter filter = (IImageFilter) filterAdapter.getItem(position);
-				new processImageTask(MainActivity.this, filter).execute();
-			}
-		});
-	}
+        // TODO Auto-generated method stub
+        Gallery gallery = (Gallery) findViewById(R.id.galleryFilter);
+        final ImageFilterAdapter filterAdapter = new ImageFilterAdapter(MainActivity.this);
+        gallery.setAdapter(new ImageFilterAdapter(this));
+        gallery.setSelection(2);
+        gallery.setAnimationDuration(3000);
+        gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                IImageFilter filter = (IImageFilter) filterAdapter.getItem(position);
+                new processImageTask(MainActivity.this, filter).execute();
+            }
+        });
+    }
 
-	@Override
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.btn_select_pic:
@@ -96,7 +94,7 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
             try {
                 bitmapSource = BitmapFactory.decodeStream(cr.openInputStream(uri)).copy(Bitmap.Config.ARGB_8888, true);
                 // draw this bitmap to canvas over stamp background
-                mStampView.setBitmap(bitmapSource);
+                mStampView.setBmpStamp(bitmapSource);
                 mStampView.invalidate();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -104,58 +102,58 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    
+
     public class processImageTask extends AsyncTask<Void, Void, Bitmap> {
-		private IImageFilter filter;
+        private IImageFilter filter;
         private Activity activity = null;
-		public processImageTask(Activity activity, IImageFilter imageFilter) {
-			this.filter = imageFilter;
-			this.activity = activity;
-		}
 
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-		}
+        public processImageTask(Activity activity, IImageFilter imageFilter) {
+            this.filter = imageFilter;
+            this.activity = activity;
+        }
 
-		public Bitmap doInBackground(Void... params) {
-			Image img = null;
-			try
-	    	{
-				//Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.image);
-				Bitmap bitmap = bitmapSource;
-				img = new Image(bitmap);
-				if (filter != null) {
-					img = filter.process(img);
-					img.copyPixelsFromBuffer();
-				}
-				return img.getImage();
-	    	}
-			catch(Exception e){
-				if (img != null && img.destImage.isRecycled()) {
-					img.destImage.recycle();
-					img.destImage = null;
-					System.gc(); // ����ϵͳ��ʱ����
-				}
-			}
-			finally{
-				if (img != null && img.image.isRecycled()) {
-					img.image.recycle();
-					img.image = null;
-					System.gc(); // ����ϵͳ��ʱ����
-				}
-			}
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Bitmap result) {
-			if(result != null){
-				super.onPostExecute(result);
-				mStampView.setBitmap(result);	
-			}
-		}
-	}
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+        }
+
+        public Bitmap doInBackground(Void... params) {
+            Image img = null;
+            try {
+                // Bitmap bitmap =
+                // BitmapFactory.decodeResource(activity.getResources(),
+                // R.drawable.image);
+                Bitmap bitmap = bitmapSource;
+                img = new Image(bitmap);
+                if (filter != null) {
+                    img = filter.process(img);
+                    img.copyPixelsFromBuffer();
+                }
+                return img.getImage();
+            } catch (Exception e) {
+                if (img != null && img.destImage.isRecycled()) {
+                    img.destImage.recycle();
+                    img.destImage = null;
+                    System.gc(); // ����ϵͳ��ʱ����
+                }
+            } finally {
+                if (img != null && img.image.isRecycled()) {
+                    img.image.recycle();
+                    img.image = null;
+                    System.gc(); // ����ϵͳ��ʱ����
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                super.onPostExecute(result);
+                mStampView.setBmpStamp(result);
+            }
+        }
+    }
 
 }

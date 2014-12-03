@@ -18,8 +18,8 @@
 
 package com.stamp20.app.textures;
 
-import com.stamp20.filter.IImageFilter;
-import com.stamp20.filter.Image;
+import com.stamp20.app.filter.IImageFilter;
+import com.stamp20.app.filter.Image;
 
 public class TexturerFilter  implements IImageFilter{
 	 // texture generator

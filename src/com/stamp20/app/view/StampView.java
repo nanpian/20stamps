@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -16,45 +16,57 @@ import com.stamp20.app.util.Log;
 
 public class StampView extends SurfaceView implements Callback {
 
-    private Paint paint = new Paint();
-    private Bitmap bitmap;
+    private Bitmap bmpStampBackground = null;
+    private Bitmap bmpStamp = null;
 
     public StampView(Context context) {
         super(context);
         getHolder().addCallback(this);
-    }
-
-    public StampView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        getHolder().addCallback(this);
+        Resources res = getResources();
+        bmpStampBackground = BitmapFactory.decodeResource(res, R.drawable.stamp_bg);
     }
 
     public StampView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
+        Resources res = getResources();
+        bmpStampBackground = BitmapFactory.decodeResource(res, R.drawable.stamp_bg);
     }
 
-    public Paint getPaint() {
-        return paint;
+    public StampView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        getHolder().addCallback(this);
+        Resources res = getResources();
+        bmpStampBackground = BitmapFactory.decodeResource(res, R.drawable.stamp_bg);
     }
 
-    public void setPaint(Paint paint) {
-        this.paint = paint;
+    public Bitmap getBmpStampBackground() {
+        return bmpStampBackground;
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    public void setBmpStampBackground(Bitmap bmpStampBackground) {
+        this.bmpStampBackground = bmpStampBackground;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public Bitmap getBmpStamp() {
+        return bmpStamp;
+    }
+
+    public void setBmpStamp(Bitmap bmpStamp) {
+        this.bmpStamp = bmpStamp;
     }
 
     public void draw(Bitmap bitmap) {
-        Log.d(this,"draw()...");
+        Log.d(this, "draw()...");
         Canvas canvas = getHolder().lockCanvas();
         canvas.save();
-        canvas.drawBitmap(bitmap, getWidth() / 8, getHeight() / 8, null);
+        canvas.drawColor(Color.parseColor("#282828"));
+        // draw stamp background
+        canvas.drawBitmap(getBmpStampBackground(), getWidth() / 8, getHeight() / 8, null);
+        //draw stamp
+        if (bitmap != null) {
+            canvas.drawBitmap(bitmap, getWidth() / 4, getHeight() / 4, null);
+        }
         canvas.restore();
         getHolder().unlockCanvasAndPost(canvas);
     }
@@ -62,27 +74,18 @@ public class StampView extends SurfaceView implements Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(this, "surfaceCreated()...");
-        if (getBitmap() != null) {
-            draw(getBitmap());
-        } else {
-            Resources res = getResources();
-            Bitmap bmp = BitmapFactory.decodeResource(res, R.drawable.stamp_bg);
-            setBitmap(bmp);
-            draw(bmp);
-        }
+        draw(getBmpStamp());
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.d(this, "surfaceChanged()...");
-        draw(getBitmap());
+        draw(getBmpStamp());
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.d(this, "surfaceDestroyed()...");
-        // TODO Auto-generated method stub
-
     }
 
 }

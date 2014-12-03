@@ -18,7 +18,7 @@
 
 package com.stamp20.app.textures;
 
-import com.stamp20.filter.*;
+import com.stamp20.app.filter.*;
 
 public class WoodTexture implements ITextureGenerator
 {

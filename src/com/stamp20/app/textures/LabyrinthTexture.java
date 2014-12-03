@@ -18,7 +18,7 @@
 
 package com.stamp20.app.textures;
 
-import com.stamp20.filter.NoiseFilter;
+import com.stamp20.app.filter.NoiseFilter;
 
 public class LabyrinthTexture implements ITextureGenerator
 {
