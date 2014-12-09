@@ -165,14 +165,14 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                 int w = bitmap.getWidth();
                 int h = bitmap.getHeight();
 //                zoomMatrix.postScale(1.0f, 1.0f);
-                Bitmap zoomBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), zoomMatrix, true);
+                Bitmap zoomBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), zoomMatrix, false);
                 int left = (int) mStampPoints.getX();
                 int top = (int) mStampPoints.getY();
                 int right = (int) (mStampPoints.getX() + zoomBitmap.getWidth());
                 int bottom = (int) (mStampPoints.getY() + zoomBitmap.getHeight());
 //                Log.d(this, left + ", " + top + ", " + right + ", " + bottom);
                 mStampRect.set(left, top, right, bottom);
-                if (mode == NONE) {
+                /*if (mode == NONE) {
                     // 此处为剪切画布，移动图案松手后，只在邮票框内显示图案
                     canvas.save();
                     canvas.clipRect(mStampCenterRect);
@@ -180,12 +180,17 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                     canvas.restore();
                     // canvas.drawBitmap(newBitmap, null, mStampCenterRect,
                     // mStampPaint);
-                } else if (mode == DRAG) {
+                } else */if (mode == DRAG) {
                     canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
                 } else if (mode == ZOOM) {
                     
                     canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
                 }
+                canvas.save();
+                canvas.clipRect(mStampCenterRect);
+                mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+                canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
+                canvas.restore();
             }
 
             //画出最上层的邮票框
@@ -264,7 +269,7 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         if (mode == DRAG) {
             Log.d(this, "DRAG...");
             mStampBackgroundPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
-            mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            mStampPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
             deltaX = event.getX() - x;
             deltaY = event.getY() - y;
             x = event.getX();
@@ -274,6 +279,7 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
             draw(getBmpStamp());
             // 缩放图片
         } else if (mode == ZOOM && event.getPointerCount() == 2) {
+            mStampPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
             float offsetX = event.getX(0) - event.getX(1);
             float offsetY = event.getY(0) - event.getY(1);
             currentDistance = getDistance(offsetX, offsetY);
@@ -288,6 +294,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                     sx = 1.01f;
                     sy = 1.01f;
                     zoomMatrix.postScale(sx, sy);
+                    mStampPoints.setX(mStampPoints.getX()/1.01f);
+                    mStampPoints.setY(mStampPoints.getY()/1.01f);
                     draw(getBmpStamp());
                 } else if (lastDistance - currentDistance > 15) {
                     lastDistance = currentDistance;
@@ -295,6 +303,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                     sx = 0.99f;
                     sy = 0.99f;
                     zoomMatrix.postScale(sx, sy);
+                    mStampPoints.setX(mStampPoints.getX()/0.99f);
+                    mStampPoints.setY(mStampPoints.getY()/0.99f);
                     draw(getBmpStamp());
                 }
             }
