@@ -54,12 +54,14 @@
 
     <Button
         android:id="@+id/button"
+        android:background="@android:color/transparent" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/ll"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="立即体验"
-        android:visibility="gone" 
-        android:layout_marginBottom="10dp"/>
+        android:text="      "
+        android:visibility="gone"
+      />
 
 </RelativeLayout>

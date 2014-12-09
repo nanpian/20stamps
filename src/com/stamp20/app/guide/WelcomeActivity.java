@@ -3,10 +3,6 @@ package com.stamp20.app.guide;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.stamp20.app.MainActivity;
-import com.stamp20.app.R;
-import com.stamp20.app.util.Constant;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,13 +11,19 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.stamp20.app.R;
+import com.stamp20.app.activities.MainActivity;
+import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.Log;
 
 public class WelcomeActivity extends Activity implements OnClickListener,
         OnPageChangeListener {
@@ -38,6 +40,10 @@ public class WelcomeActivity extends Activity implements OnClickListener,
     private static final int[] mPics = { R.drawable.guide1, R.drawable.guide2,
             R.drawable.guide3, R.drawable.guide4 };
 
+    private int mCurrentViewPagerState = 0;
+    private int mCurrentPage = 0;
+    private float mCurrentPageMove = 0;
+    
     // 底部页面指示器图片
     private ImageView[] mDots;
 
@@ -90,10 +96,24 @@ public class WelcomeActivity extends Activity implements OnClickListener,
                         .edit()
                         .putBoolean(
                                 Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
-                                false).commit();
+                                true).commit();
                 finish();
             }
         });
+/*        runOnUiThread(new Runnable() {
+            
+            @Override
+            public void run() {
+                if(mCurrentPage == 0 && mCurrentViewPagerState == 0){
+                    ImageView iv = (ImageView) mViews.get(0).findViewById(R.id.pic3);
+                    iv.startAnimation(AnimationUtil.getTranslateAnimation(0,300,0,0,null));
+                    
+                    ImageView iv2 = (ImageView) mViews.get(0).findViewById(R.id.pic2);
+                    iv2.startAnimation(AnimationUtil.getTranslateAnimation(0, 0, 0, -250,null));
+                }
+            }
+        });*/
+
     }
 
     private void initDots() {
@@ -137,13 +157,33 @@ public class WelcomeActivity extends Activity implements OnClickListener,
     }
 
     // 当滑动状态改变时调用
+    /**
+     * arg0:
+     *     1,表示正在滑动
+     *     2,表示滑动完毕
+     *     3,表示什么都没做
+     */
     @Override
     public void onPageScrollStateChanged(int arg0) {
+        mCurrentViewPagerState = arg0;
     }
 
     // 当当前页面被滑动时调用
+    /**
+     * arg0:标识当前页面
+     *      0,第一页
+     *      1,第二页
+     *      2,第三页
+     *      3,第四页
+     * arg1:当前页面偏移的百分比
+     *      从0.0开始变化到1.0
+     * arg2:当前页面偏移的像素位置   
+     */
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2) {
+        Log.i("xixia", "arg0:"+arg0+",arg1:"+arg1+",arg2:"+arg2);
+        mCurrentPage = arg0;
+        mCurrentPageMove = arg1;
     }
 
     // 当新的页面被选中时调用

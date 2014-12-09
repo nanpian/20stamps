@@ -1,7 +1,7 @@
 package com.stamp20.app.guide;
 
-import com.stamp20.app.MainActivity;
 import com.stamp20.app.R;
+import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.util.Constant;
 
 import android.app.Activity;
