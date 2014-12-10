@@ -96,7 +96,7 @@ public class WelcomeActivity extends Activity implements OnClickListener,
                         .edit()
                         .putBoolean(
                                 Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
-                                true).commit();
+                                false).commit();
                 finish();
             }
         });
@@ -117,7 +117,7 @@ public class WelcomeActivity extends Activity implements OnClickListener,
     }
 
     private void initDots() {
-        LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
+        /*LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
 
         mDots = new ImageView[mPics.length];
 
@@ -131,7 +131,7 @@ public class WelcomeActivity extends Activity implements OnClickListener,
 
         currentIndex = 0;
         mDots[currentIndex].setEnabled(false);// 设置为白色，表示当前页面
-    }
+*/    }
 
     /**
      * 设置当前的引导页
@@ -190,7 +190,7 @@ public class WelcomeActivity extends Activity implements OnClickListener,
     @Override
     public void onPageSelected(int arg0) {
         // 设置底部小点选中状态
-        setCurDot(arg0);
+        /*setCurDot(arg0);*/
         if (arg0 == 3) {
             mButton.setVisibility(View.VISIBLE);
 
@@ -203,7 +203,7 @@ public class WelcomeActivity extends Activity implements OnClickListener,
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         setCurView(position);
-        setCurDot(position);
+        /*setCurDot(position);*/
     }
 
     class WelcomeViewPagerAdapter extends PagerAdapter {

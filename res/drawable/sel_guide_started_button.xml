@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/dra_guide_started_button_pressed_not" android:state_pressed="false"/>
+    <item android:drawable="@drawable/dra_guide_started_button_pressed_yes" android:state_pressed="true"/>
+
+</selector>

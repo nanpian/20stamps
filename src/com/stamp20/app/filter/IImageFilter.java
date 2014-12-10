@@ -18,8 +18,10 @@
 
 package com.stamp20.app.filter;
 
+import android.graphics.Bitmap;
+
 public interface IImageFilter {
-	 public Image process(Image imageIn);
+	 public Bitmap process(Bitmap imageIn);
 	 
 	 public static double  LIB_PI = 3.14159265358979323846;
 	 

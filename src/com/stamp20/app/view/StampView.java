@@ -1,6 +1,5 @@
 package com.stamp20.app.view;
 
-import android.R.integer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -10,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -25,8 +26,12 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
 
     private Bitmap bmpStampBackground = null;
     private Bitmap bmpStamp = null;
+    private Bitmap bmpBtnReversal = null;
+
     private StampPoints mStampBackgroundPoints = null;
     private StampPoints mStampPoints = null;
+    private StampPoints mBtnReversalPoints = null;
+    private boolean isHorizontal = true;
 
     private Paint mStampBackgroundPaint = null;
     private Paint mStampPaint = null;
@@ -47,6 +52,9 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
     private int DRAG = 1;
     private int ZOOM = 2;
     private int mode = NONE;
+    private boolean isBtnReversalClicked = false;
+
+    private static final int MSG_ROTATE_STAMP_VIEW = 1100;
 
     public StampView(Context context) {
         super(context);
@@ -67,9 +75,11 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         getHolder().addCallback(this);
         Resources res = getResources();
         bmpStampBackground = BitmapFactory.decodeResource(res, R.drawable.background_stamp_h_transparent_pierced);
+        bmpBtnReversal = BitmapFactory.decodeResource(res, R.drawable.icon_rotation_left);
 
         mStampBackgroundPoints = new StampPoints();
         mStampPoints = new StampPoints();
+        mBtnReversalPoints = new StampPoints();
 
         mStampBackgroundPaint = new Paint();
         mStampPaint = new Paint();
@@ -98,6 +108,7 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
     }
 
     public void setBmpStampBackground(int resId) {
+        this.bmpStampBackground = null;
         Resources res = getResources();
         this.bmpStampBackground = BitmapFactory.decodeResource(res, resId);
     }
@@ -121,6 +132,27 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         this.stampViewCanvasColor = stampViewCanvasColor;
     }
 
+    public boolean isHorizontal() {
+        return isHorizontal;
+    }
+
+    public void setHorizontal(boolean isHorizontal) {
+        this.isHorizontal = isHorizontal;
+    }
+
+    public Bitmap getBmpBtnReversal() {
+        return bmpBtnReversal;
+    }
+
+    public void setBmpBtnReversal(Bitmap bmpBtnReversal) {
+        this.bmpBtnReversal = bmpBtnReversal;
+    }
+
+    public void setBmpBtnReversal(int resId) {
+        Resources res = getResources();
+        this.bmpBtnReversal = BitmapFactory.decodeResource(res, resId);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Log.d(this, "onMeasure()...");
@@ -128,10 +160,13 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         Log.d(this, "width:" + getWidth() + ", height:" + getHeight());
         int bmpStampBackgroundWidth = bmpStampBackground.getWidth();
         int bmpStampBackgroundHeight = bmpStampBackground.getHeight();
+        Log.d(this, "bmpStampBackgroundWidth:" + bmpStampBackgroundWidth + "bmpStampBackgroundHeight:" + bmpStampBackgroundHeight);
         mStampBackgroundPoints.setX(getWidth() / 2 - bmpStampBackgroundWidth / 2);
         mStampBackgroundPoints.setY(getHeight() / 2 - bmpStampBackgroundHeight / 2);
         mStampPoints.setX(mStampBackgroundPoints.getX() + 20);
         mStampPoints.setY(mStampBackgroundPoints.getY() + 20);
+        mBtnReversalPoints.setX(mStampBackgroundPoints.getX() + bmpStampBackgroundWidth - bmpBtnReversal.getWidth() / 2);
+        mBtnReversalPoints.setY(mStampBackgroundPoints.getY() - bmpBtnReversal.getHeight() / 2);
 
         int left = getWidth() / 2 - bmpStampBackgroundWidth / 2;
         int top = getHeight() / 2 - bmpStampBackgroundHeight / 2;
@@ -164,28 +199,19 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                 // matrix.postScale(Math.min(sx, sy), Math.min(sx, sy));
                 int w = bitmap.getWidth();
                 int h = bitmap.getHeight();
-//                zoomMatrix.postScale(1.0f, 1.0f);
                 Bitmap zoomBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), zoomMatrix, false);
                 int left = (int) mStampPoints.getX();
                 int top = (int) mStampPoints.getY();
                 int right = (int) (mStampPoints.getX() + zoomBitmap.getWidth());
                 int bottom = (int) (mStampPoints.getY() + zoomBitmap.getHeight());
-//                Log.d(this, left + ", " + top + ", " + right + ", " + bottom);
                 mStampRect.set(left, top, right, bottom);
-                /*if (mode == NONE) {
-                    // 此处为剪切画布，移动图案松手后，只在邮票框内显示图案
-                    canvas.save();
-                    canvas.clipRect(mStampCenterRect);
-                    canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
-                    canvas.restore();
-                    // canvas.drawBitmap(newBitmap, null, mStampCenterRect,
-                    // mStampPaint);
-                } else */if (mode == DRAG) {
+                if (mode == DRAG) {
                     canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
                 } else if (mode == ZOOM) {
-                    
+
                     canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
                 }
+                // 画出邮票中间部分，让图片在中间区域不透明
                 canvas.save();
                 canvas.clipRect(mStampCenterRect);
                 mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
@@ -193,8 +219,10 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                 canvas.restore();
             }
 
-            //画出最上层的邮票框
+            // 画出最上层的邮票框
             canvas.drawBitmap(getBmpStampBackground(), mStampBackgroundPoints.getX(), mStampBackgroundPoints.getY(), mStampBackgroundPaint);
+            // 画出右上角旋转按钮
+            canvas.drawBitmap(getBmpBtnReversal(), mBtnReversalPoints.getX(), mBtnReversalPoints.getY(), mStampBackgroundPaint);
             canvas.restore();
             getHolder().unlockCanvasAndPost(canvas);
         }
@@ -217,7 +245,6 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         Log.d(this, "surfaceDestroyed()...");
     }
 
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -232,7 +259,9 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
             mode = ZOOM;
             break;
         case MotionEvent.ACTION_MOVE:
-            onTouchMove(event);
+            if (!isBtnReversalClicked) {
+                onTouchMove(event);
+            }
             break;
 
         case MotionEvent.ACTION_UP:
@@ -249,13 +278,86 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
 
     private void onTouchUp() {
         Log.d(this, "onTouchUp");
-        mStampBackgroundPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
-        mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
-        setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
-        setStampViewCanvasColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
-        lastDistance = -1;
+        if (isBtnReversalClicked) {
+            // 旋转画面
+            setHorizontal(!isHorizontal);
+            rotateStampView();
+        } else {
+            mStampBackgroundPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            if (isHorizontal()) {
+                setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
+            } else {
+                setBmpStampBackground(R.drawable.background_stamp_v_transparent_pierced);
+            }
+            setStampViewCanvasColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
+            lastDistance = -1;
+            draw(getBmpStamp());
+        }
+    }
+
+    private void rotateStampView() {
+        Log.d(this, "rotateStampView");
+        if (isHorizontal()) {
+            setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
+            setBmpBtnReversal(R.drawable.icon_rotation_left);
+        } else {
+            setBmpStampBackground(R.drawable.background_stamp_v_transparent_pierced);
+            setBmpBtnReversal(R.drawable.icon_rotation_right);
+        }
+        drawRotateView();
+        // mHandler.sendEmptyMessageDelayed(MSG_ROTATE_STAMP_VIEW, 3000);
+
+    }
+
+    private void drawRotateView() {
+        Log.d(this, "width:" + getWidth() + ", height:" + getHeight());
+        int bmpStampBackgroundWidth = bmpStampBackground.getWidth();
+        int bmpStampBackgroundHeight = bmpStampBackground.getHeight();
+        Log.d(this, "bmpStampBackgroundWidth:" + bmpStampBackgroundWidth + "bmpStampBackgroundHeight:" + bmpStampBackgroundHeight);
+        mStampBackgroundPoints.setX(getWidth() / 2 - bmpStampBackgroundWidth / 2);
+        mStampBackgroundPoints.setY(getHeight() / 2 - bmpStampBackgroundHeight / 2);
+        if (isHorizontal) {
+            mStampPoints.setX(mStampBackgroundPoints.getX() + 20);
+            mStampPoints.setY(mStampBackgroundPoints.getY() + 40);
+        } else {
+            mStampPoints.setX(mStampBackgroundPoints.getX());
+            mStampPoints.setY(mStampBackgroundPoints.getY() + 80);
+        }
+        mBtnReversalPoints.setX(mStampBackgroundPoints.getX() + bmpStampBackgroundWidth - bmpBtnReversal.getWidth() / 2);
+        mBtnReversalPoints.setY(mStampBackgroundPoints.getY() - bmpBtnReversal.getHeight() / 2);
+
+        int left = getWidth() / 2 - bmpStampBackgroundWidth / 2;
+        int top = getHeight() / 2 - bmpStampBackgroundHeight / 2;
+        int right = getWidth() - left;
+        int bottom = getHeight() - top;
+
+        mStampBackgroundRect.set(left, top, right, bottom);
+        mStampRect.set(left, top, right, bottom);
+        if (isHorizontal) {
+            mStampCenterRect.set(160, 300, 500, 550);
+        } else {
+            mStampCenterRect.set(220, 310, 480, 600);
+        }
         draw(getBmpStamp());
     }
+
+    // Handler mHandler = new Handler(){
+    //
+    // @Override
+    // public void handleMessage(Message msg) {
+    // switch (msg.what) {
+    // case MSG_ROTATE_STAMP_VIEW:
+    // Log.d(this, "drawRotateView...");
+    // drawRotateView();
+    // break;
+    //
+    // default:
+    // break;
+    // }
+    // }
+    //
+    // };
 
     private float x = 0;// current x coordinate of position
     private float y = 0;// current y coordinate of position
@@ -267,7 +369,6 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
     private void onTouchMove(MotionEvent event) {
         // 移动图片
         if (mode == DRAG) {
-            Log.d(this, "DRAG...");
             mStampBackgroundPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
             mStampPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
             deltaX = event.getX() - x;
@@ -294,8 +395,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                     sx = 1.01f;
                     sy = 1.01f;
                     zoomMatrix.postScale(sx, sy);
-                    mStampPoints.setX(mStampPoints.getX()/1.01f);
-                    mStampPoints.setY(mStampPoints.getY()/1.01f);
+                    mStampPoints.setX(mStampPoints.getX() / 1.01f);
+                    mStampPoints.setY(mStampPoints.getY() / 1.01f);
                     draw(getBmpStamp());
                 } else if (lastDistance - currentDistance > 15) {
                     lastDistance = currentDistance;
@@ -303,8 +404,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                     sx = 0.99f;
                     sy = 0.99f;
                     zoomMatrix.postScale(sx, sy);
-                    mStampPoints.setX(mStampPoints.getX()/0.99f);
-                    mStampPoints.setY(mStampPoints.getY()/0.99f);
+                    mStampPoints.setX(mStampPoints.getX() / 0.99f);
+                    mStampPoints.setY(mStampPoints.getY() / 0.99f);
                     draw(getBmpStamp());
                 }
             }
@@ -320,10 +421,24 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         Log.d(this, "onTouchDown");
         x = event.getX();
         y = event.getY();
-        mStampBackgroundPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
-        mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
-        setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
-        // setStampViewCanvasColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_BLACK));
+        Log.d(this, "x:" + x + ", y:" + y);
+        Log.d(this, "x, y:" + mBtnReversalPoints.getX() + ", " + mBtnReversalPoints.getY());
+        if (x >= mBtnReversalPoints.getX() - 5 && x <= mBtnReversalPoints.getX() + getBmpBtnReversal().getWidth() + 5
+                && y >= mBtnReversalPoints.getY() - 5 && y <= mBtnReversalPoints.getY() + getBmpBtnReversal().getHeight() + 5) {
+            // 点击了旋转按钮
+            Log.d(this, "点击了旋转按钮");
+            isBtnReversalClicked = true;
+        } else {
+            isBtnReversalClicked = false;
+            mStampBackgroundPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+            mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            if (isHorizontal()) {
+                setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
+            } else {
+                setBmpStampBackground(R.drawable.background_stamp_v_transparent_pierced);
+            }
+            // setStampViewCanvasColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_BLACK));
+        }
     }
 
 }

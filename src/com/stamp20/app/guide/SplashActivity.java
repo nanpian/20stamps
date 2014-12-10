@@ -22,7 +22,25 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        final ImageView imageView = (ImageView) this
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2250);
+                } catch (InterruptedException e) {
+                }
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        startNextActivity();
+                        finish();
+                    }
+                });
+            }
+        }).start();
+        /*final ImageView imageView = (ImageView) this
                 .findViewById(R.id.fullscreen_content);
         final Animation animation = AnimationUtils.loadAnimation(this,
                 R.anim.splash_activity_scale);
@@ -35,7 +53,7 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                /*下面这句用于控制动画结束以后，保持默认状态*/
+                下面这句用于控制动画结束以后，保持默认状态
                 animation.setFillAfter(true);
                 boolean firstStart = SplashActivity.this.getSharedPreferences(
                         Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE)
@@ -57,6 +75,21 @@ public class SplashActivity extends Activity {
             public void run() {
                 imageView.startAnimation(animation);
             }
-        }, 500);
+        }, 500);*/
+    }
+    
+    private void startNextActivity(){
+        boolean firstStart = SplashActivity.this.getSharedPreferences(
+                Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE)
+                .getBoolean(
+                        Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
+                        true);
+        if (firstStart) {
+            startActivity(new Intent(SplashActivity.this,
+                    WelcomeActivity.class));
+        } else {
+            startActivity(new Intent(SplashActivity.this,
+                    MainActivity.class));
+        }
     }
 }

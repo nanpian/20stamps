@@ -8,9 +8,10 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent" 
+        android:layout_alignParentTop="true"/>
 
-    <LinearLayout
+    <!-- <LinearLayout
         android:id="@+id/ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,17 +51,16 @@
             android:clickable="true"
             android:padding="15.0dip"
             android:src="@drawable/dot" />
-    </LinearLayout>
+    </LinearLayout> -->
 
     <Button
         android:id="@+id/button"
-        android:background="@android:color/transparent" 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/ll"
+        android:alpha="0.2"
+        android:background="@drawable/sel_guide_started_button" 
+        android:layout_width="match_parent"
+        android:layout_height="59dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="      "
         android:visibility="gone"
       />
 
