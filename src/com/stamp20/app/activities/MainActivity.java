@@ -26,7 +26,7 @@ import com.stamp20.app.view.StampView;
 
 public class MainActivity extends BaseTitleActivity implements View.OnClickListener {
 
-    private static final CharSequence titleName = "Choose a photo";
+    private static final CharSequence titleName = "Customize";
 
     private Button btnSelect;
     private Button btnViewCard;
@@ -34,6 +34,8 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
     private Bitmap bitmapSource;
     
     private Context mContext;
+
+	private ImageFilterAdapter filterAdapter;
 
     private static final int SELECT_PIC = 1;
     private static final int MSG_SELECT_PICTURE = 1000;
@@ -59,12 +61,13 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
     private void LoadImageFilter() {
         // TODO Auto-generated method stub
         Gallery gallery = (Gallery) findViewById(R.id.galleryFilter);
-        final ImageFilterAdapter filterAdapter = new ImageFilterAdapter(MainActivity.this);
-        gallery.setAdapter(new ImageFilterAdapter(this));
+        filterAdapter = new ImageFilterAdapter(MainActivity.this);
+        gallery.setAdapter(filterAdapter);
         gallery.setSelection(2);
         gallery.setAnimationDuration(3000);
         gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+            	filterAdapter.setSelectItem(position);
                 IImageFilter filter = (IImageFilter) filterAdapter.getItem(position);
                 new processImageTask(MainActivity.this, filter).execute();
             }

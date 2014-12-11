@@ -15,9 +15,9 @@
     <Gallery
         android:id="@+id/galleryFilter"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:spacing="5dp" />
+        android:spacing="10dp" />
 
     <Button
         android:id="@+id/btn_select_pic"
