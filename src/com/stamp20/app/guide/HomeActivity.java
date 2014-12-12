@@ -61,8 +61,8 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
+
+        super.onCreateNoTitle(); 
         setContentView(R.layout.activity_home);
         getActionBar().hide();
         mButtonGreen = (Button) this.findViewById(R.id.green_button);

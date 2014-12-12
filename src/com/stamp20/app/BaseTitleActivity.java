@@ -23,6 +23,15 @@ public class BaseTitleActivity extends Activity {
         initContentView();
         initTitleBar();
     }
+    
+    public void onCreateNoTitle() {
+    	super.onCreate(null);
+        ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
+        content.removeAllViews();
+        contentLayout = new LinearLayout(this);
+        contentLayout.setOrientation(LinearLayout.VERTICAL);
+        content.addView(contentLayout);
+    }
 
     private void initContentView() {
         ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
