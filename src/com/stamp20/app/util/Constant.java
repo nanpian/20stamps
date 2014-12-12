@@ -21,4 +21,12 @@ public class Constant {
         final String STAMP20_FIRST_START = "stamp20_first_start";
         return Constant.isPropertyEnabled(STAMP20_FIRST_START);
     }
+    
+    public static boolean debugXixiaLog(){
+        /*是否调试Xixia的Log*/
+        //adb shell setprop log.tag.stamp20_xixia_log V : make this return true
+        //adb shell setprop log.tag.stamp20_xixia_log S : make this return false
+        final String STAMP20_XIXIA_LOG = "stamp20_xixia_log";
+        return Constant.isPropertyEnabled(STAMP20_XIXIA_LOG);
+    }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="home_background">
+	    <item>@drawable/background_home_baby_shower</item>
+	    <item>@drawable/background_home_birthday</item>
+	    <item>@drawable/background_home_kids</item>
+	    <item>@drawable/background_home_pets</item>
+	    <item>@drawable/background_home_save_the_date</item>
+	    <item>@drawable/background_home_wedding</item>
+	</integer-array>
+</resources>

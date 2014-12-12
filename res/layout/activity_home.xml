@@ -6,8 +6,8 @@
         android:id="@+id/background"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/background_home_wedding"
         android:scaleType="fitXY"
+        android:src="@drawable/background_home_baby_shower"
         />
 	<Button 
 	    android:id="@+id/red_button"
