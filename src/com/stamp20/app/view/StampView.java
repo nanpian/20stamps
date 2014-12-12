@@ -21,6 +21,7 @@ import android.view.View.OnTouchListener;
 
 import com.stamp20.app.R;
 import com.stamp20.app.util.Log;
+import com.stamp20.app.util.BitmapCache;
 
 public class StampView extends SurfaceView implements Callback, OnTouchListener {
 
@@ -56,6 +57,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
 
     private static final int MSG_ROTATE_STAMP_VIEW = 1100;
     private static final int DELTA_LEN = 15;
+    
+    private BitmapCache mCache = null;
 
     public StampView(Context context) {
         super(context);
@@ -96,6 +99,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         sx = 1.0f;
         sy = 1.0f;// 默认设置缩放为1
         zoomMatrix.postScale(sx, sy);
+        
+        mCache = BitmapCache.getCache();
 
         setOnTouchListener(this);
     }
@@ -217,6 +222,10 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                 canvas.clipRect(mStampCenterRect);
                 mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
                 canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
+                
+                // only for test
+                mCache.put(zoomBitmap);
+                
                 canvas.restore();
             }
 

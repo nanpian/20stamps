@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:background="#282828"
     android:orientation="vertical" >
-
+    
+    <include layout="@layout/header" />
+    "
     <com.stamp20.app.view.StampView
         android:id="@+id/view_stamp"
         android:layout_width="fill_parent"
@@ -27,14 +29,7 @@
         android:layout_marginBottom="10dp"
         android:text="@string/select_a_picture"
         android:textColor="#ffffff" />
-
-    <Button
-        android:id="@+id/btn_view_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
-        android:text="@string/view_card"
-        android:textColor="#ffffff" />
+    
+    <include layout="@layout/tail"/>
 
 </LinearLayout>

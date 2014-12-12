@@ -7,5 +7,7 @@
     <string name="select_a_picture">Select a picture</string>
     <string name="next_step">NEXT:choose a rate</string>
     <string name="view_card">VIEW CARD</string>
+    <string name="next_review">NEXT: REVIEW</string>
+    <string name="review_title">Review</string>
 
 </resources>

@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
@@ -24,14 +26,19 @@ import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampView;
 
-public class MainActivity extends BaseTitleActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final CharSequence titleName = "Customize";
 
     private Button btnSelect;
-    private Button btnViewCard;
     private StampView mStampView;
     private Bitmap bitmapSource;
+    
+    private ImageView headerPrevious;
+    private TextView headerTitle;
+    
+    private ImageView tailIcon;
+    private TextView tailText;
     
     private Context mContext;
 
@@ -49,11 +56,19 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
         mStampView = (StampView) findViewById(R.id.view_stamp);
         btnSelect = (Button) findViewById(R.id.btn_select_pic);
         btnSelect.setOnClickListener(this);
-        btnViewCard = (Button) findViewById(R.id.btn_view_card);
-        btnViewCard.setOnClickListener(this);
 
         getActionBar().hide();
-        setTitle(titleName);
+        
+        headerPrevious = (ImageView)findViewById(R.id.header_previous);
+        headerPrevious.setOnClickListener(this);
+        headerTitle = (TextView)findViewById(R.id.header_title);
+        headerTitle.setText(titleName);
+        
+        tailIcon = (ImageView)findViewById(R.id.tail_icon);
+        tailIcon.setVisibility(View.GONE);
+        tailText = (TextView)findViewById(R.id.tail_text);
+        tailText.setText(R.string.next_review);
+        findViewById(R.id.tail).setOnClickListener(this);
 
         LoadImageFilter();
     }
@@ -80,9 +95,13 @@ public class MainActivity extends BaseTitleActivity implements View.OnClickListe
         case R.id.btn_select_pic:
             selectPicture();
             break;
-        case R.id.btn_view_card:
-            break;
-
+        case R.id.header_previous:
+        	finish();
+        	break;
+        case R.id.tail:
+        	Intent intent = new Intent(this, com.stamp20.app.activities.ReviewActivity.class);
+        	startActivity(intent);
+        	break;
         default:
             break;
         }

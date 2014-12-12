@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tail"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@drawable/tail_button"
+    android:layout_gravity="bottom"
+    android:clickable="true"
+     >
+    
+    <ImageView android:id="@+id/tail_icon"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_addtocart"
+        />
+
+    <TextView android:id="@+id/tail_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="ADD TO CART"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        />
+
+</RelativeLayout>

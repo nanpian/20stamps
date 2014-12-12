@@ -2,6 +2,7 @@ package com.stamp20.app;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,7 +49,8 @@ public class BaseTitleActivity extends Activity {
         mButtonLeft.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+               Log.i("dewei","left button cllicked");
+               finish();
             }
         });
         mButtonRight = (Button) findViewById(R.id.titlebar_right);

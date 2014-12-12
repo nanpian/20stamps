@@ -27,6 +27,7 @@
         </activity>
         <activity android:name="com.stamp20.app.guide.GuideActivity"></activity>
         <activity android:name="com.stamp20.app.guide.HomeActivity"></activity>
+        <activity android:name="com.stamp20.app.activities.ReviewActivity"></activity>
         <activity android:name=".BaseTitleActivity"></activity>
     </application>
 
