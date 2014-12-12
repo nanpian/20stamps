@@ -55,6 +55,7 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
     private boolean isBtnReversalClicked = false;
 
     private static final int MSG_ROTATE_STAMP_VIEW = 1100;
+    private static final int DELTA_LEN = 15;
 
     public StampView(Context context) {
         super(context);
@@ -175,7 +176,7 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
 
         mStampBackgroundRect.set(left, top, right, bottom);
         mStampRect.set(left, top, right, bottom);
-        mStampCenterRect.set(160, 300, 500, 550);
+        mStampCenterRect.set(left+DELTA_LEN, top+DELTA_LEN, right-DELTA_LEN, bottom-DELTA_LEN);
 
     }
 
@@ -334,11 +335,7 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
 
         mStampBackgroundRect.set(left, top, right, bottom);
         mStampRect.set(left, top, right, bottom);
-        if (isHorizontal) {
-            mStampCenterRect.set(160, 300, 500, 550);
-        } else {
-            mStampCenterRect.set(220, 310, 480, 600);
-        }
+        mStampCenterRect.set(left+DELTA_LEN, top+DELTA_LEN, right-DELTA_LEN, bottom-DELTA_LEN);
         draw(getBmpStamp());
     }
 

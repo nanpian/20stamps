@@ -25,7 +25,7 @@ import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Log;
 
-public class WelcomeActivity extends Activity implements OnClickListener,
+public class GuideActivity extends Activity implements OnClickListener,
         OnPageChangeListener {
 
     private final static String TAG = "WelcomeActivity";
@@ -58,7 +58,7 @@ public class WelcomeActivity extends Activity implements OnClickListener,
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
         // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_guide);
         mButton = (Button) findViewById(R.id.button);
         mViews = new ArrayList<View>();
 
@@ -85,12 +85,12 @@ public class WelcomeActivity extends Activity implements OnClickListener,
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent();
-                intent.setClass(WelcomeActivity.this, MainActivity.class);
-                WelcomeActivity.this.startActivity(intent);
+                intent.setClass(GuideActivity.this, HomeActivity.class);
+                GuideActivity.this.startActivity(intent);
                 com.stamp20.app.util.Log
                         .i(TAG,
                                 "First start WelcomeActivity, set the flag of SharedPreferences_Guide_FirstStart to true");
-                WelcomeActivity.this
+                GuideActivity.this
                         .getSharedPreferences(Constant.SHAREDPREFERENCES_GUIDE,
                                 Context.MODE_PRIVATE)
                         .edit()

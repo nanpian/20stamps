@@ -1,0 +1,34 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView 
+        android:id="@+id/background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/background_home_wedding"
+        android:scaleType="fitXY"
+        />
+	<Button 
+	    android:id="@+id/red_button"
+	    android:layout_width="260dp"
+	    android:layout_height="55dp"
+	    android:background="@drawable/sel_home_red_button"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginBottom="50dp"
+	    android:text="GETTING CARDS"
+	    android:textColor="@android:color/white"
+	    />
+	<Button 
+	    android:id="@+id/green_button"
+	    android:layout_above="@id/red_button"
+	    android:layout_width="260dp"
+	    android:layout_height="55dp"
+	    android:background="@drawable/sel_home_green_button"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginBottom="25dp"
+	    android:text="POSTAGE STAMPS"
+	    android:textColor="@android:color/white"
+	    />
+</RelativeLayout>

@@ -25,7 +25,8 @@
             android:name=".activities.MainActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity android:name="com.stamp20.app.guide.WelcomeActivity"></activity>
+        <activity android:name="com.stamp20.app.guide.GuideActivity"></activity>
+        <activity android:name="com.stamp20.app.guide.HomeActivity"></activity>
         <activity android:name=".BaseTitleActivity"></activity>
     </application>
 

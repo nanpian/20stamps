@@ -84,12 +84,14 @@ public class SplashActivity extends Activity {
                 .getBoolean(
                         Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
                         true);
-        if (firstStart) {
+        if (firstStart || Constant.debugGuideActivity()) {
             startActivity(new Intent(SplashActivity.this,
-                    WelcomeActivity.class));
+                    GuideActivity.class));
         } else {
+            /*startActivity(new Intent(SplashActivity.this,
+                    MainActivity.class));*/
             startActivity(new Intent(SplashActivity.this,
-                    MainActivity.class));
+                    HomeActivity.class));
         }
     }
 }
