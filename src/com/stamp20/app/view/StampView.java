@@ -9,13 +9,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
@@ -23,41 +18,110 @@ import com.stamp20.app.R;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.util.BitmapCache;
 
-public class StampView extends SurfaceView implements Callback, OnTouchListener {
+public class StampView extends View implements OnTouchListener {
 
+    /*
+     * 邮票框
+     */
     private Bitmap bmpStampBackground = null;
-    private Bitmap bmpStamp = null;
+    
+    /*
+     * 制作邮票所用的图片
+     */
+    private Bitmap bmpStampPhoto = null;
+    
+    /*
+     * 制作邮票时右上角的旋转按钮
+     */
     private Bitmap bmpBtnReversal = null;
+    
+    /*
+     * 最终生成的邮票图案，不包含右上角的旋转按钮
+     */
+    private Bitmap bmpStamp = null;
 
+    /*
+     * 邮票框的点坐标
+     */
     private StampPoints mStampBackgroundPoints = null;
+    
+    /*
+     * 邮票所用图片点坐标
+     */
     private StampPoints mStampPoints = null;
+    
+    /*
+     * 旋转按钮点坐标
+     */
     private StampPoints mBtnReversalPoints = null;
+    
+    /*
+     * 当前邮票是横屏还是竖屏界面
+     */
     private boolean isHorizontal = true;
 
+    /*
+     * 画邮票框所用的画笔
+     */
     private Paint mStampBackgroundPaint = null;
+    
+    /*
+     * 画邮票所用图片的画笔
+     */
     private Paint mStampPaint = null;
+    
+    /*
+     * 画整个画面的背景的画笔
+     */
+    private Paint mViewBackgroundPaint = null;
 
-    private Matrix mStampBackgroundMatrix;
-    private Matrix mStampMatrix;
+    // private Matrix mStampBackgroundMatrix;
+    // private Matrix mStampMatrix;
+    /*
+     * 缩放图片使用的矩阵
+     */
     private Matrix zoomMatrix;
     float sx;
     float sy;
 
-    private Rect mStampRect;
+    // private Rect mStampRect;
+    /*
+     * 邮票框背景矩阵
+     */
     private Rect mStampBackgroundRect;
+    /*
+     * 邮票框中间用于呈现图案的矩阵
+     */
     private Rect mStampCenterRect;
 
+    /*
+     * 背景色
+     */
     private int stampViewCanvasColor = Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY);
 
+    /*
+     * 手势:
+     * NONE:手指没有操作
+     * DRAG：移动
+     * ZOOM：缩放
+     * mode：当前所处的模式NONE/DRAG/ZOOM
+     */
     private int NONE = 0;
     private int DRAG = 1;
     private int ZOOM = 2;
     private int mode = NONE;
+    
+    /*
+     * 旋转按钮是否被触发
+     */
     private boolean isBtnReversalClicked = false;
 
     private static final int MSG_ROTATE_STAMP_VIEW = 1100;
     private static final int DELTA_LEN = 15;
-    
+
+    /*
+     * 用于保存最终生成的邮票cache
+     */
     private BitmapCache mCache = null;
 
     public StampView(Context context) {
@@ -76,7 +140,6 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
     }
 
     private void init() {
-        getHolder().addCallback(this);
         Resources res = getResources();
         bmpStampBackground = BitmapFactory.decodeResource(res, R.drawable.background_stamp_h_transparent_pierced);
         bmpBtnReversal = BitmapFactory.decodeResource(res, R.drawable.icon_rotation_left);
@@ -87,11 +150,13 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
 
         mStampBackgroundPaint = new Paint();
         mStampPaint = new Paint();
+        mViewBackgroundPaint = new Paint();
+        mViewBackgroundPaint.setColor(Color.WHITE);
 
-        mStampBackgroundMatrix = new Matrix();
-        mStampMatrix = new Matrix();
+        // mStampBackgroundMatrix = new Matrix();
+        // mStampMatrix = new Matrix();
 
-        mStampRect = new Rect();
+        // mStampRect = new Rect();
         mStampBackgroundRect = new Rect();
         mStampCenterRect = new Rect();
 
@@ -99,16 +164,25 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         sx = 1.0f;
         sy = 1.0f;// 默认设置缩放为1
         zoomMatrix.postScale(sx, sy);
-        
+
         mCache = BitmapCache.getCache();
 
         setOnTouchListener(this);
+
     }
 
+    /*
+     * 获取邮票背景框
+     * return：bitmap
+     */
     public Bitmap getBmpStampBackground() {
         return bmpStampBackground;
     }
 
+    /*
+     * 设置邮票背景框
+     * @para:bmpStampBackground, 邮票框bitmap
+     */
     public void setBmpStampBackground(Bitmap bmpStampBackground) {
         this.bmpStampBackground = bmpStampBackground;
     }
@@ -119,12 +193,12 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         this.bmpStampBackground = BitmapFactory.decodeResource(res, resId);
     }
 
-    public Bitmap getBmpStamp() {
-        return bmpStamp;
+    public Bitmap getBmpStampPhoto() {
+        return bmpStampPhoto;
     }
 
-    public void setBmpStamp(Bitmap bmpStamp) {
-        this.bmpStamp = bmpStamp;
+    public void setBmpStampPhoto(Bitmap bmpStamp) {
+        this.bmpStampPhoto = bmpStamp;
         sx = (float) getBmpStampBackground().getWidth() / bmpStamp.getWidth();
         sy = (float) getBmpStampBackground().getHeight() / bmpStamp.getHeight();
         zoomMatrix.postScale(sx, sy);
@@ -159,6 +233,14 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         this.bmpBtnReversal = BitmapFactory.decodeResource(res, resId);
     }
 
+    public Bitmap getBmpStamp() {
+        return bmpStamp;
+    }
+
+    public void setBmpStamp(Bitmap bmpStamp) {
+        this.bmpStamp = bmpStamp;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Log.d(this, "onMeasure()...");
@@ -180,79 +262,47 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         int bottom = getHeight() - top;
 
         mStampBackgroundRect.set(left, top, right, bottom);
-        mStampRect.set(left, top, right, bottom);
-        mStampCenterRect.set(left+DELTA_LEN, top+DELTA_LEN, right-DELTA_LEN, bottom-DELTA_LEN);
+        // mStampRect.set(left, top, right, bottom);
+        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right - DELTA_LEN, bottom - DELTA_LEN);
 
     }
 
-    public void draw(Bitmap bitmap) {
-        Canvas canvas = getHolder().lockCanvas();
+    @Override
+    public void onDraw(Canvas canvas) {
         if (canvas != null) {
-            canvas.save();
             canvas.drawColor(getStampViewCanvasColor());
-
-            if (bitmap != null) {
+            Bitmap bmpStamp = getBmpStampPhoto();
+            if (bmpStamp != null) {
                 // 画出邮票后的白色背景，此处应替换为与邮票背景一样的白色图案
-                Paint p = new Paint();
-                p.setColor(Color.WHITE);
-                canvas.drawRect(mStampCenterRect, p);
-
-                // Matrix matrix = new Matrix();
-                // float sx = (float) getBmpStampBackground().getWidth()/
-                // bitmap.getWidth();
-                // float sy = (float) getBmpStampBackground().getHeight()/
-                // bitmap.getHeight();
-                // matrix.postScale(Math.min(sx, sy), Math.min(sx, sy));
-                int w = bitmap.getWidth();
-                int h = bitmap.getHeight();
-                Bitmap zoomBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), zoomMatrix, false);
-                int left = (int) mStampPoints.getX();
-                int top = (int) mStampPoints.getY();
-                int right = (int) (mStampPoints.getX() + zoomBitmap.getWidth());
-                int bottom = (int) (mStampPoints.getY() + zoomBitmap.getHeight());
-                mStampRect.set(left, top, right, bottom);
-                if (mode == DRAG) {
-                    canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
-                } else if (mode == ZOOM) {
-
-                    canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
+                canvas.drawRect(mStampCenterRect, mViewBackgroundPaint);
+                bmpStamp = Bitmap.createBitmap(bmpStamp, 0, 0, bmpStamp.getWidth(), bmpStamp.getHeight(), zoomMatrix, true);
+                if (mode == DRAG || mode == ZOOM) {
+                    canvas.drawBitmap(bmpStamp, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
                 }
                 // 画出邮票中间部分，让图片在中间区域不透明
                 canvas.save();
                 canvas.clipRect(mStampCenterRect);
                 mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
-                canvas.drawBitmap(zoomBitmap, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
-                
-                // only for test
-                mCache.put(zoomBitmap);
-                
+                canvas.drawBitmap(bmpStamp, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
                 canvas.restore();
             }
 
             // 画出最上层的邮票框
             canvas.drawBitmap(getBmpStampBackground(), mStampBackgroundPoints.getX(), mStampBackgroundPoints.getY(), mStampBackgroundPaint);
+            // 松开手指，此时产生一张图片，用于review等后续操作，该图案不包含右上角的旋转按钮
+            if (bmpStamp != null && mode == NONE) {
+                generateStamp();
+            }
             // 画出右上角旋转按钮
-            canvas.drawBitmap(getBmpBtnReversal(), mBtnReversalPoints.getX(), mBtnReversalPoints.getY(), mStampBackgroundPaint);
+            canvas.drawBitmap(getBmpBtnReversal(), mBtnReversalPoints.getX(), mBtnReversalPoints.getY(), mViewBackgroundPaint);
             canvas.restore();
-            getHolder().unlockCanvasAndPost(canvas);
         }
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(this, "surfaceCreated()...");
-        draw(getBmpStamp());
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d(this, "surfaceChanged()...");
-        draw(getBmpStamp());
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(this, "surfaceDestroyed()...");
+    public void generateStamp() {
+        buildDrawingCache();
+        mCache.put(getDrawingCache());
+        destroyDrawingCache();
     }
 
     @Override
@@ -302,7 +352,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
             }
             setStampViewCanvasColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
             lastDistance = -1;
-            draw(getBmpStamp());
+            // draw(getBmpStamp());
+            invalidate();
         }
     }
 
@@ -343,27 +394,11 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
         int bottom = getHeight() - top;
 
         mStampBackgroundRect.set(left, top, right, bottom);
-        mStampRect.set(left, top, right, bottom);
-        mStampCenterRect.set(left+DELTA_LEN, top+DELTA_LEN, right-DELTA_LEN, bottom-DELTA_LEN);
-        draw(getBmpStamp());
+        // mStampRect.set(left, top, right, bottom);
+        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right - DELTA_LEN, bottom - DELTA_LEN);
+        invalidate();
+        // draw(getBmpStamp());
     }
-
-    // Handler mHandler = new Handler(){
-    //
-    // @Override
-    // public void handleMessage(Message msg) {
-    // switch (msg.what) {
-    // case MSG_ROTATE_STAMP_VIEW:
-    // Log.d(this, "drawRotateView...");
-    // drawRotateView();
-    // break;
-    //
-    // default:
-    // break;
-    // }
-    // }
-    //
-    // };
 
     private float x = 0;// current x coordinate of position
     private float y = 0;// current y coordinate of position
@@ -383,7 +418,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
             y = event.getY();
             mStampPoints.setX(mStampPoints.getX() + deltaX);
             mStampPoints.setY(mStampPoints.getY() + deltaY);
-            draw(getBmpStamp());
+            // draw(getBmpStamp());
+            invalidate();
             // 缩放图片
         } else if (mode == ZOOM && event.getPointerCount() == 2) {
             mStampPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
@@ -403,7 +439,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                     zoomMatrix.postScale(sx, sy);
                     mStampPoints.setX(mStampPoints.getX() / 1.01f);
                     mStampPoints.setY(mStampPoints.getY() / 1.01f);
-                    draw(getBmpStamp());
+                    // draw(getBmpStamp());
+                    invalidate();
                 } else if (lastDistance - currentDistance > 15) {
                     lastDistance = currentDistance;
                     Log.d(this, "缩小");
@@ -412,7 +449,8 @@ public class StampView extends SurfaceView implements Callback, OnTouchListener 
                     zoomMatrix.postScale(sx, sy);
                     mStampPoints.setX(mStampPoints.getX() / 0.99f);
                     mStampPoints.setY(mStampPoints.getY() / 0.99f);
-                    draw(getBmpStamp());
+                    // draw(getBmpStamp());
+                    invalidate();
                 }
             }
 

@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/cards_icon_change_template" android:state_pressed="false"/>
+    <item android:drawable="@drawable/cards_icon_change_template_selected" android:state_pressed="true"/>
+
+</selector>

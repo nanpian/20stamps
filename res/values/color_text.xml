@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="filter_item_selected_true">#f1c40f</color>
+    <color name="filter_item_selected_false">#FFFFFF</color>
+</resources>

@@ -6,21 +6,25 @@
     android:orientation="vertical" >
     
     <include layout="@layout/header" />
-    "
-    <com.stamp20.app.view.StampView
+    <com.stamp20.app.view.StampNewView
         android:id="@+id/view_stamp"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
+        <com.stamp20.app.view.StampFrameView
+            android:layout_width="fill_parent"
+            android:layout_height = "fill_parent"
+            android:gravity = "center"
+            android:id = "@+id/view_stamp_frame" />
+   </com.stamp20.app.view.StampNewView>
 
     <Gallery
         android:id="@+id/galleryFilter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="20dp"
-        android:spacing="30dp" />
+        android:spacing="10dp" />
 
     <Button
         android:id="@+id/btn_select_pic"

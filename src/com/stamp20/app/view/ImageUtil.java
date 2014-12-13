@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -23,6 +24,13 @@ public class ImageUtil {
     public ImageUtil() {
         
     }
+    
+     static Bitmap bigBitMap(Bitmap bitmap) {
+    	  Matrix matrix = new Matrix(); 
+    	  matrix.postScale(1.5f,1.5f); //长和宽放大缩小的比例
+    	  Bitmap resizeBmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+    	  return resizeBmp;
+    	 }
 
     public static String getLocalPathFromUri(ContentResolver resolver, Uri uri) {
         Cursor cursor = resolver.query(uri, new String[] { MediaStore.Images.Media.DATA }, null, null, null);

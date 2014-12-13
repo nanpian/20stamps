@@ -64,11 +64,11 @@ public class ImageFilterAdapter extends BaseAdapter {
 	public ImageFilterAdapter(Context c) {
 		mContext = c;
 		mInflater = LayoutInflater.from(mContext);
-		filterArray.add(new FilterInfo(R.drawable.video_filter1, new NormaFilter(),"Normal"));
-		filterArray.add(new FilterInfo(R.drawable.video_filter2, new GrayFilter(),"Gray"));
-		filterArray.add(new FilterInfo(R.drawable.video_filter3, new BlackWhiteFilter(),"Black"));
-		filterArray.add(new FilterInfo(R.drawable.video_filter4, new YellowFilter(),"Yellow"));
-		filterArray.add(new FilterInfo(R.drawable.video_filter4, new SunShineFilter(),"SunShine"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_normal, new NormaFilter(),"normal"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_gray, new GrayFilter(),"gray"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_black, new BlackWhiteFilter(),"black"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_yellow, new YellowFilter(),"yellow"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new SunShineFilter(),"sunshine"));
 
 		
 	}
@@ -96,15 +96,20 @@ public class ImageFilterAdapter extends BaseAdapter {
         imageView = (ImageView)convertView.findViewById(R.id.image_item);
         textView = (TextView)convertView.findViewById(R.id.text_item);
 	    imageView.setImageResource(filterArray.get(position).filterID);
+	    
 		 if(selectItem==position){
 			 //处理点击放大效果，注意，这里还要加入边框效果，需要UI
-		    Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.gallery_click_scale);
-		    imageView.startAnimation(animation);
-		    imageView.setLayoutParams(new LinearLayout.LayoutParams(200,200));
+		    //Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.gallery_click_scale);
+		    //imageView.startAnimation(animation);
+		    //imageView.setLayoutParams(new LinearLayout.LayoutParams(200,200));
+		    textView.setTextColor(Color.parseColor("#f1c40f"));
+		    imageView.setBackgroundResource(R.drawable.bg_filter_item_selected);
 		  } else {
-		    imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+		    //imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+		    textView.setTextColor(Color.parseColor("#ffffff"));
+		    imageView.setBackgroundResource(R.drawable.bg_filter_item_selected_no);
 		  }
-		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+		 //imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         textView.setText(filterArray.get(position).filterName);
 		return convertView;
 	}

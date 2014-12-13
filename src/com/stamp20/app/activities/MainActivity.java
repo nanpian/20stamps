@@ -123,7 +123,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
                 Uri uri = (Uri) msg.obj;
                 bitmapSource = ImageUtil.loadDownsampledBitmap(mContext, uri, 2);
-                mStampView.setBmpStamp(bitmapSource);
+                mStampView.setBmpStampPhoto(bitmapSource);
                 mStampView.invalidate();
                 break;
 
@@ -184,7 +184,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(this, "onPostExecute---");
-                mStampView.setBmpStamp(result);
+                mStampView.setBmpStampPhoto(result);
             }
         }
     }

@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.activities.MainActivity;
+import com.stamp20.app.cards.CardsActivity;
+import com.stamp20.app.activities.TestViewActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.view.ImageUtil;
 
@@ -115,9 +117,12 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     
     @Override
     public void onClick(View v) {
-        if(v.getId() == mButtonGreen.getId() || v.getId() == mButtonRed.getId()){
+        if(v.getId() == mButtonGreen.getId()){
             startActivity(new Intent(HomeActivity.this,
                     MainActivity.class));
+        }else if(v.getId() == mButtonRed.getId()){
+            startActivity(new Intent(HomeActivity.this,
+                    CardsActivity.class));
         }
     }
 }
