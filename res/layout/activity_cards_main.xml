@@ -1,4 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imageviewtext="http://schemas.android.com/apk/res-auto"
+    xmlns:zoomimageview="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,14 +10,17 @@
         android:id="@+id/pic_area"
         android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/cards_christmas"
         android:layout_width="match_parent"
         android:layout_height="250dp">
-       	   <com.stamp20.app.view.ZoomImageView
+       	   <com.stamp20.app.view.ZoomImageViewMaskOpposite
+       	        android:layout_marginTop="4dp"
+       	        android:layout_marginLeft="1dp"
+       	        android:layout_marginBottom="6dp"
 			    android:id="@+id/zoom_image_view"
-			    android:layout_width="match_parent"
-			    android:layout_height="match_parent"
-			    android:background="#000000" />
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    zoomimageview:maskDrawable="@drawable/cards_shape"
+			    zoomimageview:maskColor="@color/activity_background_gray"/>
            <ImageView 
 		        android:id="@+id/background_pic"
 		        android:src="@drawable/cards_christmas"
@@ -22,13 +28,12 @@
 		        android:layout_height="match_parent"/>
     </FrameLayout>
     <RelativeLayout 
-        android:layout_marginTop="20dp"
         android:layout_below="@id/pic_area"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:layout_height="50dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
         <ImageView 
             android:id="@+id/middle_divider"
             android:layout_width="1dp"
@@ -36,40 +41,24 @@
             android:layout_centerHorizontal="true"
             android:background="#ff323433"
             />
-        <LinearLayout 
+        <com.stamp20.app.view.ImageViewText
+            android:id="@+id/choose_photo"
             android:layout_toLeftOf="@id/middle_divider"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:orientation="vertical">
-            <ImageButton
-	            android:id="@+id/change_photo"
-	            android:layout_height="match_parent"
-	            android:layout_width="wrap_content"
-	            android:src="@drawable/sel_cards_change_photo_button"/>
-            <TextView 
-                android:id="@+id/change_photo_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="CHANGE PHOTO"
-                />
-        </LinearLayout>
-        <LinearLayout 
+            imageviewtext:text="CHANGE PHOTO"
+            imageviewtext:textViewColorStateList="@color/sel_cards_choose_button"
+            imageviewtext:imageViewSelectorDrawable="@drawable/sel_cards_change_photo_button"
+            />
+        <com.stamp20.app.view.ImageViewText
+            android:id="@+id/choose_template"
             android:layout_toRightOf="@id/middle_divider"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:orientation="vertical">
-            <ImageButton
-	            android:id="@+id/change_design"
-	            android:layout_height="match_parent"
-	            android:layout_width="wrap_content"
-	            android:src="@drawable/sel_cards_change_template_button"/>
-            <TextView 
-                android:id="@+id/change_design_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="CHANGE DESIGN"
-                />
-        </LinearLayout>
+            imageviewtext:text="CHANGE DESIGN"
+            imageviewtext:textViewColorStateList="@color/sel_cards_choose_button"
+            imageviewtext:imageViewSelectorDrawable="@drawable/sel_cards_change_template_button"
+            />
     </RelativeLayout>
 	<Button 
 	    android:id="@+id/button"

@@ -2,7 +2,9 @@ package com.stamp20.app.guide;
 
 import com.stamp20.app.R;
 import com.stamp20.app.activities.MainActivity;
+import com.stamp20.app.cards.CardsActivity;
 import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.Log;
 
 import android.app.Activity;
 import android.content.Context;
@@ -84,14 +86,26 @@ public class SplashActivity extends Activity {
                 .getBoolean(
                         Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
                         true);
-        if (firstStart || Constant.debugGuideActivity()) {
+        if(Constant.debugMainActivity() && Log.DEBUG){
+            startActivity(new Intent(SplashActivity.this,
+                    MainActivity.class));
+                return;
+        }
+        if(Constant.debugCardsActivity() && Log.DEBUG){
+            startActivity(new Intent(SplashActivity.this,
+                CardsActivity.class));
+            return;
+        }
+        if (firstStart || (Constant.debugGuideActivity() && Log.DEBUG)) {
             startActivity(new Intent(SplashActivity.this,
                     GuideActivity.class));
+            return;
         } else {
             /*startActivity(new Intent(SplashActivity.this,
                     MainActivity.class));*/
             startActivity(new Intent(SplashActivity.this,
                     HomeActivity.class));
+            return;
         }
     }
 }

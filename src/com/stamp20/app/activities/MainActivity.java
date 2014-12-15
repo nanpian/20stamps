@@ -1,6 +1,5 @@
 package com.stamp20.app.activities;
 
-import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +9,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.renderscript.Sampler;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.adapter.ImageFilterAdapter;
 import com.stamp20.app.filter.IImageFilter;
@@ -30,23 +26,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final CharSequence titleName = "Customize";
 
-    private Button btnSelect;
+    // private Button btnSelect;
     private StampView mStampView;
     private Bitmap bitmapSource;
-    
+
     private ImageView headerPrevious;
     private TextView headerTitle;
-    
+
     private ImageView tailIcon;
     private TextView tailText;
-    
+
     private Context mContext;
 
-	private ImageFilterAdapter filterAdapter;
+    private ImageFilterAdapter filterAdapter;
 
     private static final int SELECT_PIC = 1;
     private static final int MSG_SELECT_PICTURE = 1000;
-    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +49,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mContext = this;
         setContentView(R.layout.select_picture);
         mStampView = (StampView) findViewById(R.id.view_stamp);
-        btnSelect = (Button) findViewById(R.id.btn_select_pic);
-        btnSelect.setOnClickListener(this);
+        // btnSelect = (Button) findViewById(R.id.btn_select_pic);
+        // btnSelect.setOnClickListener(this);
 
         getActionBar().hide();
-        
-        headerPrevious = (ImageView)findViewById(R.id.header_previous);
+
+        headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerPrevious.setOnClickListener(this);
-        headerTitle = (TextView)findViewById(R.id.header_title);
+        headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(titleName);
-        
-        tailIcon = (ImageView)findViewById(R.id.tail_icon);
+
+        tailIcon = (ImageView) findViewById(R.id.tail_icon);
         tailIcon.setVisibility(View.GONE);
-        tailText = (TextView)findViewById(R.id.tail_text);
+        tailText = (TextView) findViewById(R.id.tail_text);
         tailText.setText(R.string.next_review);
         findViewById(R.id.tail).setOnClickListener(this);
+        mStampView.setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
+
+        Uri uri = (Uri) getIntent().getParcelableExtra("imageUri");
+        Log.d(this, "uri=" + uri);
+        initStampView(uri);
 
         LoadImageFilter();
     }
@@ -82,7 +82,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         gallery.setAnimationDuration(3000);
         gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-            	filterAdapter.setSelectItem(position);
+                filterAdapter.setSelectItem(position);
                 IImageFilter filter = (IImageFilter) filterAdapter.getItem(position);
                 new processImageTask(MainActivity.this, filter).execute();
             }
@@ -92,19 +92,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.btn_select_pic:
-            selectPicture();
-            break;
+        // case R.id.btn_select_pic:
+        // selectPicture();
+        // break;
         case R.id.header_previous:
-        	finish();
-        	break;
+            finish();
+            break;
         case R.id.tail:
-        	Intent intent = new Intent(this, com.stamp20.app.activities.ReviewActivity.class);
-        	startActivity(intent);
-        	break;
+            Intent intent = new Intent(this, com.stamp20.app.activities.ReviewActivity.class);
+            startActivity(intent);
+            break;
         default:
             break;
         }
+    }
+
+    private void initStampView(Uri uri) {
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
     }
 
     private void selectPicture() {
@@ -114,8 +118,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         startActivityForResult(intent, SELECT_PIC);
     }
 
-
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -123,7 +126,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
                 Uri uri = (Uri) msg.obj;
                 bitmapSource = ImageUtil.loadDownsampledBitmap(mContext, uri, 2);
-                mStampView.setBmpStampPhoto(bitmapSource);
+                if (bitmapSource != null) {
+                    mStampView.setBmpStampPhoto(bitmapSource);
+                }
                 mStampView.invalidate();
                 break;
 
@@ -131,12 +136,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             }
         }
-        
+
     };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SELECT_PIC && resultCode == RESULT_OK) {
             Uri uri = data.getData();
+            Log.d(this, "uri---" + uri);
             mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -166,14 +173,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 return img;
             } catch (Exception e) {
-                if (img != null ) {
+                if (img != null) {
                     img.recycle();
-                    System.gc(); 
+                    System.gc();
                 }
             } finally {
-                if (img != null ) {
+                if (img != null) {
                     img.recycle();
-                    System.gc(); 
+                    System.gc();
                 }
             }
             return null;

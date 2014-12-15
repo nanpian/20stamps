@@ -1,9 +1,15 @@
 package com.stamp20.app.view;
 
+import com.stamp20.app.R;
+
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -139,6 +145,11 @@ public class ZoomImageView extends View {
 	public ZoomImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		currentStatus = STATUS_INIT;
+		
+		TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.ZoomImageView);
+		mMaskBitmapId = a.getResourceId(R.styleable.ZoomImageView_maskDrawable, -1);
+		mMaskColorId = a.getResourceId(R.styleable.ZoomImageView_maskColor, -1);
+		a.recycle();
 	}
 
 	/**
@@ -261,6 +272,7 @@ public class ZoomImageView extends View {
 			canvas.drawBitmap(sourceBitmap, matrix, null);
 			break;
 		}
+		mask(canvas);
 	}
 
 	/**
@@ -328,6 +340,31 @@ public class ZoomImageView extends View {
 		canvas.drawBitmap(sourceBitmap, matrix, null);
 	}
 
+	protected Bitmap mMaskBitmap = null;
+	protected int mMaskBitmapId = -1;
+	protected int mMaskColorId = -1;
+    /**
+     * 对图片进行mask处理
+     * 
+     * @param canvas
+     */
+    protected void mask(Canvas canvas) {
+        if(mMaskBitmapId == -1) {
+            return;
+        }
+        if(mMaskBitmap == null){
+            mMaskBitmap = BitmapFactory.decodeResource(getResources(), mMaskBitmapId);
+            mMaskBitmap = ImageUtil.zoomBitmap(mMaskBitmap, getWidth(), getHeight());    
+        }
+        Paint paint = new Paint();
+        // 仅仅绘制DST图片中，不和SRC图片相交的部分(完全不绘制SRC)
+        paint.setXfermode(new PorterDuffXfermode(
+                android.graphics.PorterDuff.Mode.DST_IN));
+        // 这幅图片是SRC图片
+        canvas.drawBitmap(mMaskBitmap, 0, 0, paint);
+        paint.setXfermode(null);
+    }
+	
 	/**
 	 * 对图片进行初始化操作，包括让图片居中，以及当图片大于屏幕宽高时对图片进行压缩。
 	 * 
@@ -400,5 +437,4 @@ public class ZoomImageView extends View {
 		centerPointX = (xPoint0 + xPoint1) / 2;
 		centerPointY = (yPoint0 + yPoint1) / 2;
 	}
-
 }

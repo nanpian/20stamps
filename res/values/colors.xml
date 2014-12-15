@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="activity_background_gray">#ff282828</color>
+    <color name="activity_cards_choose_photo_text_pressed">#fff7c71f</color>
 </resources>

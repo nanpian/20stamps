@@ -27,7 +27,7 @@ import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.cards.CardsActivity;
-import com.stamp20.app.activities.TestViewActivity;
+import com.stamp20.app.imageloader.ImageLoaderActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.view.ImageUtil;
 
@@ -119,7 +119,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == mButtonGreen.getId()){
             startActivity(new Intent(HomeActivity.this,
-                    MainActivity.class));
+                    ImageLoaderActivity.class));
         }else if(v.getId() == mButtonRed.getId()){
             startActivity(new Intent(HomeActivity.this,
                     CardsActivity.class));

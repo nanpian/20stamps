@@ -4,7 +4,7 @@
     <string name="app_name">Stamp20</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="select_a_picture">Select a picture</string>
+    <string name="select_a_picture">Choose a Photo</string>
     <string name="next_step">NEXT:choose a rate</string>
     <string name="view_card">VIEW CARD</string>
     <string name="next_review">NEXT: REVIEW</string>

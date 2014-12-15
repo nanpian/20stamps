@@ -22,6 +22,22 @@ public class Constant {
         return Constant.isPropertyEnabled(STAMP20_FIRST_START);
     }
     
+    public static boolean debugCardsActivity(){
+        /*是否调试debugCardsActivity*/
+        //adb shell setprop log.tag.stamp20_cards_start V : make this return true
+        //adb shell setprop log.tag.stamp20_cards_start S : make this return false
+        final String STAMP20_CARDS_START = "stamp20_cards_start";
+        return Constant.isPropertyEnabled(STAMP20_CARDS_START);
+    }
+    
+    public static boolean debugMainActivity(){
+        /*是否调试debugCardsActivity*/
+        //adb shell setprop log.tag.stamp20_main_start V : make this return true
+        //adb shell setprop log.tag.stamp20_main_start S : make this return false
+        final String STAMP20_MAIN_START = "stamp20_main_start";
+        return Constant.isPropertyEnabled(STAMP20_MAIN_START);
+    }
+    
     public static boolean debugXixiaLog(){
         /*是否调试Xixia的Log*/
         //adb shell setprop log.tag.stamp20_xixia_log V : make this return true
