@@ -196,6 +196,12 @@ public class StampView extends View implements OnTouchListener {
     public Bitmap getBmpStampPhoto() {
         return bmpStampPhoto;
     }
+    
+	public void setBmpStampPhoto(Bitmap bitmap, boolean b) {
+		// TODO 使用滤镜的时候不缩放
+	       this.bmpStampPhoto = bmpStamp;
+	        zoomMatrix.postScale(1.0f, 1.0f);
+	}
 
     public void setBmpStampPhoto(Bitmap bmpStamp) {
         this.bmpStampPhoto = bmpStamp;

@@ -22,12 +22,14 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.cards.CardsActivity;
 import com.stamp20.app.imageloader.ImageLoaderActivity;
+import com.stamp20.app.activities.TestViewActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.view.ImageUtil;
 
@@ -42,8 +44,8 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     private Button mButtonGreen;
     private Button mButtonRed;
     
-    private final static int ANIMATION_DURATION = 2000;
-    private final static int CHANGE_PICTURE_DURATION = 3000;
+    private final static int ANIMATION_DURATION = 1000;
+    private final static int CHANGE_PICTURE_DURATION = 2000;
     private final static float MAX_ALPHA = 1.0f;
     private final static float MIN_ALPHA_0 = 0.0f;
     private final static float MIN_ALPHA_1 = 0.1f;
@@ -58,7 +60,8 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
                         mDrawables[mCurrentPicNum % mDrawableIDs.size()],//实现从0 1 2 3 4 5 0 1 2.。。这样的不停转变  
                         mDrawables[(mCurrentPicNum + 1) % mDrawableIDs.size()] });  
                 mCurrentPicNum++;  
-                mBackgroundImageView.setImageDrawable(transitionDrawable);  
+                mBackgroundImageView.setImageDrawable(transitionDrawable);
+                mBackgroundImageView.setScaleType(ScaleType.CENTER_CROP);
                 transitionDrawable.startTransition(ANIMATION_DURATION);  
             }
         }

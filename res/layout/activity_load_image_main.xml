@@ -7,18 +7,12 @@
 
     <include layout="@layout/header" />
 
-    <GridView
-        android:id="@+id/main_grid"
+    <include layout="@layout/top_loadimage_view_page" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:columnWidth="90dip"
-        android:gravity="center"
-        android:horizontalSpacing="20dip"
-        android:listSelector="@android:color/transparent"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="20dip" >
-    </GridView>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

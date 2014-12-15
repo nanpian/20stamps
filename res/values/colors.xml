@@ -2,4 +2,5 @@
 <resources>
     <color name="activity_background_gray">#ff282828</color>
     <color name="activity_cards_choose_photo_text_pressed">#fff7c71f</color>
+    <color name="image_button_background">#00ffffff</color>
 </resources>

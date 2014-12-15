@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // private Button btnSelect;
     private StampView mStampView;
     private Bitmap bitmapSource;
-
+	private static Bitmap bitmap;
     private ImageView headerPrevious;
     private TextView headerTitle;
 
@@ -42,6 +42,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final int SELECT_PIC = 1;
     private static final int MSG_SELECT_PICTURE = 1000;
+
+	public static final String Tag = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,24 +167,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         public Bitmap doInBackground(Void... params) {
-            Bitmap img = null;
             try {
-                Bitmap bitmap = bitmapSource;
-                if (filter != null) {
-                    img = filter.process(bitmap);
+                bitmap = mStampView.getBmpStampPhoto();
+                Log.i(Tag, "debug exception bitmap is" + bitmap);
+                if ((filter != null) && (bitmap!=null)) {
+                    bitmap = filter.process(bitmap);
+                    Log.i(Tag,"debug exception image is " +bitmap);
+                    mStampView.setBmpStampPhoto(bitmap,true);
                 }
-                return img;
+                return bitmap;
             } catch (Exception e) {
-                if (img != null) {
-                    img.recycle();
+            	e.printStackTrace();
+                if (bitmap != null ) {
+                	bitmap.recycle();
                     System.gc();
                 }
             } finally {
-                if (img != null) {
-                    img.recycle();
+            	Log.i(Tag,"debug exception exception is ");
+                if (bitmap != null) {
+                	bitmap.recycle();
                     System.gc();
                 }
-            }
+            } 
             return null;
         }
 
@@ -191,7 +197,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(this, "onPostExecute---");
-                mStampView.setBmpStampPhoto(result);
+                mStampView.invalidate();
+
             }
         }
     }

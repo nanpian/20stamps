@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/activity_background_gray"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/tab_featured_album"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/button_featured_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/image_button_background"
+                android:contentDescription="TODO"
+                android:src="@drawable/icon_featured_album" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_photo_album"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageButton
+                android:id="@+id/button_photo_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/image_button_background"
+                android:src="@drawable/icon_photo_album" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_fb_album"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageButton
+                android:id="@+id/button_fb_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/image_button_background"
+                android:contentDescription="TODO"
+                android:src="@drawable/icon_fb_album" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_instagram_album"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageButton
+                android:id="@+id/button_instagram_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/image_button_background"
+                android:src="@drawable/icon_instagram_album" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/image_source_selected"
+        android:layout_width="180dp"
+        android:layout_height="10dp"
+        android:src="@drawable/background_source_selected" />
+
+</LinearLayout>
