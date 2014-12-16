@@ -41,7 +41,7 @@ public class ImageLoaderActivity extends FragmentActivity implements OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().hide();
+//        getActionBar().hide();
         setContentView(R.layout.activity_load_image_main);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerTitle = (TextView) findViewById(R.id.header_title);

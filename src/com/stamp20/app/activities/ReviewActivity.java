@@ -23,7 +23,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().hide();
+//        getActionBar().hide();
 
         setContentView(R.layout.review_activity);
 

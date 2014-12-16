@@ -54,7 +54,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // btnSelect = (Button) findViewById(R.id.btn_select_pic);
         // btnSelect.setOnClickListener(this);
 
-        getActionBar().hide();
+//        getActionBar().hide();
 
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerPrevious.setOnClickListener(this);

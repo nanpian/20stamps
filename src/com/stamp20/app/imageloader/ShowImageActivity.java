@@ -29,7 +29,7 @@ public class ShowImageActivity extends Activity implements OnItemClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image_grid);
-        getActionBar().hide();
+//        getActionBar().hide();
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(R.string.select_a_picture);

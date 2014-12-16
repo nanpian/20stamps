@@ -23,6 +23,7 @@
                 android:id="@+id/button_featured_album"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:background="@color/image_button_background"
                 android:contentDescription="TODO"
                 android:src="@drawable/icon_featured_album" />
@@ -39,6 +40,7 @@
                 android:id="@+id/button_photo_album"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:background="@color/image_button_background"
                 android:src="@drawable/icon_photo_album" />
         </LinearLayout>
@@ -54,6 +56,7 @@
                 android:id="@+id/button_fb_album"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:background="@color/image_button_background"
                 android:contentDescription="TODO"
                 android:src="@drawable/icon_fb_album" />
@@ -70,6 +73,7 @@
                 android:id="@+id/button_instagram_album"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:background="@color/image_button_background"
                 android:src="@drawable/icon_instagram_album" />
         </LinearLayout>

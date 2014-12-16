@@ -72,7 +72,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
 
         super.onCreateNoTitle(); 
         setContentView(R.layout.activity_home);
-        getActionBar().hide();
+//        getActionBar().hide();
         mButtonGreen = (Button) this.findViewById(R.id.green_button);
         mButtonGreen.setOnClickListener(this);
         mButtonRed = (Button) this.findViewById(R.id.red_button);
