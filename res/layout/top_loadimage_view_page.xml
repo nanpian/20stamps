@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@color/activity_background_gray"
+    android:layout_marginTop="20dp"
     android:baselineAligned="false"
     android:orientation="vertical" >
 
@@ -81,7 +82,7 @@
 
     <ImageView
         android:id="@+id/image_source_selected"
-        android:layout_width="180dp"
+        android:layout_width="360dp"
         android:layout_height="10dp"
         android:src="@drawable/background_source_selected" />
 

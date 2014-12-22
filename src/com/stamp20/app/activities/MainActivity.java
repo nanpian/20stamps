@@ -19,6 +19,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.adapter.ImageFilterAdapter;
 import com.stamp20.app.filter.IImageFilter;
 import com.stamp20.app.util.Log;
+import com.stamp20.app.view.ChooseRateActivity;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampView;
 
@@ -60,7 +61,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tailIcon = (ImageView) findViewById(R.id.tail_icon);
         tailIcon.setVisibility(View.GONE);
         tailText = (TextView) findViewById(R.id.tail_text);
-        tailText.setText(R.string.next_review);
+        tailText.setText(R.string.next_step);
         findViewById(R.id.tail).setOnClickListener(this);
 
         Uri uri = (Uri) getIntent().getParcelableExtra("imageUri");
@@ -96,7 +97,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             finish();
             break;
         case R.id.tail:
-            Intent intent = new Intent(this, com.stamp20.app.activities.ReviewActivity.class);
+            Intent intent = new Intent(this, ChooseRateActivity.class);
             startActivity(intent);
             break;
         default:

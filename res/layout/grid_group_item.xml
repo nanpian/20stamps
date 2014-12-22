@@ -10,13 +10,13 @@
 
         <com.stamp20.app.imageloader.MyImageView
             android:id="@+id/group_image"
-            android:background="@drawable/albums_bg"
-            android:src="@drawable/friends_sends_pictures_no"
-            android:paddingLeft="20dip"
-            android:paddingRight="20dip"
+
+            android:src="@drawable/friends_sends_pictures_no" 
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
             android:paddingTop="18dip"
-            android:paddingBottom="30dip"
-            android:scaleType="fitXY"
+            android:paddingBottom="5dip"
+            android:scaleType="centerCrop"
             android:layout_width="fill_parent"
             android:layout_height="150dip" />
 
@@ -28,6 +28,7 @@
             android:gravity="center"
             android:layout_marginBottom="10dip"
             android:text="5"
+            android:visibility="gone"
             android:layout_gravity="bottom|center_horizontal" />
     </FrameLayout>
 

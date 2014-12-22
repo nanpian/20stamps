@@ -37,13 +37,22 @@ public class ImageUtil {
     	 }
 
     public static String getLocalPathFromUri(ContentResolver resolver, Uri uri) {
-        Cursor cursor = resolver.query(uri, new String[] { MediaStore.Images.Media.DATA }, null, null, null);
+    	Cursor cursor =null;
+    	String urlReturn = null;
+    	try {
+        cursor = resolver.query(uri, new String[] { MediaStore.Images.Media.DATA }, null, null, null);
         if (cursor == null) {
             return null;
         }
         int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
-        return cursor.getString(index);
+        urlReturn = cursor.getString(index);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		cursor.close();
+    	}
+		return urlReturn;
     }
 
     /**
