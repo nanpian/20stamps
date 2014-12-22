@@ -66,9 +66,9 @@ public class ImageFilterAdapter extends BaseAdapter {
 		mInflater = LayoutInflater.from(mContext);
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_normal, new NormaFilter(),"normal"));
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_gray, new GrayFilter(),"gray"));
-		filterArray.add(new FilterInfo(R.drawable.filter_sample_black, new GrayFilter(),"black"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_black, new BlackWhiteFilter(),"black"));
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_yellow, new YellowFilter(),"yellow"));
-		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new YellowFilter(),"sunshine"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new SunShineFilter(),"sunshine"));
 		
 	}
 

@@ -236,10 +236,15 @@ public class StampView extends View {
 
     private void initView() {
         currentStatus = STATUS_INIT;
+        //设置画笔颜色
         viewBackgroundPaint.setColor(Color.WHITE);
+        //设置邮票图片透明度
         stampPhotoPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+        //设置背景图片透明度
         stampBackgroundPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+        //设置邮票框资源
         setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
+        //设置旋转按钮资源
         setBmpBtnReversal(R.drawable.icon_rotation_left);
     }
 
@@ -261,6 +266,7 @@ public class StampView extends View {
             matrix.reset();
             int bitmapWidth = sourceBitmap.getWidth();
             int bitmapHeight = sourceBitmap.getHeight();
+            //计算邮票宽与图片宽比率，背景高与图片高比率，取较大值作为比率，使得缩放宽度与邮票框宽度一致
             float ratio = Math.max(stampBackgroundWidth / (bitmapWidth * 1.0f), stampBackgroundHeight / (bitmapHeight * 1.0f));
             matrix.postScale(ratio, ratio);
             float translateX = (width - (bitmapWidth * ratio)) / 2f;
