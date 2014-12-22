@@ -48,6 +48,10 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
+            android:name="com.stamp20.app.cards.CardsTemplateChooseActivity"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
             android:name="com.stamp20.app.activities.ReviewActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>

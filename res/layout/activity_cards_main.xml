@@ -23,9 +23,46 @@
 			    zoomimageview:maskColor="@color/activity_background_gray"/>
            <ImageView 
 		        android:id="@+id/background_pic"
-		        android:src="@drawable/cards_christmas"
+		        android:src="@drawable/cards_new_year"
 		        android:layout_width="match_parent"
 		        android:layout_height="match_parent"/>
+           <RelativeLayout 
+               android:id="@+id/cross"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:visibility="invisible">
+               <ImageView 
+                   android:layout_centerVertical="true"
+                   android:layout_width="fill_parent"
+                   android:layout_height="1dp"
+                   android:src="@color/activity_cards_choose_photo_text_pressed"/>
+               <ImageView 
+                   android:layout_centerHorizontal="true"
+                   android:layout_height="fill_parent"
+                   android:layout_width="1dp"
+                   android:src="@color/activity_cards_choose_photo_text_pressed"/>
+           </RelativeLayout>
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/tip"
+               android:visibility="invisible">
+               <TextView 
+                   android:id="@+id/tip_initratio"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/activity_cards_choose_photo_text_pressed"
+                   android:text="初始缩放倍数:"
+                   /> 
+               <TextView 
+                   android:layout_below="@id/tip_initratio"
+                   android:id="@+id/tip_currentratio"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/activity_cards_choose_photo_text_pressed"
+                   android:text="当前缩放倍数:"
+                   />
+		   </RelativeLayout>
     </FrameLayout>
     <RelativeLayout 
         android:layout_below="@id/pic_area"

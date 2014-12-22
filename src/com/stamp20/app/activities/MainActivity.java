@@ -51,10 +51,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mContext = this;
         setContentView(R.layout.select_picture);
         mStampView = (StampView) findViewById(R.id.view_stamp);
-        // btnSelect = (Button) findViewById(R.id.btn_select_pic);
-        // btnSelect.setOnClickListener(this);
-
-//        getActionBar().hide();
 
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerPrevious.setOnClickListener(this);
@@ -66,7 +62,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tailText = (TextView) findViewById(R.id.tail_text);
         tailText.setText(R.string.next_review);
         findViewById(R.id.tail).setOnClickListener(this);
-        mStampView.setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
 
         Uri uri = (Uri) getIntent().getParcelableExtra("imageUri");
         Log.d(this, "uri=" + uri);
@@ -131,7 +126,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 if (bitmapSource != null) {
                     mStampView.setBmpStampPhoto(bitmapSource);
                 }
-                mStampView.invalidate();
                 break;
 
             default:
@@ -168,26 +162,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         public Bitmap doInBackground(Void... params) {
             try {
-                bitmap = mStampView.getBmpStampPhoto();
+                bitmap = bitmapSource;
                 Log.i(Tag, "debug exception bitmap is" + bitmap);
                 if ((filter != null) && (bitmap!=null)) {
                     bitmap = filter.process(bitmap);
                     Log.i(Tag,"debug exception image is " +bitmap);
-                    mStampView.setBmpStampPhoto(bitmap,true);
+                    
                 }
                 return bitmap;
             } catch (Exception e) {
-            	e.printStackTrace();
-                if (bitmap != null ) {
-                	bitmap.recycle();
-                    System.gc();
-                }
+//            	e.printStackTrace();
+//                if (bitmap != null ) {
+//                	bitmap.recycle();
+//                    System.gc();
+//                }
             } finally {
             	Log.i(Tag,"debug exception exception is ");
-                if (bitmap != null) {
-                	bitmap.recycle();
-                    System.gc();
-                }
+//                if (bitmap != null) {
+//                	bitmap = null;
+//                }
             } 
             return null;
         }
@@ -197,7 +190,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (result != null) {
                 super.onPostExecute(result);
                 Log.d(this, "onPostExecute---");
-                mStampView.invalidate();
+                mStampView.setBmpStampPhoto(bitmap);
+                mStampView.postInvalidate();
 
             }
         }

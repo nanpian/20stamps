@@ -3,6 +3,7 @@ package com.stamp20.app.guide;
 import com.stamp20.app.R;
 import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.cards.CardsActivity;
+import com.stamp20.app.cards.CardsTemplateChooseActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Log;
 
@@ -94,6 +95,11 @@ public class SplashActivity extends Activity {
         if(Constant.debugCardsActivity() && Log.DEBUG){
             startActivity(new Intent(SplashActivity.this,
                 CardsActivity.class));
+            return;
+        }
+        if(Constant.debugCardsTemplateChooseActivity() && Log.DEBUG){
+            startActivity(new Intent(SplashActivity.this,
+                CardsTemplateChooseActivity.class));
             return;
         }
         if (firstStart || (Constant.debugGuideActivity() && Log.DEBUG)) {

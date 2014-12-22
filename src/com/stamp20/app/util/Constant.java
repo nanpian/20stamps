@@ -30,6 +30,14 @@ public class Constant {
         return Constant.isPropertyEnabled(STAMP20_CARDS_START);
     }
     
+    public static boolean debugCardsTemplateChooseActivity(){
+        /*是否调试debugCardsActivity*/
+        //adb shell setprop log.tag.stamp20_template_start V : make this return true
+        //adb shell setprop log.tag.stamp20_template_start S : make this return false
+        final String STAMP20_CARDS_TEMPLATE_CHOOSE_START = "stamp20_template_start";
+        return Constant.isPropertyEnabled(STAMP20_CARDS_TEMPLATE_CHOOSE_START);
+    }
+    
     public static boolean debugMainActivity(){
         /*是否调试debugCardsActivity*/
         //adb shell setprop log.tag.stamp20_main_start V : make this return true

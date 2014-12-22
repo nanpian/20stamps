@@ -44,87 +44,87 @@ public class ZoomImageView extends View {
 	/**
 	 * 用于对图片进行移动和缩放变换的矩阵
 	 */
-	private Matrix matrix = new Matrix();
+	protected Matrix matrix = new Matrix();
 
 	/**
 	 * 待展示的Bitmap对象
 	 */
-	private Bitmap sourceBitmap;
+	protected Bitmap sourceBitmap;
 
 	/**
 	 * 记录当前操作的状态，可选值为STATUS_INIT、STATUS_ZOOM_OUT、STATUS_ZOOM_IN和STATUS_MOVE
 	 */
-	private int currentStatus;
+	protected int currentStatus;
 
 	/**
 	 * ZoomImageView控件的宽度
 	 */
-	private int width;
+	protected int width;
 
 	/**
 	 * ZoomImageView控件的高度
 	 */
-	private int height;
+	protected int height;
 
 	/**
 	 * 记录两指同时放在屏幕上时，中心点的横坐标值
 	 */
-	private float centerPointX;
+	protected float centerPointX;
 
 	/**
 	 * 记录两指同时放在屏幕上时，中心点的纵坐标值
 	 */
-	private float centerPointY;
+	protected float centerPointY;
 
 	/**
 	 * 记录当前图片的宽度，图片被缩放时，这个值会一起变动
 	 */
-	private float currentBitmapWidth;
+	protected float currentBitmapWidth;
 
 	/**
 	 * 记录当前图片的高度，图片被缩放时，这个值会一起变动
 	 */
-	private float currentBitmapHeight;
+	protected float currentBitmapHeight;
 
 	/**
 	 * 记录上次手指移动时的横坐标
 	 */
-	private float lastXMove = -1;
+	protected float lastXMove = -1;
 
 	/**
 	 * 记录上次手指移动时的纵坐标
 	 */
-	private float lastYMove = -1;
+	protected float lastYMove = -1;
 
 	/**
 	 * 记录手指在横坐标方向上的移动距离
 	 */
-	private float movedDistanceX;
+	protected float movedDistanceX;
 
 	/**
 	 * 记录手指在纵坐标方向上的移动距离
 	 */
-	private float movedDistanceY;
+	protected float movedDistanceY;
 
 	/**
 	 * 记录图片在矩阵上的横向偏移值
 	 */
-	private float totalTranslateX;
+	protected float totalTranslateX;
 
 	/**
 	 * 记录图片在矩阵上的纵向偏移值
 	 */
-	private float totalTranslateY;
+	protected float totalTranslateY;
 
 	/**
 	 * 记录图片在矩阵上的总缩放比例
 	 */
-	private float totalRatio;
+	protected float totalRatio;
 
 	/**
 	 * 记录手指移动的距离所造成的缩放比例
 	 */
-	private float scaledRatio;
+	protected float scaledRatio;
 
 	/**
 	 * 记录图片初始化时的缩放比例
@@ -173,6 +173,34 @@ public class ZoomImageView extends View {
 		}
 	}
 
+	protected void dealMoveEvent(MotionEvent event){
+	 // 只有单指按在屏幕上移动时，为拖动状态
+        float xMove = event.getX();
+        float yMove = event.getY();
+        if (lastXMove == -1 && lastYMove == -1) {
+            lastXMove = xMove;
+            lastYMove = yMove;
+        }
+        currentStatus = STATUS_MOVE;
+        movedDistanceX = xMove - lastXMove;
+        movedDistanceY = yMove - lastYMove;
+        // 进行边界检查，不允许将图片拖出边界
+        if (totalTranslateX + movedDistanceX > 0) {
+            movedDistanceX = 0;
+        } else if (width - (totalTranslateX + movedDistanceX) > currentBitmapWidth) {
+            movedDistanceX = 0;
+        }
+        if (totalTranslateY + movedDistanceY > 0) {
+            movedDistanceY = 0;
+        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight) {
+            movedDistanceY = 0;
+        }
+        // 调用onDraw()方法绘制图片
+        invalidate();
+        lastXMove = xMove;
+        lastYMove = yMove;
+	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getActionMasked()) {
@@ -183,32 +211,9 @@ public class ZoomImageView extends View {
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
+		    mIsMovingOrZooming = true;
 			if (event.getPointerCount() == 1) {
-				// 只有单指按在屏幕上移动时，为拖动状态
-				float xMove = event.getX();
-				float yMove = event.getY();
-				if (lastXMove == -1 && lastYMove == -1) {
-					lastXMove = xMove;
-					lastYMove = yMove;
-				}
-				currentStatus = STATUS_MOVE;
-				movedDistanceX = xMove - lastXMove;
-				movedDistanceY = yMove - lastYMove;
-				// 进行边界检查，不允许将图片拖出边界
-				if (totalTranslateX + movedDistanceX > 0) {
-					movedDistanceX = 0;
-				} else if (width - (totalTranslateX + movedDistanceX) > currentBitmapWidth) {
-					movedDistanceX = 0;
-				}
-				if (totalTranslateY + movedDistanceY > 0) {
-					movedDistanceY = 0;
-				} else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight) {
-					movedDistanceY = 0;
-				}
-				// 调用onDraw()方法绘制图片
-				invalidate();
-				lastXMove = xMove;
-				lastYMove = yMove;
+			    dealMoveEvent(event);
 			} else if (event.getPointerCount() == 2) {
 				// 有两个手指按在屏幕上移动时，为缩放状态
 				centerPointBetweenFingers(event);
@@ -240,12 +245,20 @@ public class ZoomImageView extends View {
 				lastXMove = -1;
 				lastYMove = -1;
 			}
+            mIsMovingOrZooming = false;
+            invalidate();
 			break;
 		case MotionEvent.ACTION_UP:
 			// 手指离开屏幕时将临时值还原
 			lastXMove = -1;
 			lastYMove = -1;
+            mIsMovingOrZooming = false;
+            invalidate();
 			break;
+		case MotionEvent.ACTION_CANCEL:
+            mIsMovingOrZooming = false;
+            invalidate();
+            break;
 		default:
 			break;
 		}
@@ -272,15 +285,26 @@ public class ZoomImageView extends View {
 			canvas.drawBitmap(sourceBitmap, matrix, null);
 			break;
 		}
-		mask(canvas);
+		if(mIsMovingOrZooming){
+		    if(listener != null){
+		        listener.onMoveOrZoomListener(true, initRatio, totalRatio);
+		    }
+		} else {
+		    if(listener != null){
+                listener.onMoveOrZoomListener(false, initRatio, totalRatio);
+            }
+	        mask(canvas);   
+		}
 	}
 
+	private boolean mIsMovingOrZooming = false;
+	
 	/**
 	 * 对图片进行缩放处理。
 	 * 
 	 * @param canvas
 	 */
-	private void zoom(Canvas canvas) {
+	protected void zoom(Canvas canvas) {
 		matrix.reset();
 		// 将图片按总缩放比例进行缩放
 		matrix.postScale(totalRatio, totalRatio);
@@ -436,5 +460,14 @@ public class ZoomImageView extends View {
 		float yPoint1 = event.getY(1);
 		centerPointX = (xPoint0 + xPoint1) / 2;
 		centerPointY = (yPoint0 + yPoint1) / 2;
+	}
+	
+	OnMoveOrZoomListener listener = null;
+	public void setOnMoveOrZoomListener(OnMoveOrZoomListener l){
+	    listener = l;
+	}
+	
+	public interface OnMoveOrZoomListener{
+	    public void onMoveOrZoomListener(boolean flag, float ratio, float currentRatio);
 	}
 }
