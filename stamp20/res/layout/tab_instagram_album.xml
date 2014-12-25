@@ -5,12 +5,87 @@
     android:gravity="center"
     android:background="@color/activity_background_gray"
     android:orientation="vertical" >
+    <LinearLayout
+        android:id="@+id/fb_no_login_id"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+        
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/icon_instagram_album_big" />
 
-    <TextView
-        android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="You aren't signed in to Instagram"
+            android:textSize="15sp" />
+        
+    </LinearLayout>
+    
+    
+    <Button
+        android:id="@+id/instagram_login_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This is instagram Tab"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+
+        android:text="@string/com_instagram_loginview_log_in_button"
+        android:textColor="@color/com_facebook_loginview_text_color"
+        android:textSize="@dimen/com_facebook_loginview_text_size"
+        android:textStyle="bold"
+
+        android:background="@drawable/com_facebook_button_blue"
+        android:drawablePadding="10dp"
+        android:paddingLeft="@dimen/com_facebook_loginview_padding_left"
+        android:paddingTop="@dimen/com_facebook_loginview_padding_top"
+        android:paddingRight="@dimen/com_facebook_loginview_padding_right"
+        android:paddingBottom="@dimen/com_facebook_loginview_padding_bottom"
+        />
+    
+    <GridView
+        android:id="@+id/main_grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="@android:color/transparent"
+        android:columnWidth="90dip"
+        android:gravity="center"
+        android:horizontalSpacing="10dip"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dip"
+        android:visibility="gone" >
+    </GridView>
+    
+    <Button
+        android:id="@+id/instagram_logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+
+        android:text="@string/com_facebook_loginview_log_out_button"
+        android:textColor="@color/com_facebook_loginview_text_color"
+        android:textSize="@dimen/com_facebook_loginview_text_size"
+        android:textStyle="bold"
+
+        android:background="@drawable/com_facebook_button_blue"
+        android:drawableLeft="@drawable/com_facebook_inverse_icon"
+        android:drawablePadding="10dp"
+        android:paddingLeft="@dimen/com_facebook_loginview_padding_left"
+        android:paddingTop="@dimen/com_facebook_loginview_padding_top"
+        android:paddingRight="@dimen/com_facebook_loginview_padding_right"
+        android:paddingBottom="@dimen/com_facebook_loginview_padding_bottom"
+        />
+    
+
 
 </LinearLayout>

@@ -2,10 +2,13 @@ package com.stamp20.app.view;
 
 import java.util.concurrent.ExecutionException;
 
+import lenovo.jni.ImageUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
@@ -14,12 +17,12 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow.OnDismissListener;
 
 import com.stamp20.app.R;
 import com.stamp20.app.activities.BlurTestActivity;
 import com.stamp20.app.guide.AnimationUtil;
 import com.stamp20.app.util.BitmapCache;
-import com.stamp20.app.util.BlurBitmapAsyncTask;
 import com.stamp20.app.util.Log;
 
 public class ChooseRateActivity extends Activity implements View.OnClickListener{
@@ -67,50 +70,23 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     private float mStartAlpha = 0.001f;
     private float mEndAlpha = 1.0f;
     private long mDuration = 1000;
+    private ChooseRatePopupWindow mCRP;
     private void popupWindowInit(){
         mChooseRateRoot = (LinearLayout) this.findViewById(R.id.choose_rate_root);
         mBlurImageView = (ImageView) this.findViewById(R.id.blur_background);
-        mBlurImageView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration, 
-                        new AnimationListener() {
-                    
-                    @Override
-                    public void onAnimationStart(Animation animation) {}
-                    
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {}
-                    
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        mBlurImageView.setClickable(false);
-                        mBlurImageView.setVisibility(View.INVISIBLE);
-                    }
-                }));
-            }
-        });
+        if(mCRP == null){
+            mCRP = new ChooseRatePopupWindow(getApplicationContext(), ChooseRateActivity.this.findViewById(R.id.root));
+            mCRP.setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    hidePopupWindow();
+                }
+            });
+        }
     }
     
-    private void showPopupWindow(){
-        mChooseRateRoot.buildDrawingCache();
-        Bitmap source = mChooseRateRoot.getDrawingCache();
-        
-        mBlurImageView.setVisibility(View.VISIBLE);
-        try {
-            mBlurImageView.setImageBitmap(new BlurBitmapAsyncTask().execute(source).get());
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Log.i(this, "blur bitmap error InterruptedException");
-            return;
-        } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Log.i(this, "blur bitmap error ExecutionException");
-            return;
-        }
-        mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, 
+    private void hidePopupWindow(){
+        mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration, 
                 new AnimationListener() {
             
             @Override
@@ -121,9 +97,52 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             
             @Override
             public void onAnimationEnd(Animation animation) {
-                mBlurImageView.setClickable(true);
+                mBlurImageView.setClickable(false);
+                mBlurImageView.setVisibility(View.INVISIBLE);
             }
         }));
+    }
+    
+    private void showPopupWindow(){
+        new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected void onPreExecute() {
+                mCRP.show();
+            }
+
+            /*
+             * 第一个参数是doInBackground的输入参数
+             * 第二个参数是用于输出中间计算进度的参数
+             * 第三个参数是说明doInBackground的返回参数和onPostExecute的输入参数
+             * */
+            @Override
+            protected Bitmap doInBackground(Void... unused) {
+                mChooseRateRoot.buildDrawingCache();
+                Bitmap source = mChooseRateRoot.getDrawingCache();
+                return ImageUtils.fastBlur(source, 100);
+            }
+            
+            @Override
+            protected void onPostExecute(Bitmap result) {
+                mBlurImageView.setVisibility(View.VISIBLE);
+                mBlurImageView.setImageBitmap(result);
+                mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, 
+                        new AnimationListener() {
+                    
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+                    
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                    
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mBlurImageView.setClickable(true);
+                    }
+                }));
+            }
+        }.execute();
+        
     }
     /*和底部弹出的PopupWindow相关 END*/
 }

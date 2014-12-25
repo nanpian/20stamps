@@ -20,7 +20,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.guide.SplashActivity;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ImageUtil;
-import com.stamp20.app.view.ImageViewText;
+import com.stamp20.app.view.ImageTextView;
 import com.stamp20.app.view.ZoomImageView;
 
 public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoomListener{
@@ -35,8 +35,8 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
      */
     private Bitmap bitmap;
     
-    private ImageViewText mChoosePhoto;
-    private ImageViewText mChooseTemplate;
+    private ImageTextView mChoosePhoto;
+    private ImageTextView mChooseTemplate;
     private ImageView mBackgroundPic ;
     private RelativeLayout mCross;
     private RelativeLayout mTextTip;
@@ -49,9 +49,9 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
     private static final int MSG_CHANGE_DESIGN = MSG_SELECT_PICTURE + 1;
     public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
     
-    private ImageViewText.OnClickListenerImageViewText onClickListenerImageViewText = new ImageViewText.OnClickListenerImageViewText() {
+    private ImageTextView.OnClickListenerImageTextView onClickListenerImageTextView = new ImageTextView.OnClickListenerImageTextView() {
         @Override
-        public void onClick(View arg0, int id) {
+        public void onClick(View arg0, int id, String text) {
             com.stamp20.app.util.Log.d(this, "click");
             if(id == mChoosePhoto.getId()){
                 com.stamp20.app.util.Log.d(this, "mChoosePhoto.click");
@@ -80,10 +80,10 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
         mTextTip = (RelativeLayout) this.findViewById(R.id.tip);
         mTextViewCurrentRatio = (TextView) this.findViewById(R.id.tip_currentratio);
         mTextViewInitRatio = (TextView) this.findViewById(R.id.tip_initratio);
-        mChoosePhoto = (ImageViewText) this.findViewById(R.id.choose_photo);
-        mChoosePhoto.setOnClickListenerImageViewText(onClickListenerImageViewText);
-        mChooseTemplate = (ImageViewText) this.findViewById(R.id.choose_template);
-        mChooseTemplate.setOnClickListenerImageViewText(onClickListenerImageViewText);
+        mChoosePhoto = (ImageTextView) this.findViewById(R.id.choose_photo);
+        mChoosePhoto.setOnClickListenerImageViewText(onClickListenerImageTextView);
+        mChooseTemplate = (ImageTextView) this.findViewById(R.id.choose_template);
+        mChooseTemplate.setOnClickListenerImageViewText(onClickListenerImageTextView);
     }
 
     private void changeTemplate(){

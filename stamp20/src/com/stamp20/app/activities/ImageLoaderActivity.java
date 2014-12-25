@@ -3,6 +3,7 @@ package com.stamp20.app.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -18,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 import com.stamp20.app.R;
 import com.stamp20.app.fragments.FaceBookAlbumFragment;
 import com.stamp20.app.fragments.FeaturedAlbumFragment;
@@ -52,6 +55,22 @@ public class ImageLoaderActivity extends FragmentActivity implements OnClickList
         headerTitle.setText(R.string.select_a_picture);
         initSelectedImage();
         initView();
+        
+        // Check if there is a currently logged in user
+        // and it's linked to a Facebook account.        
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
+          // Go to the user info activity
+        	//showUserDetailsActivity();
+        }
+        
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      //Log.i(TAG, "finish authentication");
+      ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
 
     private void initSelectedImage() {

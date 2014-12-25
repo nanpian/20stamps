@@ -6,7 +6,7 @@
     <attr name="roundHeight" format="dimension" />
 </declare-styleable>
 
-<declare-styleable name="ImageViewText">
+<declare-styleable name="ImageTextView">
     <attr name="text" format="string" />
     <attr name="textViewColorStateList" format="reference" />
     <attr name="imageViewSelectorDrawable" format="reference" />

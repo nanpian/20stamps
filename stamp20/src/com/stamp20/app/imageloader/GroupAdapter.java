@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.facebook.FbAlbum;
 import com.stamp20.app.imageloader.MyImageView.OnMeasureListener;
-import com.stamp20.app.imageloader.NativeImageLoader.NativeImageCallBack;
+import com.stamp20.app.imageloader.ImageLoader.NativeImageCallBack;
 
 public class GroupAdapter extends BaseAdapter {
     private List<ImageBean> list;
@@ -50,7 +51,7 @@ public class GroupAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
         ImageBean mImageBean = list.get(position);
-        String path = mImageBean.getTopImagePath();
+        
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.grid_group_item, null);
@@ -75,20 +76,51 @@ public class GroupAdapter extends BaseAdapter {
 
         viewHolder.mTextViewTitle.setText(mImageBean.getFolderName());
         viewHolder.mTextViewCounts.setText(Integer.toString(mImageBean.getImageCounts()));
-        // 给ImageView设置路径Tag,这是异步加载图片的小技巧
-        viewHolder.mImageView.setTag(path);
+        
+        String path = mImageBean.getTopImagePath();
+        FbAlbum album = mImageBean.getFbAlbum();
+        
+        Bitmap bitmap = null;
+        
+        if(path == null && album != null){
+        	//Facebook 
+        	String url = album.getCoverThumbnailUrl();
+        	
+        	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
+            viewHolder.mImageView.setTag(url);
 
-        // 利用NativeImageLoader类加载本地图片
-        Bitmap bitmap = NativeImageLoader.getInstance().loadNativeImage(path, mPoint, new NativeImageCallBack() {
+            // 利用NativeImageLoader类加载本地图片
+            bitmap = ImageLoader.getInstance().loadNativeImage(url, mPoint, new NativeImageCallBack() {
 
-            @Override
-            public void onImageLoader(Bitmap bitmap, String path) {
-                ImageView mImageView = (ImageView) mGridView.findViewWithTag(path);
-                if (bitmap != null && mImageView != null) {
-                    mImageView.setImageBitmap(bitmap);
+                @Override
+                public void onImageLoader(Bitmap bitmap, String path) {
+                    ImageView mImageView = (ImageView) mGridView.findViewWithTag(path);
+                    if (bitmap != null && mImageView != null) {
+                        mImageView.setImageBitmap(bitmap);
+                    }
                 }
-            }
-        });
+            });
+        	
+        	
+        }else{
+        	//本地目录
+        	
+        	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
+            viewHolder.mImageView.setTag(path);
+
+            // 利用NativeImageLoader类加载本地图片
+            bitmap = ImageLoader.getInstance().loadNativeImage(path, mPoint, new NativeImageCallBack() {
+
+                @Override
+                public void onImageLoader(Bitmap bitmap, String path) {
+                    ImageView mImageView = (ImageView) mGridView.findViewWithTag(path);
+                    if (bitmap != null && mImageView != null) {
+                        mImageView.setImageBitmap(bitmap);
+                    }
+                }
+            });	
+        }
+        
 
         if (bitmap != null) {
             viewHolder.mImageView.setImageBitmap(bitmap);

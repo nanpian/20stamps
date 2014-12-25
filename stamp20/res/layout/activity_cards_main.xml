@@ -78,7 +78,7 @@
             android:layout_centerHorizontal="true"
             android:background="#ff323433"
             />
-        <com.stamp20.app.view.ImageViewText
+        <com.stamp20.app.view.ImageTextView
             android:id="@+id/choose_photo"
             android:layout_toLeftOf="@id/middle_divider"
             android:layout_height="match_parent"
@@ -87,7 +87,7 @@
             imageviewtext:textViewColorStateList="@color/sel_cards_choose_button"
             imageviewtext:imageViewSelectorDrawable="@drawable/sel_cards_change_photo_button"
             />
-        <com.stamp20.app.view.ImageViewText
+        <com.stamp20.app.view.ImageTextView
             android:id="@+id/choose_template"
             android:layout_toRightOf="@id/middle_divider"
             android:layout_height="match_parent"

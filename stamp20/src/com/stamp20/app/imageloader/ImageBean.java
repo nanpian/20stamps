@@ -1,5 +1,6 @@
 package com.stamp20.app.imageloader;
 
+import com.stamp20.app.facebook.FbAlbum;
 import com.stamp20.app.view.ImageUtil;
 
 import android.content.Context;
@@ -16,6 +17,12 @@ public class ImageBean {
      * 文件夹的第一张图片路径
      */
     private String topImagePath;
+    
+    /**
+     * facebook album
+     */
+    private FbAlbum album;
+    
     /**
      * 文件夹名
      */
@@ -29,6 +36,15 @@ public class ImageBean {
     public ImageBean(Context context) {
         this.mContext = context;
     }
+    
+    public FbAlbum getFbAlbum(){
+    	return this.album;
+    }
+    
+    public void setFbAlbum(FbAlbum album){
+    	this.album = album;
+    	this.topImagePath = null;
+    }
 
     public String getTopImagePath() {
         return topImagePath;
@@ -36,6 +52,7 @@ public class ImageBean {
 
     public void setTopImagePath(String topImagePath) {
         this.topImagePath = topImagePath;
+        this.album = null;
     }
 
     public void setTopImagePath(Uri uri) {

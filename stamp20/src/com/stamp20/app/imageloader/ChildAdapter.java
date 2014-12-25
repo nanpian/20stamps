@@ -21,7 +21,7 @@ import android.widget.ImageView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.imageloader.MyImageView.OnMeasureListener;
-import com.stamp20.app.imageloader.NativeImageLoader.NativeImageCallBack;
+import com.stamp20.app.imageloader.ImageLoader.NativeImageCallBack;
 import com.stamp20.app.view.ImageUtil;
 
 public class ChildAdapter extends BaseAdapter {
@@ -81,7 +81,7 @@ public class ChildAdapter extends BaseAdapter {
         }
         viewHolder.mImageView.setTag(path);
         // 利用NativeImageLoader类加载本地图片
-        Bitmap bitmap = NativeImageLoader.getInstance().loadNativeImage(path, mPoint, new NativeImageCallBack() {
+        Bitmap bitmap = ImageLoader.getInstance().loadNativeImage(path, mPoint, new NativeImageCallBack() {
 
             @Override
             public void onImageLoader(Bitmap bitmap, String path) {

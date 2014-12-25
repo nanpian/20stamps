@@ -18,6 +18,11 @@
 
 package com.stamp20.app.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.IntBuffer;
 
 import android.app.Activity;
@@ -294,5 +299,27 @@ public class Image {
     {
 		Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(), resourceId);
         return new Image(bitmap);
+    }
+    
+    public static Bitmap LoadImage(String url){    	
+    	URL myFileUrl = null;        	  
+    	Bitmap bitmap = null;        	  
+    	try {    	  
+    		myFileUrl = new URL(url);    	  
+    	} catch (MalformedURLException e) {        	  
+    		e.printStackTrace();    	  
+    	}        	  
+    	try {        	  
+    		HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();    
+    		conn.setDoInput(true);    
+    		conn.connect();    
+    		InputStream is = conn.getInputStream();    
+    		bitmap = BitmapFactory.decodeStream(is);    
+    		is.close();        	  
+    	} catch (IOException e) {    
+    		e.printStackTrace();    
+    	}
+    	return bitmap;
+    	
     }
 }

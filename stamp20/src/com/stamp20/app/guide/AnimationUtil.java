@@ -17,4 +17,19 @@ public class AnimationUtil {
         }
         return animation;
     }
+    
+    public static Animation getTranslateAnimation(int fromXType, float fromXValue, 
+            int toXType, float toXValue, 
+            int fromYType, float fromYValue, 
+            int toYType, float toYValue, 
+            boolean fillAfter, long durationMillis, AnimationListener listener){
+        TranslateAnimation animation = new TranslateAnimation(fromXType, fromXValue, toXType, toXValue, 
+                fromYType, fromYValue, toYType, toYValue);
+        animation.setDuration(durationMillis);
+        animation.setFillAfter(fillAfter);
+        if(listener != null){
+            animation.setAnimationListener(listener);
+        }
+        return animation;
+    }
 }

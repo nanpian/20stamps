@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	android:adjustViewBounds="true" 
+	则将缩放包围ImageView的矩形到适合ImageView当前缩放比例的大小-->
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imageviewtext="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <com.stamp20.app.view.ImageTextView
+        android:id="@+id/item"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        imageviewtext:imageViewSelectorDrawable="@drawable/sel_cards_change_photo_button"
+        imageviewtext:textViewColorStateList="@color/sel_cards_choose_button" />
+
+</LinearLayout>
