@@ -11,6 +11,13 @@ import org.jinstagram.entity.users.feed.MediaFeed;
 import org.jinstagram.entity.users.feed.MediaFeedData;
 import org.jinstagram.exceptions.InstagramException;
 
+import com.parse.ParseUser;
+
+import com.stamp20.app.R;
+import com.stamp20.app.Setting;
+import com.stamp20.app.imageloader.ImageLoader;
+import com.stamp20.app.imageloader.ImageLoader2;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +40,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InstagramPhotosView extends Activity {/*
+public class InstagramPhotosView extends Activity {
 
 	private final int REQUEST_CODE_IMAGE_DETAILS = 1;
 	
@@ -47,7 +54,7 @@ public class InstagramPhotosView extends Activity {/*
 	
 	private ArrayList<MediaFeedData> mediaFeedDataList;
 	private Pagination pagination=null;
-	private ImageLoader imageLoader;
+	private ImageLoader2 imageLoader;
 	
 	private Instagram instagramClient;
 	private long instagramUserId=-1;
@@ -57,33 +64,33 @@ public class InstagramPhotosView extends Activity {/*
 	private TokenValidationTask tokenValidationTask;
 	private LoadRecentMediaTask loadRecentMediaTask;
 	
-	private LocalyticsSession localyticsSession;
+	//private LocalyticsSession localyticsSession;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(getResources().getBoolean(R.bool.portrait_only)){
+		//if(getResources().getBoolean(R.bool.portrait_only)){
 	        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	    }
+	    //}
 		setContentView(R.layout.instagram_photos_view);
 		
 		mediaFeedDataList = new ArrayList<MediaFeedData>();
 		
-		imageLoader = ImageLoader.get(this.getApplicationContext());
+		imageLoader = ImageLoader2.get(this.getApplicationContext());
 
-		header_title = (TextView)findViewById(R.id.header_center_text);
-		header_menu_btn = (ImageButton)findViewById(R.id.header_left_button);
-		header_cart_btn = (ImageButton)findViewById(R.id.header_right_button);
-		header_title.setText("Instagram Photos");
-		header_cart_btn.setVisibility(View.INVISIBLE);
-		header_menu_btn.setImageResource(R.drawable.ic_header_back);
-		header_menu_btn.setOnClickListener(new View.OnClickListener() {
+		//header_title = (TextView)findViewById(R.id.header_center_text);
+		//header_menu_btn = (ImageButton)findViewById(R.id.header_left_button);
+		//header_cart_btn = (ImageButton)findViewById(R.id.header_right_button);
+		//header_title.setText("Instagram Photos");
+		//header_cart_btn.setVisibility(View.INVISIBLE);
+		//header_menu_btn.setImageResource(R.drawable.ic_header_back);
+	/*	header_menu_btn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				activity.setResult(RESULT_CANCELED);
 				activity.finish();
 			}
-		});
+		});*/
 
 		guideText = (TextView) findViewById(R.id.instagram_photos_view_guide_text);
 		imageGrid = (GridView) findViewById(R.id.instagram_photos_view_gridview);
@@ -102,16 +109,16 @@ public class InstagramPhotosView extends Activity {/*
 				      url = mdf.getImages().getStandardResolution().getImageUrl();
 				    }catch(Exception e){
 				    	if (mdf.getImages()!=null){
-							  Crashlytics.log(Log.ERROR, "case", "InstagramPhotosView-mdf.getImages() is "+mdf.getImages().toString());				    		
+							  //Crashlytics.log(Log.ERROR, "case", "InstagramPhotosView-mdf.getImages() is "+mdf.getImages().toString());				    		
 				    	}else{
-							  Crashlytics.log(Log.ERROR, "case", "InstagramPhotosView-mdf.getImages() is null!?");				    		
+							  //Crashlytics.log(Log.ERROR, "case", "InstagramPhotosView-mdf.getImages() is null!?");				    		
 				    	}
-				      Crashlytics.logException(e);
+				     // Crashlytics.logException(e);
 				    }
 				    if (url!=null){
 						Intent i = new Intent(activity,InstagramPhotoDetailsView.class);
-						i.putExtra(InstagramPhotoDetailsView.EXTRA_IMAGE_FULL_URL, url);
-						startActivityForResult(i,REQUEST_CODE_IMAGE_DETAILS);				      
+						//i.putExtra(InstagramPhotoDetailsView.EXTRA_IMAGE_FULL_URL, url);
+						//startActivityForResult(i,REQUEST_CODE_IMAGE_DETAILS);				      
 				    }else{
 				      Toast.makeText(activity, "Error loading this photo", Toast.LENGTH_LONG).show();
 				    }
@@ -124,26 +131,23 @@ public class InstagramPhotosView extends Activity {/*
 		pagination = null;
 		
 		//locallytics tracking
-		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());
-		this.localyticsSession.open();
-		this.localyticsSession.tagScreen("InstagramPhotosView");
-		this.localyticsSession.upload();
+		//this.localyticsSession = new LocalyticsSession(this.getApplicationContext());
+		//this.localyticsSession.open();
+		//this.localyticsSession.tagScreen("InstagramPhotosView");
+		//this.localyticsSession.upload();
 
 	}
 	
 	@Override
 	public void onStart(){
 	  super.onStart();
-	  GoogleAnalytics.getInstance(getApplicationContext()).getDefaultTracker().send(MapBuilder
-		  .createAppView()
-		  .set(Fields.SCREEN_NAME, "InstagramPhotosView")
-		  .build());
+	 
 	}
 	
 	@Override
 	public void onResume(){
 	  super.onResume();
-	  this.localyticsSession.open();
+	 // this.localyticsSession.open();
 	  if (instagramUserId==-1){
 		tokenValidationTask = new TokenValidationTask();
 		tokenValidationTask.execute();
@@ -154,8 +158,7 @@ public class InstagramPhotosView extends Activity {/*
 	
 	@Override
 	public void onPause(){
-	  this.localyticsSession.close();
-	  this.localyticsSession.upload();
+
 	  if (tokenValidationTask!=null && !tokenValidationTask.getStatus().equals(AsyncTask.Status.FINISHED)){
 		tokenValidationTask.cancel(false);
 	  }
@@ -184,11 +187,11 @@ public class InstagramPhotosView extends Activity {/*
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		if (requestCode == REQUEST_CODE_IMAGE_DETAILS){
-			if (resultCode == RESULT_OK && data!=null 
+/*			if (resultCode == RESULT_OK && data!=null 
 					&& data.hasExtra(InstagramPhotoDetailsView.EXTRA_IMAGE_FULL_URL)){
 				activity.setResult(RESULT_OK, data);
 				activity.finish();
-			}
+			}*/
 		}else{
 			super.onActivityResult(requestCode, resultCode, data);
 		}
@@ -243,18 +246,18 @@ public class InstagramPhotosView extends Activity {/*
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (getItemViewType(position)==0){
-	            ImageView imageView;
+	            ImageView imageView = null;
 	            if (convertView == null) { 
-	                imageView = (ImageView)inflater.inflate(R.layout.image_search_view_grid_item, parent, false);
+	                //imageView = (ImageView)inflater.inflate(R.layout.image_search_view_grid_item, parent, false);
 	            } else {
 	                imageView = (ImageView) convertView;
 	            }
 	            imageLoader.displayImageFromUrlLater(mediaFeedDataList.get(position).getImages().getThumbnail().getImageUrl(), activity, imageView,150);            	
 	            return imageView;
 			}else{
-	            ImageView imageView;
+	            ImageView imageView = null;
 	            if (convertView == null) { 
-	                imageView = (ImageView)inflater.inflate(R.layout.image_search_view_grid_item, parent, false);
+	               // imageView = (ImageView)inflater.inflate(R.layout.image_search_view_grid_item, parent, false);
 	            } else {
 	                imageView = (ImageView) convertView;
 	            }
@@ -298,7 +301,7 @@ public class InstagramPhotosView extends Activity {/*
 		try{
 			 currentUserInfo = instagramClient.getCurrentUserInfo();
 		}catch(InstagramException e){
-			 Crashlytics.log(Log.ERROR, "case", e.getMessage());
+			// Crashlytics.log(Log.ERROR, "case", e.getMessage());
 		}
 		if (currentUserInfo!=null && currentUserInfo.getData()!=null){
 			return currentUserInfo.getData();
@@ -322,10 +325,10 @@ public class InstagramPhotosView extends Activity {/*
 			}else if (pagination.hasNextPage()){
 			  return instagramClient.getRecentMediaNextPage(pagination);
 			}else{
-			  Crashlytics.log(Log.ERROR, "case", "InstagramPhotosView-doInBackground no next page?!");
+			  //Crashlytics.log(Log.ERROR, "case", "InstagramPhotosView-doInBackground no next page?!");
 			}
 		  }catch(Exception e){
-			Crashlytics.logException(e);
+			//Crashlytics.logException(e);
 		  }
 		  return null;
 		}
@@ -344,6 +347,6 @@ public class InstagramPhotosView extends Activity {/*
 			}
 			imageAdapter.notifyDataSetChanged();
 		}
-	}*/
+	}
 
 }

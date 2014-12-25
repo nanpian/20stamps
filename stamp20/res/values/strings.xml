@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="facebook_app_id">713170092123951</string>
     
     <string name="app_name">StampDesign</string>
@@ -13,5 +14,6 @@
     <string name="post_card">post card</string>
     <string name="select_letter">1st class letter</string>
     <string name="select_more">more</string>
+    <string name="title_activity_show_fbimage">ShowFBImageActivity</string>
 
 </resources>

@@ -25,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.stamp20.app.R;
 import com.stamp20.app.activities.ImageLoaderActivity;
+import com.stamp20.app.activities.ShowFBImageActivity;
 import com.stamp20.app.activities.ShowImageActivity;
 import com.stamp20.app.facebook.FbAlbumResult;
 import com.stamp20.app.facebook.FbAlbumStore;
@@ -98,7 +99,12 @@ public class FaceBookAlbumFragment extends Fragment implements OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             	// TODO
-            	Log.d(TAG, "position = " + position);
+            	String parseCMD = mImageList.get(position).getFbAlbum().getId() + "/photos";
+            	Log.d(TAG, "position = " + position + "; parseCMD = " + parseCMD);
+            	
+            	Intent intent = new Intent(getActivity(), ShowFBImageActivity.class);
+            	intent.putExtra("parse_cmd", parseCMD);
+            	startActivity(intent);
             }
         });
         
@@ -115,11 +121,6 @@ public class FaceBookAlbumFragment extends Fragment implements OnClickListener{
         	getFacebookAlbums();
     }
     
-	private void showUserDetailsActivity() {
-        Intent intent = new Intent(getActivity(), UserDetailsActivity.class);
-        startActivity(intent);
-      }
-
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub

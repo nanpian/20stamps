@@ -301,7 +301,8 @@ public class Image {
         return new Image(bitmap);
     }
     
-    public static Bitmap LoadImage(String url){    	
+    public static Bitmap LoadImage(String url){   
+    	Log.e("wangpeng","url: " + url);
     	URL myFileUrl = null;        	  
     	Bitmap bitmap = null;        	  
     	try {    	  

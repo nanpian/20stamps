@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.facebook.FbPhotoResult;
 import com.stamp20.app.imageloader.MyImageView.OnMeasureListener;
 import com.stamp20.app.imageloader.ImageLoader.NativeImageCallBack;
 import com.stamp20.app.view.ImageUtil;
@@ -32,24 +33,42 @@ public class ChildAdapter extends BaseAdapter {
     private HashMap<Integer, Boolean> mSelectMap = new HashMap<Integer, Boolean>();
     private GridView mGridView;
     private List<Uri> list;
+    private FbPhotoResult mFbPhotos;
     protected LayoutInflater mInflater;
     private Context mContext;
 
     public ChildAdapter(Context context, List<Uri> list, GridView mGridView) {
         this.list = list;
+        this.mFbPhotos = null;
+        
         this.mGridView = mGridView;
+        mInflater = LayoutInflater.from(context);
+        mContext = context;
+    }
+    
+    public ChildAdapter(Context context, FbPhotoResult fbPhotos, GridView mGridView){
+    	this.list = null;
+    	this.mFbPhotos = fbPhotos;
+    	
+    	this.mGridView = mGridView;
         mInflater = LayoutInflater.from(context);
         mContext = context;
     }
 
     @Override
     public int getCount() {
-        return list.size();
+    	if(list != null && mFbPhotos == null)
+    		return list.size();
+    	else
+    		return mFbPhotos.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+    	if(list != null && mFbPhotos == null)
+    		return list.get(position);
+    	else
+    		return mFbPhotos.get(position);
     }
 
     @Override
@@ -60,8 +79,6 @@ public class ChildAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
-        Uri uri = list.get(position);
-        String path = ImageUtil.getLocalPathFromUri(mContext.getContentResolver(), uri);
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.grid_child_item, null);
@@ -79,19 +96,43 @@ public class ChildAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.mImageView.setTag(path);
-        // 利用NativeImageLoader类加载本地图片
-        Bitmap bitmap = ImageLoader.getInstance().loadNativeImage(path, mPoint, new NativeImageCallBack() {
+        
+        Bitmap bitmap = null;
+        		
+        if(list != null && mFbPhotos == null){
+        	Uri uri = list.get(position);
+        	String path = ImageUtil.getLocalPathFromUri(mContext.getContentResolver(), uri);
+        	viewHolder.mImageView.setTag(path);
+        	// 利用NativeImageLoader类加载本地图片
+        	bitmap = ImageLoader.getInstance().loadNativeImage(path, mPoint, new NativeImageCallBack() {
 
-            @Override
-            public void onImageLoader(Bitmap bitmap, String path) {
-                ImageView mImageView = (ImageView) mGridView.findViewWithTag(path);
-                if (bitmap != null && mImageView != null) {
-                    mImageView.setImageBitmap(bitmap);
+        		@Override
+        		public void onImageLoader(Bitmap bitmap, String path) {
+        			ImageView mImageView = (ImageView) mGridView.findViewWithTag(path);
+        			if (bitmap != null && mImageView != null) {
+        				mImageView.setImageBitmap(bitmap);
+        			}
+        			}
+        	});
+        } else if (list == null && mFbPhotos != null){
+        	// Facebook
+        	String url = mFbPhotos.get(position).getSourceImageUrl();
+        	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
+            viewHolder.mImageView.setTag(url);
+
+            // 利用ImageLoader类加载网络图片
+            bitmap = ImageLoader.getInstance().loadNetImage(url, mPoint, new NativeImageCallBack() {
+
+                @Override
+                public void onImageLoader(Bitmap bitmap, String path) {
+                    ImageView mImageView = (ImageView) mGridView.findViewWithTag(path);
+                    if (bitmap != null && mImageView != null) {
+                        mImageView.setImageBitmap(bitmap);
+                    }
                 }
-            }
-        });
-
+            });
+        }
+        
         if (bitmap != null) {
             viewHolder.mImageView.setImageBitmap(bitmap);
         } else {

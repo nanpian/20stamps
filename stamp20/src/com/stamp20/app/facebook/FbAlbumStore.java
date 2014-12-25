@@ -68,7 +68,7 @@ public class FbAlbumStore {
 										saObj.getString("name"),
 										saObj.getInt("count"),
 										saObj.getString("cover_photo"),
-										null
+										null, null
 										));
 							}
 						}
@@ -86,6 +86,7 @@ public class FbAlbumStore {
 						FbPhoto coverPhoto = getFbPhoto(fa.getCoverId());
 						if (coverPhoto!=null){
 							fa.setCoverThumbnailUrl(coverPhoto.getThumbnailUrl());
+							fa.setCoverSourceUrl(coverPhoto.getSourceImageUrl());
 						}
 					}
 				}
@@ -120,7 +121,7 @@ public class FbAlbumStore {
 										saObj.getString("name"),
 										saObj.getInt("count"),
 										saObj.getString("cover_photo"),
-										null
+										null, null
 										));
 							}
 						}

@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,13 +85,13 @@ public class GroupAdapter extends BaseAdapter {
         
         if(path == null && album != null){
         	//Facebook 
-        	String url = album.getCoverThumbnailUrl();
+        	String url = album.getCoverSourceUrl();
         	
         	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
             viewHolder.mImageView.setTag(url);
 
-            // 利用NativeImageLoader类加载本地图片
-            bitmap = ImageLoader.getInstance().loadNativeImage(url, mPoint, new NativeImageCallBack() {
+            // 利用ImageLoader类加载网络图片
+            bitmap = ImageLoader.getInstance().loadNetImage(url, mPoint, new NativeImageCallBack() {
 
                 @Override
                 public void onImageLoader(Bitmap bitmap, String path) {
@@ -104,7 +105,6 @@ public class GroupAdapter extends BaseAdapter {
         	
         }else{
         	//本地目录
-        	
         	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
             viewHolder.mImageView.setTag(path);
 

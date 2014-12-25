@@ -19,7 +19,6 @@ import com.stamp20.app.R;
 import com.stamp20.app.adapter.ImageFilterAdapter;
 import com.stamp20.app.filter.IImageFilter;
 import com.stamp20.app.util.Log;
-import com.stamp20.app.view.ChooseRateActivity;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampView;
 

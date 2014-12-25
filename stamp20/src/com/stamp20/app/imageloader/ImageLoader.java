@@ -145,8 +145,14 @@ public class ImageLoader {
 
                 @Override
                 public void run() {
-                    // 先获取图片的缩略图
-                    Bitmap mBitmap = Image.LoadImage(url);
+                    // 先获取图片的缩略图                	
+                	Bitmap tmp = Image.LoadImage(url);
+                	Bitmap mBitmap = null;
+                	if(mPoint != null && tmp != null){
+                		mBitmap = Bitmap.createScaledBitmap(tmp, mPoint.x, mPoint.y, false);
+                	}else{
+                		mBitmap = tmp;
+                	}
                     Message msg = mHander.obtainMessage();
                     msg.obj = mBitmap;
                     mHander.sendMessage(msg);
@@ -228,6 +234,20 @@ public class ImageLoader {
             inSampleSize = widthScale < heightScale ? widthScale : heightScale;
         }
         return inSampleSize;
+    }
+    
+    private int computeScale(int bitmapWidth, int bitmapHeight, int viewWidth, int viewHeight){
+    	int inSampleSize = 1;
+    	
+        // 假如Bitmap的宽度或高度大于我们设定图片的View的宽高，则计算缩放比例
+        if (bitmapWidth > viewWidth || bitmapHeight > viewWidth) {
+            int widthScale = Math.round((float) bitmapWidth / (float) viewWidth);
+            int heightScale = Math.round((float) bitmapHeight / (float) viewWidth);
+
+            // 为了保证图片不缩放变形，我们取宽高比例最小的那个
+            inSampleSize = widthScale < heightScale ? widthScale : heightScale;
+        }
+        return inSampleSize;	
     }
 
     /**

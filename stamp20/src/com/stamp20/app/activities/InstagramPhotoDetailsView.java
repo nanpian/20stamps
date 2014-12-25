@@ -1,5 +1,7 @@
 package com.stamp20.app.activities;
 
+import com.stamp20.app.imageloader.ImageLoader;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -26,15 +28,15 @@ public class InstagramPhotoDetailsView extends Activity {/*
 	private ImageLoader imageLoader;
 	private Activity activity = this;
 
-	private LocalyticsSession localyticsSession;
+	//private LocalyticsSession localyticsSession;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(getResources().getBoolean(R.bool.portrait_only)){
+/*		if(getResources().getBoolean(R.bool.portrait_only)){
 	        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	    }
-		
+	    }*/
+		/*
 		setContentView(R.layout.image_search_details_view);
 
 		imageLoader = ImageLoader.get(getApplicationContext());
@@ -82,41 +84,41 @@ public class InstagramPhotoDetailsView extends Activity {/*
 		}
 		
 		//locallytics tracking
-		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());
-		this.localyticsSession.open();
-		this.localyticsSession.tagScreen("InstagramPhotoDetailsView");
-		this.localyticsSession.upload();
+		//this.localyticsSession = new LocalyticsSession(this.getApplicationContext());
+		//this.localyticsSession.open();
+		//this.localyticsSession.tagScreen("InstagramPhotoDetailsView");
+		//this.localyticsSession.upload();
 
 	}
 
 	@Override
 	public void onStart(){
 		super.onStart();
-		GoogleAnalytics.getInstance(getApplicationContext()).getDefaultTracker().send(MapBuilder
-			  .createAppView()
-			  .set(Fields.SCREEN_NAME, "InstagramPhotoDetailsView")
-			  .build());
+		//GoogleAnalytics.getInstance(getApplicationContext()).getDefaultTracker().send(MapBuilder
+		//	  .createAppView()
+		//	  .set(Fields.SCREEN_NAME, "InstagramPhotoDetailsView")
+		//	  .build());
 	}
 	
 	@Override
 	public void onResume(){
 	  super.onResume();
-	  this.localyticsSession.open();
+	  //this.localyticsSession.open();
 	}
 	
 	@Override
 	public void onPause(){
-	  this.localyticsSession.close();
-	  this.localyticsSession.upload();
+	 // this.localyticsSession.close();
+	 // this.localyticsSession.upload();
 	  super.onPause();
 	}
 
 	private void doClickUse(){
 		if (imageURI!=null){
-		    GoogleAnalytics.getInstance(getApplicationContext()).getDefaultTracker().send(MapBuilder
-			  .createEvent("ui_action", "button_press", "UseInstagramPhoto", null)
-			  .build());
-		    this.localyticsSession.tagEvent(TrackingUtil.Event_UseInstagramPhoto);
+		    //GoogleAnalytics.getInstance(getApplicationContext()).getDefaultTracker().send(MapBuilder
+			//  .createEvent("ui_action", "button_press", "UseInstagramPhoto", null)
+			//  .build());
+		    //this.localyticsSession.tagEvent(TrackingUtil.Event_UseInstagramPhoto);
 		    
 			activity.setResult(RESULT_OK, new Intent().putExtra(EXTRA_IMAGE_FULL_URL, imageURI));
 			activity.finish();

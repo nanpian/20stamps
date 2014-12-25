@@ -57,7 +57,7 @@ public class InstagramAuthView extends Activity {
 
 				if (url.startsWith(REDIRECT_URI)) {
 					String code = extractCodeFromURL(url);
-//					Log.i("case", "InstagramAuthView-code="+code);
+					Log.i("case", "InstagramAuthView-code="+code);
 					onTokenRetrieved(code);
 					return true;
 				}

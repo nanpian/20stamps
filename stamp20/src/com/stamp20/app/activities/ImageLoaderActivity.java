@@ -138,7 +138,7 @@ public class ImageLoaderActivity extends FragmentActivity implements OnClickList
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPx) {
-        Log.d(this, "currenindex:" + mCurrentPageIndex + ", position:" + position);
+        //Log.d(this, "currenindex:" + mCurrentPageIndex + ", position:" + position);
         LayoutParams lp = (LayoutParams) mImageSelectedIndicator.getLayoutParams();
         if (mCurrentPageIndex == 0 && position == 0) {// 0->1
             lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset * mScreen1_4);

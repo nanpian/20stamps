@@ -19,6 +19,6 @@ public class Stamp20Application extends Application {
 	        "0V96uKLLzg2DYcCT7ndlI0HULdOh297tIP8RUk4d"
 	    );
 	    
-	    ParseFacebookUtils.initialize("lrvQWDyUVWC2iNG7ZvK1PfSAKSgIQ0MWtVu6jIhf");
+	    ParseFacebookUtils.initialize("713170092123951");
 	  }
 }

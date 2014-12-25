@@ -1,5 +1,6 @@
 package com.stamp20.app.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
@@ -13,7 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.stamp20.app.activities.InstagramPhotosView;
+import com.stamp20.app.activities.*;
 import com.stamp20.app.activities.*;
 import com.stamp20.app.Setting;
 import com.stamp20.app.R;
@@ -21,6 +25,9 @@ import com.stamp20.app.util.Log;
 
 public class InstagramAlbumFragment extends Fragment implements OnClickListener{
     private View mInstagramView;
+    private static final int REQUEST_CODE_BASE = 50;
+	private int REQUEST_CODE_SELECT_INSTAGRAM_AUTH =REQUEST_CODE_BASE +1 ;
+	private int REQUEST_CODE_SELECT_INSTAGRAM = REQUEST_CODE_BASE +2;
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,33 +52,19 @@ public class InstagramAlbumFragment extends Fragment implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.instagram_login_button :
+	        doInstagramAuth();
 			break;
 		case R.id.instagram_logout_button:
-			 doSelectInstagramClick();
 			break;
 		default:
 			break;
 		}
 	}
 	
-	private void  doSelectInstagramClick() {
-	    if (getActivity()==null){
-	      return; //so it won't throw NullPointerException after user leaves app
-	    }
-		if (Setting.isUserInstagramLinked(getActivity())){
-			//Intent instagramIntent = new Intent(getActivity(),InstagramPhotosView.class);
-			//startActivityForResult(instagramIntent,REQUEST_CODE_SELECT_INSTAGRAM);
-		}else{
-			if(Setting.isUserLogin(getActivity())){
-			  InstagramAuthRequestDialog dialogFrag = new InstagramAuthRequestDialog();
-		    	dialogFrag.show(getFragmentManager(), "instagram_auth_request_dialog");
-			}else{
-			  AccountRequestDialog dialogFrag = new AccountRequestDialog();
-		    	dialogFrag.show(getFragmentManager(), "instagram_register_account_dialog");
-			}
+	private void doInstagramAuth(){
+		  Intent i = new Intent(getActivity(),InstagramAuthView.class);
+		  startActivityForResult(i,REQUEST_CODE_SELECT_INSTAGRAM_AUTH);
 		}
-	
-	}
 	
 	//Dialog for request user to setup an account 
 	public class AccountRequestDialog extends DialogFragment{
@@ -97,6 +90,37 @@ public class InstagramAlbumFragment extends Fragment implements OnClickListener{
 					dialog.dismiss();
 				}});
 			return builder.create();
+		}
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode,int resultCode, Intent dataIntent){
+		if (requestCode == REQUEST_CODE_SELECT_INSTAGRAM_AUTH){
+	  	  if (resultCode == Activity.RESULT_OK){
+	  		  doSelectInstagramClick();
+	  	  }else{
+	  		Toast.makeText(getActivity(), "Instagram authorization canceled", Toast.LENGTH_SHORT).show();
+	  	  }
+	}else{
+		super.onActivityResult(requestCode, resultCode, dataIntent);
+	}
+	}
+	
+	private void doSelectInstagramClick(){
+	    if (getActivity()==null){
+	      return; //so it won't throw NullPointerException after user leaves app
+	    }
+		if (Setting.isUserInstagramLinked(getActivity())){
+			Intent instagramIntent = new Intent(getActivity(),InstagramPhotosView.class);
+			startActivityForResult(instagramIntent,REQUEST_CODE_SELECT_INSTAGRAM );
+		}else{
+			if(Setting.isUserLogin(getActivity())){
+			  InstagramAuthRequestDialog dialogFrag = new InstagramAuthRequestDialog();
+		    	dialogFrag.show(getFragmentManager(), "instagram_auth_request_dialog");
+			}else{
+			  AccountRequestDialog dialogFrag = new AccountRequestDialog();
+		    	dialogFrag.show(getFragmentManager(), "instagram_register_account_dialog");
+			}
 		}
 	}
 	

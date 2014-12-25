@@ -18,13 +18,13 @@
         android:smallScreens="true" />
 
     <application
+        android:name=".Stamp20Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar" 
-        android:name="com.stamp20.app.Stamp20Application" >
+        android:theme="@android:style/Theme.NoTitleBar" >
         <activity
-            android:name="com.stamp20.app.guide.SplashActivity"
+            android:name=".guide.SplashActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,31 +38,31 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.guide.GuideActivity"
+            android:name=".guide.GuideActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.guide.HomeActivity"
+            android:name=".guide.HomeActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.cards.CardsActivity"
+            android:name=".cards.CardsActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.cards.CardsTemplateChooseActivity"
+            android:name=".cards.CardsTemplateChooseActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.activities.ReviewActivity"
+            android:name=".activities.ReviewActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.activities.ImageLoaderActivity"
+            android:name=".activities.ImageLoaderActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.activities.ShowImageActivity"
+            android:name=".activities.ShowImageActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
@@ -70,24 +70,34 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.view.ChooseRateActivity"
+            android:name="com.stamp20.app.activities.ChooseRateActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.stamp20.app.activities.BlurTestActivity"
+            android:name=".activities.BlurTestActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-        
         <activity
-            android:name="com.stamp20.app.imageloader.UserDetailsActivity" 
-            android:label="@string/app_name"/>
-        
+            android:name=".imageloader.UserDetailsActivity"
+            android:label="@string/app_name" />
         <activity
             android:name="com.facebook.LoginActivity"
             android:label="@string/app_name" >
-        </activity>        
-        <meta-data android:value="@string/facebook_app_id" android:name="com.facebook.sdk.ApplicationId"/>
+        </activity>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.stamp20.app.activities.ShowFBImageActivity"
+            android:label="@string/app_name" >
+        </activity>
         
+        <activity
+            android:name="com.stamp20.app.activities.InstagramAuthView"
+            >
+        </activity>
     </application>
 
 </manifest>
