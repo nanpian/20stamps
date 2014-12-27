@@ -104,7 +104,7 @@ public class ZoomImageViewMaskOpposite extends ZoomImageView{
     }
     
     @Override
-    protected void dealMoveEvent(MotionEvent event){
+    protected void onTouchEventSingleFingerMove(MotionEvent event){
         // 只有单指按在屏幕上移动时，为拖动状态
         float xMove = event.getX();
         float yMove = event.getY();

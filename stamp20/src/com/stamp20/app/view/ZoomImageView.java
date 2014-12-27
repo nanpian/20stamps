@@ -129,7 +129,7 @@ public class ZoomImageView extends View {
 	/**
 	 * 记录图片初始化时的缩放比例
 	 */
-	private float initRatio;
+	protected float initRatio;
 
 	/**
 	 * 记录上次两指之间的距离
@@ -173,7 +173,7 @@ public class ZoomImageView extends View {
 		}
 	}
 
-	protected void dealMoveEvent(MotionEvent event){
+	protected void onTouchEventSingleFingerMove(MotionEvent event){
 	 // 只有单指按在屏幕上移动时，为拖动状态
         float xMove = event.getX();
         float yMove = event.getY();
@@ -201,8 +201,61 @@ public class ZoomImageView extends View {
         lastYMove = yMove;
 	}
 	
+	protected void onTouchEventDoubleFingerMove(MotionEvent event){
+	    // 有两个手指按在屏幕上移动时，为缩放状态
+        centerPointBetweenFingers(event);
+        double fingerDis = distanceBetweenFingers(event);
+        if (fingerDis > lastFingerDis) {
+            currentStatus = STATUS_ZOOM_OUT;
+        } else {
+            currentStatus = STATUS_ZOOM_IN;
+        }
+        // 进行缩放倍数检查，最大只允许将图片放大4倍，最小可以缩小到初始化比例
+        if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 4 * initRatio)
+                || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio)) {
+            scaledRatio = (float) (fingerDis / lastFingerDis);
+            totalRatio = totalRatio * scaledRatio;
+            if (totalRatio > 4 * initRatio) {
+                totalRatio = 4 * initRatio;
+            } else if (totalRatio < initRatio) {
+                totalRatio = initRatio;
+            }
+            // 调用onDraw()方法绘制图片
+            invalidate();
+            lastFingerDis = fingerDis;
+        }
+	}
+	
+	protected void onTouchEventSigleFingerUp(MotionEvent event){
+        // 手指离开屏幕时将临时值还原
+        lastXMove = -1;
+        lastYMove = -1;
+        mIsMovingOrZooming = false;
+        invalidate();
+	}
+	
+    protected void onTouchEventDoubleFingerUp(MotionEvent event) {
+        if (event.getPointerCount() == 2) {
+            // 手指离开屏幕时将临时值还原
+            lastXMove = -1;
+            lastYMove = -1;
+        }
+        mIsMovingOrZooming = false;
+        invalidate();
+    }
+    
+    protected void onTouchEventCancel(MotionEvent event){
+        mIsMovingOrZooming = false;
+        invalidate();
+    }
+	
+    protected void onPreTouchEvent(){
+        //供子类在onTouch事件前进行某些处理
+    }
+    
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+	    onPreTouchEvent();
 		switch (event.getActionMasked()) {
 		case MotionEvent.ACTION_POINTER_DOWN:
 			if (event.getPointerCount() == 2) {
@@ -213,51 +266,19 @@ public class ZoomImageView extends View {
 		case MotionEvent.ACTION_MOVE:
 		    mIsMovingOrZooming = true;
 			if (event.getPointerCount() == 1) {
-			    dealMoveEvent(event);
+			    onTouchEventSingleFingerMove(event);
 			} else if (event.getPointerCount() == 2) {
-				// 有两个手指按在屏幕上移动时，为缩放状态
-				centerPointBetweenFingers(event);
-				double fingerDis = distanceBetweenFingers(event);
-				if (fingerDis > lastFingerDis) {
-					currentStatus = STATUS_ZOOM_OUT;
-				} else {
-					currentStatus = STATUS_ZOOM_IN;
-				}
-				// 进行缩放倍数检查，最大只允许将图片放大4倍，最小可以缩小到初始化比例
-				if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 4 * initRatio)
-						|| (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio)) {
-					scaledRatio = (float) (fingerDis / lastFingerDis);
-					totalRatio = totalRatio * scaledRatio;
-					if (totalRatio > 4 * initRatio) {
-						totalRatio = 4 * initRatio;
-					} else if (totalRatio < initRatio) {
-						totalRatio = initRatio;
-					}
-					// 调用onDraw()方法绘制图片
-					invalidate();
-					lastFingerDis = fingerDis;
-				}
+			    onTouchEventDoubleFingerMove(event);
 			}
 			break;
 		case MotionEvent.ACTION_POINTER_UP:
-			if (event.getPointerCount() == 2) {
-				// 手指离开屏幕时将临时值还原
-				lastXMove = -1;
-				lastYMove = -1;
-			}
-            mIsMovingOrZooming = false;
-            invalidate();
+		    onTouchEventDoubleFingerUp(event);
 			break;
 		case MotionEvent.ACTION_UP:
-			// 手指离开屏幕时将临时值还原
-			lastXMove = -1;
-			lastYMove = -1;
-            mIsMovingOrZooming = false;
-            invalidate();
+		    onTouchEventSigleFingerUp(event);
 			break;
 		case MotionEvent.ACTION_CANCEL:
-            mIsMovingOrZooming = false;
-            invalidate();
+		    onTouchEventCancel(event);
             break;
 		default:
 			break;
@@ -394,7 +415,7 @@ public class ZoomImageView extends View {
 	 * 
 	 * @param canvas
 	 */
-	private void initBitmap(Canvas canvas) {
+	protected void initBitmap(Canvas canvas) {
 		if (sourceBitmap != null) {
 			matrix.reset();
 			int bitmapWidth = sourceBitmap.getWidth();

@@ -8,13 +8,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
-
-    <com.stamp20.app.view.ImageTextView
+    <Button 
+        android:id="@+id/item"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:background="@color/image_button_background"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@drawable/sel_cards_change_photo_button"
+        android:textColor="@color/sel_cards_choose_button"
+        />
+<!--     <com.stamp20.app.view.ImageTextView
         android:id="@+id/item"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         imageviewtext:imageViewSelectorDrawable="@drawable/sel_cards_change_photo_button"
-        imageviewtext:textViewColorStateList="@color/sel_cards_choose_button" />
+        imageviewtext:textViewColorStateList="@color/sel_cards_choose_button" 
+        imageviewtext:orientation="horizontal"/> -->
 
 </LinearLayout>

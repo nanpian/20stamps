@@ -1,9 +1,6 @@
-package com.stamp20.app.guide;
+package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
-import com.stamp20.app.activities.MainActivity;
-import com.stamp20.app.cards.CardsActivity;
-import com.stamp20.app.cards.CardsTemplateChooseActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Log;
 

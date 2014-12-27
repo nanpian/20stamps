@@ -6,12 +6,6 @@
     <attr name="roundHeight" format="dimension" />
 </declare-styleable>
 
-<declare-styleable name="ImageTextView">
-    <attr name="text" format="string" />
-    <attr name="textViewColorStateList" format="reference" />
-    <attr name="imageViewSelectorDrawable" format="reference" />
-</declare-styleable>
-
 <declare-styleable name="ZoomImageView">
     <attr name="maskDrawable" format="reference" />
     <attr name="maskColor" format="reference"/>

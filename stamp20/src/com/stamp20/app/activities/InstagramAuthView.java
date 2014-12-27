@@ -1,8 +1,10 @@
 package com.stamp20.app.activities;
 
 
+
 import com.parse.ParseUser;
 import com.stamp20.app.*;
+import com.stamp20.app.util.InstagramTokenKeeper;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -127,8 +129,10 @@ public class InstagramAuthView extends Activity {
 	
 	private void onTokenRetrieved(String token){
 	  if (DEBUGLOG) Log.i("case", "InstagramAUthView-token retrieved");
-	  ParseUser.getCurrentUser().put(Setting.KEY_INSTAGRAM_TOKEN, token);
-	  ParseUser.getCurrentUser().saveEventually();
+	  Log.i("token","token panduan0 "+ token);
+	  InstagramTokenKeeper.writeAccessToken(this, token);
+	  //ParseUser.getCurrentUser().put(Setting.KEY_INSTAGRAM_TOKEN, token);
+	  //ParseUser.getCurrentUser().saveEventually();
 	  setResult(Activity.RESULT_OK);
 	  this.finish();
 	}

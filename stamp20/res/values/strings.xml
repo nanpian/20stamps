@@ -15,5 +15,7 @@
     <string name="select_letter">1st class letter</string>
     <string name="select_more">more</string>
     <string name="title_activity_show_fbimage">ShowFBImageActivity</string>
+    <string name="save_design">Save Design</string>
+    <string name="share_design">Share Design</string>
 
 </resources>

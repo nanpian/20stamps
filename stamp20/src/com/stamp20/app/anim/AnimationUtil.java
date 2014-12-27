@@ -1,4 +1,4 @@
-package com.stamp20.app.guide;
+package com.stamp20.app.anim;
 
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;

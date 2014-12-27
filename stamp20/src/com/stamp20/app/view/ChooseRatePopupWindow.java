@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -31,6 +33,7 @@ public class ChooseRatePopupWindow extends PopupWindow{
             "1st Class Letter 2oz or 1oz odd",
             "1st Class Letter 3oz or 2oz odd"};
     private ListView mListView;
+    private Button mCancel;
     
     private View mAncor;
        
@@ -55,19 +58,23 @@ public class ChooseRatePopupWindow extends PopupWindow{
         
         mListView = com.stamp20.app.util.ViewHolder.findChildView(contentView, R.id.listview);
         mListView.setAdapter(new ChooseRatePopupWindowListViewAdapter(context));
+        mCancel = com.stamp20.app.util.ViewHolder.findChildView(contentView, R.id.cancel);
+        mCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hidePopupWindow();
+            }
+        });
     }
     
     public void show(){
         this.showAtLocation(mAncor, Gravity.BOTTOM, 0, 0);
     }
     
-    private ImageTextView.OnClickListenerImageTextView onClickListenerImageTextView = new ImageTextView.OnClickListenerImageTextView() {
-        @Override
-        public void onClick(View arg0, int id, String text) {
-            Log.i("xixia", "text:"+text);
-        }
-    };
-    
+    public void hidePopupWindow(){
+        this.dismiss();
+    }
+         
     private class ChooseRatePopupWindowListViewAdapter extends BaseAdapter{
 
         private Context mContext;
@@ -98,9 +105,8 @@ public class ChooseRatePopupWindow extends PopupWindow{
                 convertView = LayoutInflater.from(mContext).inflate(
                         R.layout.choose_rate_popupwindow_adapter_item, null);
             } 
-            ImageTextView itv = com.stamp20.app.util.ViewHolder.get(convertView, R.id.item);
-            itv.setText(mListViewTexts[position]);
-            itv.setOnClickListenerImageViewText(onClickListenerImageTextView);
+            Button btn = com.stamp20.app.util.ViewHolder.get(convertView, R.id.item);
+            btn.setText(mListViewTexts[position]);
             return convertView;
         }
     }

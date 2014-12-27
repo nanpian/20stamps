@@ -1,4 +1,4 @@
-package com.stamp20.app.guide;
+package com.stamp20.app.activities;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -26,10 +26,6 @@ import android.widget.ImageView.ScaleType;
 
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
-import com.stamp20.app.activities.ImageLoaderActivity;
-import com.stamp20.app.activities.MainActivity;
-import com.stamp20.app.cards.CardsActivity;
-import com.stamp20.app.activities.TestViewActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.view.ImageUtil;
 

@@ -18,6 +18,7 @@ import android.util.Log;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.stamp20.app.util.InstagramTokenKeeper;
 import com.stamp20.app.util.StringUtils;
 
 public class Setting {
@@ -59,8 +60,9 @@ public class Setting {
 	public static final String MAT_KEY="bc0dab35245126b0c50ffac73e528720";
 	
 	public synchronized static boolean isUserLogin(Context context){
-		ParseUser currentUser = ParseUser.getCurrentUser();
-		return currentUser!=null && !ParseAnonymousUtils.isLinked(currentUser);
+		//ParseUser currentUser = ParseUser.getCurrentUser();
+		//return currentUser!=null && !ParseAnonymousUtils.isLinked(currentUser);
+		return true;
 	}
 		
 	public synchronized static boolean isUserFacebookLinked(Context context){
@@ -170,10 +172,16 @@ public class Setting {
 	}
 
 	public static boolean isUserInstagramLinked(Context mContext) {
-		ParseUser currentUser = ParseUser.getCurrentUser();
+		/*ParseUser currentUser = ParseUser.getCurrentUser();
 		if (currentUser!=null && !ParseAnonymousUtils.isLinked(currentUser)){
 		  Log.d("case", "Setting-CurrentUserHasInstagramKey is "+currentUser.has(KEY_INSTAGRAM_TOKEN));
 		  return currentUser.has(KEY_INSTAGRAM_TOKEN) && !StringUtils.isEmptyString(currentUser.get(KEY_INSTAGRAM_TOKEN).toString());
+		}*/
+		Log.i("token","token panduan 1");
+		String token = InstagramTokenKeeper.readAccessToken(mContext);
+		if(token!=null && !StringUtils.isEmptyString(token)) {
+			Log.i("token", "token panduan2");
+			return true;
 		}
 		return false;
 	}

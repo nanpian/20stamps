@@ -1,4 +1,4 @@
-package com.stamp20.app.cards;
+package com.stamp20.app.anim;
 
 import com.stamp20.app.R;
 

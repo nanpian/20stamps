@@ -11,11 +11,12 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow.OnDismissListener;
 
 import com.stamp20.app.R;
-import com.stamp20.app.guide.AnimationUtil;
+import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ChooseRatePopupWindow;
@@ -38,13 +39,12 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         btnLetter = (Button) findViewById(R.id.btn_letter);
         btnMore = (Button) findViewById(R.id.btn_more);
         stampBitmap = BitmapCache.getCache().get();
-        chooseRateStampView.setBmpStampPhoto(stampBitmap);
-        
-        btnPostCard.setOnClickListener(this);
-        btnLetter.setOnClickListener(this);
-        btnMore.setOnClickListener(this);
+        chooseRateStampView.setImageBitmap(stampBitmap);
         findViewById(R.id.tail).setOnClickListener(this);
+        findViewById(R.id.tail_icon).setVisibility(View.GONE);
+        ((TextView)findViewById(R.id.tail_text)).setText(R.string.next_review);;
         
+        buttonInit(btnPostCard, btnLetter, btnMore);
         popupWindowInit();
     }
     
@@ -68,6 +68,15 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     
 
     /*和底部弹出的PopupWindow相关 START*/
+    
+    private void buttonInit(Button... btns){
+        for(int i=0; i<btns.length; i++){
+            final Button btn = btns[i];
+            btn.setOnClickListener(this);
+            /*btn.setTextColor(this.getResources().getColorStateList(R.color.sel_cards_choose_button));*/
+        }
+    }
+    
     private ImageView mBlurImageView;
     private LinearLayout mChooseRateRoot;
     private float mStartAlpha = 0.001f;
@@ -101,7 +110,7 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             @Override
             public void onAnimationEnd(Animation animation) {
                 mBlurImageView.setClickable(false);
-                mBlurImageView.setVisibility(View.INVISIBLE);
+                mBlurImageView.setVisibility(View.GONE);
             }
         }));
     }

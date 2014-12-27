@@ -1,26 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#282828"
-    android:orientation="vertical" >
-    
-    <include layout="@layout/header"/>
-    
-    <FrameLayout
+    android:background="#282828" 
+    android:id="@+id/root">
+
+    <LinearLayout
+        android:id="@+id/review_root"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        
-            <ImageView android:id="@+id/reviewer"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <include layout="@layout/header" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/background_stamp_h" 
-                android:layout_gravity="center"
-            />
-            
-    </FrameLayout>
-    
-    <include  layout="@layout/tail" />
-    
-</LinearLayout>
+                android:layout_centerInParent="true"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/reviewer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/background_stamp_h" />
+
+                <TextView
+                    android:id="@+id/text_stamp_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/select_letter"
+                    android:textColor="@color/sel_cards_choose_button"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/layout_btn_selcet_rate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp" >
+
+                    <Button
+                        android:id="@+id/btn_save_design"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/image_button_background"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@drawable/sel_cards_change_photo_button"
+                        android:text="@string/save_design"
+                        android:textColor="@color/sel_cards_choose_button"
+                        android:textSize="12sp" >
+                    </Button>
+
+                    <Button
+                        android:id="@+id/btn_share_design"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/image_button_background"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@drawable/sel_cards_change_photo_button"
+                        android:text="@string/share_design"
+                        android:textColor="@color/sel_cards_choose_button"
+                        android:textSize="12sp" >
+                    </Button>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <include layout="@layout/tail" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/blur_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
-package com.stamp20.app.cards;
+package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
+import com.stamp20.app.anim.ListView2GridViewLayoutAnimationController;
 
 import android.app.Activity;
 import android.content.Context;

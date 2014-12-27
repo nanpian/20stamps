@@ -3,11 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <TextView 
+        android:id="@+id/title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginStart="10dp"
+        android:text="Select a Rate"
+        android:textSize="23sp"
+        android:textColor="@color/activity_cards_choose_photo_text_pressed"
+        />
     <ListView 
         android:id="@+id/listview"
+        android:layout_below="@id/title"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:clickable="true"
         android:focusable="true">
     </ListView>
+   	<Button 
+   	    android:layout_below="@id/listview"
+	    android:id="@+id/cancel"
+	    android:layout_width="match_parent"
+	    android:layout_height="65dp"
+	    android:background="@drawable/sel_home_green_button"
+	    android:text="Cancel"
+	    android:textSize="20sp"
+	    android:textColor="@android:color/white"
+	    />
 </RelativeLayout>

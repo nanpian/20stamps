@@ -3,4 +3,22 @@
     <color name="activity_background_gray">#ff282828</color>
     <color name="activity_cards_choose_photo_text_pressed">#fff7c71f</color>
     <color name="image_button_background">#00ffffff</color>
+    <color name="red">#900</color>
+    <color name="white">#FFFFFF</color>
+    <color name="offwhite">#EEEEEE</color>
+    <color name="black">#000000</color>
+    <color name="darkgray">#333333</color>
+    <color name="gray">#5c5856</color>
+    <color name="lightgray">#878787</color>
+    <color name="superlightgray">#b1b1b1</color>
+    <color name="header_background_line_color">#e8493a</color>
+    <color name="sidebar_pressed_row_background">#2fb382</color>
+    <color name="theme_green">#2fb382</color>
+    <color name="mainframe_background">#e5e5e5</color>
+    <color name="transparent_green">#AA9ae5c9</color>
+    <color name="login_header_background">#b9b9b9</color>
+    <color name="tabbar_gray_background">#b9b9b9</color>
+    
+    <color name="design_finish_frag_product_info_title_textcolor">#333333</color>
+    <color name="design_finish_frag_product_info_value_textcolor">#666666</color>
 </resources>

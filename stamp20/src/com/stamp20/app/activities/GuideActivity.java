@@ -1,4 +1,4 @@
-package com.stamp20.app.guide;
+package com.stamp20.app.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.stamp20.app.R;
-import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Log;
 

@@ -45,9 +45,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/image_button_background"
-                    android:drawableTop="@drawable/icon_post_card_selected_white"
+                    android:drawableTop="@drawable/sel_cards_change_photo_button"
+                    android:drawablePadding="5dp"
                     android:text="@string/post_card"
-                    android:textColor="@color/filter_item_selected_false"
+        			android:textColor="@color/sel_cards_choose_button"
                     android:textSize="12sp" >
                 </Button>
                 <Button
@@ -56,9 +57,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/image_button_background"
-                    android:drawableTop="@drawable/icon_letter_selected_white"
+                    android:drawableTop="@drawable/sel_cards_change_photo_button"
+                    android:drawablePadding="5dp"
                     android:text="@string/select_letter"
-                    android:textColor="@color/filter_item_selected_false"
+        			android:textColor="@color/sel_cards_choose_button"
                     android:textSize="12sp" >
                 </Button>
                 <Button
@@ -67,9 +69,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/image_button_background"
-                    android:drawableTop="@drawable/icon_more_selected_white"
+                    android:drawableTop="@drawable/sel_cards_change_photo_button"
+                    android:drawablePadding="5dp"
                     android:text="@string/select_more"
-                    android:textColor="@color/filter_item_selected_false"
+        			android:textColor="@color/sel_cards_choose_button"
                     android:textSize="12sp" >
                 </Button>
             </LinearLayout>
@@ -81,7 +84,7 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:id="@+id/blur_background"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:clickable="false"
         />
 </RelativeLayout>

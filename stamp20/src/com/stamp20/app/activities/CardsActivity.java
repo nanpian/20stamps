@@ -1,4 +1,4 @@
-package com.stamp20.app.cards;
+package com.stamp20.app.activities;
 
 import java.util.Currency;
 
@@ -11,19 +11,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
-import com.stamp20.app.guide.SplashActivity;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ImageUtil;
-import com.stamp20.app.view.ImageTextView;
 import com.stamp20.app.view.ZoomImageView;
 
-public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoomListener{
+public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoomListener, View.OnClickListener{
 
     /**
      * 自定义的ImageView控制，可对图片进行多点触控缩放和拖动
@@ -35,8 +34,8 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
      */
     private Bitmap bitmap;
     
-    private ImageTextView mChoosePhoto;
-    private ImageTextView mChooseTemplate;
+    private Button mChoosePhoto;
+    private Button mChooseTemplate;
     private ImageView mBackgroundPic ;
     private RelativeLayout mCross;
     private RelativeLayout mTextTip;
@@ -48,22 +47,7 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
     private static final int MSG_SELECT_PICTURE = 1000;
     private static final int MSG_CHANGE_DESIGN = MSG_SELECT_PICTURE + 1;
     public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
-    
-    private ImageTextView.OnClickListenerImageTextView onClickListenerImageTextView = new ImageTextView.OnClickListenerImageTextView() {
-        @Override
-        public void onClick(View arg0, int id, String text) {
-            com.stamp20.app.util.Log.d(this, "click");
-            if(id == mChoosePhoto.getId()){
-                com.stamp20.app.util.Log.d(this, "mChoosePhoto.click");
-                selectPicture();
-            }else if (id == mChooseTemplate.getId()){
-                com.stamp20.app.util.Log.d(this, "mChooseTemplate.click");
-                changeTemplate();
-            }
-            
-        }
-    };
-    
+        
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -80,10 +64,10 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
         mTextTip = (RelativeLayout) this.findViewById(R.id.tip);
         mTextViewCurrentRatio = (TextView) this.findViewById(R.id.tip_currentratio);
         mTextViewInitRatio = (TextView) this.findViewById(R.id.tip_initratio);
-        mChoosePhoto = (ImageTextView) this.findViewById(R.id.choose_photo);
-        mChoosePhoto.setOnClickListenerImageViewText(onClickListenerImageTextView);
-        mChooseTemplate = (ImageTextView) this.findViewById(R.id.choose_template);
-        mChooseTemplate.setOnClickListenerImageViewText(onClickListenerImageTextView);
+        mChoosePhoto = (Button) this.findViewById(R.id.choose_photo);
+        mChoosePhoto.setOnClickListener(this);
+        mChooseTemplate = (Button) this.findViewById(R.id.choose_template);
+        mChooseTemplate.setOnClickListener(this);
     }
 
     private void changeTemplate(){
@@ -165,6 +149,18 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
             mTextTip.setVisibility(View.INVISIBLE);
             mCross.setVisibility(View.INVISIBLE);
             mBackgroundPic.setAlpha(255);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if(id == mChoosePhoto.getId()){
+            com.stamp20.app.util.Log.d(this, "mChoosePhoto.click");
+            selectPicture();
+        }else if (id == mChooseTemplate.getId()){
+            com.stamp20.app.util.Log.d(this, "mChooseTemplate.click");
+            changeTemplate();
         }
     }
 }

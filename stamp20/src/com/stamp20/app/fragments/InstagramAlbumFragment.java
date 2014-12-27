@@ -52,7 +52,7 @@ public class InstagramAlbumFragment extends Fragment implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.instagram_login_button :
-	        doInstagramAuth();
+			doSelectInstagramClick();
 			break;
 		case R.id.instagram_logout_button:
 			break;
@@ -76,7 +76,7 @@ public class InstagramAlbumFragment extends Fragment implements OnClickListener{
 		public Dialog onCreateDialog(Bundle savedInstanceState){
 			Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("Account Required");
-			builder.setMessage("Please register a Pic2Press account before we can connect to your Instagram.");
+			builder.setMessage("Please register a stampdesign account before we can connect to your Instagram.");
 			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -111,6 +111,7 @@ public class InstagramAlbumFragment extends Fragment implements OnClickListener{
 	      return; //so it won't throw NullPointerException after user leaves app
 	    }
 		if (Setting.isUserInstagramLinked(getActivity())){
+			Log.i("token", "token panduan3, enter instagramphoto view");
 			Intent instagramIntent = new Intent(getActivity(),InstagramPhotosView.class);
 			startActivityForResult(instagramIntent,REQUEST_CODE_SELECT_INSTAGRAM );
 		}else{
@@ -143,7 +144,7 @@ public class InstagramAlbumFragment extends Fragment implements OnClickListener{
 			builder.setPositiveButton("Connect Now", new DialogInterface.OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					//doInstagramAuth();
+					doInstagramAuth();
 					dialog.dismiss();
 				}});
 			return builder.create();
@@ -151,8 +152,8 @@ public class InstagramAlbumFragment extends Fragment implements OnClickListener{
 	}
 
 	  private void doInstagramAuto()  {
-	      //Intent i = new Intent(getActivity(),InstagramAuthView.class);
-	      //startActivityForResult(i,REQUEST_CODE_SELECT_INSTAGRAM_AUTH);
+	         Intent i = new Intent(getActivity(),InstagramAuthView.class);
+	         startActivityForResult(i,REQUEST_CODE_SELECT_INSTAGRAM_AUTH);
 	  }
 
 }
