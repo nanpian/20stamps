@@ -8,9 +8,9 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class ZoomImageViewMaskOpposite extends ZoomImageView{
+public class CardsView extends ZoomImageView{
 
-    public ZoomImageViewMaskOpposite(Context context, AttributeSet attrs) {
+    public CardsView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

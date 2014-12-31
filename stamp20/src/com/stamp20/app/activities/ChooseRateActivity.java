@@ -4,6 +4,7 @@ import lenovo.jni.ImageUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -18,11 +19,12 @@ import android.widget.PopupWindow.OnDismissListener;
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ChooseRatePopupWindow;
 import com.stamp20.app.view.ChooseRateStampView;
 
-public class ChooseRateActivity extends Activity implements View.OnClickListener{
+public class ChooseRateActivity extends Activity implements View.OnClickListener, ChooseRatePopupWindow.OnRateSelecedListener{
 
     Bitmap stampBitmap;
     ChooseRateStampView chooseRateStampView;
@@ -43,7 +45,7 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         findViewById(R.id.tail).setOnClickListener(this);
         findViewById(R.id.tail_icon).setVisibility(View.GONE);
         ((TextView)findViewById(R.id.tail_text)).setText(R.string.next_review);;
-        
+        mStampViewIsHorizontal = getIntent().getBooleanExtra(Constant.STAMP_IS_HORIZONTAL, true);
         buttonInit(btnPostCard, btnLetter, btnMore);
         popupWindowInit();
     }
@@ -56,6 +58,7 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             showPopupWindow();
             break;
         case R.id.tail:
+            drawRate2BitmapCache();
             Intent intent = new Intent(this, ReviewActivity.class);
             startActivity(intent);
             break;
@@ -69,6 +72,15 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
 
     /*和底部弹出的PopupWindow相关 START*/
     
+    private void drawRate2BitmapCache(){
+        if(chooseRateStampView.getRateBitmap() == null){
+            return;
+        }
+        Canvas c = new Canvas(BitmapCache.getCache().get());
+        c.drawBitmap(chooseRateStampView.getRateBitmap(), 0, 0, null);
+        c.setBitmap(null);
+    }
+    
     private void buttonInit(Button... btns){
         for(int i=0; i<btns.length; i++){
             final Button btn = btns[i];
@@ -76,18 +88,19 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             /*btn.setTextColor(this.getResources().getColorStateList(R.color.sel_cards_choose_button));*/
         }
     }
-    
+    private boolean mStampViewIsHorizontal = false;
     private ImageView mBlurImageView;
     private LinearLayout mChooseRateRoot;
     private float mStartAlpha = 0.001f;
     private float mEndAlpha = 1.0f;
-    private long mDuration = 1000;
+    private long mDuration = 500;
     private ChooseRatePopupWindow mCRP;
     private void popupWindowInit(){
         mChooseRateRoot = (LinearLayout) this.findViewById(R.id.choose_rate_root);
         mBlurImageView = (ImageView) this.findViewById(R.id.blur_background);
         if(mCRP == null){
-            mCRP = new ChooseRatePopupWindow(getApplicationContext(), ChooseRateActivity.this.findViewById(R.id.root));
+            mCRP = new ChooseRatePopupWindow(getApplicationContext(), ChooseRateActivity.this.findViewById(R.id.root), mStampViewIsHorizontal);
+            mCRP.setOnRateSelecedListener(this);
             mCRP.setOnDismissListener(new OnDismissListener() {
                 @Override
                 public void onDismiss() {
@@ -155,6 +168,12 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             }
         }.execute();
         
+    }
+    
+    @Override
+    public void onRateSelecedListener(int id) {
+        chooseRateStampView.setRateBitmapId(id);
+        mCRP.dismiss();
     }
     /*和底部弹出的PopupWindow相关 END*/
 }

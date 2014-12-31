@@ -12,6 +12,11 @@ import com.stamp20.app.filter.NoiseFilter;
 import com.stamp20.app.filter.VignetteFilter;
 import com.stamp20.app.filter.ImageBlender.BlendMode;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.Bitmap.Config;
 
 /** 
  * @author 作者 E-mail: 
@@ -20,48 +25,25 @@ import android.graphics.Bitmap;
  */
 
 public class LomoFilter implements IImageFilter{
-	 private BrightContrastFilter contrastFx = new BrightContrastFilter();
-    private GradientMapFilter gradientMapFx  = new GradientMapFilter();
-    private ImageBlender blender = new ImageBlender();
-    private VignetteFilter vignetteFx = new VignetteFilter();
-    private NoiseFilter noiseFx = new NoiseFilter();
-
-    public LomoFilter()
-    {
-        contrastFx.BrightnessFactor = 0.05f;
-        contrastFx.ContrastFactor = 0.5f;
-     
-        blender.Mixture = 0.5f;
-        blender.Mode = BlendMode.Multiply;
-    
-        vignetteFx.Size = 0.6f;
-
-        noiseFx.Intensity = 0.02f;
-    }
-
-    public Image process(Image imageIn)
-    {
-        Image tempImg = contrastFx.process(imageIn);
-        tempImg = noiseFx.process(tempImg);
-        imageIn = gradientMapFx.process(tempImg);
-        imageIn = blender.Blend(imageIn, tempImg);
-        imageIn = vignetteFx.process(imageIn);
-        return imageIn;
-    }
-
-	/* (non-Javadoc)
-	 * @see com.stamp20.app.filter.IImageFilter#process(android.graphics.Bitmap)
-	 */
 	@Override
-	public Bitmap process(Bitmap imageIn) {
-		// TODO Auto-generated method stub
-		Image temp = new Image(imageIn);
-	       Image tempImg = contrastFx.process(temp);
-	        tempImg = noiseFx.process(tempImg);
-	        temp = gradientMapFx.process(tempImg);
-	        temp = blender.Blend(temp, tempImg);
-	        temp = vignetteFx.process(temp);
-	        return temp.getImage();
+	public Bitmap process(Bitmap bitmap) {
+		// TODO 照片泛蓝效果
+	        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+	                bitmap.getHeight(), Config.RGB_565);
+
+	        Canvas canvas = new Canvas(output);
+
+	        Paint paint = new Paint();        
+	        ColorMatrix cm = new ColorMatrix();
+	        float[] array = {1,0,0,0,0,
+	                0,1,0,0,50,
+	                0,0,1,0,0,
+	                0,0,0,1,0};
+	        cm.set(array);
+	        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+
+	        canvas.drawBitmap(bitmap, 0, 0, paint);
+	        return output;
 	}
 }
 

@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="250dp">
-       	   <com.stamp20.app.view.ZoomImageViewMaskOpposite
+       	   <com.stamp20.app.view.CardsView
        	        android:layout_marginTop="4dp"
        	        android:layout_marginLeft="1dp"
        	        android:layout_marginBottom="6dp"

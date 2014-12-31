@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.filter.BlackWhiteFilter;
+import com.stamp20.app.filter.BlueFilter;
 import com.stamp20.app.filter.GrayFilter;
 import com.stamp20.app.filter.IImageFilter;
 import com.stamp20.app.filter.LomoFilter;
@@ -69,7 +70,8 @@ public class ImageFilterAdapter extends BaseAdapter {
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_gray, new GrayFilter(),"gray"));
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_black, new BlackWhiteFilter(),"black"));
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_yellow, new YellowFilter(),"yellow"));
-		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new LomoFilter(),"lomo"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new BlueFilter(),"Blue"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new LomoFilter(),"Lomo"));
 		
 	}
 

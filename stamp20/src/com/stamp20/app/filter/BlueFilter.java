@@ -6,6 +6,10 @@ package com.stamp20.app.filter;
 import com.spore.meitu.jni.ImageUtilEngine;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 
 /** 
@@ -18,15 +22,23 @@ public class BlueFilter implements IImageFilter {
 
 	@Override
 	public Bitmap process(Bitmap bitmap) {
-		// TODO 处理日照效果
-		ImageUtilEngine imageProcessEng = new ImageUtilEngine();
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int[] buf = new int[width * height];
-        Math.pow(2, 1);
-        bitmap.getPixels(buf, 0, width, 1, 1, width - 1, height - 1);
-        int[] result = imageProcessEng.toSunshine(buf, width, height, 100, 100, 20, 150);
-        return bitmap = Bitmap.createBitmap(result, width, height, Config.ARGB_8888);
+		// TODO 照片泛蓝效果
+	        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+	                bitmap.getHeight(), Config.RGB_565);
+
+	        Canvas canvas = new Canvas(output);
+
+	        Paint paint = new Paint();        
+	        ColorMatrix cm = new ColorMatrix();
+	        float[] array = {1,0,0,0,0,
+	                0,1,0,0,0,
+	                0,0,1,0,100,
+	                0,0,0,1,0};
+	        cm.set(array);
+	        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+
+	        canvas.drawBitmap(bitmap, 0, 0, paint);
+	        return output;
 	}
 
 }

@@ -7,6 +7,8 @@ public class Constant {
     /* 用来监测是否是初次启动的 SharedPreferences_Guide */
     public static final String SHAREDPREFERENCES_GUIDE = "SharedPreferences_Guide";
     public static final String SHAREDPREFERENCES_GUIDE_FIRSTSTART = "SharedPreferences_Guide_FirstStart";
+    // MainActivity向ChooseRateActivity传递的Extra，判断当前Stamp的方向
+    public static final String STAMP_IS_HORIZONTAL = "stamp_is_horizontal";
     
     //adb shell setprop log.tag.propertyName V : open this property
     //adb shell setprop log.tag.propertyName S : close this property
@@ -52,5 +54,20 @@ public class Constant {
         //adb shell setprop log.tag.stamp20_xixia_log S : make this return false
         final String STAMP20_XIXIA_LOG = "stamp20_xixia_log";
         return Constant.isPropertyEnabled(STAMP20_XIXIA_LOG);
+    }
+    
+    public static void LogXixia(String... str){
+        if(debugXixiaLog() && str.length >= 1){
+            String tag = "";
+            String msg = "";
+            if(str.length == 1){
+                tag = "xixia";
+                msg = str[0];
+            } else {
+                tag = "xixia-" + str[0];
+                msg = str[1];
+            }
+            android.util.Log.i(tag, msg);
+        }
     }
 }

@@ -17,6 +17,9 @@
         android:drawablePadding="5dp"
         android:drawableLeft="@drawable/sel_cards_change_photo_button"
         android:textColor="@color/sel_cards_choose_button"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
         />
 <!--     <com.stamp20.app.view.ImageTextView
         android:id="@+id/item"

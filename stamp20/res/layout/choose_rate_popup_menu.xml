@@ -15,10 +15,11 @@
     <ListView 
         android:id="@+id/listview"
         android:layout_below="@id/title"
-        android:layout_height="wrap_content"
+        android:layout_height="450dp"
         android:layout_width="match_parent"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:listSelector="@android:color/transparent">
     </ListView>
    	<Button 
    	    android:layout_below="@id/listview"

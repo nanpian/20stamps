@@ -57,6 +57,11 @@
             android:name=".activities.ReviewActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity 
+            android:name=".activities.ShopCartActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            >
+        </activity>
       
         <provider 
             android:name="android.support.v4.content.FileProvider"

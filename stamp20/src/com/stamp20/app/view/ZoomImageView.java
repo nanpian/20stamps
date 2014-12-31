@@ -226,7 +226,7 @@ public class ZoomImageView extends View {
         }
 	}
 	
-	protected void onTouchEventSigleFingerUp(MotionEvent event){
+	protected void onTouchEventSingleFingerUp(MotionEvent event){
         // 手指离开屏幕时将临时值还原
         lastXMove = -1;
         lastYMove = -1;
@@ -275,7 +275,7 @@ public class ZoomImageView extends View {
 		    onTouchEventDoubleFingerUp(event);
 			break;
 		case MotionEvent.ACTION_UP:
-		    onTouchEventSigleFingerUp(event);
+		    onTouchEventSingleFingerUp(event);
 			break;
 		case MotionEvent.ACTION_CANCEL:
 		    onTouchEventCancel(event);

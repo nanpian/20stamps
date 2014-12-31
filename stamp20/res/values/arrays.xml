@@ -8,4 +8,49 @@
 	    <item>@drawable/background_home_save_the_date</item>
 	    <item>@drawable/background_home_wedding</item>
 	</integer-array>
+    <integer-array name="stamp_rate_horizontal">
+	    <item>@drawable/background_stamp_h_rate_3</item>
+	    <item>@drawable/background_stamp_h_rate_34</item>
+	    <item>@drawable/background_stamp_h_rate_49</item>
+	    <item>@drawable/background_stamp_h_rate_70</item>
+	    <item>@drawable/background_stamp_h_rate_91</item>
+	    <item>@drawable/background_stamp_h_rate_98</item>
+	    <item>@drawable/background_stamp_h_rate_112</item>
+	    <item>@drawable/background_stamp_h_rate_119</item>
+	    <item>@drawable/background_stamp_h_rate_140</item>
+	    <item>@drawable/background_stamp_h_rate_161</item>
+	    <item>@drawable/background_stamp_h_rate_182</item>
+	    <item>@drawable/background_stamp_h_rate_203</item>
+	    <item>@drawable/background_stamp_h_rate_560</item>
+	</integer-array>
+    <integer-array name="stamp_rate_vertical">
+	    <item>@drawable/background_stamp_v_rate_3</item>
+	    <item>@drawable/background_stamp_v_rate_34</item>
+	    <item>@drawable/background_stamp_v_rate_49</item>
+	    <item>@drawable/background_stamp_v_rate_70</item>
+	    <item>@drawable/background_stamp_v_rate_91</item>
+	    <item>@drawable/background_stamp_v_rate_98</item>
+	    <item>@drawable/background_stamp_v_rate_112</item>
+	    <item>@drawable/background_stamp_v_rate_119</item>
+	    <item>@drawable/background_stamp_v_rate_140</item>
+	    <item>@drawable/background_stamp_v_rate_161</item>
+	    <item>@drawable/background_stamp_v_rate_182</item>
+	    <item>@drawable/background_stamp_v_rate_203</item>
+	    <item>@drawable/background_stamp_v_rate_560</item>
+	</integer-array>
+    <string-array name="stamp_rate_title">
+	    <item>Post Card</item>
+	    <item>1st Class Letter 1oz</item>
+	    <item>1st Class Letter 2oz or 1oz odd</item>
+	    <item>1st Class Letter 3oz or 2oz odd</item>
+	    <item>1st Class Letter 4oz or 3oz odd</item>
+	    <item>1st Class Letter 5oz or 4oz odd</item>
+	    <item>1st Class Letter 6oz or 5oz odd</item>
+	    <item>1st Class Letter 7oz or 6oz odd</item>
+	    <item>1st Class Letter 8oz or 7oz odd</item>
+	    <item>1st Class Letter 9oz or 8oz odd</item>
+	    <item>1st Class Letter 10oz or 9oz odd</item>
+	    <item>1st Class Letter 11oz or 10oz odd</item>
+	    <item>1st Class Letter 12oz or 11z odd</item>
+	</string-array>	
 </resources>

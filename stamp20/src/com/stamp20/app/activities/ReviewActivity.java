@@ -93,6 +93,10 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
             finish();
             break;
         case R.id.tail:
+        	Intent intent = new Intent();
+        	intent.setClass(this, ShopCartActivity.class);
+        	startActivity(intent);
+        	finish();
             break;
         case R.id.btn_save_design:
         	File pic = saveBitmapToPic(mCache.get());

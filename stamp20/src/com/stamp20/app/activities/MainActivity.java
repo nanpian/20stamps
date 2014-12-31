@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.stamp20.app.R;
 import com.stamp20.app.adapter.ImageFilterAdapter;
 import com.stamp20.app.filter.IImageFilter;
+import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampView;
@@ -97,6 +98,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             break;
         case R.id.tail:
             Intent intent = new Intent(this, ChooseRateActivity.class);
+            intent.putExtra(Constant.STAMP_IS_HORIZONTAL, mStampView.isHorizontal());
             startActivity(intent);
             break;
         default:
