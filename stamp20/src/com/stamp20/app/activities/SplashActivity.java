@@ -1,18 +1,15 @@
 package com.stamp20.app.activities;
 
-import com.stamp20.app.R;
-import com.stamp20.app.util.Constant;
-import com.stamp20.app.util.Log;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
+
+import com.stamp20.app.R;
+import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.util.Log;
 
 public class SplashActivity extends Activity {
 
@@ -22,6 +19,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        FontManager.changeFonts((FrameLayout)findViewById(R.id.root), this);
         new Thread(new Runnable() {
 
             @Override

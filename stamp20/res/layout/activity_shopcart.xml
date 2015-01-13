@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#282828"
     android:orientation="vertical" >
 
-    <include layout="@layout/header" />
+    <include layout="@layout/home_header" />
 
-    <ListView
-        android:id="@+id/cartlist"
+    <com.stamp20.app.view.ScollerRelativeView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/header" >
-    </ListView>
+        android:layout_height="match_parent" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:background="@color/white" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+        <LinearLayout
+            android:id="@+id/move_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:clickable="true"
-            android:src="@drawable/shopcart_button_buy_with_paypal" />
-    </RelativeLayout>
+            android:orientation="vertical" >
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/chart_view"
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:background="@drawable/icon_addtocart"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:id="@+id/item_check_view"
+                    android:layout_width="25dip"
+                    android:layout_height="25dip"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/pop_type_sel"
+                    android:visibility="invisible" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:text="@string/item_addto_chart"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </com.stamp20.app.view.ScollerRelativeView>
 </RelativeLayout>

@@ -4,6 +4,7 @@ package com.stamp20.app.activities;
 
 import com.parse.ParseUser;
 import com.stamp20.app.*;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.InstagramTokenKeeper;
 
 import android.app.Activity;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 
 public class InstagramAuthView extends Activity {
 
@@ -49,6 +51,7 @@ public class InstagramAuthView extends Activity {
 			};
 		};
 		setContentView(mWebview);
+		FontManager.changeFonts(mWebview, this);
 		
 		mWebview.setWebChromeClient(mChromeClient);
 

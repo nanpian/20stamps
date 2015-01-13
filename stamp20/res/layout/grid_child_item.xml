@@ -7,10 +7,11 @@
 
     <com.stamp20.app.imageloader.MyImageView
         android:id="@+id/child_image"
+        android:scaleType="centerCrop"
         android:layout_width="fill_parent"
         android:layout_height="100dip"
         android:background="@drawable/friends_sends_pictures_no"
-        android:scaleType="fitXY" />
+         />
 
 <!--     <CheckBox -->
 <!--         android:id="@+id/child_checkbox" -->

@@ -11,11 +11,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.imageloader.ChildAdapter;
+import com.stamp20.app.util.FontManager;
 
 public class ShowImageActivity extends Activity implements OnItemClickListener {
     private GridView mGridView;
@@ -30,7 +32,7 @@ public class ShowImageActivity extends Activity implements OnItemClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image_grid);
-//        getActionBar().hide();
+        FontManager.changeFonts((LinearLayout)findViewById(R.id.root), this);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(R.string.select_a_picture);
@@ -53,7 +55,8 @@ public class ShowImageActivity extends Activity implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Uri uri = list.get(position);
-        Intent intent = new Intent(ShowImageActivity.this, MainActivity.class);
+        //Intent intent = new Intent(ShowImageActivity.this, MainActivity.class);
+        Intent intent = new Intent(ShowImageActivity.this, MainEffect.class);
         intent.putExtra("imageUri", uri);
         startActivity(intent);
     }

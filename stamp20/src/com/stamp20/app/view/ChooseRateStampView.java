@@ -9,10 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.Log;
 
 /**
  * 只准上下移动
@@ -21,10 +23,15 @@ public class ChooseRateStampView extends ZoomImageView {
     /**
      * 图片拖动状态常量
      */
-    public static final int STATUS_ANIM_DOWN = 8001;
+    public static final int STATUS_ANIM_DOWN_OR_UP = 8001;
     private static final float sDampFactor = 0.25f;
     private static float yEdgeRate = 0.2f;
-    private ValueAnimator mDropDownAnimation;// mDropDownAnimation
+    private static float yStartUpAnimEdgeRate = 0.5f;
+    private static float sMin =  -Float.MAX_VALUE + 1;
+    private float mAnimDistance = sMin;
+    private float mAnimStart = sMin;
+    private ValueAnimator mDropDownAnimation = null;// mDropDownAnimation
+    private ValueAnimator mFirstUpAnimation = null;// mDropDownAnimation
     
     private int mRateBitmapId = -1;
     private Bitmap mRateBitmap = null;
@@ -72,7 +79,10 @@ public class ChooseRateStampView extends ZoomImageView {
 
     public ChooseRateStampView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setupDropDownAnim();
+        /*setupDropDownAnim();
+        setupFirstUpAnim();*/
+		
+		setupDropDownAnim();
     }
 
     @Override
@@ -125,6 +135,22 @@ public class ChooseRateStampView extends ZoomImageView {
     }
 
     @Override
+    protected void onFinishInit() {
+        // TODO Auto-generated method stub
+        super.onFinishInit();
+        if(mFirstUpAnimation == null){
+            mFirstUpAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 800);
+        }
+        new Handler().postDelayed(new Runnable() { 
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                mFirstUpAnimation.start(); 
+            }
+        }, 200);
+    }
+
+    @Override
     protected void initBitmap(Canvas canvas) {
         /* 重写该方法，直接让bitmap居中显示 */
         if (sourceBitmap != null) {
@@ -134,7 +160,7 @@ public class ChooseRateStampView extends ZoomImageView {
             // 当图片的宽高都小于屏幕宽高时，直接让图片居中显示
             float translateX = (width - sourceBitmap.getWidth()) / 2f;
             /* 初始让Y偏移到最底下 */
-            float translateY = height * yEdgeRate;// (height -
+            float translateY = height * yStartUpAnimEdgeRate;// (height -
                                                   // sourceBitmap.getHeight()) /
                                                   // 2f;
             matrix.postTranslate(translateX, translateY);
@@ -149,7 +175,7 @@ public class ChooseRateStampView extends ZoomImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (currentStatus == STATUS_ANIM_DOWN) {
+        if (currentStatus == STATUS_ANIM_DOWN_OR_UP) {
             // 如果当前是执行DropDown的动画的话，则进入这个分支
             matrix.reset();
             // 直接根据最新计算的totalTranslateY进行位移，实现DropDown动画
@@ -192,6 +218,52 @@ public class ChooseRateStampView extends ZoomImageView {
         stopDropDownAnim();
     }
 
+    private ValueAnimator getTranslationValueAnimator(final float start, final float end, long duration) {
+        ValueAnimator va = ValueAnimator.ofFloat(0f, 1f);
+        va.setDuration(duration);
+        va.addUpdateListener(new AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if(mAnimDistance == sMin){
+                    mAnimDistance = end - start;
+                    mAnimStart = start;
+                }
+                totalTranslateY = mAnimStart + mAnimDistance/*((height * yEdgeRate) - totalTranslateY)*/
+                        * (Float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        va.addListener(new AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                currentStatus = STATUS_ANIM_DOWN_OR_UP;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                totalTranslateY = end;
+                currentStatus = -1; 
+                invalidate();
+                mAnimDistance = sMin;
+                mAnimStart = sMin;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                totalTranslateY = end;
+                currentStatus = -1;
+                invalidate();
+                mAnimDistance = sMin;
+                mAnimStart = sMin;
+            }
+        });
+        return va;
+    }
+    
     private void setupDropDownAnim() {
         mDropDownAnimation = ValueAnimator.ofFloat(0f, 1f);
         mDropDownAnimation.setDuration(1500);
@@ -210,7 +282,7 @@ public class ChooseRateStampView extends ZoomImageView {
         mDropDownAnimation.addListener(new AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                currentStatus = STATUS_ANIM_DOWN;
+                currentStatus = STATUS_ANIM_DOWN_OR_UP;
             }
 
             @Override
@@ -234,10 +306,16 @@ public class ChooseRateStampView extends ZoomImageView {
     }
     
     private void startDropDownAnim() {
+        if(mDropDownAnimation == null){
+            mDropDownAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 500);
+        }
         mDropDownAnimation.start();
     }
 
     private void stopDropDownAnim() {
+        if(null == mDropDownAnimation){
+            return;
+        }
         if (mDropDownAnimation.isRunning()) {
             mDropDownAnimation.cancel();
         }

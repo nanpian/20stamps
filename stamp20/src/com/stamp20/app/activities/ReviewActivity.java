@@ -24,12 +24,14 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
 public class ReviewActivity extends Activity implements View.OnClickListener {
@@ -57,6 +59,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 //        getActionBar().hide();
 
         setContentView(R.layout.review_activity);
+        FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
 
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerTitle = (TextView) findViewById(R.id.header_title);

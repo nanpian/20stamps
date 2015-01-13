@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import com.stamp20.app.fragments.FaceBookAlbumFragment;
 import com.stamp20.app.fragments.FeaturedAlbumFragment;
 import com.stamp20.app.fragments.InstagramAlbumFragment;
 import com.stamp20.app.fragments.PhotoAlbumFragment;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
 public class ImageLoaderActivity extends FragmentActivity implements OnClickListener, OnPageChangeListener {
@@ -50,6 +53,7 @@ public class ImageLoaderActivity extends FragmentActivity implements OnClickList
         super.onCreate(savedInstanceState);
 //        getActionBar().hide();
         setContentView(R.layout.activity_load_image_main);
+        FontManager.changeFonts((LinearLayout)findViewById(R.id.root), this);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(R.string.select_a_picture);

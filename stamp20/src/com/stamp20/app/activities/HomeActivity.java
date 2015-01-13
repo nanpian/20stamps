@@ -22,11 +22,13 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
 
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.ImageUtil;
 
 public class HomeActivity extends BaseTitleActivity implements View.OnClickListener{
@@ -57,7 +59,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
                         mDrawables[(mCurrentPicNum + 1) % mDrawableIDs.size()] });  
                 mCurrentPicNum++;  
                 mBackgroundImageView.setImageDrawable(transitionDrawable);
-                mBackgroundImageView.setScaleType(ScaleType.CENTER_CROP);
+                /*mBackgroundImageView.setScaleType(ScaleType.CENTER_CROP);*/
                 transitionDrawable.startTransition(ANIMATION_DURATION);  
             }
         }
@@ -68,12 +70,14 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
 
         super.onCreateNoTitle(); 
         setContentView(R.layout.activity_home);
+        FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
         mButtonGreen = (Button) this.findViewById(R.id.green_button);
         mButtonGreen.setOnClickListener(this);
         mButtonRed = (Button) this.findViewById(R.id.red_button);
         mButtonRed.setOnClickListener(this);
         mBackgroundImageView = (ImageView) this.findViewById(R.id.background);
-        
+        mBackgroundImageView.setScaleType(ScaleType.FIT_XY);
+        mBackgroundImageView.setImageDrawable(getResources().getDrawable(R.drawable.background_home_baby_shower));
         initBackgroundArrays();
         
         /*获得合适的drawable资源*/  

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E1E1E1" >
+
+    <include
+        android:id="@+id/shop_items_header"
+        android:layout_alignParentTop="true"
+        layout="@layout/home_header" />
+
+    <ListView
+        android:id="@+id/listview_cartitems"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/paypal_fees"
+        android:layout_below="@id/shop_items_header"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="1dp"
+        android:scrollbars="none" />
+
+    <LinearLayout
+        android:id="@+id/paypal_fees"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/shop_cartitems_totalmoney"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/shop_cartitems_totalmoney"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginStart="20dip"
+            android:layout_marginEnd="20dip"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/shop_cartitems_papal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginEnd="10dip"
+                android:layout_weight="1"
+                android:background="@drawable/shopcart_button_buy_with_paypal" />
+
+            <Button
+                android:id="@+id/shop_cartitems_checkout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/green_round_button"
+                android:text="@string/shop_checkout"
+                android:textAllCaps="true"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

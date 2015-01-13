@@ -2,6 +2,7 @@ package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
 import com.stamp20.app.anim.ListView2GridViewLayoutAnimationController;
+import com.stamp20.app.util.FontManager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -43,6 +44,7 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_template_choose);
         RelativeLayout root = (RelativeLayout) this.findViewById(R.id.root);
+        FontManager.changeFonts(root, this);
         mListChange = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.list_change);
         mListChange.setOnClickListener(this);
         mGridView = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.gridview);

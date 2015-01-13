@@ -1,22 +1,8 @@
 package com.stamp20.app.activities;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.stamp20.app.R;
-import com.stamp20.app.R.layout;
-import com.stamp20.app.facebook.FbAlbumResult;
-import com.stamp20.app.facebook.FbAlbumStore;
-import com.stamp20.app.facebook.FbPhotoResult;
-import com.stamp20.app.imageloader.ChildAdapter;
-import com.stamp20.app.imageloader.GroupAdapter;
-import com.stamp20.app.imageloader.ImageBean;
-import com.stamp20.app.util.Image;
-import com.stamp20.app.util.Log;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -29,14 +15,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.stamp20.app.R;
+import com.stamp20.app.facebook.FbAlbumStore;
+import com.stamp20.app.facebook.FbPhotoResult;
+import com.stamp20.app.imageloader.ChildAdapter;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.util.Image;
+import com.stamp20.app.util.Log;
 
 public class ShowFBImageActivity extends Activity implements OnItemClickListener {
 	private static final String TAG = "Show_Facebook_ImageActivity";
@@ -76,6 +69,7 @@ public class ShowFBImageActivity extends Activity implements OnItemClickListener
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_image_grid);
+		FontManager.changeFonts((LinearLayout)findViewById(R.id.root), this);
 		
 		headerPrevious = (ImageView) findViewById(R.id.header_previous);
 		headerPrevious.setOnClickListener(new View.OnClickListener() {

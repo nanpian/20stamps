@@ -19,9 +19,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.stamp20.app.R;
 import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
 public class GuideActivity extends Activity implements OnClickListener,
@@ -58,6 +60,7 @@ public class GuideActivity extends Activity implements OnClickListener,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
         // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_guide);
+        FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
         mButton = (Button) findViewById(R.id.button);
         mViews = new ArrayList<View>();
 

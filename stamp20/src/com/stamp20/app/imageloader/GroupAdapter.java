@@ -28,7 +28,11 @@ public class GroupAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+       if(list == null){
+    	   return 0;
+       }else{
+    	   return list.size();
+       }
     }
 
     @Override

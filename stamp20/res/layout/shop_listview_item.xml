@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="110dp"
+        android:layout_height="150dp"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/shop_list_itemview"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp" >
+
+            <TextView
+                android:id="@+id/shop_listview_itemname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@color/white"
+                android:text="1st class letter 1oz"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/shop_listview_itemprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/white"
+                android:text="$22.95"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:id="@+id/shop_listview_persheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@color/white"
+                android:text="20 per sheet"
+                android:textColor="#f58220" />
+
+            <TextView
+                android:id="@+id/shop_listview_unitprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/white"
+                android:text="unit price: $1.14"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dip"
+            android:layout_marginTop="10dip" >
+
+            <ImageView
+                android:id="@+id/shop_listview_num_reduce"
+                android:layout_width="30.0dip"
+                android:layout_height="30.0dip"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:layout_marginLeft="3.0dip"
+                android:background="@drawable/listview_num_reduce" />
+
+            <TextView
+                android:id="@+id/shop_listview_num"
+                android:layout_width="40dip"
+                android:layout_height="30.0dip"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3.0dip"
+                android:layout_toRightOf="@id/shop_listview_num_reduce"
+                android:gravity="center"
+                android:maxLength="4"
+                android:singleLine="true"
+                android:text="1"
+                android:textColor="@color/black"
+                android:textSize="18.0sp" />
+
+            <ImageView
+                android:id="@+id/shop_listview_num_add"
+                android:layout_width="30.0dip"
+                android:layout_height="30.0dip"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3.0dip"
+                android:clickable="true"
+                android:layout_toRightOf="@id/shop_listview_num"
+                android:background="@drawable/listview_num_add" />
+
+            <ImageView
+                android:id="@+id/shop_listview_num_delete"
+                android:layout_width="23.0dip"
+                android:layout_height="23.0dip"
+                android:clickable="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/listview_num_delete" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

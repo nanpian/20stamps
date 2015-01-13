@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint.FontMetricsInt;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow.OnDismissListener;
@@ -20,6 +22,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ChooseRatePopupWindow;
 import com.stamp20.app.view.ChooseRateStampView;
@@ -37,10 +40,16 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_rate);
         chooseRateStampView = (ChooseRateStampView) findViewById(R.id.view_stamp);
+        FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
         btnPostCard = (Button) findViewById(R.id.btn_post_card);
         btnLetter = (Button) findViewById(R.id.btn_letter);
         btnMore = (Button) findViewById(R.id.btn_more);
         stampBitmap = BitmapCache.getCache().get();
+        if( stampBitmap !=null ) {
+            Log.i("bitmapcache", "onDrawFrame, stampbitmap get is " + stampBitmap.getWidth());
+        } else {
+        	Log.i("bitmapchache", "onDrawFrame, stampbitmap is " + stampBitmap);
+        }
         chooseRateStampView.setImageBitmap(stampBitmap);
         findViewById(R.id.tail).setOnClickListener(this);
         findViewById(R.id.tail_icon).setVisibility(View.GONE);

@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shop_insert_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_layout_background"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/text_shop_bundle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dip"
+            android:gravity="center_horizontal"
+            android:text="@string/shop_text_bundle"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <com.stamp20.app.view.ShopCartView
+            android:id="@+id/shop_stamp_view"
+            android:layout_width="fill_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="10dip"
+            android:layout_marginLeft="25dip"
+            android:layout_marginRight="25dip"
+            android:background="#3C3C3C"
+            android:layout_gravity="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dip"
+            android:layout_marginTop="15dip"
+            android:orientation="horizontal"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp" >
+
+            <Button
+                android:id="@+id/btn_shop_customize"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dip"
+                android:layout_weight="1"
+                android:background="@drawable/shop_custom_button"
+                android:text="@string/shop_custom"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_shop_addto_chart"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/green_round_button"
+                android:text="@string/shop_addto_chart"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_shop_skipto"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shop_custom_button"
+        android:text="@string/shop_skipto_chart"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

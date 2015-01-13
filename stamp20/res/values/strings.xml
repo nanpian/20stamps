@@ -17,5 +17,15 @@
     <string name="title_activity_show_fbimage">ShowFBImageActivity</string>
     <string name="save_design">Save Design</string>
     <string name="share_design">Share Design</string>
-
+    <string name="item_addto_chart">Item Added to Cart</string>
+    <string name="shop_custom">customize</string>
+    <string name="shop_addto_chart">add to chart</string>
+    <string name="shop_skipto_chart">Skip to cart</string>
+    <string name="shop_text_bundle">Make a Bundle. Save $10!</string>
+    <string name="shop_cartitems_title">Cart</string>
+    <string name="shop_cartitems_totalmoney">Sub-total:</string>
+    <string name="shop_cartitems_addmore">Add More items</string>
+    <string name="shop_cartitems_coupon">Coupon Code:</string>
+    <string name="shop_checkout">Check out</string>
+    <string name="shop_cartitems_getcoupon">No coupon Code? Get One Here</string>
 </resources>

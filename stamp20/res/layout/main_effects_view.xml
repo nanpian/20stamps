@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imageviewtext="http://schemas.android.com/apk/res-auto"
+    xmlns:zoomimageview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_gray" >
+
+    <include layout="@layout/header" />
+
+    <FrameLayout
+        android:id="@+id/pic_area"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:background="@color/activity_background_gray"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" >
+        <FrameLayout
+            android:id= "@+id/stampid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity = "center"
+            android:background="#00000000"
+            >
+
+        <com.stamp20.app.view.StampGLSurfaceView
+            android:id="@+id/zoomgpuimage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="4dp" />
+
+        <ImageView
+            android:id="@+id/background_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/background_stamp_h_transparent_pierced" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <Gallery
+        android:id="@+id/galleryFilter"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/pic_area"
+        android:layout_marginBottom="10dp"
+        android:spacing="8dp" />
+
+    <!-- <Button -->
+    <!-- android:id="@+id/btn_select_pic" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_gravity="center" -->
+    <!-- android:layout_marginBottom="10dp" -->
+    <!-- android:text="@string/select_a_picture" -->
+    <!-- android:textColor="#ffffff" /> -->
+
+    <RelativeLayout
+        android:id="@+id/tail"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tail_button"
+        android:clickable="true" >
+
+        <ImageView
+            android:id="@+id/tail_icon"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginStart="35dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_addtocart" />
+
+        <TextView
+            android:id="@+id/tail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="ADD TO CART"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

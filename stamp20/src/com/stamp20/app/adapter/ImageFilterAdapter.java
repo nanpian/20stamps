@@ -3,6 +3,12 @@ package com.stamp20.app.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.co.cyberagent.android.gpuimage.GPUImageColorInvertFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageContrastFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageGammaFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImagePixelationFilter;
+
 import com.stamp20.app.R;
 
 import android.app.Activity;
@@ -32,12 +38,15 @@ import com.stamp20.app.filter.LomoFilter;
 import com.stamp20.app.filter.NormaFilter;
 import com.stamp20.app.filter.SunShineFilter;
 import com.stamp20.app.filter.YellowFilter;
+import com.stamp20.app.util.FontManager;
 
 public class ImageFilterAdapter extends BaseAdapter {
 	private class FilterInfo {
 		public int filterID;
 		public String filterName;
 		public IImageFilter filter;
+		public GPUImageFilter gpufilter;
+		public String type;
 		public int selectItem;
 
 		public FilterInfo(int filterID, IImageFilter filter) {
@@ -49,7 +58,16 @@ public class ImageFilterAdapter extends BaseAdapter {
 			this.filterID = filterID;
 			this.filter = filter;
 			this.filterName = filtername;
+			this.type = "common";
 		}
+		
+		public FilterInfo(int filterID, GPUImageFilter gpufilter, String filtername) {
+			this.filterID = filterID;
+			this.gpufilter = gpufilter;
+			this.filterName = filtername;
+			this.type = "gpu";
+		}
+		
 	}
 
 	private Context mContext;
@@ -72,6 +90,10 @@ public class ImageFilterAdapter extends BaseAdapter {
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_yellow, new YellowFilter(),"yellow"));
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new BlueFilter(),"Blue"));
 		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new LomoFilter(),"Lomo"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new GPUImageContrastFilter(),"contrast"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new GPUImageGammaFilter(),"gama"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new GPUImageColorInvertFilter(),"invert"));
+		filterArray.add(new FilterInfo(R.drawable.filter_sample_sunshine, new GPUImagePixelationFilter(),"pixel"));
 		
 	}
 
@@ -80,7 +102,18 @@ public class ImageFilterAdapter extends BaseAdapter {
 	}
 
 	public Object getItem(int position) {
+		if(filterArray.get(position).type.equals("common")) {
 		return position < filterArray.size() ? filterArray.get(position).filter
+				: null;
+		} else if (filterArray.get(position).type.equals("gpu")) {
+			return position < filterArray.size() ? filterArray.get(position).gpufilter
+					: null;
+		}
+		return null;
+	}
+	
+	public String getType(int position) {
+		return position < filterArray.size() ? filterArray.get(position).type
 				: null;
 	}
 
@@ -93,6 +126,7 @@ public class ImageFilterAdapter extends BaseAdapter {
 		int width = 180;
 		int height = 180;
 		convertView = mInflater.inflate(R.layout.gallery_item_layout, null);
+		FontManager.changeFonts(mContext, (LinearLayout)convertView.findViewById(R.id.root));
 		ImageView imageView = null;
 	    TextView textView = null;
         imageView = (ImageView)convertView.findViewById(R.id.image_item);

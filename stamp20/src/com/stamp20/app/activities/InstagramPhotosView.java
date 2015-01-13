@@ -12,11 +12,11 @@ import org.jinstagram.entity.users.feed.MediaFeedData;
 import org.jinstagram.exceptions.InstagramException;
 
 import com.parse.ParseUser;
-
 import com.stamp20.app.R;
 import com.stamp20.app.Setting;
 import com.stamp20.app.imageloader.ImageLoader;
 import com.stamp20.app.imageloader.ImageLoader2;
+import com.stamp20.app.util.FontManager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,6 +37,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +74,7 @@ public class InstagramPhotosView extends Activity {
 	        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	    //}
 		setContentView(R.layout.instagram_photos_view);
+		FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
 		
 		mediaFeedDataList = new ArrayList<MediaFeedData>();
 		

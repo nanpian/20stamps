@@ -253,6 +253,11 @@ public class ZoomImageView extends View {
         //供子类在onTouch事件前进行某些处理
     }
     
+    /* 渲染完初始图片的回调函数 */
+    protected void onFinishInit(){
+        
+    }
+    
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    onPreTouchEvent();
@@ -302,6 +307,7 @@ public class ZoomImageView extends View {
 			break;
 		case STATUS_INIT:
 			initBitmap(canvas);
+			onFinishInit();
 		default:
 			canvas.drawBitmap(sourceBitmap, matrix, null);
 			break;

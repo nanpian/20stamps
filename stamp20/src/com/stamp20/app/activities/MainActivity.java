@@ -1,5 +1,7 @@
 package com.stamp20.app.activities;
 
+import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +15,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.adapter.ImageFilterAdapter;
 import com.stamp20.app.filter.IImageFilter;
 import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampView;
@@ -40,9 +44,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Context mContext;
 
     private ImageFilterAdapter filterAdapter;
+    private GPUImageView mGPUImageView;
 
     private static final int SELECT_PIC = 1;
     private static final int MSG_SELECT_PICTURE = 1000;
+    
+    public MainActivity instance = this;
 
 	public static final String Tag = MainActivity.class.getSimpleName();
 
@@ -51,6 +58,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.select_picture);
+        FontManager.changeFonts((LinearLayout)findViewById(R.id.root), this);
         mStampView = (StampView) findViewById(R.id.view_stamp);
 
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
@@ -81,8 +89,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
                 filterAdapter.setSelectItem(position);
-                IImageFilter filter = (IImageFilter) filterAdapter.getItem(position);
-                new processImageTask(MainActivity.this, filter).execute();
+                String type = filterAdapter.getType(position);
+                if (type.equals("common")) {
+                    IImageFilter filter = (IImageFilter) filterAdapter.getItem(position);
+                    new processImageTask(MainActivity.this, filter).execute();
+                } else if (type.equals("gpu")) {
+                	GPUImageFilter filter = (GPUImageFilter)filterAdapter.getItem(position);
+                //	mGPUImageView.set
+                }
             }
         });
     }

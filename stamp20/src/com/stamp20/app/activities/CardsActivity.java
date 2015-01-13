@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.ZoomImageView;
@@ -53,6 +54,7 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_main);
+        FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
         zoomImageView = (ZoomImageView) findViewById(R.id.zoom_image_view);
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_home_wedding);
         zoomImageView.setImageBitmap(bitmap);
