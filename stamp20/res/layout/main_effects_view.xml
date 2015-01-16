@@ -14,42 +14,56 @@
         android:id="@+id/pic_area"
         android:layout_width="match_parent"
         android:layout_height="320dp"
-        android:background="@color/activity_background_gray"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" >
+        android:layout_marginTop="40dp"
+        android:background="@color/activity_background_gray" >
+
         <FrameLayout
-            android:id= "@+id/stampid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity = "center"
-            android:background="#00000000"
-            >
-
-        <com.stamp20.app.view.StampGLSurfaceView
-            android:id="@+id/zoomgpuimage"
+            android:id="@+id/stampid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="6dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginTop="4dp" />
+            android:background="#00000000" >
 
-        <ImageView
-            android:id="@+id/background_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="6dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/background_stamp_h_transparent_pierced" />
+            <com.stamp20.app.view.StampGLSurfaceView
+                android:id="@+id/zoomgpuimage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="4dp" />
+
+            <RelativeLayout
+                android:id="@+id/rotateframe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <ImageView
+                    android:id="@+id/background_pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/background_stamp_h_transparent_pierced" />
+
+                <ImageView
+                    android:id="@+id/rotateimage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/background_pic"
+                    android:src="@drawable/icon_rotation_left" />
+            </RelativeLayout>
         </FrameLayout>
     </FrameLayout>
 
     <Gallery
         android:id="@+id/galleryFilter"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="90dp"
         android:layout_below="@id/pic_area"
         android:layout_marginBottom="10dp"
         android:spacing="8dp" />

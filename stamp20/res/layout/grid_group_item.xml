@@ -17,8 +17,8 @@
             android:paddingTop="18dip"
             android:paddingBottom="5dip"
             android:scaleType="centerCrop"
-            android:layout_width="fill_parent"
-            android:layout_height="150dip" />
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
 
         <TextView
             android:id="@+id/group_count"

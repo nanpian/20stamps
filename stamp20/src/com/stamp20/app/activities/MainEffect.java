@@ -32,14 +32,14 @@ import android.widget.TextView;
 import android.media.effect.EffectContext;
 import android.view.View.OnClickListener;
 
-public class MainEffect extends Activity implements OnTouchListener,OnStampBitmapGeneratedListener,
-		OnClickListener {
+public class MainEffect extends Activity implements OnTouchListener,
+		OnStampBitmapGeneratedListener, OnClickListener {
 
 	private Context mContext;
-	public MainEffect instance;
 	private Bitmap bitmap;
 
 	private static final CharSequence titleName = "Customize";
+	public static MainEffect instance;
 	private StampGLSurfaceView mGPUImageView;
 	private FrameLayout mStampView;
 	private FrameLayout touchArea;
@@ -56,15 +56,17 @@ public class MainEffect extends Activity implements OnTouchListener,OnStampBitma
 	private ImageView tailIcon;
 	private TextView tailText;
 	private ImageEffectAdapter effectAdapter;
-	private ImageView mStampFrame;
+	public ImageView mStampFrame;
+	private ImageView mRotateView;
+	private RelativeLayout mFrameLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
+		instance = this;
 		setContentView(R.layout.main_effects_view);
 		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-
 		headerPrevious = (ImageView) findViewById(R.id.header_previous);
 		headerPrevious.setOnClickListener(this);
 		headerTitle = (TextView) findViewById(R.id.header_title);
@@ -77,9 +79,12 @@ public class MainEffect extends Activity implements OnTouchListener,OnStampBitma
 		findViewById(R.id.tail).setOnClickListener(this);
 
 		mGPUImageView = (StampGLSurfaceView) findViewById(R.id.zoomgpuimage);
-		mStampFrame = (ImageView)findViewById(R.id.background_pic);
-		mStampView = (FrameLayout)findViewById(R.id.stampid);
-		
+		mStampFrame = (ImageView) findViewById(R.id.background_pic);
+		mStampView = (FrameLayout) findViewById(R.id.stampid);
+		mRotateView = (ImageView) findViewById(R.id.rotateimage);
+		mRotateView.setOnClickListener(this);
+		mFrameLayout = (RelativeLayout) findViewById(R.id.rotateframe);
+
 		LoadImageFilter();
 
 		touchArea = (FrameLayout) findViewById(R.id.pic_area);
@@ -103,11 +108,10 @@ public class MainEffect extends Activity implements OnTouchListener,OnStampBitma
 		gallery.setSelection(0);
 		gallery.setAnimationDuration(3000);
 		gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				effectAdapter.setSelectItem(position);
-				//mCurrentEffect = (Effect) effectAdapter.getItem(position);
+				// mCurrentEffect = (Effect) effectAdapter.getItem(position);
 				currentfiltername = effectAdapter.getFilterName(position);
 				currentfilterID = effectAdapter.getFilterID(position);
 				mGPUImageView.setCurrentfilterID(currentfilterID);
@@ -122,7 +126,6 @@ public class MainEffect extends Activity implements OnTouchListener,OnStampBitma
 		mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
 	}
 
-
 	Handler mHandler = new Handler() {
 
 		@Override
@@ -131,8 +134,7 @@ public class MainEffect extends Activity implements OnTouchListener,OnStampBitma
 			case MSG_SELECT_PICTURE:
 				Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
 				Uri uri = (Uri) msg.obj;
-				bitmap = ImageUtil
-						.loadDownsampledBitmap(mContext, uri, 2);
+				bitmap = ImageUtil.loadDownsampledBitmap(mContext, uri, 2);
 				mGPUImageView.setSourceBitmap(bitmap);
 				break;
 			default:
@@ -160,14 +162,16 @@ public class MainEffect extends Activity implements OnTouchListener,OnStampBitma
 			// mStampView.isHorizontal());
 			generateStamp();
 			mGPUImageView.setOnStampBitmapGeneratedListener(this);
-
+			break;
+		case R.id.rotateimage:
+			mGPUImageView.onRotateClick(mContext, mFrameLayout);
 			break;
 		default:
 			break;
 		}
 	}
 
-	public void generateStamp(){
+	public void generateStamp() {
 		mGPUImageView.setStatus(StampGLSurfaceView.STATUS_CAPTURE);
 		mGPUImageView.requestRender();
 	}
@@ -176,8 +180,29 @@ public class MainEffect extends Activity implements OnTouchListener,OnStampBitma
 	public void OnStampBitmapGeneratedListener() {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, ChooseRateActivity.class);
-		intent.putExtra(Constant.STAMP_IS_HORIZONTAL,true);
+		intent.putExtra(Constant.STAMP_IS_HORIZONTAL, true);
 		startActivity(intent);
 		mGPUImageView.setOnStampBitmapGeneratedListener(null);
 	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		mGPUImageView.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		mGPUImageView.onResume();
+	}
+
 }

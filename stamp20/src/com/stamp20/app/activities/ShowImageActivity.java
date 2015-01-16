@@ -58,6 +58,10 @@ public class ShowImageActivity extends Activity implements OnItemClickListener {
         //Intent intent = new Intent(ShowImageActivity.this, MainActivity.class);
         Intent intent = new Intent(ShowImageActivity.this, MainEffect.class);
         intent.putExtra("imageUri", uri);
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (Exception e ) {
+        	e.printStackTrace();
+        }
     }
 }

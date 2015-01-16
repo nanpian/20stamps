@@ -9,11 +9,10 @@
         android:id="@+id/titlebar_left"
         android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/icon_back_arrow" />
-
 
     <TextView
         android:id="@+id/titlebar_title"
@@ -24,16 +23,12 @@
         android:gravity="center"
         android:textColor="#ffffff"
         android:textSize="25sp" />
-    
-        <Button
+
+    <Button
         android:id="@+id/titlebar_right"
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:visibility="gone" />
-
-        
-
 
 </LinearLayout>

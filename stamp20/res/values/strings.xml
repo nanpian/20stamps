@@ -28,4 +28,10 @@
     <string name="shop_cartitems_coupon">Coupon Code:</string>
     <string name="shop_checkout">Check out</string>
     <string name="shop_cartitems_getcoupon">No coupon Code? Get One Here</string>
+    <string name="confirmation_email">CONFIRMATION EMAIL</string>
+    <string name="email_confirmed">Email:</string>
+    <string name="next">next</string>
+    <string name="customize_title">Customize</string>
+    <string name="header_previous">back</string>
+    <string name="shipping_title_1">(1/2)Shipping</string>
 </resources>

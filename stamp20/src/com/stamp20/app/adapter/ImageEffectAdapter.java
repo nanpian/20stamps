@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.media.effect.Effect;
 import android.media.effect.EffectContext;
 import android.media.effect.EffectFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +94,12 @@ public class ImageEffectAdapter extends BaseAdapter{
 	public Effect createEffect(int mCurrentEffect) {
 		
 		if (mEffectContext == null ) {
+			try {
 			mEffectContext = EffectContext.createWithCurrentGlContext();
+			} catch (Exception e ) {
+				Log.e("EffectException","create effect exception");
+				e.printStackTrace();
+			}
 		}
 
 		EffectFactory effectFactory = mEffectContext.getFactory();
@@ -278,8 +284,8 @@ public class ImageEffectAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		int width = 180;
-		int height = 180;
+		//int width = 180;
+		//int height = 180;
 		convertView = mInflater.inflate(R.layout.gallery_item_layout, null);
 		//FontManager.changeFonts(mContext, (LinearLayout)convertView.findViewById(R.id.root));
 		ImageView imageView = null;
