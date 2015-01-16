@@ -35,6 +35,8 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -660,8 +662,29 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 		}
 
 		// 这个是设置动画时间的
-		rotateAnimation.setDuration(1000);
+		rotateAnimation.setDuration(500);
 		rotateAnimation.setFillAfter(true);
+		rotateAnimation.setAnimationListener(new AnimationListener() {
+
+			@Override
+			public void onAnimationEnd(Animation arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onAnimationStart(Animation arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		mView.startAnimation(rotateAnimation);
 	}
 

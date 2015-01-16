@@ -109,122 +109,122 @@ public class ImageEffectAdapter extends BaseAdapter{
 		// Initialize the correct effect based on the selected menu/action item
 		switch (mCurrentEffect) {
 
-		case 1:
+		case 0:
 			break;
 
-		case 2:
+		case 1:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_AUTOFIX);
 			mEffect.setParameter("scale", 0.5f);
 			break;
 
-		case 3:
+		case 2:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_BLACKWHITE);
 			mEffect.setParameter("black", .1f);
 			mEffect.setParameter("white", .7f);
 			break;
 
-		case 4:
+		case 3:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_BRIGHTNESS);
 			mEffect.setParameter("brightness", 2.0f);
 			break;
 
-		case 5:
+		case 4:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_CONTRAST);
 			mEffect.setParameter("contrast", 1.4f);
 			break;
 
-		case 6:
+		case 5:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_CROSSPROCESS);
 			break;
 
-		case 7:
+		case 6:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_DOCUMENTARY);
 			break;
 
-		case 8:
+		case 7:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_DUOTONE);
 			mEffect.setParameter("first_color", Color.YELLOW);
 			mEffect.setParameter("second_color", Color.DKGRAY);
 			break;
 
-		case 9:
+		case 8:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_FILLLIGHT);
 			mEffect.setParameter("strength", .8f);
 			break;
 
-		case 10:
+		case 9:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FISHEYE);
 			mEffect.setParameter("scale", .5f);
 			break;
 
-		case 11:
+		case 10:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP);
 			mEffect.setParameter("vertical", true);
 			break;
 
-		case 12:
+		case 11:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP);
 			mEffect.setParameter("horizontal", true);
 			break;
 
-		case 13:
+		case 12:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_GRAIN);
 			mEffect.setParameter("strength", 1.0f);
 			break;
 
-		case 14:
+		case 13:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_GRAYSCALE);
 			break;
 
-		case 15:
+		case 14:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_LOMOISH);
 			break;
 
-		case 16:
+		case 15:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_NEGATIVE);
 			break;
 
-		case 17:
+		case 16:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_POSTERIZE);
 			break;
 
-		case 18:
+		case 17:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_ROTATE);
 			mEffect.setParameter("angle", 180);
 			break;
 
-		case 19:
+		case 18:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SATURATE);
 			mEffect.setParameter("scale", .5f);
 			break;
 
-		case 20:
+		case 19:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SEPIA);
 			break;
 
-		case 21:
+		case 20:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SHARPEN);
 			break;
 
-		case 22:
+		case 21:
 			mEffect = effectFactory
 					.createEffect(EffectFactory.EFFECT_TEMPERATURE);
 			mEffect.setParameter("scale", .9f);
 			break;
 
-		case 23:
+		case 22:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_TINT);
 			mEffect.setParameter("tint", Color.MAGENTA);
 			break;
 
-		case 24:
+		case 23:
 			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_VIGNETTE);
 			mEffect.setParameter("scale", .5f);
 			break;
