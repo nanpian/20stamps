@@ -40,7 +40,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 
 	private static final CharSequence titleName = "Customize";
 	public static MainEffect instance;
-	private StampGLSurfaceView mGPUImageView;
+	public StampGLSurfaceView mGPUImageView;
 	private FrameLayout mStampView;
 	private FrameLayout touchArea;
 	private static final int MSG_SELECT_PICTURE = 1000;
@@ -105,7 +105,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 		mGPUImageView.setEffectAdapter(effectAdapter);
 		currentfilterID = 0;
 		gallery.setAdapter(effectAdapter);
-		gallery.setSelection(0);
+		gallery.setSelection(5);
 		gallery.setAnimationDuration(3000);
 		gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1,

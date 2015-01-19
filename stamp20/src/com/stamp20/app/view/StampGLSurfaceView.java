@@ -202,22 +202,31 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	private int surfaceWidth;
 
 	private int surfaceHeight;
-    //the stamp bitmap finally produce
+	// the stamp bitmap finally produce
 	private Bitmap bitmap;
-	
+
 	private Handler mHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
-			if (msg.what == UPDATE_FRAME ) {
+			if (msg.what == UPDATE_FRAME) {
 				MainEffect.instance.mStampFrame.setImageBitmap(bitmap);
-			} else if (msg.what == INIT_FRAME ) {
-				MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),
-						R.drawable.background_stamp_h_transparent_pierced));
+			} else if (msg.what == INIT_FRAME) {
+				if (isHorizontal) {
+					MainEffect.instance.mStampFrame
+							.setImageBitmap(BitmapFactory.decodeResource(
+									mContext.getResources(),
+									R.drawable.background_stamp_h_transparent_pierced));
+				} else {
+					MainEffect.instance.mStampFrame
+							.setImageBitmap(BitmapFactory.decodeResource(
+									mContext.getResources(),
+									R.drawable.background_stamp_v_transparent_pierced));
+				}
 			}
 		}
-		
+
 	};
 
 	public Bitmap getSourceBitmap() {
@@ -316,7 +325,8 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			mInitialized = true;
 		}
 
-		if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE) {
+		if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE
+				|| currentStatus == STATUS_CAPTURE) {
 			// if an effect is chosen initialize it and apply it to the texture
 			if (currentfilterID != 0) {
 				Log.i(Tag, "onDrawFrame the filter name is "
@@ -330,31 +340,34 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			mHandler.sendEmptyMessage(UPDATE_FRAME);
 			GLES20.glClearColor(0.15686f, 0.15686f, 0.15686f, 1.0f);
 			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-		} else {
-            mHandler.sendEmptyMessage(INIT_FRAME);
-			// if an effect is chosen initialize it and apply it to the texture
-/*			if (currentfilterID != 0) {
-				Log.i(Tag, "onDrawFrame the filter name is "
-						+ currentfiltername);
-				mCurrentEffect = effectAdapter.createEffect(currentfilterID,
-						mEffectContext);
-				applyEffect();
-			} else {
-				mCurrentEffect = null;
-			}*/
-
-			gl.glLoadIdentity(); // 重置当前的模型观察矩阵
-			gl.glPushMatrix();
-			renderResult();
-			gl.glPopMatrix();
 			if (currentStatus == STATUS_CAPTURE) {
 				Log.i(Tag, "onDrawFrame , generateStamp the gl is " + gl);
-				generateStamp(gl);
 				if (stamplistener != null) {
 					notifyStampGernerated();
 					Log.i(Tag, "onDrawFrame ,notify stamp generated!");
 				}
 			}
+		} else {
+			mHandler.sendEmptyMessage(INIT_FRAME);
+			// if an effect is chosen initialize it and apply it to the texture
+			/*
+			 * if (currentfilterID != 0) { Log.i(Tag,
+			 * "onDrawFrame the filter name is " + currentfiltername);
+			 * mCurrentEffect = effectAdapter.createEffect(currentfilterID,
+			 * mEffectContext); applyEffect(); } else { mCurrentEffect = null; }
+			 */
+
+			gl.glLoadIdentity(); // 重置当前的模型观察矩阵
+			gl.glPushMatrix();
+			renderResult();
+			gl.glPopMatrix();
+			/*
+			 * if (currentStatus == STATUS_CAPTURE) { Log.i(Tag,
+			 * "onDrawFrame , generateStamp the gl is " + gl);
+			 * generateStamp(gl); if (stamplistener != null) {
+			 * notifyStampGernerated(); Log.i(Tag,
+			 * "onDrawFrame ,notify stamp generated!"); } }
+			 */
 		}
 
 	}
@@ -642,50 +655,67 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	public void onRotateClick(Context mContext, RelativeLayout frameLayout) {
 		// TODO Auto-generated method stub
 		if (isHorizontal) {
+			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
+					.decodeResource(mContext.getResources(),
+							R.drawable.background_stamp_h_transparent_pierced));
 			showAnimation(frameLayout, true);
+
 			isHorizontal = false;
+			// 旋转后，重新刷新GLSurfaceView
+			this.requestRender();
 		} else {
+			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
+					.decodeResource(mContext.getResources(),
+							R.drawable.background_stamp_v_transparent_pierced));
 			showAnimation(frameLayout, false);
+
 			isHorizontal = true;
+			this.requestRender();
 		}
 	}
 
-	public void showAnimation(RelativeLayout mView, boolean isHorizontal) {
-		final float centerX = mView.getWidth() / 2.0f;
-		final float centerY = mView.getHeight() / 2.0f;
-		RotateAnimation rotateAnimation;
-		// 这个是设置需要旋转的角度
+	public void showAnimation(RelativeLayout mView, final boolean isHorizontal) {
+		/*
+		 * final float centerX = mView.getWidth() / 2.0f; final float centerY =
+		 * mView.getHeight() / 2.0f; RotateAnimation rotateAnimation; //
+		 * 这个是设置需要旋转的角度 if (isHorizontal) { rotateAnimation = new
+		 * RotateAnimation(0, -90, centerX, centerY); } else { rotateAnimation =
+		 * new RotateAnimation(0, 90, centerX, centerY); }
+		 * 
+		 * // 这个是设置动画时间的 rotateAnimation.setDuration(500);
+		 * //rotateAnimation.setFillAfter(true);
+		 * rotateAnimation.setAnimationListener(new AnimationListener() {
+		 * 
+		 * @Override public void onAnimationEnd(Animation arg0) {
+		 */
+		// TODO Auto-generated method stub
 		if (isHorizontal) {
-			rotateAnimation = new RotateAnimation(0, -90, centerX, centerY);
+			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
+					.decodeResource(mContext.getResources(),
+							R.drawable.background_stamp_v_transparent_pierced));
+			MainEffect.instance.mGPUImageView.requestRender();
+			currentStatus = STATUS_INIT;
 		} else {
-			rotateAnimation = new RotateAnimation(0, 90, centerX, centerY);
+			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
+					.decodeResource(mContext.getResources(),
+							R.drawable.background_stamp_h_transparent_pierced));
+			MainEffect.instance.mGPUImageView.requestRender();
+			currentStatus = STATUS_INIT;
 		}
-
-		// 这个是设置动画时间的
-		rotateAnimation.setDuration(500);
-		rotateAnimation.setFillAfter(true);
-		rotateAnimation.setAnimationListener(new AnimationListener() {
-
-			@Override
-			public void onAnimationEnd(Animation arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onAnimationStart(Animation arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		mView.startAnimation(rotateAnimation);
+		// }
+		/*
+		 * @Override public void onAnimationRepeat(Animation arg0) { // TODO
+		 * Auto-generated method stub
+		 * 
+		 * }
+		 * 
+		 * @Override public void onAnimationStart(Animation arg0) { // TODO
+		 * Auto-generated method stub
+		 * 
+		 * }
+		 * 
+		 * }); mView.startAnimation(rotateAnimation);
+		 */
 	}
 
 }
