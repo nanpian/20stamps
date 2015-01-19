@@ -19,6 +19,7 @@
     <color name="login_header_background">#b9b9b9</color>
     <color name="tabbar_gray_background">#b9b9b9</color>
     <color name="tabbar_blue_background">#009cde</color>
+    <color name="color_text_blue">#009cde</color>
     <color name="paypal_background">#f7f7f7</color>
     
     <color name="design_finish_frag_product_info_title_textcolor">#333333</color>

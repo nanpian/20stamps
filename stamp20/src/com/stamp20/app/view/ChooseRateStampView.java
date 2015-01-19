@@ -1,19 +1,36 @@
 package com.stamp20.app.view;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import lenovo.jni.ImageUtils;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 
+import com.stamp20.app.R;
+import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Log;
 
 /**
@@ -25,8 +42,8 @@ public class ChooseRateStampView extends ZoomImageView {
      */
     public static final int STATUS_ANIM_DOWN_OR_UP = 8001;
     private static final float sDampFactor = 0.25f;
-    private static float yEdgeRate = 0.2f;
-    private static float yStartUpAnimEdgeRate = 0.5f;
+    private static float yEdgeRate = 0.7f;
+    private static float yStartUpAnimEdgeRate = 1.1f;
     private static float sMin =  -Float.MAX_VALUE + 1;
     private float mAnimDistance = sMin;
     private float mAnimStart = sMin;
@@ -41,8 +58,8 @@ public class ChooseRateStampView extends ZoomImageView {
     
     /*1025 650*/
     /* 790 500*/
-    public void setRateBitmapId(int id){
-        if(mRateBitmapId != id){
+    public void setRateBitmapId(final int position, final boolean isH){
+        if(mRateBitmapId != position){
             /*
              * 这是一个经验数据，因为StampView中使用的是这个图片（A）"background_stamp_h_transparent_pierced"
              * 德伟给的资源包中的数字替换资源的图片是（B）"background_stamp_h_rate_112"这样的图片
@@ -58,7 +75,7 @@ public class ChooseRateStampView extends ZoomImageView {
              * 3,得到的最终图片就是一个和StampView中的（A）图进行过相同处理的我们需要的图片
              * 
              * */
-            float scale = 790f / 1025f;
+            /*float scale = 790f / 1025f;
             mRateBitmapId = id;
             mRateBitmap = BitmapFactory.decodeResource(getResources(), mRateBitmapId);
             Matrix matrix = new Matrix(); 
@@ -71,8 +88,38 @@ public class ChooseRateStampView extends ZoomImageView {
                     BitmapCache.getCache().get().getHeight(), Bitmap.Config.ARGB_8888);
             Canvas tmpCanvas = new Canvas(tmpCanvasBitmap);
             tmpCanvas.drawBitmap(mRateBitmap, 0.5f * (tmpCanvasBitmap.getWidth() - mRateBitmap.getWidth()), 0.5f * (tmpCanvasBitmap.getHeight() - mRateBitmap.getHeight()), null);
-            
-            mRateBitmap = tmpCanvasBitmap;
+            */
+        	
+        	ValueAnimator va = ValueAnimator.ofInt(0, mHorizontalRateBitmap.size());
+            va.setDuration(500);
+            va.addUpdateListener(new AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                	int id = (Integer) animation.getAnimatedValue();
+                	if(id != mHorizontalRateBitmap.size()){
+                    	mRateBitmap = isH ? mHorizontalRateBitmap.get(id) : mVerticalRateBitmap.get(id);
+                	}
+                    invalidate();
+                }
+            });
+            va.addListener(new AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {}
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {}
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
+                }
+            });
+            va.start();
         }
         invalidate();
     }
@@ -198,17 +245,19 @@ public class ChooseRateStampView extends ZoomImageView {
         if(mRateBitmap == null) {
             return;
         }
-        matrix.reset();
+        Matrix m = new Matrix();
         // 直接根据最新计算的totalTranslateY进行位移，实现DropDown动画
         float translateX = totalTranslateX /* + movedDistanceX */;
         float translateY = totalTranslateY /* + movedDistanceY */;
         // 先按照已有的缩放比例对图片进行缩放
-        matrix.postScale(totalRatio, totalRatio);
+        m.postScale(totalRatio, totalRatio);
         // 再根据移动距离进行偏移
-        matrix.postTranslate(translateX, translateY);
+        m.postTranslate(translateX + rateXMove * totalRatio, translateY + rateYMove * totalRatio);
         totalTranslateX = translateX;
         totalTranslateY = translateY;
-        canvas.drawBitmap(mRateBitmap, matrix, null);
+        canvas.save();
+        canvas.drawBitmap(mRateBitmap, m, null);
+        canvas.restore();
     }
     
     @Override
@@ -320,4 +369,74 @@ public class ChooseRateStampView extends ZoomImageView {
             mDropDownAnimation.cancel();
         }
     }
+    
+    private List<Bitmap> mHorizontalRateBitmap;
+    private List<Bitmap> mVerticalRateBitmap;
+    public void startBuilRateBitmapTask(final boolean isStampViewIsHorizontal){
+    	if(null == BitmapCache.getCache().get()){
+        	android.util.Log.i("xixia", "BitmapCache.getCache().get() is null, return");
+    		return;
+    	}
+    	final Resources res = this.getContext().getResources();
+    	new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+            }
+
+            /*
+             * 第一个参数是doInBackground的输入参数
+             * 第二个参数是用于输出中间计算进度的参数
+             * 第三个参数是说明doInBackground的返回参数和onPostExecute的输入参数
+             * */
+            @Override
+            protected Void doInBackground(Void... unused) {
+            	TypedArray typedArray = res.obtainTypedArray(R.array.stamp_rate_horizontal);
+                if( null != typedArray && isStampViewIsHorizontal){
+                	mHorizontalRateBitmap = new ArrayList<Bitmap>();
+                    Constant.LogXixia("pop", "Horizontal typedArray:"+typedArray.length());
+                    for(int i=0; i<typedArray.length(); i++){
+                    	int id = typedArray.getResourceId(i, 0);
+                    	mHorizontalRateBitmap.add(buildRateBitmap(id));
+                    }
+                }
+                
+                typedArray = res.obtainTypedArray(R.array.stamp_rate_vertical);
+                if( null != typedArray && !isStampViewIsHorizontal){
+                	mVerticalRateBitmap = new ArrayList<Bitmap>();
+                    Constant.LogXixia("pop", "Vertical typedArray:"+typedArray.length());
+                    for(int i=0; i<typedArray.length(); i++){
+                    	int id = typedArray.getResourceId(i, 0);
+                    	mVerticalRateBitmap.add(buildRateBitmap(id));
+                    }
+                }
+				return null;
+            }
+            
+            @Override
+            protected void onPostExecute(Void result) {
+            }
+        }.execute();
+    }
+    
+    private int rateXMove = -1;
+    private int rateYMove = -1;
+    
+    private Bitmap buildRateBitmap(int id){
+    	final float scale = 790f / 1025f;
+    	Bitmap rt = BitmapFactory.decodeResource(getResources(), id);
+        Matrix matrix = new Matrix(); 
+        matrix.postScale(scale, scale);
+        rt = Bitmap.createBitmap(rt, 0, 0, 
+								 rt.getWidth(), rt.getHeight(), 
+                                 matrix,true);
+        
+        //scaleRateCanvas.drawBitmap(rt, 0.5f * (scaleRateBitmap.getWidth() - rt.getWidth()), 0.5f * (scaleRateBitmap.getHeight() - rt.getHeight()), null);
+        //rt.recycle();
+        if(rateXMove == -1 && rateYMove == -1){
+        	rateXMove = (int) (0.5f * (BitmapCache.getCache().get().getWidth() - rt.getWidth()));
+        	rateYMove = (int) (0.5f * (BitmapCache.getCache().get().getHeight() - rt.getHeight()));
+        }
+        return rt;
+    }
+    
 }

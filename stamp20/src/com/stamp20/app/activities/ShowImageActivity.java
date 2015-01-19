@@ -55,7 +55,7 @@ public class ShowImageActivity extends Activity implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Uri uri = list.get(position);
-        //Intent intent = new Intent(ShowImageActivity.this, MainActivity.class);
+//        Intent intent = new Intent(ShowImageActivity.this, MainActivity.class);
         Intent intent = new Intent(ShowImageActivity.this, MainEffect.class);
         intent.putExtra("imageUri", uri);
         try {

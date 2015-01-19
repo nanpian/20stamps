@@ -55,6 +55,7 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         findViewById(R.id.tail_icon).setVisibility(View.GONE);
         ((TextView)findViewById(R.id.tail_text)).setText(R.string.next_review);;
         mStampViewIsHorizontal = getIntent().getBooleanExtra(Constant.STAMP_IS_HORIZONTAL, true);
+        chooseRateStampView.startBuilRateBitmapTask(mStampViewIsHorizontal);
         buttonInit(btnPostCard, btnLetter, btnMore);
         popupWindowInit();
     }
@@ -180,8 +181,8 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     }
     
     @Override
-    public void onRateSelecedListener(int id) {
-        chooseRateStampView.setRateBitmapId(id);
+    public void onRateSelecedListener(int id, boolean isH) {
+        chooseRateStampView.setRateBitmapId(id, isH);
         mCRP.dismiss();
     }
     /*和底部弹出的PopupWindow相关 END*/

@@ -27,11 +27,11 @@ import android.widget.TextView;
 
 public class ChooseRatePopupWindow extends PopupWindow{
     
-    private ArrayList<Integer> mRateDrawableHorizontal = new ArrayList<Integer>();
-    private ArrayList<Integer> mRateDrawableVertical = new ArrayList<Integer>();
+    /*private ArrayList<Integer> mRateDrawableHorizontal = new ArrayList<Integer>();
+    private ArrayList<Integer> mRateDrawableVertical = new ArrayList<Integer>();*/
     private final String[] mRateTitles;
     
-    private void initRateArrays(){
+    /*private void initRateArrays(){
         TypedArray typedArray = mContext.getResources().obtainTypedArray(R.array.stamp_rate_horizontal);
         if( null != typedArray ){
             Constant.LogXixia("pop", "Horizontal typedArray:"+typedArray.length());
@@ -47,7 +47,7 @@ public class ChooseRatePopupWindow extends PopupWindow{
                 mRateDrawableVertical.add(typedArray.getResourceId(i, 0));
             }
         }
-    }
+    }*/
     
     private ListView mListView;
     private Button mCancel;
@@ -77,7 +77,7 @@ public class ChooseRatePopupWindow extends PopupWindow{
         this.setAnimationStyle(R.style.popupAnimation);
         //初始化Rate选择队列名
         mRateTitles = mContext.getResources().getStringArray(R.array.stamp_rate_title);
-        initRateArrays();
+        //initRateArrays();
         isHorizontal = isH;
         
         mListView = com.stamp20.app.util.ViewHolder.findChildView(contentView, R.id.listview);
@@ -88,7 +88,7 @@ public class ChooseRatePopupWindow extends PopupWindow{
                     long arg3) {
                 android.util.Log.i("xixia", "arg2:"+arg2);
                 if(null != listener){
-                    listener.onRateSelecedListener(isHorizontal ? mRateDrawableHorizontal.get(arg2) : mRateDrawableVertical.get(arg2));
+                    listener.onRateSelecedListener(arg2, isHorizontal);
                 }
             }
         });
@@ -150,6 +150,6 @@ public class ChooseRatePopupWindow extends PopupWindow{
         this.listener = l;
     }
     public interface OnRateSelecedListener{
-        public void onRateSelecedListener(int id);
+        public void onRateSelecedListener(int id, boolean isH);
     }
 }

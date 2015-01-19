@@ -33,5 +33,24 @@
     <string name="next">next</string>
     <string name="customize_title">Customize</string>
     <string name="header_previous">back</string>
-    <string name="shipping_title_1">(1/2)Shipping</string>
+    <string name="shipping_title_1">(1/2) Shipping</string>
+    <string name="shipping_title_2">(2/2) Review</string>
+    <string name="secure_payment">Secure Payment</string>
+    <string name="pay">PAY $</string>
+    <string name="text_shipping_address">shipping address</string>
+    <string name="first_name">First Name</string>
+    <string name="second_name">Second Name</string>
+    <string name="address_line_1">Address Line 1</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="address_city">City</string>
+    <string name="address_state">State</string>
+    <string name="address_zip">Zip</string>
+    <string name="text_shipping_method">Shipping method</string>
+    <string name="shipping_method_standard">Standard e.g. First Class ($3.50)</string>
+    <string name="shipping_method_priority">Priority e.g. Fedex 2 Day ($7.00)</string>
+    <string name="shipping_method_one_day">One-Day e.g. USPS Express ($18.61)</string>
+    <string name="shipping_review_bottom_description">paypal bottom image</string>
+    <string name="ship_to">ship to</string>
+    <string name="text_sheet">20 per sheet (qty 1)</string>
+    <string name="text_post_card">Post Card</string>
 </resources>

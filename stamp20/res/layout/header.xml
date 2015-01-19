@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/header"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="#282828"
+    android:layout_height="@dimen/header_height"
+    android:background="@color/activity_background_gray"
     android:orientation="horizontal" >
 
     <ImageView

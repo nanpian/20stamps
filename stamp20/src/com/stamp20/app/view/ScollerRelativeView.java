@@ -53,7 +53,18 @@ public class ScollerRelativeView extends RelativeLayout {
 		Log.i(TAG, "onLayout is called");
 		
 		if(isViewBeMoved){
-			Log.i(TAG, "2 view height is : " +getChildAt(1).getMeasuredHeight());
+			/* 注释下面的Log,因为会报如下的Exception
+			 * E/AndroidRuntime(27382): FATAL EXCEPTION: main
+			 * E/AndroidRuntime(27382): Process: com.stamp20.app, PID: 27382
+			 * E/AndroidRuntime(27382): java.lang.NullPointerException
+			 * E/AndroidRuntime(27382): 	at com.stamp20.app.view.ScollerRelativeView.onLayout(ScollerRelativeView.java:56)
+			 * E/AndroidRuntime(27382): 	at android.view.View.layout(View.java:15331)
+			 * E/AndroidRuntime(27382): 	at android.view.ViewGroup.layout(ViewGroup.java:4883)
+			 * E/AndroidRuntime(27382): 	at android.widget.RelativeLayout.onLayout(RelativeLayout.java:1160)
+			 * E/AndroidRuntime(27382): 	at android.view.View.layout(View.java:15331)
+			 * E/AndroidRuntime(27382): 	at android.view.ViewGroup.layout(ViewGroup.java:4883)
+			 * */
+			/*Log.i(TAG, "2 view height is : " +getChildAt(1).getMeasuredHeight());*/
 			int count = getChildCount();
 			for(int i = 0; i < count; i++){
 				if(i == 0){

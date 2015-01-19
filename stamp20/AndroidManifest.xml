@@ -126,6 +126,12 @@
         </activity>
         <activity
             android:name="com.stamp20.app.activities.BuyWithPaypalShippingActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.stamp20.app.activities.BuyWithPaypalReviewActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" >
         </activity>
 
