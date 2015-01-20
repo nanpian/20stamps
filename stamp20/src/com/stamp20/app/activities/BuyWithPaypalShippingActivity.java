@@ -18,7 +18,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
     private ImageView headerPrevious;
     private TextView headerTitle;
     private TextView tailTitle;
-    private Button headerButton;
+    private TextView headerButton;
     private ViewGroup header;
     private ViewGroup tail;
     @Override
@@ -33,7 +33,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         headerPrevious.setOnClickListener(this);
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(R.string.shipping_title_1);
-        headerButton = (Button) findViewById(R.id.header_button);
+        headerButton = (TextView) findViewById(R.id.header_right);
         headerButton.setOnClickListener(this);
         headerButton.setVisibility(View.VISIBLE);
         tail = (ViewGroup) findViewById(R.id.tail);
@@ -48,7 +48,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         case R.id.header_previous:
             finish();
             break;
-        case R.id.header_button:
+        case R.id.header_right:
         case R.id.tail:
             Intent reviewIntent = new Intent(this, BuyWithPaypalReviewActivity.class);
             startActivity(reviewIntent);

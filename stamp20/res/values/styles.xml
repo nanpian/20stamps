@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
     <!-- Application theme. -->
@@ -20,6 +20,9 @@
         <item name="android:windowEnterAnimation">@anim/popupwindow_in</item>
         <item name="android:windowExitAnimation">@anim/popupwindow_out</item>
     </style>
+    <style name="header_right_text_style" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/bg_header_right_text</item>
+    </style>
 
     <style name="paypal_edittext_style" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/bg_edittext</item>
@@ -29,6 +32,18 @@
         <item name="android:paddingStart">@dimen/activity_paypal_activity_text_pending_start</item>
         <item name="android:paddingEnd">@dimen/activity_paypal_activity_text_pending_end</item>
         <item name="android:gravity">bottom|start</item>
+    </style>
+
+    <style name="paypal_edittext_style_no_bottom" parent="paypal_edittext_style">
+        <item name="android:background">@drawable/bg_edittext_no_bottom</item>
+    </style>
+
+    <style name="paypal_edittext_style_no_left" parent="paypal_edittext_style">
+        <item name="android:background">@drawable/bg_edittext_no_left</item>
+    </style>
+
+    <style name="paypal_edittext_style_no_left_bottom" parent="paypal_edittext_style_no_bottom">
+        <item name="android:background">@drawable/bg_edittext_no_left_bottom</item>
     </style>
 
     <style name="paypal_shipping_method_style" parent="@android:style/Widget.EditText">

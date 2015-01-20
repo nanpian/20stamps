@@ -92,11 +92,11 @@ public class MainEffect extends Activity implements OnTouchListener,
 
 		Uri uri = (Uri) getIntent().getParcelableExtra("imageUri");
 		Log.d(this, "uri=" + uri);
-
-		initImage(uri);
 		mGPUImageView.setStampFrame(mStampFrame);
-
+		initImage(uri);
 	}
+	
+	
 
 	private void LoadImageFilter() {
 		// TODO Auto-generated method stub
@@ -182,6 +182,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 		Intent intent = new Intent(this, ChooseRateActivity.class);
 		intent.putExtra(Constant.STAMP_IS_HORIZONTAL, true);
 		startActivity(intent);
+		finish();
 		mGPUImageView.setOnStampBitmapGeneratedListener(null);
 	}
 
@@ -201,8 +202,8 @@ public class MainEffect extends Activity implements OnTouchListener,
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		super.onResume();
 		mGPUImageView.onResume();
+		super.onResume();
 	}
 
 }

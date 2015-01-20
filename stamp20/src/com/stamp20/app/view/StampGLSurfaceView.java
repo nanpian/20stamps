@@ -50,7 +50,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	public Context mContext;
 
 	private boolean mInitialized = false;
-	private EffectContext mEffectContext;
+	private static EffectContext mEffectContext;
 	private int mImageWidth;
 	private int mImageHeight;
 	private Effect mCurrentEffect = null;
@@ -193,7 +193,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
 	private float currentBitmapHeight;
 
-	private int ratio;
+	private float ratio;
 
 	private int deltaW = 15;
 
@@ -229,6 +229,10 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
 	};
 
+	private int stampFrameWidth;
+
+	private int stampFrameHeight;
+
 	public Bitmap getSourceBitmap() {
 		return sourceBitmap;
 	}
@@ -241,23 +245,31 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
 		int bitmapWidth = sourceBitmap.getWidth();
 		int bitmapHeight = sourceBitmap.getHeight();
-		int stampFrameWidth = stampFrame.getWidth();
-		int stampFrameHeight = stampFrame.getHeight();
+		stampFrameBitmap = BitmapFactory.decodeResource(getResources(),
+				R.drawable.background_stamp_h_transparent_pierced);
+		stampFrameWidth = stampFrameBitmap.getWidth();
+		stampFrameHeight = stampFrameBitmap.getHeight();
+		Log.i(Tag, "the bitmap width is " + bitmapWidth
+				+ " the bitmap height is " + bitmapHeight);
+		Log.i(Tag, "the stamp framewidth is " + stampFrameWidth
+				+ " the stamp frame height is " + stampFrameHeight);
 		// 计算邮票宽与图片宽比率，背景高与图片高比率，取较大值作为比率，使得缩放宽度与邮票框宽度一致
 		// float ratio = Math.max(stampBackgroundWidth / (bitmapWidth * 1.0f),
 		// stampBackgroundHeight / (bitmapHeight * 1.0f));
 		float translateX = (getWidth() - (stampFrameWidth * 1)) / 2f;
 		float translateY = (getHeight() - (stampFrameHeight * 1)) / 2f;
-		totalTranslateX = translateX;
-		totalTranslateY = translateY;
+		totalTranslateX = translateX = 0;
+		totalTranslateY = translateY = 0;
+		Log.i(Tag, "the totaltranlate x is " + totalTranslateX);
+		Log.i(Tag, "the totaltranlate y is " + totalTranslateY);
 
-		ratio = stampFrameWidth / bitmapWidth;
+		ratio = (float) (stampFrameWidth / bitmapWidth);
 
 		totalRatio = initRatio = ratio = 1;
 
 		// currentBitmapWidth = bitmapWidth * initRatio;
 		// currentBitmapHeight = bitmapHeight * initRatio;
-
+		this.requestRender();
 	}
 
 	public String getCurrentfiltername() {
@@ -323,6 +335,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			mTexRenderer.init();
 			loadTextures();
 			mInitialized = true;
+
 		}
 
 		if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE
@@ -468,7 +481,15 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			return;
 		mImageWidth = sourceBitmap.getWidth();
 		mImageHeight = sourceBitmap.getHeight();
+		mTexRenderer.updateTextureSize(mImageWidth, mImageHeight,
+				stampFrameWidth, stampFrameHeight);
 		mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
+
+		/*
+		 * float translateX = (surfaceWidth- (stampFrameWidth * 1)) / 2f; float
+		 * translateY = (surfaceHeight - (stampFrameHeight * 1)) / 2f;
+		 * totalTranslateX = translateX; totalTranslateY = translateY;
+		 */
 
 		// Upload to texture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
@@ -655,67 +676,34 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	public void onRotateClick(Context mContext, RelativeLayout frameLayout) {
 		// TODO Auto-generated method stub
 		if (isHorizontal) {
-			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
-					.decodeResource(mContext.getResources(),
-							R.drawable.background_stamp_h_transparent_pierced));
 			showAnimation(frameLayout, true);
-
 			isHorizontal = false;
 			// 旋转后，重新刷新GLSurfaceView
-			this.requestRender();
+			// this.requestRender();
 		} else {
-			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
-					.decodeResource(mContext.getResources(),
-							R.drawable.background_stamp_v_transparent_pierced));
 			showAnimation(frameLayout, false);
 
 			isHorizontal = true;
-			this.requestRender();
+			// this.requestRender();
 		}
 	}
 
-	public void showAnimation(RelativeLayout mView, final boolean isHorizontal) {
-		/*
-		 * final float centerX = mView.getWidth() / 2.0f; final float centerY =
-		 * mView.getHeight() / 2.0f; RotateAnimation rotateAnimation; //
-		 * 这个是设置需要旋转的角度 if (isHorizontal) { rotateAnimation = new
-		 * RotateAnimation(0, -90, centerX, centerY); } else { rotateAnimation =
-		 * new RotateAnimation(0, 90, centerX, centerY); }
-		 * 
-		 * // 这个是设置动画时间的 rotateAnimation.setDuration(500);
-		 * //rotateAnimation.setFillAfter(true);
-		 * rotateAnimation.setAnimationListener(new AnimationListener() {
-		 * 
-		 * @Override public void onAnimationEnd(Animation arg0) {
-		 */
-		// TODO Auto-generated method stub
+	public void showAnimation(RelativeLayout mView, boolean isHorizontal) {
 		if (isHorizontal) {
 			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
 					.decodeResource(mContext.getResources(),
 							R.drawable.background_stamp_v_transparent_pierced));
-			MainEffect.instance.mGPUImageView.requestRender();
+			isHorizontal = false;
 			currentStatus = STATUS_INIT;
+			MainEffect.instance.mGPUImageView.requestRender();
 		} else {
 			MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
 					.decodeResource(mContext.getResources(),
 							R.drawable.background_stamp_h_transparent_pierced));
-			MainEffect.instance.mGPUImageView.requestRender();
+			isHorizontal = true;
 			currentStatus = STATUS_INIT;
+			MainEffect.instance.mGPUImageView.requestRender();
 		}
-		// }
-		/*
-		 * @Override public void onAnimationRepeat(Animation arg0) { // TODO
-		 * Auto-generated method stub
-		 * 
-		 * }
-		 * 
-		 * @Override public void onAnimationStart(Animation arg0) { // TODO
-		 * Auto-generated method stub
-		 * 
-		 * }
-		 * 
-		 * }); mView.startAnimation(rotateAnimation);
-		 */
 	}
 
 }

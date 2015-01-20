@@ -26,7 +26,6 @@ public class BuyWithPaypalReviewActivity extends Activity implements View.OnClic
     private TextView headerTitle;
     private ImageView tailPrevious;
     private TextView tailTitle;
-    private Button headerButton;
     private ViewGroup header;
     private ViewGroup tail;
 
@@ -74,9 +73,6 @@ public class BuyWithPaypalReviewActivity extends Activity implements View.OnClic
         headerPrevious.setOnClickListener(this);
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(R.string.shipping_title_2);
-        headerButton = (Button) findViewById(R.id.header_button);
-        headerButton.setOnClickListener(this);
-        headerButton.setVisibility(View.INVISIBLE);
         tailPrevious = (ImageView) findViewById(R.id.tail_icon);
         tailPrevious.setImageResource(R.drawable.icon_lock);
         tailTitle = (TextView) findViewById(R.id.tail_text);

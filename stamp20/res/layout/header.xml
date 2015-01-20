@@ -8,11 +8,11 @@
 
     <ImageView
         android:id="@+id/header_previous"
-        android:layout_width="25dp"
+        android:layout_width="50dp"
         android:layout_height="25dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="10dp"
-        android:scaleType="fitXY"
+        android:scaleType="center"
         android:contentDescription="@string/header_previous"
         android:src="@drawable/btn_back" />
 
@@ -27,14 +27,19 @@
         android:textColor="#ffffff"
         android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/header_button"
-        android:layout_width="25dp"
+    <TextView
+        android:id="@+id/header_right"
+        style="@style/header_right_text_style"
+        android:layout_width="50dp"
         android:layout_height="25dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:text="@string/next"
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:textAllCaps="true"
         android:visibility="invisible" />
 
 </LinearLayout>

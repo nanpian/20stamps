@@ -38,6 +38,8 @@ public class TextureRenderer {
 
     private int mTexWidth;
     private int mTexHeight;
+	private int mstampFrameWidth;
+	private int mstampFrameHeight;
 
     private static final String VERTEX_SHADER =
         "attribute vec4 a_position;\n" +
@@ -101,7 +103,7 @@ public class TextureRenderer {
     public void updateViewSize(int viewWidth, int viewHeight) {
         mViewWidth = viewWidth;
         mViewHeight = viewHeight;
-        computeOutputVertices();
+       // computeOutputVertices();
     }
     
 	public void renderTexture(int texId, float totalRatio,
@@ -115,7 +117,7 @@ public class TextureRenderer {
         GLToolbox.checkGlError("glUseProgram");
 
         // Set viewport
-        Log.i(Tag,"total translate x is " + totalTranslateX + "total translate y is " + totalTranslateY);
+        Log.i(Tag,"total translate x is " + totalTranslateX + "total translate y is " + totalTranslateY + " totalratio is " + totalRatio);
         GLES20.glViewport(totalTranslateX, -totalTranslateY, (int)(mViewWidth*totalRatio), (int)(mViewHeight*totalRatio));
         GLToolbox.checkGlError("glViewport");
 
@@ -155,7 +157,7 @@ public class TextureRenderer {
         GLToolbox.checkGlError("glUseProgram");
 
         // Set viewport
-        GLES20.glViewport(0, 0, (int)(mViewWidth*ratio), (int)(mViewHeight*ratio));
+        GLES20.glViewport(0, 0, (int)(mViewWidth*ratio/2), (int)(mViewHeight*ratio/2));
         GLToolbox.checkGlError("glViewport");
 
         // Disable blending
@@ -227,19 +229,34 @@ public class TextureRenderer {
             float relativeAspectRatio = viewAspectRatio / imgAspectRatio;
             float x0, y0, x1, y1;
             if (relativeAspectRatio > 1.0f) {
-                x0 = -1.0f / relativeAspectRatio;
-                y0 = -1.0f;
-                x1 = 1.0f / relativeAspectRatio;
-                y1 = 1.0f;
+               // x0 = -1.0f / relativeAspectRatio;
+            	x0 = -1.0f*(float)mstampFrameWidth/(float)mViewWidth;
+            	//x0 = -1.0f*(float)mstampFrameWidth*relativeAspectRatio/(float)mViewWidth;
+                y0 = -1.0f*(float)mstampFrameWidth*relativeAspectRatio/(float)mViewWidth;
+                x1 = 1.0f*(float)mstampFrameWidth/(float)mViewWidth;
+               // x1 = 1.0f;
+                y1 = (float)mstampFrameWidth*relativeAspectRatio/(float)mViewWidth;
+            	Log.i(Tag,">1, mstampFrameWidth is "+mstampFrameWidth+" mViewWidth is " + mViewWidth+"x0 is "+x0+" y0 is"+y0+ " x1 is" +x1+ " y1 is" +y1  );
             } else {
-                x0 = -1.0f;
-                y0 = -relativeAspectRatio;
-                x1 = 1.0f;
-                y1 = relativeAspectRatio;
+                x0 = -1.0f*(float)mstampFrameWidth/(float)mViewWidth;
+               // y0 = -relativeAspectRatio;
+                y0= -1.0f*(float)mstampFrameWidth*relativeAspectRatio/(float)mViewWidth;
+                x1 = 1.0f*(float)mstampFrameWidth/(float)mViewWidth;
+                y1 = 1.0f*(float)mstampFrameWidth*relativeAspectRatio/(float)mViewWidth;
+              //  y1 = relativeAspectRatio;
+            	Log.i(Tag,"<1, mstampFrameWidth is "+mstampFrameWidth+" mViewWidth is " + mViewWidth+"x0 is "+x0+" y0 is"+y0+ " x1 is" +x1+ " y1 is" +y1  );
             }
             float[] coords = new float[] { x0, y0, x1, y0, x0, y1, x1, y1 };
             mPosVertices.put(coords).position(0);
         }
     }
+
+	public void updateTextureSize(int mImageWidth, int mImageHeight,
+			int stampFrameWidth, int stampFrameHeight) {
+		// TODO Auto-generated method stub
+		mstampFrameWidth = stampFrameWidth;
+		mstampFrameHeight = stampFrameHeight;
+		
+	}
 
 }

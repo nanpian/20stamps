@@ -12,8 +12,9 @@
     <dimen name="activity_paypal_activity_text_pending_bottom">5dp</dimen>
     <dimen name="activity_paypal_activity_margin_end">16dp</dimen>
     <dimen name="activity_paypal_activity_margin_top">5dp</dimen>
+    <dimen name="activity_paypal_activity_margin_top2">10dp</dimen>
     <dimen name="header_height">50dp</dimen>
-    <dimen name="paypal_edittext_textsize">16sp</dimen>
+    <dimen name="paypal_edittext_textsize">14sp</dimen>
     <dimen name="paypal_review_bottom_image_padding_start">16sp</dimen>
     <dimen name="paypal_review_bottom_image_padding_end">16sp</dimen>
     <dimen name="paypal_review_ship_to_height">60dp</dimen>
