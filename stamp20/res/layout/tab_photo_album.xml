@@ -11,13 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@android:color/transparent"
-        android:columnWidth="100dip"
         android:gravity="center"
-        android:horizontalSpacing="10dip"
+        android:horizontalSpacing="6dip"
         android:listSelector="@android:color/transparent"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dip" >
+        android:verticalSpacing="6dip" >
     </GridView>
 
 </LinearLayout>

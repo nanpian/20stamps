@@ -55,6 +55,13 @@ public class ImageLoaderActivity extends FragmentActivity implements OnClickList
         setContentView(R.layout.activity_load_image_main);
         FontManager.changeFonts((LinearLayout)findViewById(R.id.root), this);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
+        headerPrevious.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View arg0) {
+			    finish();
+			}
+        	
+        });
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(R.string.select_a_picture);
         initSelectedImage();

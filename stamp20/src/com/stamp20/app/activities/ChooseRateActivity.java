@@ -29,11 +29,14 @@ import com.stamp20.app.view.ChooseRateStampView;
 
 public class ChooseRateActivity extends Activity implements View.OnClickListener, ChooseRatePopupWindow.OnRateSelecedListener{
 
-    Bitmap stampBitmap;
+    private static final String titleName = "Choose a Rate";
+	Bitmap stampBitmap;
     ChooseRateStampView chooseRateStampView;
     Button btnPostCard;
     Button btnLetter;
     Button btnMore;
+	private ImageView headerPrevious;
+	private TextView headerTitle;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,11 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.choose_rate);
         chooseRateStampView = (ChooseRateStampView) findViewById(R.id.view_stamp);
         FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
+		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+		headerPrevious = (ImageView) findViewById(R.id.header_previous);
+		headerPrevious.setOnClickListener(this);
+		headerTitle = (TextView) findViewById(R.id.header_title);
+		headerTitle.setText(titleName);
         btnPostCard = (Button) findViewById(R.id.btn_post_card);
         btnLetter = (Button) findViewById(R.id.btn_letter);
         btnMore = (Button) findViewById(R.id.btn_more);
@@ -72,7 +80,9 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             Intent intent = new Intent(this, ReviewActivity.class);
             startActivity(intent);
             break;
-            
+        case R.id.header_previous:
+        	finish();
+        	break;
         default:
             break;
         }
