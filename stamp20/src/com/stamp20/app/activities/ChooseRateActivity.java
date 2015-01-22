@@ -97,7 +97,8 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             return;
         }
         Canvas c = new Canvas(BitmapCache.getCache().get());
-        c.drawBitmap(chooseRateStampView.getRateBitmap(), 0, 0, null);
+        c.drawBitmap(chooseRateStampView.getRateBitmap(), 
+        		chooseRateStampView.getRateXMove(), chooseRateStampView.getRateYMove(), null);
         c.setBitmap(null);
     }
     

@@ -176,17 +176,6 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         }
     }
 
-    /**
-     * 
-     * 举个例子你会理解的更快：X, Y两个listview，X里有1,2,3,4这4个item，Y里有a,b,c,d这4个item。
-     * 如果你点了b这个item。如下：
-     * 
-     * public void onItemClick (AdapterView<?> parent, View view, int position, long id )
-     *      parent 相当于listview Y适配器的一个指针，可以通过它来获得Y里装着的一切东西，再通俗点就是说告诉你，你点的是Y，不是X - -
-     *      view 是你点b item的view的句柄，就是你可以用这个view，来获得b里的控件的id后操作控件
-     *      position 是b在Y适配器里的位置（生成listview时，适配器一个一个的做item，然后把他们按顺序排好队，在放到listview里，意思就是这个b是第position号做好的）
-     *      id 是b在listview Y里的第几行的位置（很明显是第2行），大部分时候position和id的值是一样的，如果需要的话，你可以自己加个log把position和id都弄出来在logcat里瞅瞅，看了之后心里才踏实。
-     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String strParent = "";
@@ -197,8 +186,9 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         }
         Log.i("xixia", strParent + " --- position : " + position);
         Intent data = new Intent();
+        data.setClass(this, CardsActivity.class);
         data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList[position]);
-        setResult(RESULT_OK, data); //这理有2个参数(int resultCode, Intent intent)
-        finish();
+        //setResult(RESULT_OK, data); //这理有2个参数(int resultCode, Intent intent)
+        startActivity(data);
     }
 }

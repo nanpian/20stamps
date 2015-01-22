@@ -124,7 +124,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
                     ImageLoaderActivity.class));
         }else if(v.getId() == mButtonRed.getId()){
             startActivity(new Intent(HomeActivity.this,
-                    CardsActivity.class));
+                    CardsTemplateChooseActivity.class));
         }
     }
 }

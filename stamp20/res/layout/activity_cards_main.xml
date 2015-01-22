@@ -1,109 +1,119 @@
-<RelativeLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:imageviewtext="http://schemas.android.com/apk/res-auto"
     xmlns:zoomimageview="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
-    android:background="@color/activity_background_gray">
-    <FrameLayout 
+    android:background="@color/activity_background_gray" >
+
+    <include layout="@layout/header" />
+
+    <FrameLayout
         android:id="@+id/pic_area"
-        android:layout_marginTop="25dp"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="250dp">
-       	   <com.stamp20.app.view.CardsView
-       	        android:layout_marginTop="4dp"
-       	        android:layout_marginLeft="1dp"
-       	        android:layout_marginBottom="6dp"
-			    android:id="@+id/zoom_image_view"
-			    android:layout_width="fill_parent"
-			    android:layout_height="fill_parent"
-			    zoomimageview:maskDrawable="@drawable/cards_shape"
-			    zoomimageview:maskColor="@color/activity_background_gray"/>
-           <ImageView 
-		        android:id="@+id/background_pic"
-		        android:src="@drawable/cards_new_year"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"/>
-           <RelativeLayout 
-               android:id="@+id/cross"
-               android:layout_width="fill_parent"
-               android:layout_height="fill_parent"
-               android:visibility="invisible">
-               <ImageView 
-                   android:layout_centerVertical="true"
-                   android:layout_width="fill_parent"
-                   android:layout_height="1dp"
-                   android:src="@color/activity_cards_choose_photo_text_pressed"/>
-               <ImageView 
-                   android:layout_centerHorizontal="true"
-                   android:layout_height="fill_parent"
-                   android:layout_width="1dp"
-                   android:src="@color/activity_cards_choose_photo_text_pressed"/>
-           </RelativeLayout>
-           <RelativeLayout
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:id="@+id/tip"
-               android:visibility="invisible">
-               <TextView 
-                   android:id="@+id/tip_initratio"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:textColor="@color/activity_cards_choose_photo_text_pressed"
-                   android:text="初始缩放倍数:"
-                   /> 
-               <TextView 
-                   android:layout_below="@id/tip_initratio"
-                   android:id="@+id/tip_currentratio"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:textColor="@color/activity_cards_choose_photo_text_pressed"
-                   android:text="当前缩放倍数:"
-                   />
-		   </RelativeLayout>
+        android:layout_marginTop="40dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true" >
+
+        <com.stamp20.app.view.CardsView
+            android:id="@+id/zoom_image_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="4dp"
+            zoomimageview:maskColor="@color/activity_background_gray"
+            zoomimageview:maskDrawable="@drawable/cards_shape" />
+
+        <ImageView
+            android:id="@+id/background_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/cards_new_year" />
+
+        <RelativeLayout
+            android:id="@+id/cross"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="invisible" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:src="@color/activity_cards_choose_photo_text_pressed" />
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:layout_centerHorizontal="true"
+                android:src="@color/activity_cards_choose_photo_text_pressed" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/tip_initratio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="初始缩放倍数:"
+                android:textColor="@color/activity_cards_choose_photo_text_pressed" />
+
+            <TextView
+                android:id="@+id/tip_currentratio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tip_initratio"
+                android:text="当前缩放倍数:"
+                android:textColor="@color/activity_cards_choose_photo_text_pressed" />
+        </RelativeLayout>
     </FrameLayout>
-    <RelativeLayout 
-        android:layout_below="@id/pic_area"
-        android:orientation="horizontal"
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
-        <ImageView 
+        android:layout_below="@id/pic_area"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <ImageView
             android:id="@+id/middle_divider"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:background="#ff323433"
-            />
-        <Button 
+            android:background="#ff323433" />
+
+        <Button
             android:id="@+id/choose_photo"
-            android:layout_toLeftOf="@id/middle_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginRight="5dp"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:text="CHANGE PHOTO"
+            android:layout_toLeftOf="@id/middle_divider"
             android:background="@color/image_button_background"
-            android:drawablePadding="5dp"
-            android:textColor="@color/sel_cards_choose_button"
             android:drawableLeft="@drawable/sel_cards_change_photo_button"
-            />
-        <Button 
-            android:id="@+id/choose_template"
-            android:layout_toRightOf="@id/middle_divider"
-            android:layout_marginLeft="5dp"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:text="CHANGE DESIGN"
-            android:background="@color/image_button_background"
             android:drawablePadding="5dp"
-            android:textColor="@color/sel_cards_choose_button"
+            android:text="CHANGE PHOTO"
+            android:textColor="@color/sel_cards_choose_button" />
+
+        <Button
+            android:id="@+id/choose_template"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/middle_divider"
+            android:background="@color/image_button_background"
             android:drawableLeft="@drawable/sel_cards_change_template_button"
-            />
-        <!-- <com.stamp20.app.view.ImageTextView
+            android:drawablePadding="5dp"
+            android:text="CHANGE DESIGN"
+            android:textColor="@color/sel_cards_choose_button" />
+        <!--
+        <com.stamp20.app.view.ImageTextView
             android:id="@+id/choose_photo"
             android:layout_toLeftOf="@id/middle_divider"
             android:layout_height="match_parent"
@@ -122,16 +132,18 @@
             imageviewtext:textViewColorStateList="@color/sel_cards_choose_button"
             imageviewtext:imageViewSelectorDrawable="@drawable/sel_cards_change_template_button"
             imageviewtext:orientation="horizontal"
-            /> -->
+            />
+        -->
     </RelativeLayout>
-	<Button 
-	    android:id="@+id/button"
-	    android:layout_width="fill_parent"
-	    android:layout_height="55dp"
-	    android:background="@drawable/sel_home_green_button"
-	    android:layout_alignParentBottom="true"
-	    android:layout_centerHorizontal="true"
-	    android:text="GETTING CARDS"
-	    android:textColor="@android:color/white"
-	    />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/sel_home_green_button"
+        android:text="GETTING CARDS"
+        android:textColor="@android:color/white" />
+
 </RelativeLayout>

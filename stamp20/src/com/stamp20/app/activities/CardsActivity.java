@@ -43,11 +43,17 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
     private TextView mTextViewInitRatio;
     private TextView mTextViewCurrentRatio;
     private int mCurrentBackgroundPicId = R.drawable.cards_new_year;
+
+	private ImageView headerPrevious;
+
+	private TextView headerTitle;
     private static final int ACTIVITY_RESULT_FOR_SELECT_PIC = 1;
     public static final int ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE = ACTIVITY_RESULT_FOR_SELECT_PIC + 1;
     private static final int MSG_SELECT_PICTURE = 1000;
     private static final int MSG_CHANGE_DESIGN = MSG_SELECT_PICTURE + 1;
     public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
+
+	private static final CharSequence titleName = "Customize Front";
         
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,10 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_main);
         FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
+		headerPrevious = (ImageView) findViewById(R.id.header_previous);
+		headerPrevious.setOnClickListener(this);
+		headerTitle = (TextView) findViewById(R.id.header_title);
+		headerTitle.setText(titleName);
         zoomImageView = (ZoomImageView) findViewById(R.id.zoom_image_view);
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_home_wedding);
         zoomImageView.setImageBitmap(bitmap);
@@ -70,6 +80,14 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
         mChoosePhoto.setOnClickListener(this);
         mChooseTemplate = (Button) this.findViewById(R.id.choose_template);
         mChooseTemplate.setOnClickListener(this);
+        
+        Intent getFromChooseTemp = getIntent();
+        if (getFromChooseTemp != null ) {
+            int tmplateId = getFromChooseTemp.getIntExtra(ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN, tmplateId));
+        }
+
+
     }
 
     private void changeTemplate(){
@@ -163,6 +181,8 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
         }else if (id == mChooseTemplate.getId()){
             com.stamp20.app.util.Log.d(this, "mChooseTemplate.click");
             changeTemplate();
+        } else if (id == R.id.header_previous) {
+        	finish();
         }
     }
 }

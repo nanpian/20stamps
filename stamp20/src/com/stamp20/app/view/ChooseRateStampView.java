@@ -60,43 +60,14 @@ public class ChooseRateStampView extends ZoomImageView {
     /* 790 500*/
     public void setRateBitmapId(final int position, final boolean isH){
         if(mRateBitmapId != position){
-            /*
-             * 这是一个经验数据，因为StampView中使用的是这个图片（A）"background_stamp_h_transparent_pierced"
-             * 德伟给的资源包中的数字替换资源的图片是（B）"background_stamp_h_rate_112"这样的图片
-             * 而（B）对应的图片是这个（C）"Stamp_H_Final_Transparent@3x.png"图片
-             * 
-             * 仔细观察（A）和（C）
-             * 可以发现两个图片中间显示邮票框的内容的长宽大概是(1025,,650)和(790,500);
-             * 
-             * 因此处理这个数字图片我是模拟StampView中处理邮票框的过程进行处理：
-             * 
-             * 1,首先将（B）图按照（A）和（C）之间的比例进行缩放。
-             * 2,创建一个和StampView中（A）图进行绘图操作一样大小的空白位图,将（B）图居中绘制在其中
-             * 3,得到的最终图片就是一个和StampView中的（A）图进行过相同处理的我们需要的图片
-             * 
-             * */
-            /*float scale = 790f / 1025f;
-            mRateBitmapId = id;
-            mRateBitmap = BitmapFactory.decodeResource(getResources(), mRateBitmapId);
-            Matrix matrix = new Matrix(); 
-            matrix.postScale(scale, scale);
-            mRateBitmap = Bitmap.createBitmap(mRateBitmap, 0, 0, 
-                                            mRateBitmap.getWidth(), mRateBitmap.getHeight(), 
-                                            matrix,true);
-            
-            Bitmap tmpCanvasBitmap = Bitmap.createBitmap(BitmapCache.getCache().get().getWidth(), 
-                    BitmapCache.getCache().get().getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas tmpCanvas = new Canvas(tmpCanvasBitmap);
-            tmpCanvas.drawBitmap(mRateBitmap, 0.5f * (tmpCanvasBitmap.getWidth() - mRateBitmap.getWidth()), 0.5f * (tmpCanvasBitmap.getHeight() - mRateBitmap.getHeight()), null);
-            */
-        	
-        	ValueAnimator va = ValueAnimator.ofInt(0, mHorizontalRateBitmap.size());
+        	final int sizeOfRateBitmap = isH ? mHorizontalRateBitmap.size() : mVerticalRateBitmap.size();
+        	ValueAnimator va = ValueAnimator.ofInt(0, sizeOfRateBitmap);
             va.setDuration(500);
             va.addUpdateListener(new AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                 	int id = (Integer) animation.getAnimatedValue();
-                	if(id != mHorizontalRateBitmap.size()){
+                	if(id != sizeOfRateBitmap){
                     	mRateBitmap = isH ? mHorizontalRateBitmap.get(id) : mVerticalRateBitmap.get(id);
                 	}
                     invalidate();
@@ -420,7 +391,12 @@ public class ChooseRateStampView extends ZoomImageView {
     
     private int rateXMove = -1;
     private int rateYMove = -1;
-    
+    public int getRateXMove(){
+    	return rateXMove;
+    }
+    public int getRateYMove(){
+    	return rateYMove;
+    }
     private Bitmap buildRateBitmap(int id){
     	final float scale = 790f / 1025f;
     	Bitmap rt = BitmapFactory.decodeResource(getResources(), id);

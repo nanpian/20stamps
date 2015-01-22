@@ -69,7 +69,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	/**
 	 * 当前邮票是横屏还是竖屏界面
 	 */
-	private boolean isHorizontal = true;
+	public boolean isHorizontal = true;
 
 	public ImageView getStampFrame() {
 		return stampFrame;

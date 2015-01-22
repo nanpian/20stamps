@@ -179,8 +179,9 @@ public class MainEffect extends Activity implements OnTouchListener,
 	@Override
 	public void OnStampBitmapGeneratedListener() {
 		// TODO Auto-generated method stub
+    	Constant.LogXixia("MainEffect before start ChooseRateActivity, mGPUImageView.isHorizontal:"+mGPUImageView.isHorizontal);
 		Intent intent = new Intent(this, ChooseRateActivity.class);
-		intent.putExtra(Constant.STAMP_IS_HORIZONTAL, true);
+		intent.putExtra(Constant.STAMP_IS_HORIZONTAL, mGPUImageView.isHorizontal);
 		startActivity(intent);
 		finish();
 		mGPUImageView.setOnStampBitmapGeneratedListener(null);
