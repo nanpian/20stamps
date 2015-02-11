@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:orientation="vertical" >
             <TextView
@@ -37,44 +37,73 @@
                 android:id="@+id/layout_btn_selcet_rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="50dp"
                 android:orientation="horizontal" >
-                <Button
-                    android:id="@+id/btn_post_card"
+                <View android:layout_width="20dp"
+                    android:layout_height="match_parent"></View>
+                <RelativeLayout 
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/image_button_background"
-                    android:drawableTop="@drawable/sel_cards_change_photo_button"
-                    android:drawablePadding="5dp"
-                    android:text="@string/post_card"
-        			android:textColor="@color/sel_cards_choose_button"
-                    android:textSize="12sp" >
-                </Button>
-                <Button
-                    android:id="@+id/btn_letter"
+                    android:id="@+id/btn_post_card_bg"
+                    android:background="@drawable/sel_choose_rate_button_background">
+                    <TextView
+                        android:layout_centerInParent="true"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:background="@color/image_button_background"
+	                    android:drawableTop="@drawable/sel_choose_rate_post_card_button"
+	                    android:duplicateParentState="true"
+	                    android:text="@string/post_card"
+	        			android:textColor="@color/sel_cards_choose_button"
+	                    android:textSize="12sp"
+	                    android:gravity="center" >
+                	</TextView>
+                </RelativeLayout>
+                <View android:layout_width="20dp"
+                    android:layout_height="match_parent"></View>
+                <RelativeLayout 
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/image_button_background"
-                    android:drawableTop="@drawable/sel_cards_change_photo_button"
-                    android:drawablePadding="5dp"
-                    android:text="@string/select_letter"
-        			android:textColor="@color/sel_cards_choose_button"
-                    android:textSize="12sp" >
-                </Button>
-                <Button
-                    android:id="@+id/btn_more"
+                    android:id="@+id/btn_letter_bg"
+                    android:background="@drawable/sel_choose_rate_button_background">
+	                <TextView
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+	                    android:drawableTop="@drawable/sel_choose_rate_letter_button"
+	                    android:text="@string/select_letter"
+	                    android:duplicateParentState="true"
+	        			android:textColor="@color/sel_cards_choose_button"
+	                    android:textSize="12sp" 
+	                    android:gravity="center">
+	                </TextView>
+                </RelativeLayout>
+                <View android:layout_width="20dp"
+                    android:layout_height="match_parent"></View>
+                <RelativeLayout 
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/image_button_background"
-                    android:drawableTop="@drawable/sel_cards_change_photo_button"
-                    android:drawablePadding="5dp"
-                    android:text="@string/select_more"
-        			android:textColor="@color/sel_cards_choose_button"
-                    android:textSize="12sp" >
-                </Button>
+                    android:id="@+id/btn_more_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/sel_choose_rate_button_background">
+	                <TextView
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+	                    android:duplicateParentState="true"
+	                    android:drawableTop="@drawable/sel_choose_rate_more_button"
+	                    android:text="@string/select_more"
+	        			android:textColor="@color/sel_cards_choose_button"
+	                    android:textSize="12sp"
+	                    android:gravity="center" >
+	                </TextView>
+                </RelativeLayout>
+                <View android:layout_width="20dp"
+                    android:layout_height="match_parent"></View>
             </LinearLayout>
         </LinearLayout>
         <include layout="@layout/tail" />

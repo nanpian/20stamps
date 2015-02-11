@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<declare-styleable name="RoundAngleImageView">
-    <attr name="roundWidth" format="dimension" />
-    <attr name="roundHeight" format="dimension" />
-</declare-styleable>
+    <declare-styleable name="RoundAngleImageView">
+        <attr name="roundWidth" format="dimension" />
+        <attr name="roundHeight" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="ZoomImageView">
+        <attr name="maskDrawable" format="reference" />
+        <attr name="maskColor" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="PaypalEditText">
+        <attr name="hintText" format="string" />
+        <attr name="hintTextSize" format="dimension" />
+        <attr name="hintTextColor" format="reference|color" />
+        <attr name="editText" format="string" />
+        <attr name="editTextSize" format="dimension" />
+        <attr name="editTextColor" format="reference|color" />
+    </declare-styleable>
 
-<declare-styleable name="ZoomImageView">
-    <attr name="maskDrawable" format="reference" />
-    <attr name="maskColor" format="reference"/>
-</declare-styleable>
 </resources>

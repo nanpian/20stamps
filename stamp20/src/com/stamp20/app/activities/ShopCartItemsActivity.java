@@ -18,6 +18,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.ShopStampItem;
 import com.stamp20.app.adapter.ShopCartItemsAdapter;
 import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.Constant;
 
 public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
@@ -84,10 +85,14 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
             startActivity(intent);
             break;
         case R.id.shop_cartitems_papal:
+            intent.putExtra(Constant.PAY_STYLE, 0);
             intent.setClass(this, BuyWithPaypalShippingActivity.class);
             startActivity(intent);
             break;
         case R.id.shop_cartitems_checkout:
+            intent.putExtra(Constant.PAY_STYLE, 1);
+            intent.setClass(this, BuyWithPaypalShippingActivity.class);
+            startActivity(intent);
             break;
         }
         // if(v.getId() == backHomeView.getId()){

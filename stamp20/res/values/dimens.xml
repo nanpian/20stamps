@@ -18,6 +18,14 @@
     <dimen name="paypal_review_bottom_image_padding_start">16sp</dimen>
     <dimen name="paypal_review_bottom_image_padding_end">16sp</dimen>
     <dimen name="paypal_review_ship_to_height">60dp</dimen>
+    <dimen name="paypal_eidttext_hint_size">10sp</dimen>
+    <dimen name="paypal_eidttext_edit_size">14dp</dimen>
+    <dimen name="paypal_eidttext_total_height">40dp</dimen>
+    <dimen name="paypal_eidttext_hint_height">15dp</dimen>
+    <dimen name="paypal_eidttext_edit_height">25dp</dimen>
+    <dimen name="paypal_eidttext_padding">2dp</dimen>
+    <dimen name="paypal_choose_city_popup_window_row_height">20dp</dimen>
+    <dimen name="paypal_choose_city_popup_window_padding">10dp</dimen>
     
 
 </resources>

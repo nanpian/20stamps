@@ -19,6 +19,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.activities.MainActivity;
 import com.stamp20.app.imageloader.ChildAdapter;
 import com.stamp20.app.util.FontManager;
+import com.stamp20.app.util.PhotoFromWhoRecorder;
 
 public class ShowImageActivity extends Activity implements OnItemClickListener {
     private GridView mGridView;
@@ -65,8 +66,15 @@ public class ShowImageActivity extends Activity implements OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Uri uri = list.get(position);
 //        Intent intent = new Intent(ShowImageActivity.this, MainActivity.class);
-        Intent intent = new Intent(ShowImageActivity.this, MainEffect.class);
-        intent.putExtra("imageUri", uri);
+        String fromStampOrCard = PhotoFromWhoRecorder.readFromWhich(getApplicationContext());
+        Intent intent = null;
+        if (fromStampOrCard == null || fromStampOrCard.endsWith("stamp")) {
+            intent = new Intent(ShowImageActivity.this, MainEffect.class);
+            intent.putExtra("imageUri", uri);
+        } else if (fromStampOrCard.equals("card")) {
+        	intent = new Intent(ShowImageActivity.this, CardEffect.class);
+            intent.putExtra("imageUri", uri);
+        }
         try {
             startActivity(intent);
         } catch (Exception e ) {

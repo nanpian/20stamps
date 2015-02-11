@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/paypal_background"
+    android:orientation="vertical" >
+
+    <include layout="@layout/header" />
+
+    <com.stamp20.app.view.ElasticScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                    android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/icon_lock_grey" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="@string/secure_aes_256_encrypted_payment"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/credit_card_info"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/paypal_eidttext_total_height"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/shipping_address_second_name_hint"
+                    style="@style/paypal_edittext_style_no_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/paypal_eidttext_hint_height"
+                    android:gravity="start|center_vertical"
+                    android:paddingBottom="0dp"
+                    android:paddingTop="@dimen/paypal_eidttext_padding"
+                    android:text="@string/second_name"
+                    android:textColor="@color/paypal_text_hint_color"
+                    android:textSize="@dimen/paypal_eidttext_hint_size" />
+
+                <EditText
+                    android:id="@+id/shipping_address_second_name"
+                    style="@style/paypal_edittext_style_no_top_bottom"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/paypal_eidttext_edit_height"
+                    android:gravity="start|center_vertical"
+                    android:hint="@string/second_name"
+                    android:paddingBottom="@dimen/paypal_eidttext_padding"
+                    android:paddingTop="0dp"
+                    android:singleLine="true"
+                    android:textColor="@color/paypal_text_edittext_color"
+                    android:textSize="@dimen/paypal_eidttext_edit_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/paypal_eidttext_total_height"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:background="@drawable/bg_layout_style03"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                    android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_lock_grey" />
+
+                <EditText
+                    android:id="@+id/edittext_credit_card_number"
+                    style="@style/paypal_edittext_style_no_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:hint="1234 5678 9012 3456"
+                    android:inputType="number"
+                    android:paddingEnd="0dp"
+                    android:paddingStart="0dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/billing_address"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/paypal_background"
+                android:orientation="vertical" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                    android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                    android:background="#DBDBDB" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkbox_same_as_shipping_address"
+                style="@style/CustomCheckboxTheme"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/paypal_eidttext_total_height"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:checked="true"
+                android:gravity="center|start"
+                android:paddingEnd="@dimen/activity_paypal_activity_margin_end"
+                android:paddingStart="@dimen/activity_paypal_activity_margin_start"
+                android:text="@string/same_as_shipping_address"
+                android:textColor="#000000" />
+
+            <fragment
+                android:id="@+id/shipping_address_fragment"
+                android:name="com.stamp20.app.fragments.ShippingAddressFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:layout_marginTop="@dimen/activity_paypal_activity_tail_margin_top" >
+
+                <include layout="@layout/tail" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </com.stamp20.app.view.ElasticScrollView>
+
+</LinearLayout>

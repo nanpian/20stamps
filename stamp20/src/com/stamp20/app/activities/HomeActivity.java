@@ -29,6 +29,7 @@ import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
+import com.stamp20.app.util.PhotoFromWhoRecorder;
 import com.stamp20.app.view.ImageUtil;
 
 public class HomeActivity extends BaseTitleActivity implements View.OnClickListener{
@@ -122,9 +123,13 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         if(v.getId() == mButtonGreen.getId()){
             startActivity(new Intent(HomeActivity.this,
                     ImageLoaderActivity.class));
+            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "stamp");
         }else if(v.getId() == mButtonRed.getId()){
-            startActivity(new Intent(HomeActivity.this,
-                    CardsTemplateChooseActivity.class));
+            /*startActivity(new Intent(HomeActivity.this,
+                    CardsTemplateChooseActivity.class));*/
+        	startActivity(new Intent(HomeActivity.this,
+                    OpenGL10ZoomMoveDemo.class));
+            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "card");
         }
     }
 }

@@ -3,17 +3,19 @@ package com.stamp20.app.util;
 import android.util.Log;
 
 public class Constant {
-
+	
+	private static final boolean DEBUG = false;
     /* 用来监测是否是初次启动的 SharedPreferences_Guide */
     public static final String SHAREDPREFERENCES_GUIDE = "SharedPreferences_Guide";
     public static final String SHAREDPREFERENCES_GUIDE_FIRSTSTART = "SharedPreferences_Guide_FirstStart";
     // MainActivity向ChooseRateActivity传递的Extra，判断当前Stamp的方向
     public static final String STAMP_IS_HORIZONTAL = "stamp_is_horizontal";
+    public static final String PAY_STYLE = "pay_with_paypal_or_checkout";
     
     //adb shell setprop log.tag.propertyName V : open this property
     //adb shell setprop log.tag.propertyName S : close this property
     public static boolean isPropertyEnabled(String propertyName) {
-        return Log.isLoggable(propertyName, Log.VERBOSE);
+        return DEBUG && Log.isLoggable(propertyName, Log.VERBOSE);
     }
     
     public static boolean debugGuideActivity(){

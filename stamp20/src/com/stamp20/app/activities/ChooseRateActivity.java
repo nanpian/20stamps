@@ -32,9 +32,13 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     private static final String titleName = "Choose a Rate";
 	Bitmap stampBitmap;
     ChooseRateStampView chooseRateStampView;
-    Button btnPostCard;
+    /*Button btnPostCard;
     Button btnLetter;
-    Button btnMore;
+    Button btnMore;*/
+    View mPostCard;
+    View mLetter;
+    View mMore;
+    TextView mTextSelectRate;
 	private ImageView headerPrevious;
 	private TextView headerTitle;
     
@@ -49,9 +53,9 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
 		headerPrevious.setOnClickListener(this);
 		headerTitle = (TextView) findViewById(R.id.header_title);
 		headerTitle.setText(titleName);
-        btnPostCard = (Button) findViewById(R.id.btn_post_card);
+        /*btnPostCard = (Button) findViewById(R.id.btn_post_card);
         btnLetter = (Button) findViewById(R.id.btn_letter);
-        btnMore = (Button) findViewById(R.id.btn_more);
+        btnMore = (Button) findViewById(R.id.btn_more);*/
         stampBitmap = BitmapCache.getCache().get();
         if( stampBitmap !=null ) {
             Log.i("bitmapcache", "onDrawFrame, stampbitmap get is " + stampBitmap.getWidth());
@@ -64,14 +68,21 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         ((TextView)findViewById(R.id.tail_text)).setText(R.string.next_review);;
         mStampViewIsHorizontal = getIntent().getBooleanExtra(Constant.STAMP_IS_HORIZONTAL, true);
         chooseRateStampView.startBuilRateBitmapTask(mStampViewIsHorizontal);
-        buttonInit(btnPostCard, btnLetter, btnMore);
+        
         popupWindowInit();
+        
+        mPostCard = this.findViewById(R.id.btn_post_card_bg);//.setOnClickListener(this);
+        mLetter = this.findViewById(R.id.btn_letter_bg);//.setOnClickListener(this);
+        mMore = this.findViewById(R.id.btn_more_bg);//.setOnClickListener(this);
+        
+        buttonInit(mPostCard, mLetter, mMore);
+        mTextSelectRate = (TextView) this.findViewById(R.id.text_select_rate);
     }
     
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.btn_more:
+        case R.id.btn_more_bg:
             Log.d(this, "onclick tail...");
             showPopupWindow();
             break;
@@ -82,6 +93,14 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
             break;
         case R.id.header_previous:
         	finish();
+        	break;
+        case R.id.btn_post_card_bg:
+        	mTextSelectRate.setText("Post Card");
+            chooseRateStampView.setRateBitmapId(0, mStampViewIsHorizontal);
+        	break;
+        case R.id.btn_letter_bg:
+        	mTextSelectRate.setText("1st Class Letter 1oz");
+            chooseRateStampView.setRateBitmapId(1, mStampViewIsHorizontal);
         	break;
         default:
             break;
@@ -102,10 +121,10 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         c.setBitmap(null);
     }
     
-    private void buttonInit(Button... btns){
+    private void buttonInit(View... btns){
         for(int i=0; i<btns.length; i++){
-            final Button btn = btns[i];
-            btn.setOnClickListener(this);
+            final View v = btns[i];
+            v.setOnClickListener(this);
             /*btn.setTextColor(this.getResources().getColorStateList(R.color.sel_cards_choose_button));*/
         }
     }
@@ -193,6 +212,8 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     
     @Override
     public void onRateSelecedListener(int id, boolean isH) {
+    	String[] rateArray = this.getResources().getStringArray(R.array.stamp_rate_title);
+    	mTextSelectRate.setText(rateArray[id]);
         chooseRateStampView.setRateBitmapId(id, isH);
         mCRP.dismiss();
     }

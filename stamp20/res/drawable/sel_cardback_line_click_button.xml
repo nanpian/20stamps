@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/activity_card_back_blank_icon" android:state_pressed="false"/>
+    <item android:drawable="@drawable/activity_card_back_blank_icon_selected" android:state_pressed="true"/>
+
+</selector>

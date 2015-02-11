@@ -19,9 +19,17 @@
     <color name="login_header_background">#b9b9b9</color>
     <color name="tabbar_gray_background">#b9b9b9</color>
     <color name="tabbar_blue_background">#009cde</color>
+    <color name="tabbar_green_background">#5fb336</color>
     <color name="color_text_blue">#009cde</color>
     <color name="paypal_background">#f7f7f7</color>
+    <color name="paypal_text_hint_color">#AAAAAA</color>
+    <color name="paypal_text_edittext_color">#616C6D</color>
+    <color name="paypal_text_per_sheet_color">#f1c407</color>
+    <color name="paypal_popwindow_text_done_color">#009cde</color>
+    <color name="paypal_popwindow_city_picker_color">#D1D5DB</color>
+    <color name="paypal_popwindow_city_text_color">#4D4E4F</color>
     
     <color name="design_finish_frag_product_info_title_textcolor">#333333</color>
     <color name="design_finish_frag_product_info_value_textcolor">#666666</color>
+    <color name="choose_rate_button_pressed_color">#fff1c40f</color>
 </resources>

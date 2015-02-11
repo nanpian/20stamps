@@ -50,6 +50,8 @@ public class Setting {
 	
 	public static final String KEY_INSTAGRAM_TOKEN = "instagramToken";
 	
+	public static final String KEY_FROM_WHO = "selectphotofromwho";
+	
 	public static final String GCM_SENDER_ID = "497293283334";//project number from the API console
 	
 	public static final String USER_PRODUCTS_DEVICES_KEY = "devices";

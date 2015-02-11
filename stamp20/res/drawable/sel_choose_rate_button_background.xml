@@ -1,0 +1,8 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/dra_choose_rate_button_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/dra_choose_rate_button_pressed" android:state_focused="true"/>
+    <item android:drawable="@color/image_button_background" android:state_pressed="false"/>
+    <item android:drawable="@color/image_button_background" android:state_focused="false"/>
+
+</selector>

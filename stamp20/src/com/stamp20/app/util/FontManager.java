@@ -59,4 +59,15 @@ public class FontManager {
             }
         }
     }
+    public static void changeFontsBlod(Context mContext, ViewGroup root) {
+
+        mTypefaceNormal = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans-Semibold.ttf");
+
+        for (int i = 0; i < root.getChildCount(); i++) {
+            View v = root.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTypeface(mTypefaceNormal);
+            }
+        }
+    }
 }

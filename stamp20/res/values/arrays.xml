@@ -1,60 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <integer-array name="home_background">
-	    <item>@drawable/background_home_baby_shower</item>
-	    <item>@drawable/background_home_birthday</item>
-	    <item>@drawable/background_home_kids</item>
-	    <item>@drawable/background_home_pets</item>
-	    <item>@drawable/background_home_save_the_date</item>
-	    <item>@drawable/background_home_wedding</item>
-	</integer-array>
+        <item>@drawable/background_home_baby_shower</item>
+        <item>@drawable/background_home_birthday</item>
+        <item>@drawable/background_home_kids</item>
+        <item>@drawable/background_home_pets</item>
+        <item>@drawable/background_home_save_the_date</item>
+        <item>@drawable/background_home_wedding</item>
+    </integer-array>
     <integer-array name="stamp_rate_horizontal">
-	    <item>@drawable/background_stamp_h_rate_3</item>
-	    <item>@drawable/background_stamp_h_rate_34</item>
-	    <item>@drawable/background_stamp_h_rate_49</item>
-	    <item>@drawable/background_stamp_h_rate_70</item>
-	    <item>@drawable/background_stamp_h_rate_91</item>
-	    <item>@drawable/background_stamp_h_rate_98</item>
-	    <item>@drawable/background_stamp_h_rate_112</item>
-	    <item>@drawable/background_stamp_h_rate_119</item>
-	    <item>@drawable/background_stamp_h_rate_140</item>
-	    <item>@drawable/background_stamp_h_rate_161</item>
-	    <item>@drawable/background_stamp_h_rate_182</item>
-	    <item>@drawable/background_stamp_h_rate_203</item>
-	    <item>@drawable/background_stamp_h_rate_560</item>
-	</integer-array>
+        <item>@drawable/background_stamp_h_rate_3</item>
+        <item>@drawable/background_stamp_h_rate_34</item>
+        <item>@drawable/background_stamp_h_rate_49</item>
+        <item>@drawable/background_stamp_h_rate_70</item>
+        <item>@drawable/background_stamp_h_rate_91</item>
+        <item>@drawable/background_stamp_h_rate_98</item>
+        <item>@drawable/background_stamp_h_rate_112</item>
+        <item>@drawable/background_stamp_h_rate_119</item>
+        <item>@drawable/background_stamp_h_rate_140</item>
+        <item>@drawable/background_stamp_h_rate_161</item>
+        <item>@drawable/background_stamp_h_rate_182</item>
+        <item>@drawable/background_stamp_h_rate_203</item>
+        <item>@drawable/background_stamp_h_rate_560</item>
+    </integer-array>
     <integer-array name="stamp_rate_vertical">
-	    <item>@drawable/background_stamp_v_rate_3</item>
-	    <item>@drawable/background_stamp_v_rate_34</item>
-	    <item>@drawable/background_stamp_v_rate_49</item>
-	    <item>@drawable/background_stamp_v_rate_70</item>
-	    <item>@drawable/background_stamp_v_rate_91</item>
-	    <item>@drawable/background_stamp_v_rate_98</item>
-	    <item>@drawable/background_stamp_v_rate_112</item>
-	    <item>@drawable/background_stamp_v_rate_119</item>
-	    <item>@drawable/background_stamp_v_rate_140</item>
-	    <item>@drawable/background_stamp_v_rate_161</item>
-	    <item>@drawable/background_stamp_v_rate_182</item>
-	    <item>@drawable/background_stamp_v_rate_203</item>
-	    <item>@drawable/background_stamp_v_rate_560</item>
-	</integer-array>
+        <item>@drawable/background_stamp_v_rate_3</item>
+        <item>@drawable/background_stamp_v_rate_34</item>
+        <item>@drawable/background_stamp_v_rate_49</item>
+        <item>@drawable/background_stamp_v_rate_70</item>
+        <item>@drawable/background_stamp_v_rate_91</item>
+        <item>@drawable/background_stamp_v_rate_98</item>
+        <item>@drawable/background_stamp_v_rate_112</item>
+        <item>@drawable/background_stamp_v_rate_119</item>
+        <item>@drawable/background_stamp_v_rate_140</item>
+        <item>@drawable/background_stamp_v_rate_161</item>
+        <item>@drawable/background_stamp_v_rate_182</item>
+        <item>@drawable/background_stamp_v_rate_203</item>
+        <item>@drawable/background_stamp_v_rate_560</item>
+    </integer-array>
+
     <string-array name="stamp_rate_title">
-	    <item>Post Card</item>
-	    <item>1st Class Letter 1oz</item>
-	    <item>1st Class Letter 2oz or 1oz odd</item>
-	    <item>1st Class Letter 3oz or 2oz odd</item>
-	    <item>1st Class Letter 4oz or 3oz odd</item>
-	    <item>1st Class Letter 5oz or 4oz odd</item>
-	    <item>1st Class Letter 6oz or 5oz odd</item>
-	    <item>1st Class Letter 7oz or 6oz odd</item>
-	    <item>1st Class Letter 8oz or 7oz odd</item>
-	    <item>1st Class Letter 9oz or 8oz odd</item>
-	    <item>1st Class Letter 10oz or 9oz odd</item>
-	    <item>1st Class Letter 11oz or 10oz odd</item>
-	    <item>1st Class Letter 12oz or 11z odd</item>
-	</string-array>
+        <item>Post Card</item>
+        <item>1st Class Letter 1oz</item>
+        <item>1st Class Letter 2oz or 1oz odd</item>
+        <item>1st Class Letter 3oz or 2oz odd</item>
+        <item>1st Class Letter 4oz or 3oz odd</item>
+        <item>1st Class Letter 5oz or 4oz odd</item>
+        <item>1st Class Letter 6oz or 5oz odd</item>
+        <item>1st Class Letter 7oz or 6oz odd</item>
+        <item>1st Class Letter 8oz or 7oz odd</item>
+        <item>1st Class Letter 9oz or 8oz odd</item>
+        <item>1st Class Letter 10oz or 9oz odd</item>
+        <item>1st Class Letter 11oz or 10oz odd</item>
+        <item>1st Class Letter 12oz or 11z odd</item>
+    </string-array>
+
     <integer-array name="shop_cart_background">
-        <item>@drawable/cards_new_year</item>
+        <item>@drawable/cards_new_year_gray</item>
         <item>@drawable/cards_christmas</item>
-    </integer-array>	
+    </integer-array>
+
+    <string-array name="city_names">
+        <item>Alabama</item>
+        <item>Alaska</item>
+        <item>American Samoa</item>
+        <item>Arizona</item>
+        <item>Arkansas</item>
+        <item>California</item>
+        <item>Colorado</item>
+        <item>Connecticut</item>
+        <item>Delaware</item>
+        <item>District of Columbia</item>
+        <item>Florida</item>
+        <item>Georgia</item>
+        <item>Guam</item>
+        <item>Hawaii</item>
+        <item>Idaho</item>
+        <item>IIIinois</item>
+        <item>Indiana</item>
+        <item>Lowa</item>
+        <item>Kansas</item>
+        <item>Kentucky</item>
+        <item>Louisiana</item>
+        <item>Maine</item>
+        <item>Maryland</item>
+        <item>Masschusetts</item>
+        <item>Michigan</item>
+        <item>Minnesota</item>
+        <item>Mississippi</item>
+        <item>Missouri</item>
+        <item>Montana</item>
+        <item>Nebraska</item>
+        <item>Nevada</item>
+        <item>New Hampshire</item>
+        <item>New Jersey</item>
+        <item>New Mexico</item>
+        <item>New York</item>
+        <item>North Carolina</item>
+        <item>North Dakota</item>
+        <item>Northern Mariana Islands</item>
+        <item>Ohio</item>
+        <item>Oklahoma</item>
+        <item>Oregon</item>
+        <item>Pennsylvania</item>
+        <item>Puerto Rico</item>
+        <item>Rhode Island</item>
+        <item>South Carolina</item>
+        <item>South Dakota</item>
+        <item>Tennessee</item>
+        <item>Texas</item>
+        <item>U.S. Virgin Islands</item>
+        <item>Utah</item>
+        <item>Vermont</item>
+        <item>Virginia</item>
+        <item>Washington</item>
+        <item>West Virginia</item>
+        <item>Wisconsin</item>
+        <item>Wyoming</item>
+    </string-array>
+
 </resources>

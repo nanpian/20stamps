@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
      <item android:state_pressed="true"
-           android:color="@color/activity_cards_choose_photo_text_pressed"/> <!-- pressed -->
+           android:color="@android:color/black"/> <!-- pressed -->
      <item android:state_focused="true"
-           android:color="@color/activity_cards_choose_photo_text_pressed" /> <!-- focused -->
+           android:color="@android:color/black" /> <!-- focused -->
      <item android:color="@android:color/white" /> <!-- default -->
 </selector>

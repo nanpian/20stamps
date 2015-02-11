@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/choose_city_done"
+        style="@style/paypal_edittext_style_no_left_bottom_right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/paypal_choose_city_popup_window_padding"
+        android:paddingEnd="@dimen/activity_paypal_activity_margin_end"
+        android:paddingStart="@dimen/activity_paypal_activity_margin_start"
+        android:paddingTop="@dimen/paypal_choose_city_popup_window_padding"
+        android:text="@string/done"
+        android:textColor="@color/paypal_popwindow_text_done_color"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.stamp20.app.wheel.widget.WheelView
+        android:id="@+id/city_picker_wheel_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/paypal_popwindow_city_picker_color" />
+
+</LinearLayout>

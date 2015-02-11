@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/paypal_review_ship_to_height"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/bg_layout_style01"
         android:orientation="horizontal" >
 
         <TextView
@@ -24,6 +25,7 @@
             android:singleLine="true"
             android:text="@string/ship_to"
             android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
             android:textSize="@dimen/paypal_edittext_textsize" />
 
         <LinearLayout
@@ -40,6 +42,7 @@
                 android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
                 android:gravity="bottom|start"
                 android:text="江苏 南京"
+                android:textColor="@color/paypal_text_edittext_color"
                 android:textSize="@dimen/paypal_edittext_textsize" />
 
             <TextView
@@ -50,6 +53,7 @@
                 android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
                 android:gravity="top|start"
                 android:text="南京，China， 21009"
+                android:textColor="@color/paypal_text_edittext_color"
                 android:textSize="@dimen/paypal_edittext_textsize" />
         </LinearLayout>
     </LinearLayout>
@@ -59,6 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/paypal_review_ship_to_height"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/bg_layout_style01"
         android:orientation="horizontal" >
 
         <ImageView
@@ -84,6 +89,7 @@
                 android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
                 android:gravity="bottom|start"
                 android:text="@string/text_post_card"
+                android:textColor="@color/paypal_text_edittext_color"
                 android:textSize="@dimen/paypal_edittext_textsize" />
 
             <TextView
@@ -95,6 +101,7 @@
                 android:gravity="top|start"
                 android:text="@string/text_sheet"
                 android:textAllCaps="true"
+                android:textColor="@color/paypal_text_per_sheet_color"
                 android:textSize="@dimen/paypal_edittext_textsize" />
         </LinearLayout>
 
@@ -107,8 +114,153 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="$19.95"
+            android:textColor="@color/paypal_text_edittext_color"
             android:textSize="@dimen/paypal_edittext_textsize" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/paypal_review_ship_to_height"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:gravity="start|center_vertical"
+            android:text="@string/subtotal"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+
+        <TextView
+            android:id="@+id/subtotal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:text="$19.95"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/paypal_review_ship_to_height"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:gravity="start|center_vertical"
+            android:text="@string/shipping"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+
+        <TextView
+            android:id="@+id/shipping"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:text="$3.50"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/paypal_review_ship_to_height"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:gravity="start|center_vertical"
+            android:text="@string/tax"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+
+        <TextView
+            android:id="@+id/tax"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:text="$0.00"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:background="#BBBBBB" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/paypal_review_ship_to_height"
+        android:background="@drawable/bg_layout_style02"
+        android:orientation="horizontal"
+        android:showDividers="beginning" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:gravity="start|center_vertical"
+            android:text="@string/subtotal"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+            android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:text="$23.45"
+            android:textAllCaps="true"
+            android:textColor="@color/paypal_text_edittext_color"
+            android:textSize="@dimen/paypal_edittext_textsize" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="fill_parent"

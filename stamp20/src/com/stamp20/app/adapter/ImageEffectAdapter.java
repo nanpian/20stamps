@@ -93,20 +93,23 @@ public class ImageEffectAdapter extends BaseAdapter{
 
 	public Effect createEffect(int mCurrentEffect) {
 		
+		EffectFactory effectFactory = null;
 		if (mEffectContext == null ) {
 			try {
 			mEffectContext = EffectContext.createWithCurrentGlContext();
+			effectFactory = mEffectContext.getFactory();
+			if (mEffect != null) {
+				mEffect.release();
+			}
 			} catch (Exception e ) {
 				Log.e("EffectException","create effect exception");
 				e.printStackTrace();
 			}
 		}
-
-		EffectFactory effectFactory = mEffectContext.getFactory();
-		if (mEffect != null) {
-			mEffect.release();
-		}
 		// Initialize the correct effect based on the selected menu/action item
+		if (effectFactory == null ) {
+			return null;
+		}
 		switch (mCurrentEffect) {
 
 		case 0:

@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imageviewtext="http://schemas.android.com/apk/res-auto"
+    xmlns:zoomimageview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_gray" >
+
+    <include layout="@layout/header" />
+
+    <com.stamp20.app.view.CardBackView
+        android:layout_marginTop="60dp"
+        android:id="@+id/cardbackview"
+        android:contentDescription="这个view的作用是背面设计"
+        android:layout_height="260dp"
+        android:layout_width="fill_parent"
+        android:layout_centerHorizontal="true"
+    />
+
+    <RelativeLayout
+        android:id="@+id/buttonid"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/cardbackview"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/middle_divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="#ff323433" />
+
+        <Button
+            android:id="@+id/choose_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/middle_divider"
+            android:background="@color/image_button_background"
+            android:drawableLeft="@drawable/sel_cardback_blank_click_button"
+            android:drawablePadding="5dp"
+            android:text="BLANK"
+            android:textColor="@color/sel_cards_choose_button" />
+
+        <Button
+            android:id="@+id/choose_template"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/middle_divider"
+            android:background="@color/image_button_background"
+            android:drawableLeft="@drawable/sel_cardback_line_click_button"
+            android:drawablePadding="5dp"
+            android:text="LINES"
+            android:textColor="@color/sel_cards_choose_button" />
+    </RelativeLayout>
+
+    <Gallery
+        android:id="@+id/activity_card_back_select_back"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/buttonid"
+        android:layout_marginTop="5dp"
+        android:spacing="8dp" />
+    <Button
+        android:id="@+id/customenvelope"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/sel_home_green_button"
+        android:text="Next: ENVELOPE"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

@@ -17,7 +17,9 @@ import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ZoomImageView.OnMoveOrZoomListener;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -65,34 +67,12 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	private Bitmap glBitmap;
 	private int mWidth;
 	private int mHeight;
+	private ImageView rotateButton;
 
 	/**
 	 * 当前邮票是横屏还是竖屏界面
 	 */
 	public boolean isHorizontal = true;
-
-	public ImageView getStampFrame() {
-		return stampFrame;
-	}
-
-	public void setStampFrame(ImageView stampFrame) {
-		this.stampFrame = stampFrame;
-	}
-
-	public ImageView getRotateButton() {
-		return rotateButton;
-	}
-
-	public void setRotateButton(ImageView rotateButton) {
-		this.rotateButton = rotateButton;
-	}
-
-	public void setStatus(int status) {
-		currentStatus = status;
-	}
-
-	private ImageView rotateButton;
-
 	/**
 	 * 初始化状态常量
 	 */
@@ -179,22 +159,6 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	 */
 	private int currentStatus;
 
-	/**
-	 * 记录两指同时放在屏幕上时，中心点的横坐标值
-	 */
-	private float centerPointX;
-
-	/**
-	 * 记录两指同时放在屏幕上时，中心点的纵坐标值
-	 */
-	private float centerPointY;
-
-	private float currentBitmapWidth;
-
-	private float currentBitmapHeight;
-
-	private float ratio;
-
 	private int deltaW = 15;
 
 	private int deltaH = 15;
@@ -204,6 +168,26 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	private int surfaceHeight;
 	// the stamp bitmap finally produce
 	private Bitmap bitmap;
+
+	public ImageView getStampFrame() {
+		return stampFrame;
+	}
+
+	public void setStampFrame(ImageView stampFrame) {
+		this.stampFrame = stampFrame;
+	}
+
+	public ImageView getRotateButton() {
+		return rotateButton;
+	}
+
+	public void setRotateButton(ImageView rotateButton) {
+		this.rotateButton = rotateButton;
+	}
+
+	public void setStatus(int status) {
+		currentStatus = status;
+	}
 
 	private Handler mHandler = new Handler() {
 
@@ -253,22 +237,13 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 				+ " the bitmap height is " + bitmapHeight);
 		Log.i(Tag, "the stamp framewidth is " + stampFrameWidth
 				+ " the stamp frame height is " + stampFrameHeight);
-		// 计算邮票宽与图片宽比率，背景高与图片高比率，取较大值作为比率，使得缩放宽度与邮票框宽度一致
-		// float ratio = Math.max(stampBackgroundWidth / (bitmapWidth * 1.0f),
-		// stampBackgroundHeight / (bitmapHeight * 1.0f));
-		float translateX = (getWidth() - (stampFrameWidth * 1)) / 2f;
-		float translateY = (getHeight() - (stampFrameHeight * 1)) / 2f;
-		totalTranslateX = translateX = 0;
-		totalTranslateY = translateY = 0;
-		Log.i(Tag, "the totaltranlate x is " + totalTranslateX);
-		Log.i(Tag, "the totaltranlate y is " + totalTranslateY);
+		totalTranslateX = 0;
+		totalTranslateY = 0;
 
-		ratio = (float) (stampFrameWidth / bitmapWidth);
 
-		totalRatio = initRatio = ratio = 1;
+		totalRatio = initRatio = 1;
 
-		// currentBitmapWidth = bitmapWidth * initRatio;
-		// currentBitmapHeight = bitmapHeight * initRatio;
+
 		this.requestRender();
 	}
 
@@ -298,6 +273,9 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
 	public StampGLSurfaceView(Context context) {
 		super(context);
+        if (!supportsOpenGLES2(context)) {
+            throw new IllegalStateException("OpenGL ES 2.0 is not supported on this phone.");
+        }
 		mContext = context;
 		this.setEGLContextClientVersion(2);
 		this.setRenderer(this);
@@ -306,11 +284,28 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
 	public StampGLSurfaceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+        if (!supportsOpenGLES2(context)) {
+            throw new IllegalStateException("OpenGL ES 2.0 is not supported on this phone.");
+        }
 		mContext = context;
 		this.setEGLContextClientVersion(2);
 		this.setRenderer(this);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
+	
+    /**
+     * Checks if OpenGL ES 2.0 is supported on the current device.
+     *
+     * @param context the context
+     * @return true, if successful
+     */
+    private boolean supportsOpenGLES2(final Context context) {
+        final ActivityManager activityManager = (ActivityManager)
+                context.getSystemService(Context.ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo =
+                activityManager.getDeviceConfigurationInfo();
+        return configurationInfo.reqGlEsVersion >= 0x20000;
+    }
 
 	private void renderResult() {
 		if (mCurrentEffect != null) {
@@ -344,9 +339,13 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			if (currentfilterID != 0) {
 				Log.i(Tag, "onDrawFrame the filter name is "
 						+ currentfiltername);
+                try {
 				mCurrentEffect = effectAdapter.createEffect(currentfilterID,
 						mEffectContext);
 				applyEffect();
+                } catch (Exception e ) {
+                	mCurrentEffect = null;
+                }
 			}
 			renderResult();
 			generateStamp(gl);
@@ -515,8 +514,6 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 		float yPoint0 = event.getY(0);
 		float xPoint1 = event.getX(1);
 		float yPoint1 = event.getY(1);
-		centerPointX = (xPoint0 + xPoint1) / 2;
-		centerPointY = (yPoint0 + yPoint1) / 2;
 	}
 
 	/**
@@ -637,18 +634,8 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 	}
 
 	private void onTouchDown(MotionEvent event) {
-		// TODO Auto-generated method stub
-		float x = event.getX();
-		float y = event.getY();
-		/*
-		 * if (x >= btnRotatePoints.getX() - 5 && x <= btnRotatePoints.getX() +
-		 * getBmpBtnReversal().getWidth() + 5 && y >= btnRotatePoints.getY() - 5
-		 * && y <= btnRotatePoints.getY() + getBmpBtnReversal().getHeight() + 5)
-		 * { Log.d(this, "rotate...."); isBtnReversalClicked = true;
-		 * setHorizontal(!isHorizontal); currentStatus = STATUS_INIT;
-		 * invalidate(); } else { isBtnReversalClicked = false; }
-		 */
-
+		event.getX();
+		event.getY();
 	}
 
 	OnStampBitmapGeneratedListener stamplistener = null;

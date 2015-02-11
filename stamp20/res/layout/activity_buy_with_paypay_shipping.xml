@@ -29,18 +29,41 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/paypal_edittext_textsize" />
 
-            <EditText
-                android:id="@+id/editText_confirmation_email"
-                style="@style/paypal_edittext_style_no_bottom"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
+            <LinearLayout
+                android:id="@+id/layout_confirm_email"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/paypal_eidttext_total_height"
                 android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
                 android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
                 android:layout_marginTop="@dimen/activity_paypal_activity_margin_top"
-                android:background="@drawable/bg_edittext"
-                android:gravity="bottom|start"
-                android:hint="@string/email_confirmed"
-                android:inputType="textEmailAddress" />
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/confirmation_email_hint"
+                    style="@style/paypal_edittext_style_no_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/paypal_eidttext_hint_height"
+                    android:gravity="start|center_vertical"
+                    android:paddingBottom="0dp"
+                    android:paddingTop="@dimen/paypal_eidttext_padding"
+                    android:text="@string/email_confirmed"
+                    android:textColor="@color/paypal_text_hint_color"
+                    android:textSize="@dimen/paypal_eidttext_hint_size" />
+
+                <EditText
+                    android:id="@+id/editText_confirmation_email"
+                    style="@style/paypal_edittext_style_no_top"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/paypal_eidttext_edit_height"
+                    android:gravity="start|center_vertical"
+                    android:hint="@string/email_confirmed"
+                    android:inputType="textEmailAddress"
+                    android:paddingBottom="@dimen/paypal_eidttext_padding"
+                    android:paddingTop="0dp"
+                    android:singleLine="true"
+                    android:textColor="@color/paypal_text_edittext_color"
+                    android:textSize="@dimen/paypal_eidttext_edit_size" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -54,87 +77,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/paypal_edittext_textsize" />
 
-            <TableLayout
-                android:id="@+id/tableLayout01"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
-                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
-                android:collapseColumns="2" >
-
-                <TableRow android:id="@+id/tableRow01" >
-
-                    <EditText
-                        android:id="@+id/shipping_address_first_name"
-                        style="@style/paypal_edittext_style_no_bottom"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_weight="1"
-                        android:hint="@string/first_name" />
-
-                    <EditText
-                        android:id="@+id/shipping_address_second_name"
-                        style="@style/paypal_edittext_style_no_left_bottom"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_weight="1"
-                        android:hint="@string/second_name" />
-                </TableRow>
-
-                <TableRow android:id="@+id/tableRow02" >
-
-                    <EditText
-                        android:id="@+id/shipping_address_line1"
-                        style="@style/paypal_edittext_style_no_bottom"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:hint="@string/address_line_1" />
-                </TableRow>
-
-                <TableRow android:id="@+id/tableRow03" >
-
-                    <EditText
-                        android:id="@+id/shipping_address_line2"
-                        style="@style/paypal_edittext_style_no_bottom"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:hint="@string/address_line_2" />
-                </TableRow>
-
-                <TableRow android:id="@+id/tableRow04" >
-
-                    <EditText
-                        android:id="@+id/shipping_address_city"
-                        style="@style/paypal_edittext_style_no_bottom"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:hint="@string/address_city" />
-                </TableRow>
-
-                <TableRow android:id="@+id/tableRow05" >
-
-                    <EditText
-                        android:id="@+id/shipping_address_state"
-                        style="@style/paypal_edittext_style"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:hint="@string/address_state" />
-
-                    <EditText
-                        android:id="@+id/shipping_address_zip"
-                        style="@style/paypal_edittext_style_no_left"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:hint="@string/address_zip" />
-                </TableRow>
-            </TableLayout>
+            <include layout="@layout/layout_shipping_address" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -185,8 +128,7 @@
                         android:layout_weight="1"
                         android:drawableEnd="@drawable/icon_checkmark"
                         android:gravity="center_vertical"
-                        android:text="@string/shipping_method_standard"
-                        android:textColor="@color/color_text_blue" />
+                        android:text="@string/shipping_method_standard" />
                 </TableRow>
 
                 <TableRow android:id="@+id/tableRow07" >
