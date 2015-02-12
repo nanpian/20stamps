@@ -32,6 +32,7 @@ public class CardBackView extends View {
 			cardBackBottomLogo;
 	// 第一次初始化
 	private boolean mInitialized = true;
+	private boolean isHasLine = false;
 	public onMeasuredListener listener = null;
 
 	public void setOnMeasuredListener(onMeasuredListener l) {
@@ -47,6 +48,10 @@ public class CardBackView extends View {
 		super(context, attrs);
 		initView();
 	}
+	
+	public void setHasLine(boolean b) {
+		isHasLine = b;
+	}
 
 	private void initView() {
 		Log.i(Tag, "init View ");
@@ -60,6 +65,8 @@ public class CardBackView extends View {
 		}
 		this.cardBackBottomLogo = BitmapFactory.decodeResource(getResources(),
 				R.drawable.activity_card_back_bottom_logo);
+		this.cardBackLineBitmap = BitmapFactory.decodeResource(getResources(),
+				R.drawable.lines_back_small);
 		logoWidth = cardBackBottomLogo.getWidth();
 		logoHeight = cardBackBottomLogo.getHeight();
 		if (cardBackBitmap != null) {
@@ -99,7 +106,10 @@ public class CardBackView extends View {
 			}
 		}
 		Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight, Config.ARGB_4444);  
-	    newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth, mBitmapHeight);  
+	    newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth, mBitmapHeight); 
+	    
+	    
+	    cardBackBitmap = newBmp;
 		return newBmp;
 	}
 	
@@ -139,6 +149,7 @@ public class CardBackView extends View {
 		}
 		Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight, Config.ARGB_4444);  
 	    newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth, mBitmapHeight);  
+	    mInitialized = true;
 		return newBmp;
 	}
 
@@ -187,6 +198,11 @@ public class CardBackView extends View {
 			// draw the bottom 20stamp logo ,first we get the location the logo
 			// should be
 			canvas.drawBitmap(cardBackBottomLogo, left, top, null);
+			
+			if (isHasLine) {
+				canvas.drawBitmap(cardBackLineBitmap, (cardBackWidth - cardBackLineBitmap.getWidth()) / 2, 20, null);
+			}
+			
 			mInitialized = false;
 		} else {
 
@@ -196,4 +212,5 @@ public class CardBackView extends View {
 	public interface onMeasuredListener {
 		public void onMeasuredListener(int width, int height);
 	}
+
 }

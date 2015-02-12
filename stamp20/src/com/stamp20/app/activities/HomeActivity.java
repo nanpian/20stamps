@@ -125,10 +125,10 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
                     ImageLoaderActivity.class));
             PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "stamp");
         }else if(v.getId() == mButtonRed.getId()){
-            /*startActivity(new Intent(HomeActivity.this,
-                    CardsTemplateChooseActivity.class));*/
-        	startActivity(new Intent(HomeActivity.this,
-                    OpenGL10ZoomMoveDemo.class));
+            startActivity(new Intent(HomeActivity.this,
+                    CardsTemplateChooseActivity.class));
+        	//startActivity(new Intent(HomeActivity.this,
+             //       OpenGL10ZoomMoveDemo.class));
             PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "card");
         }
     }

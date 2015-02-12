@@ -40,6 +40,9 @@ public class ChooseBackColorAdapter extends BaseAdapter {
 
 	private List<ColorArray> colorArray = new ArrayList<ColorArray>();
 	private int selectItem;
+	public void setSelectItem (int selectId) {
+		selectItem = selectId;
+	}
 
 	private class ColorArray {
 		int color; // 颜色
@@ -66,6 +69,12 @@ public class ChooseBackColorAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return position;
+	}
+	
+	public int getColor(int position) {
+		// TODO Auto-generated method stub
+		return position < colorArray.size() ? colorArray.get(position).color
+				: null;
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener;
+//import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener;
 
 public class OpenGL10ZoomMoveDemo extends Activity {
 

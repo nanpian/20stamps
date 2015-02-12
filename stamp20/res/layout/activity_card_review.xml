@@ -1,28 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:imageviewtext="http://schemas.android.com/apk/res-auto"
-    xmlns:zoomimageview="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/activity_background_gray" >
+    android:orientation="vertical" >
 
-    <include layout="@layout/header" />
+    <include
+        android:id="@+id/include1"
+        layout="@layout/header" />
 
-    <com.stamp20.app.view.CardBackView
-        android:layout_marginTop="60dp"
-        android:id="@+id/cardbackview"
-        android:contentDescription="这个view的作用是背面设计"
-        android:layout_height="260dp"
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/activity_envelope_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-    />
+        android:layout_marginTop="120dp"
+        android:rotation="-5"
+        android:src="@drawable/envelope_white" />
 
     <RelativeLayout
         android:id="@+id/buttonid"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/cardbackview"
+        android:layout_below="@id/activity_envelope_img"
         android:layout_marginTop="40dp"
         android:orientation="horizontal" >
 
@@ -34,45 +33,50 @@
             android:background="#ff323433" />
 
         <Button
-            android:id="@+id/add_blank"
+            android:id="@+id/display_front"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/middle_divider"
             android:background="@color/image_button_background"
-            android:drawableLeft="@drawable/sel_cardback_blank_click_button"
+            android:drawableLeft="@drawable/sel_card_review_front"
             android:drawablePadding="5dp"
-            android:text="BLANK"
+            android:text="FRONT"
             android:textColor="@color/sel_cards_choose_button" />
 
         <Button
-            android:id="@+id/add_line"
+            android:id="@+id/display_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/middle_divider"
             android:background="@color/image_button_background"
-            android:drawableLeft="@drawable/sel_cardback_line_click_button"
+            android:drawableLeft="@drawable/sel_cardback_blank_click_button"
             android:drawablePadding="5dp"
-            android:text="LINES"
+            android:text="BACK"
             android:textColor="@color/sel_cards_choose_button" />
     </RelativeLayout>
 
-    <Gallery
-        android:id="@+id/activity_card_back_select_back"
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_below="@id/buttonid"
-        android:layout_marginTop="5dp"
-        android:spacing="8dp" />
     <Button
-        android:id="@+id/customenvelope"
+        android:id="@+id/card_add_to_cart"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/sel_home_green_button"
-        android:text="Next: ENVELOPE"
+        android:text="ADD TO CART"
         android:textColor="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/activity_envelope_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/include1"
+        android:layout_marginTop="32dp"
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:src="@drawable/activity_card_back_shape" />
 
 </RelativeLayout>
