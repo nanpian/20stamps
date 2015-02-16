@@ -2,13 +2,16 @@ package com.stamp20.app.activities;
 
 import com.stamp20.app.adapter.ChooseBackColorAdapter;
 import com.stamp20.app.adapter.ImageEffectAdapter;
+import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.CardBackView;
+import com.stamp20.app.view.CardBackView.onGeneratedCardBackBmpListener;
 import com.stamp20.app.view.CardBackView.onMeasuredListener;
 
 import com.stamp20.app.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -112,9 +115,25 @@ public class CardBackActivity extends Activity implements OnClickListener {
 			cardBackView.invalidate();
 			break;
 		case R.id.customenvelope:
+			cardBackView.invalidate();
+			cardBackView.buildDrawingCache();
+		    Bitmap bitmap = cardBackView.getDrawingCache();
+			CardBmpCache bmpCache = CardBmpCache.getCacheInstance();
+			bmpCache.putBack(bitmap);
 			Intent intent = new Intent();
-			intent.setClass(this, CardEnvelopeActivity.class);
+			intent.setClass(getApplicationContext(), CardEnvelopeActivity.class);
 			startActivity(intent);
+/*			cardBackView.setCaptureBmp(true);
+			cardBackView.invalidate();
+			cardBackView.setonGeneratedCardBackBmpListener(new onGeneratedCardBackBmpListener() {
+				@Override
+				public void onGeneratedCardBackBmp() {
+					Intent intent = new Intent();
+					intent.setClass(getApplicationContext(), CardEnvelopeActivity.class);
+					startActivity(intent);
+				}
+				
+			});*/
 			break;
 		case R.id.header_previous:
 			finish();

@@ -24,7 +24,7 @@ public class CardEnvelopeActivity extends Activity implements OnClickListener {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_card_envelope);
-		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+		//FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
 		initView();
 	}
 
@@ -34,6 +34,7 @@ public class CardEnvelopeActivity extends Activity implements OnClickListener {
 		header_title = (TextView) findViewById(R.id.header_title);
 		header_title.setText("Select Envelope");
 		review_button = (Button) findViewById(R.id.review_card);
+		review_button.setOnClickListener(this);
 	}
 
 	@Override

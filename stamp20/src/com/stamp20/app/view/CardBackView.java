@@ -1,6 +1,8 @@
 package com.stamp20.app.view;
 
 import com.stamp20.app.R;
+import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.Log;
 
 import android.content.Context;
@@ -33,7 +35,20 @@ public class CardBackView extends View {
 	// 第一次初始化
 	private boolean mInitialized = true;
 	private boolean isHasLine = false;
+	private boolean isCaptureBmp = false;
 	public onMeasuredListener listener = null;
+	public interface onGeneratedCardBackBmpListener {
+		public void onGeneratedCardBackBmp();
+	}
+	public onGeneratedCardBackBmpListener listener2 = null;
+	public void setonGeneratedCardBackBmpListener(onGeneratedCardBackBmpListener l) {
+		this.listener2 = l;
+	}
+	
+	
+	public void setCaptureBmp(boolean isCp) {
+		isCaptureBmp = true;
+	}
 
 	public void setOnMeasuredListener(onMeasuredListener l) {
 		this.listener = l;
@@ -51,6 +66,7 @@ public class CardBackView extends View {
 	
 	public void setHasLine(boolean b) {
 		isHasLine = b;
+		mInitialized = true;
 	}
 
 	private void initView() {
@@ -91,10 +107,9 @@ public class CardBackView extends View {
 				// 获得Bitmap 图片中每一个点的color颜色值
 				int color = cardBackBitmapSource.getPixel(j, i);
 				// 将颜色值存在一个数组中 方便后面修改
-				// 如果你想做的更细致的话 可以把颜色值的R G B 拿到做响应的处理 笔者在这里就不做更多解释
-				int r = Color.red(color);
+/*				int r = Color.red(color);
 				int g = Color.green(color);
-				int b = Color.blue(color);
+				int b = Color.blue(color);*/
 				int alpha = Color.alpha(color);
 				//如果透明保持，不透明变为白色
                 if(alpha<120) {
@@ -152,6 +167,10 @@ public class CardBackView extends View {
 	    mInitialized = true;
 		return newBmp;
 	}
+	
+	public void generateCardBackBmp() {
+		
+	}
 
 	public void setCardBackLine(boolean istrue, Bitmap cardBackLineBitmap) {
 
@@ -159,7 +178,7 @@ public class CardBackView extends View {
 
 	public void setCardBackColor(int cardcolor) {
 		this.cardBackColor = cardcolor;
-		maskWithColor(cardBackBitmap, cardcolor);
+		this.cardBackBitmap = maskWithColor(cardBackBitmap, cardcolor);
 	}
 
 	public void setCardBackBitmap(Bitmap cardBitmap) {
@@ -173,7 +192,6 @@ public class CardBackView extends View {
 		Log.d(this, "onLayout...");
 		if (changed) {
 			// 分别获取到当前view的宽度和高度
-			// 分别获取到ZoomImageView的宽度和高度
 			cardBackWidth = getWidth();
 			cardBackHeight = getHeight();
 		}
@@ -184,26 +202,35 @@ public class CardBackView extends View {
 		super.onDraw(canvas);
 		if (mInitialized) {
 			Paint paintShape = new Paint();
-			// 构建ShapeDrawable对象并定义形状为椭圆
+
 			paintShape.setColor(cardBackColor);
 			int left = (cardBackWidth - logoWidth) / 2;
 			int top = (cardBackHeight - cardBackBitmap.getHeight()) / 2
 					+ cardBackBitmap.getHeight() - logoHeight;
+
 			// draw the shape background
 			canvas.drawBitmap(cardBackBitmap,
 					(cardBackWidth - cardBackBitmap.getWidth()) / 2,
 					(cardBackHeight - cardBackBitmap.getHeight()) / 2,
 					paintShape);
-			// canvas.drawBitmap(cardBackShape, null, paintShape);
+			
 			// draw the bottom 20stamp logo ,first we get the location the logo
-			// should be
 			canvas.drawBitmap(cardBackBottomLogo, left, top, null);
 			
+			// draw the line if it exists
 			if (isHasLine) {
 				canvas.drawBitmap(cardBackLineBitmap, (cardBackWidth - cardBackLineBitmap.getWidth()) / 2, 20, null);
 			}
 			
-			mInitialized = false;
+			//mInitialized = false;
+			
+/*			if (isCaptureBmp) {
+				Bitmap generatedCardBackBmp = Bitmap.createBitmap(cardBackWidth,cardBackHeight, Bitmap.Config.ARGB_4444);
+				canvas.setBitmap(generatedCardBackBmp);
+				CardBmpCache bmpCache = CardBmpCache.getCacheInstance();
+				bmpCache.putBack(generatedCardBackBmp);
+				listener2.onGeneratedCardBackBmp();
+			}*/
 		} else {
 
 		}

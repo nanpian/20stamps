@@ -48,7 +48,6 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.choose_rate);
         chooseRateStampView = (ChooseRateStampView) findViewById(R.id.view_stamp);
         FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
-		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
 		headerPrevious = (ImageView) findViewById(R.id.header_previous);
 		headerPrevious.setOnClickListener(this);
 		headerTitle = (TextView) findViewById(R.id.header_title);

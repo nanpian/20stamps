@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_below="@id/activity_envelope_img"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="70dp"
         android:orientation="horizontal" >
 
         <ImageView
@@ -68,15 +68,13 @@
         android:textColor="@android:color/white" />
 
     <ImageView
-        android:id="@+id/activity_envelope_img"
+        android:id="@+id/activity_envelope_img2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/include1"
         android:layout_marginTop="32dp"
-        android:scaleX="0.6"
-        android:scaleY="0.6"
         android:src="@drawable/activity_card_back_shape" />
 
 </RelativeLayout>

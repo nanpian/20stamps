@@ -5,9 +5,11 @@ import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.CardGLSurfaceView;
+import com.stamp20.app.view.CardGLSurfaceView.OnCardBitmapGeneratedListener;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampViewConstants;
 import com.stamp20.app.view.ZoomImageView;
+import com.stamp20.app.view.CardBackView.onGeneratedCardBackBmpListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -220,8 +222,26 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
             changeTemplate();
 			break;
 		case R.id.customback:
-			Intent intent = new Intent(this, CardBackActivity.class);
-			startActivity(intent);
+	/*		mGPUImageView.setCaptureBmp(true);
+			mGPUImageView.setonGeneratedCardBackBmpListener(new onGeneratedCardBackBmpListener() {
+				@Override
+				public void onGeneratedCardBackBmp() {
+					Intent intent = new Intent();
+					intent.setClass(getApplicationContext(), CardEnvelopeActivity.class);
+					startActivity(intent);
+				}
+				
+			});*/
+			mGPUImageView.setCaptureFront();
+			mGPUImageView.requestRender();
+			mGPUImageView.setOnCardBitmapGeneratedListener(new OnCardBitmapGeneratedListener() {
+				@Override
+				public void OnCardBitmapGeneratedListener() {
+					Intent intent = new Intent();
+					intent.setClass(getApplicationContext(), CardBackActivity.class);
+					startActivity(intent);
+				}			
+			});
 			break;
 		default:
 			break;

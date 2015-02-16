@@ -14,6 +14,7 @@ import com.stamp20.app.activities.GLToolbox;
 import com.stamp20.app.activities.MainEffect;
 import com.stamp20.app.activities.TextureRenderer;
 import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.Log;
 
 import android.app.ActivityManager;
@@ -37,7 +38,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 
 	private static final String Tag = "CardGLSurfaceView";
 	private static final int STATUS_NONE = 0;
-	private static final int STATUS_CAPTURE = 3;
+	private static final int STATUS_CAPTURE = 11;
 	private int[] mTextures = new int[2];
 	private Bitmap sourceBitmap;
 	private TextureRenderer mTexRenderer = new TextureRenderer();
@@ -144,6 +145,10 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	
 	private OnCardBitmapGeneratedListener cardlistener;
 	
+	public void setOnCardBitmapGeneratedListener(OnCardBitmapGeneratedListener l) {
+		cardlistener = l;
+	}
+	
 	private Handler mHandler = new Handler() {
 
 		@Override
@@ -159,6 +164,10 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			}
 
 	};
+	
+	public void setCaptureFront() {
+		currentStatus = STATUS_CAPTURE;
+	}
 
 	public void setSourceBitmap(Bitmap sourceBitmap) {
 		currentStatus = STATUS_INIT;
@@ -246,6 +255,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			if (currentStatus == STATUS_CAPTURE) {
 				Log.i(Tag, "onDrawFrame , generateStamp the gl is " + gl);
 				if (cardlistener != null) {
+					generateCard(gl);
 					notifyCardGernerated();
 					Log.i(Tag, "onDrawFrame ,notify stamp generated!");
 				}
@@ -326,8 +336,9 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			e.getStackTrace();
 		}
 		Log.i("zhudewei", "onDrawFrame, the bitmap is " + bitmap);
-		BitmapCache mCache = BitmapCache.getCache();
-		mCache.put(bitmap);
+		//放入系统内存中
+		CardBmpCache mCache = CardBmpCache.getCacheInstance();
+		mCache.putFront(bitmap);
 	}
 
 	private void loadTextures() {
