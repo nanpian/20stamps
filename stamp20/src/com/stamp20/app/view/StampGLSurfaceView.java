@@ -361,25 +361,12 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			}
 		} else {
 			mHandler.sendEmptyMessage(INIT_FRAME);
-			// if an effect is chosen initialize it and apply it to the texture
-			/*
-			 * if (currentfilterID != 0) { Log.i(Tag,
-			 * "onDrawFrame the filter name is " + currentfiltername);
-			 * mCurrentEffect = effectAdapter.createEffect(currentfilterID,
-			 * mEffectContext); applyEffect(); } else { mCurrentEffect = null; }
-			 */
 
 			gl.glLoadIdentity(); // 重置当前的模型观察矩阵
 			gl.glPushMatrix();
 			renderResult();
 			gl.glPopMatrix();
-			/*
-			 * if (currentStatus == STATUS_CAPTURE) { Log.i(Tag,
-			 * "onDrawFrame , generateStamp the gl is " + gl);
-			 * generateStamp(gl); if (stamplistener != null) {
-			 * notifyStampGernerated(); Log.i(Tag,
-			 * "onDrawFrame ,notify stamp generated!"); } }
-			 */
+
 		}
 
 	}

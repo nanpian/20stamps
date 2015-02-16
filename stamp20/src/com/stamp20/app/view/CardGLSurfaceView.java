@@ -13,6 +13,7 @@ import com.stamp20.app.activities.CardEffect;
 import com.stamp20.app.activities.GLToolbox;
 import com.stamp20.app.activities.MainEffect;
 import com.stamp20.app.activities.TextureRenderer;
+import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.Log;
@@ -24,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Bitmap.Config;
+import android.media.effect.Effect;
 import android.media.effect.EffectContext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -44,12 +46,15 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	private TextureRenderer mTexRenderer = new TextureRenderer();
 	private boolean mInitialized = false;
 	private EffectContext mEffectContext;
+	private ImageEffectAdapter effectAdapter;
 	private int cardTemplateWidth;
 	private int cardTemplateHeight;
 	private int currentfilterID = 0;
 	private String currentfiltername;
-	private Object mCurrentEffect;
+	private Effect mCurrentEffect = null;
 	public Context mContext;
+	private int mImageWidth;
+	private int mImageHeight;
 	/**
 	 * 初始化状态常量
 	 */
@@ -74,7 +79,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	 * 松开手指状态常量
 	 */
 
-	private static final int UPDATE_FRAME = 7;
+	private static final int UPDATE_CARD = 7;
 
 	private static final int INIT_FRAME = 8;
 
@@ -141,7 +146,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 
 	private int surfaceHeight;
 	// the stamp bitmap finally produce
-	private Bitmap bitmap;
+	private Bitmap resultBitmap;
 	
 	private OnCardBitmapGeneratedListener cardlistener;
 	
@@ -154,14 +159,11 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
-			if (msg.what == UPDATE_FRAME) {
-				CardEffect.instance.background_envelop.setImageBitmap(bitmap);
+			if (msg.what == UPDATE_CARD) {
+				CardEffect.instance.background_envelop.setImageBitmap(resultBitmap);
 			} else if (msg.what == INIT_FRAME) {
-
-				} else {
-
-				}
 			}
+		}
 
 	};
 	
@@ -243,32 +245,30 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			if (currentfilterID != 0) {
 				Log.i(Tag, "onDrawFrame the filter name is "
 						+ currentfiltername);
-				// mCurrentEffect = effectAdapter.createEffect(currentfilterID,
-				// mEffectContext);
-				// applyEffect();
+				Log.i(Tag, "onDrawFrame the filter name is "
+						+ currentfiltername);
+                try {
+				mCurrentEffect = effectAdapter.createEffect(currentfilterID,
+						mEffectContext);
+				applyEffect();
+                } catch (Exception e ) {
+                	mCurrentEffect = null;
+                }
 			}
 			renderResult();
-			//generateCard(gl);
-			//mHandler.sendEmptyMessage(UPDATE_FRAME);
-			//GLES20.glClearColor(0.15686f, 0.15686f, 0.15686f, 1.0f);
-			//GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+			generateCard(gl);
+			mHandler.sendEmptyMessage(UPDATE_CARD);
+			GLES20.glClearColor(0.15686f, 0.15686f, 0.15686f, 1.0f);
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 			if (currentStatus == STATUS_CAPTURE) {
 				Log.i(Tag, "onDrawFrame , generateStamp the gl is " + gl);
 				if (cardlistener != null) {
-					generateCard(gl);
 					notifyCardGernerated();
 					Log.i(Tag, "onDrawFrame ,notify stamp generated!");
 				}
 			}
 		} else {
 			mHandler.sendEmptyMessage(INIT_FRAME);
-			// if an effect is chosen initialize it and apply it to the texture
-			/*
-			 * if (currentfilterID != 0) { Log.i(Tag,
-			 * "onDrawFrame the filter name is " + currentfiltername);
-			 * mCurrentEffect = effectAdapter.createEffect(currentfilterID,
-			 * mEffectContext); applyEffect(); } else { mCurrentEffect = null; }
-			 */
 
 			gl.glLoadIdentity(); // 重置当前的模型观察矩阵
 			gl.glPushMatrix();
@@ -286,12 +286,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 
 	public void generateCard(GL10 mGL) {
 		// 得到GLSurfaceView图片后，要进行叠加运算
-		Bitmap frameBitmap = null;
-	    frameBitmap = BitmapFactory.decodeResource(mContext.getResources(),
+		Bitmap cardBitmap = null;
+	    cardBitmap = BitmapFactory.decodeResource(mContext.getResources(),
 					R.drawable.cards_christmas);
 		// deltaW为白色边框的条宽度
-		int mWidth = frameBitmap.getWidth();
-		int mHeight = frameBitmap.getHeight();
+		int mWidth = cardBitmap.getWidth();
+		int mHeight = cardBitmap.getHeight();
 
 		int[] iat = new int[(mWidth - 2 * deltaW) * (mHeight - 2 * deltaH)];
 		IntBuffer ib = IntBuffer.allocate((mWidth - 2 * deltaW)
@@ -319,12 +319,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			Log.i(Tag, "onDrawFrame,glBitmap width is " + glBitmap.getWidth());
 		} 
 
-		bitmap = Bitmap.createBitmap(frameBitmap.getWidth(),
-				frameBitmap.getHeight(), Config.ARGB_8888);
+		resultBitmap = Bitmap.createBitmap(cardBitmap.getWidth(),
+				cardBitmap.getHeight(), Config.ARGB_8888);
 		try {
-			Canvas cv = new Canvas(bitmap);
+			Canvas cv = new Canvas(resultBitmap);
 			cv.drawBitmap(glBitmap, deltaW, deltaH, null);
-			cv.drawBitmap(frameBitmap, 0, 0, null);
+			cv.drawBitmap(cardBitmap, 0, 0, null);
 
 			cv.save(Canvas.ALL_SAVE_FLAG);
 			cv.restore();
@@ -332,13 +332,13 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			glBitmap = null;
 		} catch (Exception e) {
 			Log.i("zhudewei", "onDrawFrame, the bitmap exception");
-			bitmap = null;
+			resultBitmap = null;
 			e.getStackTrace();
 		}
-		Log.i("zhudewei", "onDrawFrame, the bitmap is " + bitmap);
+		Log.i("zhudewei", "onDrawFrame, the bitmap is " + resultBitmap);
 		//放入系统内存中
 		CardBmpCache mCache = CardBmpCache.getCacheInstance();
-		mCache.putFront(bitmap);
+		mCache.putFront(resultBitmap);
 	}
 
 	private void loadTextures() {
@@ -350,8 +350,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		// R.drawable.puppy);
 		if (sourceBitmap == null)
 			return;
-		int mImageWidth = sourceBitmap.getWidth();
-		int mImageHeight = sourceBitmap.getHeight();
+		mImageWidth = sourceBitmap.getWidth();
+		mImageHeight = sourceBitmap.getHeight();
 		mTexRenderer.updateTextureSize(mImageWidth, mImageHeight,
 				cardTemplateWidth, cardTemplateHeight);
 		mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
@@ -376,6 +376,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		if (mTexRenderer != null) {
 			mTexRenderer.updateViewSize(width, height);
 		}
+		surfaceWidth = width;
+		surfaceHeight = height;
 		Log.i(Tag, "onSurfaceChanged, the view width is " + width
 				+ "the view height is " + height);
 	}
@@ -412,7 +414,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 				movedDistanceY = yMove - lastYMove;
 				lastXMove = xMove;
 				lastYMove = yMove;
-				//stampFrame.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+				CardEffect.instance.background_envelop.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
 				moveGLSurfaceView();
 			} else if (event.getPointerCount() == 2) {
 				// 有两个手指按在屏幕上移动时，为缩放状态
@@ -436,7 +438,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 					lastFingerDis = fingerDis;
 				}
 
-				//stampFrame.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+				CardEffect.instance.background_envelop.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
 				zoomGLSurfaceView(totalRatio);
 			}
 			break;
@@ -446,7 +448,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 				lastXMove = -1;
 				lastYMove = -1;
 			}
-			//stampFrame.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+			CardEffect.instance.background_envelop.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
 			currentStatus = STATUS_NONE;
 			this.requestRender();
 			break;
@@ -454,7 +456,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			// 手指离开屏幕时将临时值还原
 			lastXMove = -1;
 			lastYMove = -1;
-			//stampFrame.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+			CardEffect.instance.background_envelop.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
 			currentStatus = STATUS_NONE;
 			this.requestRender();
 			break;
@@ -502,7 +504,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 
 		totalTranslateX = translateX;
 		totalTranslateY = translateY;
-
+        
+		currentStatus = STATUS_MOVE;
 		// totalTranslateX = translateX*totalRatio;
 		// totalTranslateY = translateY*totalRatio;
 
@@ -520,6 +523,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		// TODO Auto-generated method stub
 
 	}
+
 
 	private void renderResult() {
 		if (mCurrentEffect != null) {
@@ -552,6 +556,15 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	public void setCurrentfiltername(String currentfiltername2) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setEffectAdapter(ImageEffectAdapter effectAdapter) {
+		this.effectAdapter = effectAdapter;
+	}
+	
+	private void applyEffect() {
+		mCurrentEffect.apply(mTextures[0], mImageWidth, mImageHeight,
+				mTextures[1]);
 	}
 
 }

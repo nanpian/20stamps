@@ -134,6 +134,8 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		mGPUImageView = (CardGLSurfaceView) findViewById(R.id.cardgpuimage);
 		galleryFilter = (Gallery) findViewById(R.id.galleryFilter);
 		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
+		mGPUImageView.setEffectAdapter(effectAdapter);
+		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
 		currentfilterID = 0;
 		galleryFilter.setAdapter(effectAdapter);
 		galleryFilter.setSelection(5);
@@ -218,6 +220,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
             selectPicture();
 			break;
 		case R.id.choose_template:
+			select_photo_button.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
             com.stamp20.app.util.Log.d(this, "mChooseTemplate.click");
             changeTemplate();
 			break;
