@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
@@ -19,6 +20,7 @@ import com.stamp20.app.ShopStampItem;
 import com.stamp20.app.adapter.ShopCartItemsAdapter;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.FontManager;
 
 public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
@@ -45,6 +47,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_cartitems_activity);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         mCache = BitmapCache.getCache();
         boolean addNewItems = getIntent().getBooleanExtra(ADD_ITEMS_TOCAET, false);
         if (addNewItems) {
@@ -67,6 +70,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         textHeaderTile.setText(R.string.shop_cartitems_title);
         listCartItems = (ListView) findViewById(R.id.listview_cartitems);
         layoutListFooter = (LinearLayout) layoutInflater.inflate(R.layout.shop_cartitems_listview_footer, null);
+        FontManager.changeFonts(layoutListFooter, this);
         layoutAddMore = (LinearLayout) layoutListFooter.findViewById(R.id.shop_add_more);
         layoutAddMore.setOnClickListener(this);
         // listCartItems.addHeaderView(layoutTest);

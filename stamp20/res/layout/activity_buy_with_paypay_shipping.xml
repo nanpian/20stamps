@@ -77,7 +77,14 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/paypal_edittext_textsize" />
 
-            <include layout="@layout/layout_shipping_address" />
+            <fragment
+                android:id="@+id/shipping_address_fragment"
+                android:name="com.stamp20.app.fragments.ShippingAddressFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
+                android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"

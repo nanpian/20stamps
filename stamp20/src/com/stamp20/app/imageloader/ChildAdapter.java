@@ -16,13 +16,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.stamp20.app.R;
 import com.stamp20.app.facebook.FbPhotoResult;
 import com.stamp20.app.imageloader.MyImageView.OnMeasureListener;
 import com.stamp20.app.imageloader.ImageLoader.NativeImageCallBack;
+import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.ImageUtil;
 
 public class ChildAdapter extends BaseAdapter {
@@ -82,6 +85,7 @@ public class ChildAdapter extends BaseAdapter {
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.grid_child_item, null);
+//            FontManager.changeFonts(mContext, (FrameLayout)convertView.findViewById(R.id.framelayout));
             viewHolder = new ViewHolder();
             viewHolder.mImageView = (MyImageView) convertView.findViewById(R.id.child_image);
             // 用来监听ImageView的宽和高

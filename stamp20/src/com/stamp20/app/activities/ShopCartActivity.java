@@ -110,11 +110,13 @@ public class ShopCartActivity extends Activity implements OnClickListener {
 		backHome.setOnClickListener(this);
 		mItemCheck = (ImageView) findViewById(R.id.item_check_view);
 		mMoveView = (LinearLayout) findViewById(R.id.move_view);
+		FontManager.changeFonts(this, mMoveView);
 		mScollerRelativeView = (ScollerRelativeView) findViewById(R.id.scroll_view);
 		mHeader = (RelativeLayout) findViewById(R.id.header);
 		AlphaAnimation alpAni = new AlphaAnimation(0.0f, 1.0f);
 		alpAni.setDuration(2000);
 		mShopviewInsert = (LinearLayout) mLayoutInflater.inflate(R.layout.shop_view_insert, null);
+		FontManager.changeFonts(this, mShopviewInsert);
 		mShopviewInsert.setAnimation(alpAni);
 		mShopStampView = (ShopCartView)mShopviewInsert.findViewById(R.id.shop_stamp_view);
 		mShopStampView.setmBpStampSource(mCache.get());

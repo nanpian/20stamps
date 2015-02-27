@@ -11,10 +11,8 @@ import javax.microedition.khronos.opengles.GL10;
 import com.stamp20.app.R;
 import com.stamp20.app.activities.CardEffect;
 import com.stamp20.app.activities.GLToolbox;
-import com.stamp20.app.activities.MainEffect;
 import com.stamp20.app.activities.TextureRenderer;
 import com.stamp20.app.adapter.ImageEffectAdapter;
-import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.Log;
 
@@ -382,6 +380,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 				+ "the view height is " + height);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void cardViewonTouchProcessing(Context mContext, MotionEvent event) {
 		// TODO Auto-generated method stub
 

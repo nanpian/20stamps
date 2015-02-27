@@ -36,7 +36,7 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     private TextView mCancel;
     private ImageView mListChange;
     private static int sTemplateList[] = {R.drawable.cards_new_year, R.drawable.cards_christmas, 
-        R.drawable.cards_new_year}; 
+        R.drawable.cards_year_sheep,R.drawable.cards_love}; 
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

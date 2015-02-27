@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
                 android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="fill_parent"

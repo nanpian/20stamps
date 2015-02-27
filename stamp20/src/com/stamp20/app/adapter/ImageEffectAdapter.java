@@ -290,7 +290,7 @@ public class ImageEffectAdapter extends BaseAdapter{
 		//int width = 180;
 		//int height = 180;
 		convertView = mInflater.inflate(R.layout.gallery_item_layout, null);
-		//FontManager.changeFonts(mContext, (LinearLayout)convertView.findViewById(R.id.root));
+		FontManager.changeFonts(mContext, (LinearLayout)convertView.findViewById(R.id.root));
 		ImageView imageView = null;
 	    TextView textView = null;
         imageView = (ImageView)convertView.findViewById(R.id.image_item);

@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class CardEffect extends Activity implements OnClickListener,OnTouchListener{
@@ -121,6 +122,9 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		change_design = (Button) findViewById(R.id.choose_template);
 		change_design.setOnClickListener(this);
 		background_envelop = (ImageView) findViewById(R.id.background_envelop);
+		
+		setupEvelopHeight();
+
 		select_photo_button = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
 		select_photo_button.setOnFocusChangeListener(new OnFocusChangeListener() {
 
@@ -158,6 +162,18 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		//galleryFilter.setVisibility(View.GONE);
 		customback = (Button)findViewById(R.id.customback);
 		customback.setOnClickListener(this);
+	}
+
+	private void setupEvelopHeight() {
+		int W=getWindowManager().getDefaultDisplay().getWidth();//获取屏幕高度
+		Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
+				R.drawable.cards_christmas);
+		int w= cardTemplate.getWidth();
+		int h= cardTemplate.getHeight();
+		LayoutParams params = new LayoutParams(2*W/3,(h*2*W)/(3*w));
+		params.addRule(RelativeLayout.CENTER_IN_PARENT);
+		background_envelop.setLayoutParams(params );
+		background_envelop.setVisibility(View.VISIBLE);
 	}
 
 	@Override

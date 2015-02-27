@@ -16,18 +16,25 @@
 
         <RelativeLayout
             android:id="@+id/cardview"
-            android:layout_marginTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" >
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp" >
 
             <com.stamp20.app.view.CardGLSurfaceView
                 android:id="@+id/cardgpuimage"
                 android:layout_width="wrap_content"
                 android:layout_height="400dp"
                 android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/background_envelop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:visibility="gone"
-                 />
+                android:src="@drawable/cards_christmas" />
 
             <ImageView
                 android:id="@+id/activity_main_effects_use_myown_photo"
@@ -35,13 +42,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:src="@drawable/activity_main_effects_use_myown_photo" />
-
-            <ImageView
-                android:id="@+id/background_envelop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/cards_christmas" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -51,8 +51,7 @@
             android:layout_below="@id/cardview"
             android:layout_marginTop="6dp"
             android:orientation="horizontal"
-            android:visibility="gone"
-             >
+            android:visibility="gone" >
 
             <ImageView
                 android:id="@+id/middle_divider"
@@ -93,7 +92,7 @@
             android:layout_below="@id/buttonid"
             android:layout_marginTop="6dp"
             android:spacing="8dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 
     <Button

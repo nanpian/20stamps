@@ -14,22 +14,25 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stamp20.app.R;
 import com.stamp20.app.ShopStampItem;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.util.Log;
 
 public class ShopCartItemsAdapter extends BaseAdapter {
 
 	private LayoutInflater layoutInflater;
-	private Context context;
+	private Context mContext;
 	private ArrayList<ShopStampItem> stampItems;
 
 	public ShopCartItemsAdapter(Context context,
 			ArrayList<ShopStampItem> stampItems) {
 		// TODO Auto-generated constructor stub
-		this.context = context;
+		mContext = context;
 		this.stampItems = stampItems;
 		layoutInflater = LayoutInflater.from(context);
 	}
@@ -58,6 +61,7 @@ public class ShopCartItemsAdapter extends BaseAdapter {
 		ViewHolder viewHolder = null;
 		final int pos = position;
 		if (view == null) {
+		    Log.d(this, "view == null");
 			view = layoutInflater.inflate(R.layout.shop_listview_item, null);
 			viewHolder = new ViewHolder();
 			viewHolder.addView = (ImageView) view.findViewById(R.id.shop_listview_num_add);
@@ -71,6 +75,7 @@ public class ShopCartItemsAdapter extends BaseAdapter {
 		}
 
 		viewHolder.stampItemView.setImageBitmap(stampItems.get(position).getBmpItemView());
+//		FontManager.changeFonts(mContext, (LinearLayout)view.findViewById(R.id.root));
 		viewHolder.addView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -104,7 +109,7 @@ public class ShopCartItemsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Builder dialog = new AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+				Builder dialog = new AlertDialog.Builder(mContext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				dialog.setTitle("Delete design");
 				dialog.setMessage("Are you sure to delete this design?");
 				dialog.setPositiveButton("Delete",
@@ -115,7 +120,7 @@ public class ShopCartItemsAdapter extends BaseAdapter {
 									int which) {
 								// TODO Auto-generated method stub
 								deleteItems(pos);
-								Toast.makeText(context, "posistion is : ",Toast.LENGTH_LONG).show();
+								Toast.makeText(mContext, "posistion is : ",Toast.LENGTH_LONG).show();
 							}
 						});
 				dialog.setNegativeButton("Cancel", null);

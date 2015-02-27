@@ -7,16 +7,35 @@
     android:orientation="vertical" >
 
     <GridView
-        android:id="@+id/main_grid"
+        android:id="@+id/main_child_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="@android:color/transparent"
+        android:columnWidth="90dip"
         android:gravity="center"
-        android:horizontalSpacing="6dip"
+        android:horizontalSpacing="5dip"
         android:listSelector="@android:color/transparent"
-        android:numColumns="3"
+        android:numColumns="auto_fit"
+        android:padding="5dip"
+        android:layout_weight="1"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="6dip" >
+        android:verticalSpacing="5dip" >
     </GridView>
+    
+    <ListView
+        android:id="@+id/main_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/gray"
+        android:dividerHeight="1dp"
+        android:layout_weight="1"
+        android:listSelector="@drawable/home_listview_item"
+        android:scrollbars="none" >
+    </ListView>
+
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
 
 </LinearLayout>

@@ -58,7 +58,17 @@ public class ImageLoaderActivity extends FragmentActivity implements OnClickList
         headerPrevious.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-			    finish();
+			    if (mViewPager != null && mViewPager.getCurrentItem() == 1 && mAdapter != null) {
+					PhotoAlbumFragment fragment = (PhotoAlbumFragment) mAdapter.getItem(1);
+					if (fragment.getIsGridView()) {
+						fragment.setIsGridView(false);
+						fragment.updateLayout(0);
+					}else {
+						finish();
+					}
+				}else {
+					finish();
+				}
 			}
         	
         });

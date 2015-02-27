@@ -23,6 +23,9 @@ public class ChooseBackColorAdapter extends BaseAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private Bitmap cardBackShape;
+    private static int sCardsBackList[] = {R.drawable.card_back_blue_dot, R.drawable.card_back_blue_line, 
+        R.drawable.card_back_green,R.drawable.card_back_love,R.drawable.card_back_new_year,R.drawable.card_back_red,
+        R.drawable.card_back_red_line}; 
 
 	public ChooseBackColorAdapter(Context c) {
 		mContext = c;
@@ -87,9 +90,10 @@ public class ChooseBackColorAdapter extends BaseAdapter {
 		TextView textView = null;
 		imageView = (ImageView) convertView.findViewById(R.id.image_item);
 		textView = (TextView) convertView.findViewById(R.id.text_item);
-		Bitmap image = maskWithColor(cardBackShape,
-				colorArray.get(position).color);
-		imageView.setImageBitmap(image);
+/*		Bitmap image = maskWithColor(cardBackShape,
+				colorArray.get(position).color);*/
+		//imageView.setImageBitmap(image);
+		imageView.setImageResource(sCardsBackList[position]);
 		//image.recycle();
 		if (selectItem == position) {
 			// 处理点击放大效果，注意，这里还要加入边框效果，需要UI
@@ -142,5 +146,9 @@ public class ChooseBackColorAdapter extends BaseAdapter {
 		newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth,
 				mBitmapHeight);
 		return newBmp;
+	}
+	
+	public Bitmap maskWithTransparent(Bitmap cardBackBitmapSource ) {
+		return cardBackBitmapSource;
 	}
 }
