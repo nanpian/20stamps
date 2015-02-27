@@ -8,6 +8,7 @@ import com.stamp20.app.util.FontManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class CardReviewActivity extends Activity implements OnClickListener {
 	private ImageView header_previous;
@@ -35,6 +37,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 	private Bitmap cardBmpBack;
 	private Bitmap cardBmpFront;
 	private boolean isFrontNow;
+	private ImageView backgroundEvelopImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +60,52 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 		display_front.setOnClickListener(this);
 		display_back = (Button) findViewById(R.id.display_back);
 		display_back.setOnClickListener(this);
+		
+		backgroundEvelopImage = (ImageView)findViewById(R.id.activity_envelope_img);
+		setupBackLocAndSize();
+		
 		activity_envelope_img = (ImageView) findViewById(R.id.activity_envelope_img2);
+		setupImageLocSize();
+
 		CardBmpCache mCache = CardBmpCache.getCacheInstance();
 		cardBmpFront = mCache.getFront();
 		activity_envelope_img.setImageBitmap(cardBmpFront);
 		CardBmpCache bmpCache = CardBmpCache.getCacheInstance();
 		cardBmpBack = bmpCache.getBack();
 		isFrontNow = true;
+	}
+
+	private void setupBackLocAndSize() {
+		int W=getWindowManager().getDefaultDisplay().getWidth();//获取屏幕高度
+		Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
+				R.drawable.cards_christmas);
+		int w= cardTemplate.getWidth();
+		int h= cardTemplate.getHeight();
+		LayoutParams params = new LayoutParams(2*W/3,(h*2*W)/(3*w));
+		params.addRule(RelativeLayout.CENTER_IN_PARENT);
+		backgroundEvelopImage.setLayoutParams(params );
+		backgroundEvelopImage.setVisibility(View.VISIBLE);
+	}
+	
+	private void setupImageLocSize2() {
+		int w= cardBmpBack.getWidth();
+		int h= cardBmpBack.getHeight();
+		LayoutParams params = new LayoutParams(w,h);
+		params.addRule(RelativeLayout.CENTER_IN_PARENT);
+		activity_envelope_img.setLayoutParams(params );
+		activity_envelope_img.setVisibility(View.VISIBLE);
+	}
+	
+	private void setupImageLocSize() {
+		int W=getWindowManager().getDefaultDisplay().getWidth();//获取屏幕高度
+		Bitmap cardBackBitmap = BitmapFactory.decodeResource(getResources(),
+				R.drawable.activity_card_back_shape);
+		int w= cardBackBitmap.getWidth();
+		int h= cardBackBitmap.getHeight();
+		LayoutParams params = new LayoutParams(w,h);
+		params.addRule(RelativeLayout.CENTER_IN_PARENT);
+		activity_envelope_img.setLayoutParams(params );
+		activity_envelope_img.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -73,7 +115,9 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.display_front:
-			 if(!isFrontNow)applyRotation(0,90,0);
+			 if(!isFrontNow) {
+				 applyRotation(0,90,0);
+			 }
 			break;
 		case R.id.display_back:
 			 if(isFrontNow)applyRotation(0,90,0);
@@ -104,10 +148,12 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 						// 实现翻转后再翻回来，要设置正反面标志位
 						if (isFrontNow) {
 							activity_envelope_img.setImageBitmap(cardBmpBack);
+							setupImageLocSize2();
 							isFrontNow = false;
 						} else {
 							isFrontNow = true;
-							activity_envelope_img.setImageBitmap(cardBmpFront);
+							setupImageLocSize();
+							activity_envelope_img.setImageBitmap(cardBmpFront);		
 						}
 						Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(
 								-90, 0, centerX, centerY, 200.0f, false);

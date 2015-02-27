@@ -12,10 +12,15 @@
         android:id="@+id/activity_envelope_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
+        android:layout_centerInParent="true"
         android:rotation="-5"
         android:src="@drawable/envelope_white" />
+    <ImageView
+        android:id="@+id/activity_envelope_img2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/activity_card_back_shape" />
 
     <RelativeLayout
         android:id="@+id/buttonid"
@@ -66,15 +71,5 @@
         android:background="@drawable/sel_home_green_button"
         android:text="ADD TO CART"
         android:textColor="@android:color/white" />
-
-    <ImageView
-        android:id="@+id/activity_envelope_img2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/include1"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/activity_card_back_shape" />
 
 </RelativeLayout>
