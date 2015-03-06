@@ -1,24 +1,17 @@
 package com.stamp20.app.view;
 
 import com.stamp20.app.R;
-import com.stamp20.app.util.BitmapCache;
-import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.Log;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewDebug.ExportedProperty;
-import android.view.animation.Animation;
 
 public class CardBackView extends View {
 
@@ -44,8 +37,8 @@ public class CardBackView extends View {
 	public void setonGeneratedCardBackBmpListener(onGeneratedCardBackBmpListener l) {
 		this.listener2 = l;
 	}
-	
-	
+
+
 	public void setCaptureBmp(boolean isCp) {
 		isCaptureBmp = true;
 	}

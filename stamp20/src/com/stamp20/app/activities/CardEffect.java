@@ -58,8 +58,10 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	private Button change_design;
 	private RelativeLayout cardview;
 	private Button customback;
+	private Integer templateId;
 
 	Handler mHandler = new Handler() {
+
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -72,7 +74,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 				break;
 			case MSG_CHANGE_DESIGN:
 				Log.d(Tag, "handleMessage--MSG_SELECT_PICTURE");
-				int templateId = (Integer) msg.obj;
+				templateId = (Integer) msg.obj;
 				if (templateId != -1) {
 					background_envelop.setImageResource(templateId);
 				}
@@ -191,6 +193,9 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 			imageUri = (Uri) intent.getParcelableExtra("imageUri");
 			Log.d(Tag, "uri=" + imageUri);
 			if (imageUri != null) {
+				if (templateId != -1) {
+					background_envelop.setImageResource(templateId);
+				}
 				loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri,
 						2);
 				refreshView();

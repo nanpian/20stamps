@@ -1,26 +1,18 @@
 package com.stamp20.app.activities;
 
-import com.stamp20.app.R;
-import com.stamp20.app.adapter.ImageEffectAdapter;
-import com.stamp20.app.util.BitmapCache;
-import com.stamp20.app.util.Constant;
-import com.stamp20.app.util.FontManager;
-import com.stamp20.app.util.Log;
-import com.stamp20.app.view.ImageUtil;
-import com.stamp20.app.view.StampGLSurfaceView;
-import com.stamp20.app.view.StampGLSurfaceView.OnStampBitmapGeneratedListener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.effect.EffectContext;
 import android.net.Uri;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -29,8 +21,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import android.media.effect.EffectContext;
-import android.view.View.OnClickListener;
+import com.stamp20.app.R;
+import com.stamp20.app.adapter.ImageEffectAdapter;
+import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.ImageUtil;
+import com.stamp20.app.view.StampGLSurfaceView;
+import com.stamp20.app.view.StampGLSurfaceView.OnStampBitmapGeneratedListener;
 
 public class MainEffect extends Activity implements OnTouchListener,
 		OnStampBitmapGeneratedListener, OnClickListener {
@@ -84,24 +81,22 @@ public class MainEffect extends Activity implements OnTouchListener,
 		mRotateView = (ImageView) findViewById(R.id.rotateimage);
 		mRotateView.setOnClickListener(this);
 		mFrameLayout = (RelativeLayout) findViewById(R.id.rotateframe);
-
-		LoadImageFilter();
+		Uri uri = (Uri) getIntent().getParcelableExtra("imageUri");
+		//Log.d(this, "uri=" + uri);
+		LoadImageFilter(uri);
 
 		touchArea = (FrameLayout) findViewById(R.id.pic_area);
 		touchArea.setOnTouchListener(this);
 
-		Uri uri = (Uri) getIntent().getParcelableExtra("imageUri");
-		Log.d(this, "uri=" + uri);
 		mGPUImageView.setStampFrame(mStampFrame);
 		initImage(uri);
 	}
 	
-	
-
-	private void LoadImageFilter() {
+	private void LoadImageFilter(Uri imageUri) {
 		// TODO Auto-generated method stub
 		Gallery gallery = (Gallery) findViewById(R.id.galleryFilter);
 		effectAdapter = new ImageEffectAdapter(MainEffect.this, mEffectContext);
+		effectAdapter.setImageResource(imageUri);
 		mGPUImageView.setEffectAdapter(effectAdapter);
 		currentfilterID = 0;
 		gallery.setAdapter(effectAdapter);
@@ -132,7 +127,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_SELECT_PICTURE:
-				Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
+		//		Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
 				Uri uri = (Uri) msg.obj;
 				bitmap = ImageUtil.loadDownsampledBitmap(mContext, uri, 2);
 				mGPUImageView.setSourceBitmap(bitmap);

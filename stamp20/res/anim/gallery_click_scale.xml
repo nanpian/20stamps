@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android" 
+     android:fillEnabled="true"
+     android:fillBefore="true"
+     android:fillAfter="true">
   <scale
       android:duration = "500"
       android:interpolator="@android:anim/decelerate_interpolator"
       android:fromXScale = "1"
       android:fromYScale = "1"
-      android:pivotX="0.8"
-      android:pivotY="0.8"
+      android:pivotX="50%"
+      android:pivotY="50%"
       android:toXScale="1.1"
       android:toYScale="1.1"
       />

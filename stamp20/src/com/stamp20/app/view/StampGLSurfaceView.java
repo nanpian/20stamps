@@ -8,19 +8,9 @@ import java.nio.IntBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.stamp20.app.R;
-import com.stamp20.app.activities.GLToolbox;
-import com.stamp20.app.activities.MainEffect;
-import com.stamp20.app.activities.TextureRenderer;
-import com.stamp20.app.adapter.ImageEffectAdapter;
-import com.stamp20.app.util.BitmapCache;
-import com.stamp20.app.util.Log;
-import com.stamp20.app.view.ZoomImageView.OnMoveOrZoomListener;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -30,19 +20,20 @@ import android.media.effect.EffectContext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
-import android.opengl.GLSurfaceView.Renderer;
-import android.opengl.Matrix;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.stamp20.app.R;
+import com.stamp20.app.activities.GLToolbox;
+import com.stamp20.app.activities.MainEffect;
+import com.stamp20.app.activities.TextureRenderer;
+import com.stamp20.app.adapter.ImageEffectAdapter;
+import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.Log;
 
 public class StampGLSurfaceView extends GLSurfaceView implements
 		GLSurfaceView.Renderer {
@@ -329,6 +320,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			mEffectContext = EffectContext.createWithCurrentGlContext();
 			mTexRenderer.init();
 			loadTextures();
+			Log.i(Tag, "mInitialized is : " + mInitialized);
 			mInitialized = true;
 
 		}
@@ -338,12 +330,13 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 			// if an effect is chosen initialize it and apply it to the texture
 			if (currentfilterID != 0) {
 				Log.i(Tag, "onDrawFrame the filter name is "
-						+ currentfiltername);
+						+ currentfiltername + "the currentfilterID is : " + currentfilterID);
                 try {
 				mCurrentEffect = effectAdapter.createEffect(currentfilterID,
 						mEffectContext);
 				applyEffect();
                 } catch (Exception e ) {
+                	Log.i(Tag, "Exception is : " + e);
                 	mCurrentEffect = null;
                 }
 			}
@@ -490,7 +483,19 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 		// TODO Auto-generated method stub
 
 	}
-
+     
+	@Override
+	public void onResume() {
+		super.onResume();
+		//when resume, we need to initialize the GL
+		//GLSurfaceView clients
+		//are required to call {@link #onPause()} when the activity pauses and
+		//{@link #onResume()} when the activity resumes. These calls allow GLSurfaceView to
+		//pause and resume the rendering thread, and also allow GLSurfaceView to release and recreate
+		//the OpenGL display.
+		Log.i(Tag, "onresume mInitialized is : " + mInitialized);
+		mInitialized = false;
+	}
 	/**
 	 * 计算两个手指之间中心点的坐标。
 	 * 
