@@ -116,52 +116,42 @@
                     android:textSize="@dimen/paypal_edittext_textsize" />
             </LinearLayout>
 
-            <TableLayout
-                android:id="@+id/tableLayout02"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/activity_paypal_activity_margin_end"
                 android:layout_marginStart="@dimen/activity_paypal_activity_margin_start"
-                android:collapseColumns="2" >
+                android:orientation="vertical" >
 
-                <TableRow android:id="@+id/tableRow06" >
+                <TextView
+                    android:id="@+id/shipping_method_standard"
+                    style="@style/paypal_edittext_style_no_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="0dp"
+                    android:drawableEnd="@drawable/icon_checkmark"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:text="@string/shipping_method_standard" />
 
-                    <TextView
-                        android:id="@+id/shipping_method_standard"
-                        style="@style/paypal_edittext_style_no_bottom"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_weight="1"
-                        android:drawableEnd="@drawable/icon_checkmark"
-                        android:gravity="center_vertical"
-                        android:text="@string/shipping_method_standard" />
-                </TableRow>
+                <TextView
+                    android:id="@+id/shipping_method_priority"
+                    style="@style/paypal_edittext_style_no_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:text="@string/shipping_method_priority" />
 
-                <TableRow android:id="@+id/tableRow07" >
-
-                    <TextView
-                        android:id="@+id/shipping_method_priority"
-                        style="@style/paypal_edittext_style_no_bottom"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/shipping_method_priority" />
-                </TableRow>
-
-                <TableRow android:id="@+id/tableRow08" >
-
-                    <TextView
-                        android:id="@+id/shipping_method_oneday"
-                        style="@style/paypal_edittext_style"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="@string/shipping_method_one_day" />
-                </TableRow>
-            </TableLayout>
+                <TextView
+                    android:id="@+id/shipping_method_oneday"
+                    style="@style/paypal_edittext_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:text="@string/shipping_method_one_day" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"

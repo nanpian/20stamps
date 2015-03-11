@@ -16,7 +16,6 @@
         android:layout_marginRight="3dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="fitXY"
-        android:src="@drawable/filter_sample_normal"
         makeramen:riv_corner_radius="10dp"
         makeramen:riv_border_color="@android:color/transparent"
         makeramen:riv_border_width="@dimen/gallery_imageview_border_width"

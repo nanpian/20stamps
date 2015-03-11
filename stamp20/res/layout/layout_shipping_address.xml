@@ -177,8 +177,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical" >
 
             <TextView
@@ -186,6 +186,7 @@
                 style="@style/paypal_edittext_style_no_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/paypal_eidttext_hint_height"
+                android:focusable="false"
                 android:gravity="start|center_vertical"
                 android:paddingBottom="0dp"
                 android:paddingTop="@dimen/paypal_eidttext_padding"
@@ -198,6 +199,7 @@
                 style="@style/paypal_edittext_style_no_top"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/paypal_eidttext_edit_height"
+                android:focusable="false"
                 android:gravity="start|center_vertical"
                 android:hint="@string/address_state"
                 android:paddingBottom="@dimen/paypal_eidttext_padding"

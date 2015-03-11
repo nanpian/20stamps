@@ -148,6 +148,11 @@ public class ListView2GridViewLayoutAnimationController extends LayoutAnimationC
     
     Animation getGrid2List(int index){
         /*获取的是ListView和GridView中的Item中包含的那个ImageView*/
+    	Log.i("xixia", "mListView.getFirstVisiblePosition() is : " + mListView.getFirstVisiblePosition());
+    	Log.i("xixia", "mListView.getLastVisiblePosition() is : " + mListView.getLastVisiblePosition());
+    	if (index >= mListView.getChildCount()) {
+			index = mListView.getChildCount() -1 ;
+		}
         View to = mListView.getChildAt(index).findViewById(R.id.image);
         View from = mGridView.getChildAt(index).findViewById(R.id.image);
         return getAnimation(from, to, index);

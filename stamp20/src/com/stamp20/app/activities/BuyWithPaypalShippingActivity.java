@@ -2,6 +2,7 @@ package com.stamp20.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import com.stamp20.app.R;
 import com.stamp20.app.fragments.ShippingAddressFragment;
 import com.stamp20.app.util.Constant;
+import com.stamp20.app.util.Constant.Pay_method;
 import com.stamp20.app.util.FontManager;
+import com.stamp20.app.util.Log;
 
 public class BuyWithPaypalShippingActivity extends Activity implements View.OnClickListener{
 
@@ -30,6 +33,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
     private ShippingAddressFragment mShippingAddressFragment;
 
     private int paystyle;
+    private Pay_method paymethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,10 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         shippingMethodStandard = (TextView) findViewById(R.id.shipping_method_standard);
         shippingMethodPriority = (TextView) findViewById(R.id.shipping_method_priority);
         shippingMethodOneday = (TextView) findViewById(R.id.shipping_method_oneday);
+        
+        shippingMethodStandard.setOnClickListener(this);
+        shippingMethodPriority.setOnClickListener(this);
+        shippingMethodOneday.setOnClickListener(this);
         
         if(mShippingAddressFragment == null){
             mShippingAddressFragment = (ShippingAddressFragment) getFragmentManager().findFragmentById(R.id.shipping_address_fragment);
@@ -90,6 +98,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
 
     @Override
     public void onClick(View v) {
+        Log.d(this, "onClick, v" +v + ", " + v.getId());
         switch (v.getId()) {
         case R.id.header_previous:
             finish();
@@ -105,6 +114,35 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
 //                emailEditText.setBackgroundColor(Color.parseColor("#FFC0CB"));
 //            }
             break;
+        case R.id.shipping_method_standard:
+            paymethod = Constant.Pay_method.Standard;
+            resetPaymethodUI(paymethod);
+            break;
+        case R.id.shipping_method_priority:
+            paymethod = Constant.Pay_method.Priority;
+            resetPaymethodUI(paymethod);
+            break;
+        case R.id.shipping_method_oneday:
+            paymethod = Constant.Pay_method.Oneday;
+            resetPaymethodUI(paymethod);
+            break;
+
+        }
+    }
+    
+    private void resetPaymethodUI(Pay_method method){
+        Log.d(this, "resetPaymethodUI method:" + method);
+        shippingMethodStandard.setCompoundDrawablesRelative(null, null, null, null);
+        shippingMethodPriority.setCompoundDrawablesRelative(null, null, null, null);
+        shippingMethodOneday.setCompoundDrawablesRelative(null, null, null, null);
+        Drawable drawable = getResources().getDrawable(R.drawable.icon_checkmark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        if(method == Constant.Pay_method.Standard){
+            shippingMethodStandard.setCompoundDrawablesRelative(null, null, drawable, null);
+        } else if (method == Constant.Pay_method.Priority){
+            shippingMethodPriority.setCompoundDrawablesRelative(null, null, drawable, null);
+        } else if (method == Constant.Pay_method.Oneday){
+            shippingMethodOneday.setCompoundDrawablesRelative(null, null, drawable, null);
         }
     }
 

@@ -12,6 +12,8 @@ public class Constant {
     public static final String STAMP_IS_HORIZONTAL = "stamp_is_horizontal";
     public static final String PAY_STYLE = "pay_with_paypal_or_checkout";
     
+    public enum Pay_method{Standard, Priority, Oneday}
+    
     //adb shell setprop log.tag.propertyName V : open this property
     //adb shell setprop log.tag.propertyName S : close this property
     public static boolean isPropertyEnabled(String propertyName) {

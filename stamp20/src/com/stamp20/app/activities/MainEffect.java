@@ -100,7 +100,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 		mGPUImageView.setEffectAdapter(effectAdapter);
 		currentfilterID = 0;
 		gallery.setAdapter(effectAdapter);
-		gallery.setSelection(5);
+		gallery.setSelection(0);
 		gallery.setAnimationDuration(3000);
 		gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -111,7 +111,8 @@ public class MainEffect extends Activity implements OnTouchListener,
 				currentfilterID = effectAdapter.getFilterID(position);
 				mGPUImageView.setCurrentfilterID(currentfilterID);
 				mGPUImageView.setCurrentfiltername(currentfiltername);
-				Log.i(Tag, "zhudewei the filter is " + currentfiltername);
+				Log.i(Tag, "zhudewei the filter name is " + currentfiltername);
+				Log.i(Tag, "zhudewei the filter id is " + currentfilterID);
 				mGPUImageView.requestRender();
 			}
 		});

@@ -58,6 +58,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	public Context mContext;
 	private int mImageWidth;
 	private int mImageHeight;
+	private Integer templatedid = R.drawable.cards_new_year;
 	/**
 	 * 初始化状态常量
 	 */
@@ -246,10 +247,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 				|| currentStatus == STATUS_CAPTURE) {
 			// if an effect is chosen initialize it and apply it to the texture
 			if (currentfilterID != 0) {
-				Log.i(Tag, "onDrawFrame the filter name is "
-						+ currentfiltername);
-				Log.i(Tag, "onDrawFrame the filter name is "
-						+ currentfiltername);
+				Log.i(Tag, "onDrawFrame the filter name is " + currentfiltername);
+				Log.i(Tag, "onDrawFrame the filter name is " + currentfiltername);
                 try {
 				mCurrentEffect = effectAdapter.createEffect(currentfilterID,
 						mEffectContext);
@@ -286,12 +285,16 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			 */
 		}
 	}
+	
+	public void changetemplate(Integer templateId) {
+		 templatedid = templateId;
+	}
 
 	public void generateCard(GL10 mGL) {
 		// 得到GLSurfaceView图片后，要进行叠加运算
 		Bitmap cardBitmap = null;
 	    cardBitmap = BitmapFactory.decodeResource(mContext.getResources(),
-					R.drawable.cards_christmas);
+	    		templatedid);
 		// deltaW为白色边框的条宽度
 		int mWidth = cardBitmap.getWidth();
 		int mHeight = cardBitmap.getHeight();
@@ -572,13 +575,11 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	}
 
 	public void setCurrentfilterID(int currentfilterID2) {
-		// TODO Auto-generated method stub
-		
+        this.currentfilterID = currentfilterID2;		
 	}
 
 	public void setCurrentfiltername(String currentfiltername2) {
-		// TODO Auto-generated method stub
-		
+        this.currentfiltername = currentfiltername2;		
 	}
 
 	public void setEffectAdapter(ImageEffectAdapter effectAdapter) {

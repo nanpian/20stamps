@@ -339,6 +339,9 @@ public class StampGLSurfaceView extends GLSurfaceView implements
                 	Log.i(Tag, "Exception is : " + e);
                 	mCurrentEffect = null;
                 }
+			}else {
+				//when currentfilterID is 0, we need to set the testure to normal
+				mCurrentEffect = null;
 			}
 			renderResult();
 			generateStamp(gl);

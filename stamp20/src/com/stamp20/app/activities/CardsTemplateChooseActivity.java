@@ -1,12 +1,11 @@
 package com.stamp20.app.activities;
 
-import com.stamp20.app.R;
-import com.stamp20.app.anim.ListView2GridViewLayoutAnimationController;
-import com.stamp20.app.util.FontManager;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +22,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.stamp20.app.R;
+import com.stamp20.app.anim.ListView2GridViewLayoutAnimationController;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.ImageUtil;
+
 public class CardsTemplateChooseActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     private static float sSwitchViewAlphaHide = 0.0001f;
@@ -32,11 +36,13 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     private ListView mListView;
     private static int sInAnimDuration = 240;
     private static int sOutAnimDuration = 180;
-    
     private TextView mCancel;
     private ImageView mListChange;
     private static int sTemplateList[] = {R.drawable.cards_new_year, R.drawable.cards_christmas, 
-        R.drawable.cards_year_sheep,R.drawable.cards_love}; 
+        R.drawable.cards_year_sheep,R.drawable.cards_love};
+    //add for template change
+    private Uri mSrcImageUri = null;
+    private Bitmap mSrcImage = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,17 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         setContentView(R.layout.activity_cards_template_choose);
         RelativeLayout root = (RelativeLayout) this.findViewById(R.id.root);
         FontManager.changeFonts(root, this);
+        
+        //add for template change 
+        Intent intent = getIntent();
+        if(intent != null) {
+			mSrcImageUri = (Uri)intent.getParcelableExtra(CardEffect.SRC_IMAGE_URI);
+			if (mSrcImageUri != null) {
+				mSrcImage = ImageUtil.loadDownsampledBitmap(this, mSrcImageUri,
+						2);
+			}
+		}
+        
         mListChange = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.list_change);
         mListChange.setOnClickListener(this);
         mGridView = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.gridview);
@@ -70,6 +87,8 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     public void onClick(View v) {
         if(v.getId() == mListChange.getId()){
             isListView = !isListView;
+            Log.i("xixia", "onClick listview count is : " + mListView.getChildCount());
+            Log.i("xixia", "onClick gridview count is : " + mGridView.getChildCount());
             if(!isListView){
                 mListView.setLayoutAnimation(getListViewAnimOut());
                 mListView.setLayoutAnimationListener(new TemplateAnimationListener(mListView, mGridView));
@@ -148,6 +167,7 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
 
         @Override
         public int getCount() {
+        	Log.i("xixia", "view count is : " + sTemplateList.length);
             return sTemplateList.length;
         }
 
@@ -171,6 +191,9 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
             } 
             
             ImageView iv = com.stamp20.app.util.ViewHolder.get(convertView, R.id.image);
+            if (mSrcImage != null) {
+				iv.setBackground(new BitmapDrawable(mSrcImage));
+			}
             iv.setImageResource(sTemplateList[position]);
             return convertView;
         }
@@ -201,6 +224,13 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         data.setClass(this, CardEffect.class);
         data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList[position]);
         //setResult(RESULT_OK, data); //这理有2个参数(int resultCode, Intent intent)
-        startActivity(data);
+        if (mSrcImageUri != null) {
+        	this.setResult(RESULT_OK, data);
+            this.finish();
+		}else {
+			startActivity(data);
+		}
+       // startActivity(data);
+        
     }
 }

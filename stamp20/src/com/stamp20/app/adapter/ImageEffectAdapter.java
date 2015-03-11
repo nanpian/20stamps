@@ -1,17 +1,21 @@
 package com.stamp20.app.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.effect.Effect;
 import android.media.effect.EffectContext;
 import android.media.effect.EffectFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +28,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.filter.ImageBlurRender;
+import com.stamp20.app.filter.PixelBuffer;
 import com.stamp20.app.makeramen.RoundedImageView;
+import com.stamp20.app.util.BitmapUtils;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.ImageUtil;
 
@@ -36,7 +43,9 @@ public class ImageEffectAdapter extends BaseAdapter {
 	private Uri imageUri;
 	private Bitmap imageBitmap;
 	private EffectContext mEffectContext;
-
+    private ImageBlurRender mImageBlurRender;
+    private PixelBuffer mGlPBuffer;
+    private Map<String, Bitmap> mBlutImageMap = new HashMap<String, Bitmap>();
 	/**
 	 * @param c
 	 *            保存Context
@@ -46,7 +55,7 @@ public class ImageEffectAdapter extends BaseAdapter {
 	public ImageEffectAdapter(Context c) {
 		mContext = c;
 		mInflater = LayoutInflater.from(mContext);
-
+		mImageBlurRender = new ImageBlurRender(c);
 	}
 
 	public ImageEffectAdapter(Context c, EffectContext meffectcontect) {
@@ -54,36 +63,40 @@ public class ImageEffectAdapter extends BaseAdapter {
 		mContext = c;
 		mInflater = LayoutInflater.from(mContext);
 		mEffectContext = meffectcontect;
-		filterArray.add(new FilterInfo(0, "normal", createEffect(0)));
-		filterArray.add(new FilterInfo(1, "autofix", createEffect(1)));
-		filterArray.add(new FilterInfo(2, "bw", createEffect(2)));
-		filterArray.add(new FilterInfo(3, "brightness", createEffect(3)));
-		filterArray.add(new FilterInfo(4, "contrast", createEffect(4)));
-		filterArray.add(new FilterInfo(5, "crossprocess", createEffect(5)));
-		filterArray.add(new FilterInfo(6, "documentary", createEffect(6)));
-		filterArray.add(new FilterInfo(7, "duotone", createEffect(7)));
-		filterArray.add(new FilterInfo(8, "filllight", createEffect(8)));
-		filterArray.add(new FilterInfo(9, "fisheye", createEffect(9)));
-		filterArray.add(new FilterInfo(10, "flipvert", createEffect(10)));
-		filterArray.add(new FilterInfo(11, "fliphor", createEffect(11)));
-		filterArray.add(new FilterInfo(12, "grain", createEffect(12)));
-		filterArray.add(new FilterInfo(13, "grayscale", createEffect(13)));
-		filterArray.add(new FilterInfo(14, "lomoish", createEffect(14)));
-		filterArray.add(new FilterInfo(15, "negative", createEffect(15)));
-		filterArray.add(new FilterInfo(16, "posterize", createEffect(16)));
-		filterArray.add(new FilterInfo(17, "rotate", createEffect(17)));
-		filterArray.add(new FilterInfo(18, "saturate", createEffect(18)));
-		filterArray.add(new FilterInfo(19, "sepia", createEffect(19)));
-		filterArray.add(new FilterInfo(20, "sharpen", createEffect(20)));
-		filterArray.add(new FilterInfo(21, "temperature", createEffect(21)));
-		filterArray.add(new FilterInfo(22, "tint", createEffect(22)));
-		filterArray.add(new FilterInfo(23, "vignette", createEffect(23)));
+		mImageBlurRender = new ImageBlurRender(c);
+		filterArray.add(new FilterInfo(0, "normal", null));
+		filterArray.add(new FilterInfo(1, "autofix", null));
+		filterArray.add(new FilterInfo(2, "bw", null));
+		filterArray.add(new FilterInfo(3, "brightness", null));
+		filterArray.add(new FilterInfo(4, "contrast", null));
+		filterArray.add(new FilterInfo(5, "crossprocess", null));
+		filterArray.add(new FilterInfo(6, "documentary", null));
+		filterArray.add(new FilterInfo(7, "duotone", null));
+		filterArray.add(new FilterInfo(8, "filllight", null));
+		filterArray.add(new FilterInfo(9, "fisheye", null));
+		filterArray.add(new FilterInfo(10, "flipvert", null));
+		filterArray.add(new FilterInfo(11, "fliphor", null));
+		filterArray.add(new FilterInfo(12, "grain", null));
+		filterArray.add(new FilterInfo(13, "grayscale", null));
+		filterArray.add(new FilterInfo(14, "lomoish", null));
+		filterArray.add(new FilterInfo(15, "negative", null));
+		filterArray.add(new FilterInfo(16, "posterize", null));
+		filterArray.add(new FilterInfo(17, "rotate", null));
+		filterArray.add(new FilterInfo(18, "saturate", null));
+		filterArray.add(new FilterInfo(19, "sepia", null));
+		filterArray.add(new FilterInfo(20, "sharpen", null));
+		filterArray.add(new FilterInfo(21, "temperature", null));
+		filterArray.add(new FilterInfo(22, "tint", null));
+		filterArray.add(new FilterInfo(23, "vignette", null));
 
 	}
 
 	public void setImageResource(Uri imageUri) {
 		this.imageUri = imageUri;
-		imageBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
+	//	imageBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
+		//for the preview blur imageview, just using 200*200 size to reduce the memorry
+		imageBitmap = BitmapUtils.decodeUri(imageUri, mContext.getContentResolver(), 200);
+		mImageBlurRender.setBlurBitmapSrc(imageBitmap);
 	}
 
 	public Effect createEffect(int currentfilterID,
@@ -121,121 +134,136 @@ public class ImageEffectAdapter extends BaseAdapter {
 			break;
 
 		case 1:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_AUTOFIX);
-			mEffect.setParameter("scale", 0.5f);
-			break;
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_AUTOFIX);
+            mEffect.setParameter("scale", 0.5f);
+            break;
 
-		case 2:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_BLACKWHITE);
-			mEffect.setParameter("black", .1f);
-			mEffect.setParameter("white", .7f);
-			break;
+        case 2:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_BLACKWHITE);
+            mEffect.setParameter("black", .1f);
+            mEffect.setParameter("white", .7f);
+            break;
 
-		case 3:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_BRIGHTNESS);
-			mEffect.setParameter("brightness", 2.0f);
-			break;
+        case 3:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_BRIGHTNESS);
+            mEffect.setParameter("brightness", 2.0f);
+            break;
 
-		case 4:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_CONTRAST);
-			mEffect.setParameter("contrast", 1.4f);
-			break;
+        case 4:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_CONTRAST);
+            mEffect.setParameter("contrast", 1.4f);
+            break;
 
-		case 5:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_CROSSPROCESS);
-			break;
+        case 5:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_CROSSPROCESS);
+            break;
 
-		case 6:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_DOCUMENTARY);
-			break;
+        case 6:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_DOCUMENTARY);
+            break;
 
-		case 7:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_DUOTONE);
-			mEffect.setParameter("first_color", Color.YELLOW);
-			mEffect.setParameter("second_color", Color.DKGRAY);
-			break;
+        case 7:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_DUOTONE);
+            mEffect.setParameter("first_color", Color.YELLOW);
+            mEffect.setParameter("second_color", Color.DKGRAY);
+            break;
 
-		case 8:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_FILLLIGHT);
-			mEffect.setParameter("strength", .8f);
-			break;
+        case 8:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_FILLLIGHT);
+            mEffect.setParameter("strength", .8f);
+            break;
 
-		case 9:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FISHEYE);
-			mEffect.setParameter("scale", .5f);
-			break;
+        case 9:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_FISHEYE);
+            mEffect.setParameter("scale", .5f);
+            break;
 
-		case 10:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP);
-			mEffect.setParameter("vertical", true);
-			break;
+        case 10:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_FLIP);
+            mEffect.setParameter("vertical", true);
+            break;
 
-		case 11:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP);
-			mEffect.setParameter("horizontal", true);
-			break;
+        case 11:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_FLIP);
+            mEffect.setParameter("horizontal", true);
+            break;
 
-		case 12:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_GRAIN);
-			mEffect.setParameter("strength", 1.0f);
-			break;
+        case 12:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_GRAIN);
+            mEffect.setParameter("strength", 1.0f);
+            break;
 
-		case 13:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_GRAYSCALE);
-			break;
+        case 13:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_GRAYSCALE);
+            break;
 
-		case 14:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_LOMOISH);
-			break;
+        case 14:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_LOMOISH);
+            break;
 
-		case 15:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_NEGATIVE);
-			break;
+        case 15:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_NEGATIVE);
+            break;
 
-		case 16:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_POSTERIZE);
-			break;
+        case 16:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_POSTERIZE);
+            break;
 
-		case 17:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_ROTATE);
-			mEffect.setParameter("angle", 180);
-			break;
+        case 17:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_ROTATE);
+            mEffect.setParameter("angle", 180);
+            break;
 
-		case 18:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SATURATE);
-			mEffect.setParameter("scale", .5f);
-			break;
+        case 18:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_SATURATE);
+            mEffect.setParameter("scale", .5f);
+            break;
 
-		case 19:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SEPIA);
-			break;
+        case 19:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_SEPIA);
+            break;
 
-		case 20:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SHARPEN);
-			break;
+        case 20:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_SHARPEN);
+            break;
 
-		case 21:
-			mEffect = effectFactory
-					.createEffect(EffectFactory.EFFECT_TEMPERATURE);
-			mEffect.setParameter("scale", .9f);
-			break;
+        case 21:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_TEMPERATURE);
+            mEffect.setParameter("scale", .9f);
+            break;
 
-		case 22:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_TINT);
-			mEffect.setParameter("tint", Color.MAGENTA);
-			break;
+        case 22:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_TINT);
+            mEffect.setParameter("tint", Color.MAGENTA);
+            break;
 
-		case 23:
-			mEffect = effectFactory.createEffect(EffectFactory.EFFECT_VIGNETTE);
-			mEffect.setParameter("scale", .5f);
-			break;
+        case 23:
+            mEffect = effectFactory.createEffect(
+                    EffectFactory.EFFECT_VIGNETTE);
+            mEffect.setParameter("scale", .5f);
+            break;
 
 		default:
 			break;
@@ -292,43 +320,89 @@ public class ImageEffectAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		convertView = mInflater.inflate(R.layout.gallery_item_layout, null);
-		FontManager.changeFonts(mContext,
-				(LinearLayout) convertView.findViewById(R.id.root));
-		final LinearLayout layout = (LinearLayout) convertView
-				.findViewById(R.id.root);
-		final RoundedImageView imageView = (RoundedImageView) convertView
-				.findViewById(R.id.image_item);
-		final TextView textView = (TextView) convertView
-				.findViewById(R.id.text_item);
-		imageView.setImageBitmap(imageBitmap);
-
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			viewHolder = new ViewHolder();
+			convertView = mInflater.inflate(R.layout.gallery_item_layout, null);
+			viewHolder.mImageView = (RoundedImageView) convertView.findViewById(R.id.image_item);
+			viewHolder.mTextView = (TextView) convertView.findViewById(R.id.text_item);
+			convertView.setTag(viewHolder);
+		}else {
+			viewHolder = (ViewHolder)convertView.getTag();
+		}
+		FontManager.changeFonts(mContext,(LinearLayout) convertView.findViewById(R.id.root));
+		Bitmap bitmap = mBlutImageMap.get(filterArray.get(position).filterName);
+		String effectName = filterArray.get(position).filterName;
+		if (bitmap == null) {
+			if (position == 0) {
+				viewHolder.mImageView.setImageBitmap(imageBitmap);
+			}else {
+				viewHolder.mImageView.setBackground(mContext.getResources().getDrawable(R.drawable.blur_image_null));
+				viewHolder.mImageView.setTag(effectName);
+				
+				new BlurAsyncTask(position, effectName, viewHolder.mImageView).execute(imageBitmap);
+			}
+		}else {
+			viewHolder.mImageView.setImageBitmap(bitmap);
+		}
+		
+		viewHolder.mTextView.setText(filterArray.get(position).filterName);
+		
 		if (this.selectItem == position) {
 			Log.i("jiangtao4", "in positon");
-			// 处理点击放大效果，注意，这里还要加入边框效果，需要UI
-			Animation animation = AnimationUtils.loadAnimation(mContext,
-					R.anim.gallery_click_scale);
 			// imageView.setBorderWidth(R.dimen.gallery_imageview_border_width);
-			imageView.setBorderColor(Color.parseColor("#f1c40f"));
-			textView.setTextColor(Color.parseColor("#f1c40f"));
-			ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(imageView, "scaleX", 1.1f);
-			ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(imageView, "scaleY", 1.1f);
+			viewHolder.mImageView.setBorderColor(Color.parseColor("#f1c40f"));
+			viewHolder.mTextView.setTextColor(Color.parseColor("#f1c40f"));
+			ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(viewHolder.mImageView, "scaleX", 1.1f);
+			ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(viewHolder.mImageView, "scaleY", 1.1f);
 			scaleDownX.setDuration(500);
 			scaleDownY.setDuration(500);
 			AnimatorSet scaleDown = new AnimatorSet();
 			scaleDown.play(scaleDownX).with(scaleDownY);
 			scaleDown.start();
 		} else {
-			// imageView.setLayoutParams(new LinearLayout.LayoutParams(width,
-			// height));
-			textView.setTextColor(Color.parseColor("#ffffff"));
-			imageView
-					.setBackgroundResource(R.drawable.bg_filter_item_selected_no);
+			viewHolder.mTextView.setTextColor(Color.parseColor("#ffffff"));
+			viewHolder.mImageView.setBackgroundResource(R.drawable.bg_filter_item_selected_no);
 		}
-		// imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-		textView.setText(filterArray.get(position).filterName);
 		return convertView;
+	}
+	
+	public class BlurAsyncTask extends AsyncTask<Bitmap, Void, Bitmap>{
+
+		private int mPosition;
+		private String mEffctName;
+		private RoundedImageView mRoundedImageView;
+		
+		public BlurAsyncTask(int pos, String name, RoundedImageView imageView){
+			this.mPosition = pos;
+			this.mEffctName = name;
+			this.mRoundedImageView = imageView;
+		}
+		
+		
+		@Override
+		protected Bitmap doInBackground(Bitmap... param) {
+			Bitmap bitmap = param[0];
+			mGlPBuffer = new PixelBuffer(bitmap.getWidth(), bitmap.getHeight());
+			mGlPBuffer.setRenderer(mImageBlurRender);	
+			mImageBlurRender.mCurrentEffect = mPosition;
+		    
+			return  mGlPBuffer.getBitmap(null, null);
+		}
+		
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			super.onPostExecute(result);
+			if (((String)mRoundedImageView.getTag()).equals(mEffctName)) {
+				mRoundedImageView.setImageBitmap(result);
+			}
+			mBlutImageMap.put(mEffctName, result);
+		}
+	}
+	
+	public static class ViewHolder{
+		public RoundedImageView mImageView;
+		public TextView mTextView;
 	}
 
 	/**
