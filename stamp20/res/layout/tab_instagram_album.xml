@@ -6,7 +6,7 @@
     android:background="@color/activity_background_gray"
     android:orientation="vertical" >
     <LinearLayout
-        android:id="@+id/fb_no_login_id"
+        android:id="@+id/ins_no_login_id"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

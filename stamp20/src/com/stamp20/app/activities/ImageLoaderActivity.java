@@ -90,8 +90,11 @@ public class ImageLoaderActivity extends FragmentActivity implements OnClickList
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
-      //Log.i(TAG, "finish authentication");
-      ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+      Log.i("wangpeng14", "finish authentication" + requestCode);
+      if (requestCode == InstagramAlbumFragment.REQUEST_CODE_SELECT_INSTAGRAM_AUTH){
+    	  mDatas.get(3).onActivityResult(requestCode, resultCode, data);
+      }else
+    	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
 
     private void initSelectedImage() {

@@ -2,10 +2,13 @@ package com.stamp20.app.activities;
 
 
 
-import com.parse.ParseUser;
-import com.stamp20.app.*;
+import org.jinstagram.auth.InstagramAuthService;
+import org.jinstagram.auth.model.Token;
+import org.jinstagram.auth.model.Verifier;
+import org.jinstagram.auth.oauth.InstagramService;
+
+import com.stamp20.app.instagram.InstagramTokenKeeper;
 import com.stamp20.app.util.FontManager;
-import com.stamp20.app.util.InstagramTokenKeeper;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,17 +16,18 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
 
 public class InstagramAuthView extends Activity {
 
-  private static final String REDIRECT_URI = "http://my-redirect-uri.com";
-  public static final String CLIENTID = "045d2613563c455eb9882369bc661523";
+  private static final String REDIRECT_URI = "http://yourcallback.com/";
+  private static final String CLIENTSECRET = "af2bbd2d48304b0bb0fee2b3cf3fa35a";
+  public static final String CLIENTID = "ea0e8b0e8d5d4db1b2a5d56449fe3cc4";
 
   
   private WebView mWebview;
@@ -37,9 +41,14 @@ public class InstagramAuthView extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		String url = "https://instagram.com/oauth/authorize/?client_id="+CLIENTID+
-					"&redirect_uri="+REDIRECT_URI+"&response_type=token";
+	    final InstagramService service = new InstagramAuthService()
+    		.apiKey(CLIENTID)
+    		.apiSecret(CLIENTSECRET)
+    		.callback(REDIRECT_URI)
+    		.build();
 		
+	    String url = service.getAuthorizationUrl(null);
+	    
 		mWebview = new WebView(this);
 		mChromeClient = new WebChromeClient() {
 			public boolean onConsoleMessage(android.webkit.ConsoleMessage consoleMessage) {
@@ -59,11 +68,10 @@ public class InstagramAuthView extends Activity {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if(!_visible) return false;
-
 				if (url.startsWith(REDIRECT_URI)) {
 					String code = extractCodeFromURL(url);
 					Log.i("case", "InstagramAuthView-code="+code);
-					onTokenRetrieved(code);
+					new GetTokenTask(service).execute(code);
 					return true;
 				}
 				return false;
@@ -105,7 +113,7 @@ public class InstagramAuthView extends Activity {
 	}
 
 	private String extractCodeFromURL(String url) {
-		return url.substring(url.indexOf("access_token=")+13);
+		return url.substring(url.indexOf("code") + 5);
 	}
 	
 	@Override
@@ -139,5 +147,25 @@ public class InstagramAuthView extends Activity {
 	  setResult(Activity.RESULT_OK);
 	  this.finish();
 	}
+	
+	private class GetTokenTask extends AsyncTask<String, Void, Token>{
+
+		InstagramService mS;
+			public GetTokenTask(InstagramService s){
+				mS = s;
+			}
+		  @Override
+		  protected void onPostExecute(Token result){
+			  onTokenRetrieved(result.getToken());
+		  }
+
+		  @Override
+		  protected Token doInBackground(String... params) {
+			  Verifier verifier = new Verifier(params[0]);
+				Token accessToken = mS.getAccessToken(null, verifier);
+				return accessToken;
+		  }
+		
+		}
 
 }

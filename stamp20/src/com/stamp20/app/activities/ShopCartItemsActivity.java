@@ -37,6 +37,8 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
     private ImageView backHomeView;
     private Button btnPaypal;
     private Button btnCheckout;
+    private ImageView headerPrevious;
+    private TextView headerTitle;
 
     public ShopCartItemsActivity() {
         // TODO Auto-generated constructor stub
@@ -59,15 +61,21 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
     public void initView() {
         layoutInflater = getLayoutInflater();
-        textHeaderTile = (TextView) findViewById(R.id.home_header_title);
-        textHeaderTile.setVisibility(View.VISIBLE);
-        backHomeView = (ImageView) findViewById(R.id.home_header_back);
-        backHomeView.setOnClickListener(this);
+//        textHeaderTile = (TextView) findViewById(R.id.home_header_title);
+//        textHeaderTile.setVisibility(View.VISIBLE);
+//        backHomeView = (ImageView) findViewById(R.id.home_header_back);
+//        backHomeView.setOnClickListener(this);
+        headerPrevious = (ImageView) findViewById(R.id.header_previous);
+        headerPrevious.setImageResource(R.drawable.main_bottom_tab_home_focus);
+        headerPrevious.setOnClickListener(this);
+        headerTitle = (TextView) findViewById(R.id.header_title);
+        headerTitle.setText(R.string.shop_cartitems_title);
+        
         btnPaypal = (Button) findViewById(R.id.shop_cartitems_papal);
         btnPaypal.setOnClickListener(this);
         btnCheckout = (Button) findViewById(R.id.shop_cartitems_checkout);
         btnCheckout.setOnClickListener(this);
-        textHeaderTile.setText(R.string.shop_cartitems_title);
+//        textHeaderTile.setText(R.string.shop_cartitems_title);
         listCartItems = (ListView) findViewById(R.id.listview_cartitems);
         layoutListFooter = (LinearLayout) layoutInflater.inflate(R.layout.shop_cartitems_listview_footer, null);
         FontManager.changeFonts(layoutListFooter, this);
@@ -84,7 +92,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         // TODO Auto-generated method stub
         Intent intent = new Intent();
         switch (v.getId()) {
-        case R.id.home_header_back:
+        case R.id.header_previous:
             intent.setClass(ShopCartItemsActivity.this, HomeActivity.class);
             startActivity(intent);
             break;

@@ -14,11 +14,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
-import com.stamp20.app.util.InstagramTokenKeeper;
+import com.stamp20.app.instagram.InstagramTokenKeeper;
 import com.stamp20.app.util.StringUtils;
 
 public class Setting {

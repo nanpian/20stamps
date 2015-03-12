@@ -1,5 +1,8 @@
 package com.stamp20.app;
 
+import org.jinstagram.auth.InstagramAuthService;
+import org.jinstagram.auth.oauth.InstagramService;
+
 import android.app.Application;
 import android.util.Log;
 
@@ -20,5 +23,6 @@ public class Stamp20Application extends Application {
 	    );
 	    
 	    ParseFacebookUtils.initialize("713170092123951");
+	    
 	  }
 }

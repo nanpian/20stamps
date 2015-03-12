@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.util.BitmapCache;
@@ -39,12 +40,14 @@ public class ShopCartActivity extends Activity implements OnClickListener {
 	private ShopCartView mShopStampView;
 	private LinearLayout mMoveView, mShopviewInsert;
 	private ScollerRelativeView mScollerRelativeView;
-	private RelativeLayout mHeader;
+	private LinearLayout mHeader;
 	private LayoutInflater mLayoutInflater;
 	//通过这个handler处理scroller完成后相应慢的问题
 	private Handler mHandler;
 	private static final int TIME_DURATION = 3000;
 	private Button btnSkiptoCart;
+    private ImageView headerPrevious;
+    private TextView headerTitle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +97,7 @@ public class ShopCartActivity extends Activity implements OnClickListener {
         	    intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
         	    startActivity(intent);
 			    break;
-		    case R.id.home_header_back:
+		    case R.id.header_previous:
 		    	Intent intent1 = new Intent();
 				intent1.setClass(ShopCartActivity.this, HomeActivity.class);
 				startActivity(intent1);
@@ -106,17 +109,24 @@ public class ShopCartActivity extends Activity implements OnClickListener {
 	}
 
 	public void initView() {
-		backHome = (ImageView)findViewById(R.id.home_header_back);
-		backHome.setOnClickListener(this);
+//		backHome = (ImageView)findViewById(R.id.home_header_back);
+//		backHome.setOnClickListener(this);
+        headerPrevious = (ImageView) findViewById(R.id.header_previous);
+        headerPrevious.setImageResource(R.drawable.main_bottom_tab_home_focus);
+        headerPrevious.setOnClickListener(this);
+        headerTitle = (TextView) findViewById(R.id.header_title);
+        headerTitle.setVisibility(View.INVISIBLE);
+        
 		mItemCheck = (ImageView) findViewById(R.id.item_check_view);
 		mMoveView = (LinearLayout) findViewById(R.id.move_view);
 		FontManager.changeFonts(this, mMoveView);
 		mScollerRelativeView = (ScollerRelativeView) findViewById(R.id.scroll_view);
-		mHeader = (RelativeLayout) findViewById(R.id.header);
+		mHeader = (LinearLayout) findViewById(R.id.header);
 		AlphaAnimation alpAni = new AlphaAnimation(0.0f, 1.0f);
 		alpAni.setDuration(2000);
 		mShopviewInsert = (LinearLayout) mLayoutInflater.inflate(R.layout.shop_view_insert, null);
-		FontManager.changeFonts(this, mShopviewInsert);
+//		FontManager.changeFonts(this, (LinearLayout)mShopviewInsert.findViewById(R.id.shop_insert_view));
+		FontManager.changeFonts((LinearLayout)mShopviewInsert.findViewById(R.id.shop_insert_view), this);
 		mShopviewInsert.setAnimation(alpAni);
 		mShopStampView = (ShopCartView)mShopviewInsert.findViewById(R.id.shop_stamp_view);
 		mShopStampView.setmBpStampSource(mCache.get());

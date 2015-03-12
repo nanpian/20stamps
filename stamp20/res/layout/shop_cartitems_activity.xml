@@ -5,10 +5,14 @@
     android:layout_height="match_parent"
     android:background="#E1E1E1" >
 
+    <!-- <include -->
+    <!-- android:id="@+id/shop_items_header" -->
+    <!-- android:layout_alignParentTop="true" -->
+    <!-- layout="@layout/home_header" /> -->
+
     <include
         android:id="@+id/shop_items_header"
-        android:layout_alignParentTop="true"
-        layout="@layout/home_header" />
+        layout="@layout/header" />
 
     <ListView
         android:id="@+id/listview_cartitems"
@@ -43,9 +47,9 @@
             android:layout_height="0dip"
             android:layout_gravity="center"
             android:layout_marginBottom="10dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginStart="20dip"
             android:layout_marginEnd="20dip"
+            android:layout_marginStart="20dip"
+            android:layout_marginTop="5dip"
             android:layout_weight="1" >
 
             <Button

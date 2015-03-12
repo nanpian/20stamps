@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.*;
 import com.stamp20.app.R;
 import com.stamp20.app.facebook.FbAlbum;
 import com.stamp20.app.imageloader.ImageLoader.NativeImageCallBack;
@@ -79,7 +81,7 @@ public class HomeListGroupAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            viewHolder.mImageView.setImageResource(R.drawable.friends_sends_pictures_no);
+//            viewHolder.mImageView.setImageResource(R.drawable.friends_sends_pictures_no);
         }
 
         viewHolder.mTextViewTitle.setText(mImageBean.getFolderName());
@@ -93,7 +95,8 @@ public class HomeListGroupAdapter extends BaseAdapter {
         if(path == null && album != null){
         	//Facebook 
         	String url = album.getCoverSourceUrl();
-        	
+        	Log.i("wangpeng14","net url: " + url);
+        	/*
         	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
             viewHolder.mImageView.setTag(url);
 
@@ -108,11 +111,17 @@ public class HomeListGroupAdapter extends BaseAdapter {
                     }
                 }
             });
+        	*/
         	
+        	Picasso.with(mContext).load(url)
+        		.resize(200, 200).centerCrop()
+        		.placeholder(R.drawable.friends_sends_pictures_no)
+        		.into(viewHolder.mImageView);
         	
         }else{
         	//本地目录
         	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
+        	/*
             viewHolder.mImageView.setTag(path);
 
             // 利用NativeImageLoader类加载本地图片
@@ -126,15 +135,22 @@ public class HomeListGroupAdapter extends BaseAdapter {
                     }
                 }
             });	
+            */
+        	Log.i("wangpeng14","native path: " + "file://" + path);
+        	Picasso.with(mContext).load("file://" + path)
+        		.resize(200, 200).centerCrop()
+    			.placeholder(R.drawable.friends_sends_pictures_no)
+    			.into(viewHolder.mImageView);
         }
         
-
+        /*
         if (bitmap != null) {
             viewHolder.mImageView.setImageBitmap(bitmap);
         } else {
             viewHolder.mImageView.setImageResource(R.drawable.friends_sends_pictures_no);
         }
-
+		*/
+        
         return convertView;
     }
 

@@ -290,7 +290,7 @@ public class InstagramPhotosView extends Activity {
 		  activity.setResult(Activity.RESULT_FIRST_USER);//request ChooseImageFrag to redo authorizaiton
 		  activity.finish();
 		}else{
-		  instagramUserId = result.getId();
+		  instagramUserId = Long.parseLong(result.getId());
 		  guideText.setText(result.getUsername()+" recent images");
 		  ParseUser.getCurrentUser().saveEventually();//token verifyied, save it!
 		  loadMore();
@@ -323,7 +323,7 @@ public class InstagramPhotosView extends Activity {
 		protected MediaFeed doInBackground(Void... params) {
 		  try{
 			if (pagination == null){
-			  return instagramClient.getRecentMediaFeed(instagramUserId);
+			  return instagramClient.getRecentMediaFeed(String.valueOf(instagramUserId));
 			}else if (pagination.hasNextPage()){
 			  return instagramClient.getRecentMediaNextPage(pagination);
 			}else{

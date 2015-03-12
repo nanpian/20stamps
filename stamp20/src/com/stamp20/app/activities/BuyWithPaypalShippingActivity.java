@@ -55,7 +55,6 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         headerButton.setOnClickListener(this);
         headerButton.setVisibility(View.VISIBLE);
         tail = (ViewGroup) findViewById(R.id.tail);
-
         tail.setOnClickListener(this);
         tailTitle = (TextView) findViewById(R.id.tail_text);
         tailTitle.setText(R.string.next_review);

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.squareup.picasso.Picasso;
 import com.stamp20.app.R;
 import com.stamp20.app.facebook.FbPhotoResult;
 import com.stamp20.app.imageloader.MyImageView.OnMeasureListener;
@@ -30,6 +32,8 @@ import com.stamp20.app.view.ImageUtil;
 
 public class ChildAdapter extends BaseAdapter {
     private Point mPoint = new Point(0, 0);// 用来封装ImageView的宽和高的对象
+	private int mWidth = 0;
+	private int mHeight = 0;
     /**
      * 用来存储图片的选中情况
      */
@@ -92,7 +96,7 @@ public class ChildAdapter extends BaseAdapter {
             viewHolder.mImageView.setOnMeasureListener(new OnMeasureListener() {
                 @Override
                 public void onMeasureSize(int width, int height) {
-                    mPoint.set(width, height);
+                   mPoint.set(width, height);
                 }
             });
 
@@ -105,6 +109,11 @@ public class ChildAdapter extends BaseAdapter {
         		
         if(list != null && mFbPhotos == null){
         	Uri uri = list.get(position);
+        	Picasso.with(mContext).load(uri)
+        	   	.resize(200, 200).centerCrop()
+    			.placeholder(R.drawable.friends_sends_pictures_no)
+    			.into(viewHolder.mImageView);
+        	/*
         	String path = ImageUtil.getLocalPathFromUri(mContext.getContentResolver(), uri);
         	viewHolder.mImageView.setTag(path);
         	// 利用NativeImageLoader类加载本地图片
@@ -118,9 +127,16 @@ public class ChildAdapter extends BaseAdapter {
         			}
         			}
         	});
+        	*/
         } else if (list == null && mFbPhotos != null){
         	// Facebook
         	String url = mFbPhotos.get(position).getSourceImageUrl();
+        	Log.i("wangpeng14","childadapter net url: " + url);
+        	Picasso.with(mContext).load(url)
+        		.resize(200, 200).centerCrop()
+				.placeholder(R.drawable.friends_sends_pictures_no)
+				.into(viewHolder.mImageView);
+        	/*
         	// 给ImageView设置路径Tag,这是异步加载图片的小技巧
             viewHolder.mImageView.setTag(url);
 
@@ -135,14 +151,15 @@ public class ChildAdapter extends BaseAdapter {
                     }
                 }
             });
+            */
         }
-        
+ /*       
         if (bitmap != null) {
             viewHolder.mImageView.setImageBitmap(bitmap);
         } else {
             viewHolder.mImageView.setImageResource(R.drawable.friends_sends_pictures_no);
         }
-
+*/
         return convertView;
     }
 

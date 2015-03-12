@@ -59,6 +59,16 @@ public class FontManager {
             }
         }
     }
+
+    public static void changeFonts(Context mContext, View view) {
+
+        mTypefaceNormal = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans.ttf");
+
+        if (view instanceof TextView) {
+            ((TextView) view).setTypeface(mTypefaceNormal);
+        }
+    }
+
     public static void changeFontsBlod(Context mContext, ViewGroup root) {
 
         mTypefaceNormal = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans-Semibold.ttf");
