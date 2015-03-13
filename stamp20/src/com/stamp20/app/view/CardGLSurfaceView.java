@@ -232,6 +232,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         return configurationInfo.reqGlEsVersion >= 0x20000;
     }
     
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	mInitialized = false;
+    }
+    
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		if (!mInitialized) {
@@ -256,6 +262,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                 } catch (Exception e ) {
                 	mCurrentEffect = null;
                 }
+			}else {
+				mCurrentEffect = null;
 			}
 			renderResult();
 			generateCard(gl);

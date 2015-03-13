@@ -1,6 +1,5 @@
 # README #
 
-git clone https://xsimida@bitbucket.org/xsimida/stamp20.git
-
+git clone https://git.oschina.net/xsimida/Stamp20.git
 
 git push -u origin master

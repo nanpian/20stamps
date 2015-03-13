@@ -99,6 +99,12 @@ public class ImageEffectAdapter extends BaseAdapter {
 		mImageBlurRender.setBlurBitmapSrc(imageBitmap);
 	}
 
+	public void clearPreviewHashMap(){
+	    if (mBlutImageMap != null) {
+	    	mBlutImageMap.clear();
+		}	
+	}
+	
 	public Effect createEffect(int currentfilterID,
 			EffectContext mEffectContext2) {
 		// TODO Auto-generated method stub

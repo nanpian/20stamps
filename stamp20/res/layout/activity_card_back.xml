@@ -61,7 +61,7 @@
     <Gallery
         android:id="@+id/activity_card_back_select_back"
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_below="@id/buttonid"
         android:layout_marginTop="5dp"
         android:spacing="8dp" />

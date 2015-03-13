@@ -3,40 +3,45 @@ package com.stamp20.app.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.stamp20.app.R;
-
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Bitmap.Config;
-import android.media.effect.Effect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.stamp20.app.R;
+import com.stamp20.app.makeramen.RoundedImageView;
 
 public class ChooseBackColorAdapter extends BaseAdapter {
 
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private Bitmap cardBackShape;
-    private static int sCardsBackList[] = {R.drawable.card_back_blue_dot, R.drawable.card_back_blue_line, 
-        R.drawable.card_back_green,R.drawable.card_back_love,R.drawable.card_back_new_year,R.drawable.card_back_red,
-        R.drawable.card_back_red_line}; 
+    private static int sCardsBackList[] = {R.drawable.card_back_white, 
+        R.drawable.card_back_green,R.drawable.card_back_grey,R.drawable.card_back_lite_blue,R.drawable.card_back_lite_green,
+        R.drawable.card_back_lite_grey, R.drawable.card_back_lite_orange, R.drawable.card_back_lite_red, R.drawable.card_back_orange,
+        R.drawable.card_back_red}; 
 
 	public ChooseBackColorAdapter(Context c) {
 		mContext = c;
 		mInflater = LayoutInflater.from(mContext);
 		colorArray.add(new ColorArray(Color.WHITE));
-		colorArray.add(new ColorArray(Color.BLUE));
-		colorArray.add(new ColorArray(Color.GRAY));
-		colorArray.add(new ColorArray(Color.GREEN));
-		colorArray.add(new ColorArray(Color.YELLOW));
-		colorArray.add(new ColorArray(Color.DKGRAY));
-		colorArray.add(new ColorArray(Color.LTGRAY));
+		colorArray.add(new ColorArray(Color.parseColor("#008B00")));
+		colorArray.add(new ColorArray(Color.parseColor("#EEE9BF")));
+		colorArray.add(new ColorArray(Color.parseColor("#66CDAA")));
+		colorArray.add(new ColorArray(Color.parseColor("#9ACD32")));
+		colorArray.add(new ColorArray(Color.parseColor("#E0EEEE")));
+		colorArray.add(new ColorArray(Color.parseColor("#EEE685")));
+		colorArray.add(new ColorArray(Color.parseColor("#FFE4C4")));
+		colorArray.add(new ColorArray(Color.parseColor("#EE9A00")));
+		colorArray.add(new ColorArray(Color.parseColor("#DC143C")));
 		this.cardBackShape = BitmapFactory.decodeResource(
 				mContext.getResources(), R.drawable.activity_card_back_shape);
 	}
@@ -44,7 +49,8 @@ public class ChooseBackColorAdapter extends BaseAdapter {
 	private List<ColorArray> colorArray = new ArrayList<ColorArray>();
 	private int selectItem;
 	public void setSelectItem (int selectId) {
-		selectItem = selectId;
+		this.selectItem = selectId;
+		notifyDataSetChanged();
 	}
 
 	private class ColorArray {
@@ -86,23 +92,27 @@ public class ChooseBackColorAdapter extends BaseAdapter {
 		convertView = mInflater.inflate(R.layout.gallery_choose_color_layout, null);
 		// FontManager.changeFonts(mContext,
 		// (LinearLayout)convertView.findViewById(R.id.root));
-		ImageView imageView = null;
+		RoundedImageView imageView = null;
 		TextView textView = null;
-		imageView = (ImageView) convertView.findViewById(R.id.image_item);
+		imageView = (RoundedImageView) convertView.findViewById(R.id.image_item);
 		textView = (TextView) convertView.findViewById(R.id.text_item);
 /*		Bitmap image = maskWithColor(cardBackShape,
 				colorArray.get(position).color);*/
 		//imageView.setImageBitmap(image);
+		//imageView.setBackgroundColor(colorArray.get(position).color);
 		imageView.setImageResource(sCardsBackList[position]);
 		//image.recycle();
 		if (selectItem == position) {
 			// 处理点击放大效果，注意，这里还要加入边框效果，需要UI
-			// Animation animation = AnimationUtils.loadAnimation(mContext,
-			// R.anim.gallery_click_scale);
-			// imageView.startAnimation(animation);
-			// imageView.setLayoutParams(new
-			// LinearLayout.LayoutParams(200,200));
-			textView.setTextColor(Color.parseColor("#f1c40f"));
+			imageView.setBorderColor(Color.parseColor("#f1c40f"));
+			ObjectAnimator xAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1.1f);
+			ObjectAnimator yAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1.1f);
+			xAnimator.setDuration(500);
+			yAnimator.setDuration(500);
+			AnimatorSet animatorSet = new AnimatorSet();
+			animatorSet.play(xAnimator).with(yAnimator);
+			animatorSet.start();
+			//textView.setTextColor(Color.parseColor("#f1c40f"));
 			// imageView.setBackgroundResource(R.drawable.bg_filter_item_selected);
 		} else {
 			// imageView.setLayoutParams(new LinearLayout.LayoutParams(width,

@@ -1,6 +1,7 @@
 package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
+import com.stamp20.app.R.string;
 import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
@@ -64,6 +65,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	//add for change the background templte
 	public static final int REQUEST_CODE_FOR_TEMPLATE = 1;
 	public static final String SRC_IMAGE_URI = "imageUri";
+	private boolean mIsChangingPhoto = false;
 
 	Handler mHandler = new Handler() {
 
@@ -99,6 +101,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
 		instance = this;
 		initView();
+		mIsChangingPhoto = false;
 		Intent getFromChooseTemp = getIntent();
 		if (getFromChooseTemp != null) {
 			int tmplateId = getFromChooseTemp.getIntExtra(
@@ -203,17 +206,38 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 					background_envelop.setImageResource(templateId);
 					mGPUImageView.changetemplate(templateId);//change backguard 
 				}
-				loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri,
-						2);
+				loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri,2);
 				refreshView();
+				
 				effectAdapter.setImageResource(imageUri);
+				//click change photo button, need to init some data
+				if (mIsChangingPhoto) {
+					effectAdapter.clearPreviewHashMap();
+					String filtername = effectAdapter.getFilterName(0);
+					currentfilterID = effectAdapter.getFilterID(0);
+					Log.i(Tag, "change photo id is : " + currentfilterID + "filtername is : " + filtername);
+					mGPUImageView.setCurrentfilterID(currentfilterID);
+					mGPUImageView.setCurrentfiltername(filtername);
+				}
 				mGPUImageView.setSourceBitmap(loadedBitmap);
-				mGPUImageView.requestRender();
+				//mGPUImageView.requestRender();
 			} else {
 			}
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mGPUImageView.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mGPUImageView.onPause();
+	}
+	
 	private void refreshView() {
 		select_photo_button.setVisibility(View.GONE);
 		buttonLayout.setVisibility(View.VISIBLE);
@@ -286,10 +310,11 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.i(Tag, "in result activity!!");
 		if (requestCode == REQUEST_CODE_FOR_TEMPLATE && resultCode == RESULT_OK) {
-			int imageid = data.getIntExtra(
+			int tempid = data.getIntExtra(
 					ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
-			background_envelop.setImageResource(imageid);
-			mGPUImageView.changetemplate(imageid);//change backguard
+			templateId = tempid;
+			background_envelop.setImageResource(tempid);
+			mGPUImageView.changetemplate(tempid);//change backguard
 			mGPUImageView.requestRender();
 		}
 	};
@@ -298,6 +323,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 //        startActivity(new Intent(CardEffect.this,
 //                CardsTemplateChooseActivity.class));
 //        finish();
+    	mIsChangingPhoto = false;
     	Intent intent = new Intent();
     	intent.setClass(CardEffect.this, CardsTemplateChooseActivity.class);
     	intent.putExtra(SRC_IMAGE_URI, imageUri);
@@ -305,6 +331,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
     }
 	
     private void selectPicture() {
+    	mIsChangingPhoto = true;
 		Intent data = new Intent();
 		data.setClass(getBaseContext(), ImageLoaderActivity.class);
 		startActivity(data);

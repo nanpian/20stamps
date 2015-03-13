@@ -657,15 +657,13 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
 	public void onRotateClick(Context mContext, RelativeLayout frameLayout) {
 		// TODO Auto-generated method stub
+		isHorizontal = !isHorizontal;
 		if (isHorizontal) {
 			showAnimation(frameLayout, true);
-			isHorizontal = false;
 			// 旋转后，重新刷新GLSurfaceView
 			// this.requestRender();
 		} else {
 			showAnimation(frameLayout, false);
-
-			isHorizontal = true;
 			// this.requestRender();
 		}
 	}

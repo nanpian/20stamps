@@ -2,6 +2,7 @@ package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
 import com.stamp20.app.anim.Rotate3dAnimation;
+import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
 
@@ -123,8 +124,12 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 			 if(isFrontNow)applyRotation(0,90,0);
 			break;
 		case R.id.card_add_to_cart:
+			//add to cart
+			BitmapCache mCache = BitmapCache.getCache();
+			mCache.put(cardBmpFront);
 			Intent intent = new Intent();
 			intent.setClass(this, ShopCartItemsActivity.class);
+			intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
 			startActivity(intent);
 			break;
 		}
