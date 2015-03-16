@@ -1,17 +1,23 @@
 package com.stamp20.app.view;
 
-import com.stamp20.app.R;
-import com.stamp20.app.util.Log;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.stamp20.app.R;
+import com.stamp20.app.util.Log;
 
 public class CardBackView extends View {
 
@@ -30,6 +36,7 @@ public class CardBackView extends View {
 	private boolean isHasLine = false;
 	private boolean isCaptureBmp = false;
 	public onMeasuredListener listener = null;
+    private Rect mImageRect;
 	public interface onGeneratedCardBackBmpListener {
 		public void onGeneratedCardBackBmp();
 	}
@@ -84,7 +91,7 @@ public class CardBackView extends View {
 		this.cardBackColor = Color.WHITE;
 
 		this.cardBackBitmap = createWhiteBitmap(cardBackBitmap);
-		
+        this.cardBackBitmap = colorBitmap(cardBackBitmap, Color.WHITE);
 		// test color mask function
 		//this.cardBackBitmap = maskWithColor(cardBackBitmap, Color.GREEN);
 	}
@@ -120,6 +127,34 @@ public class CardBackView extends View {
 	    cardBackBitmap = newBmp;
 		return newBmp;
 	}
+
+    public Bitmap colorBitmap(Bitmap bitmapSource, int color){
+        int width = bitmapSource.getWidth();
+        int height = bitmapSource.getHeight();
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        Paint paint = new Paint();
+        ColorMatrix colorMatrix = new ColorMatrix();
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+        int a = Color.alpha(color);
+        Log.i("jiangtao", "r is : " + r + "b is : " + b + "g is : " + g);
+        colorMatrix.setScale(r*1.0f/255, g*1.0f/255, b*1.0f/255, 1.0f);
+        ColorMatrixColorFilter colorMatrixFilter = new ColorMatrixColorFilter(colorMatrix);
+        paint.setColorFilter(colorMatrixFilter);
+        canvas.drawBitmap(bitmapSource, 0, 0, paint);
+        paint.reset();
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.setScale(width*1.0f/logoWidth, 1.0f);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        int left = 0;
+        int top = height - logoHeight;
+        canvas.concat(scaleMatrix);
+        canvas.drawBitmap(cardBackBottomLogo, left, top, paint);
+        mInitialized = true;
+        return bmp;
+    }
 	
 	public Bitmap maskWithColor(Bitmap cardBackBitmapSource, int maskcolor) {
 		int mBitmapHeight = cardBackBitmapSource.getHeight();
@@ -155,6 +190,7 @@ public class CardBackView extends View {
 				count++;
 			}
 		}
+
 		Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight, Config.ARGB_4444);  
 	    newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth, mBitmapHeight);  
 	    mInitialized = true;
@@ -171,7 +207,9 @@ public class CardBackView extends View {
 
 	public void setCardBackColor(int cardcolor) {
 		this.cardBackColor = cardcolor;
-		this.cardBackBitmap = maskWithColor(cardBackBitmap, cardcolor);
+		//this.cardBackBitmap = maskWithColor(cardBackBitmap, cardcolor);
+        this.cardBackBitmap = createWhiteBitmap(cardBackBitmap);
+        this.cardBackBitmap = colorBitmap(cardBackBitmap, cardcolor);
 	}
 
 	public void setCardBackBitmap(Bitmap cardBitmap) {
@@ -183,32 +221,61 @@ public class CardBackView extends View {
 			int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 		Log.d(this, "onLayout...");
-		if (changed) {
-			// 分别获取到当前view的宽度和高度
-			cardBackWidth = getWidth();
-			cardBackHeight = getHeight();
-		}
+        cardBackWidth = getMeasuredWidth();
+        cardBackHeight = getMeasuredHeight();
+        Log.i("jiangtao4", "cardBackWidth is : " + cardBackWidth + "cardBackHeight is : " + cardBackHeight);
 	}
 
-	@Override
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            int width = 0;
+            int height = 0;
+            int imWidth = 0;
+            int imHeight = 0;
+            int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+            int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+            int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+            if (cardBackBitmap != null){
+                imWidth = cardBackBitmap.getWidth();
+                imHeight = cardBackBitmap.getHeight();
+            }
+            if (widthMode == MeasureSpec.EXACTLY){
+                width = widthSize;
+            }else {
+                width = Math.min(imWidth, widthSize);
+            }
+
+            if (heightMode == MeasureSpec.EXACTLY){
+                height = heightSize;
+            }else {
+                height = Math.min(imHeight, heightSize);
+            }
+            setMeasuredDimension(width, height);
+    }
+
+    @Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		if (mInitialized) {
 			Paint paintShape = new Paint();
 
 			paintShape.setColor(cardBackColor);
-			int left = (cardBackWidth - logoWidth) / 2;
+            int left = 0;
+            if (cardBackWidth > logoWidth){
+                left = (cardBackWidth - logoWidth) / 2;
+            }else {
+                left = 0;
+            }
 			int top = (cardBackHeight - cardBackBitmap.getHeight()) / 2
 					+ cardBackBitmap.getHeight() - logoHeight;
 
 			// draw the shape background
-			canvas.drawBitmap(cardBackBitmap,
-					(cardBackWidth - cardBackBitmap.getWidth()) / 2,
-					(cardBackHeight - cardBackBitmap.getHeight()) / 2,
-					paintShape);
+			canvas.drawBitmap(cardBackBitmap, null, new Rect(getPaddingLeft(), (cardBackHeight - cardBackBitmap.getHeight()) / 2, cardBackWidth- getPaddingRight(), cardBackHeight), paintShape);
 			
 			// draw the bottom 20stamp logo ,first we get the location the logo
-			canvas.drawBitmap(cardBackBottomLogo, left, top, null);
+			//canvas.drawBitmap(cardBackBottomLogo, left, top, null);
 			
 			// draw the line if it exists
 			if (isHasLine) {

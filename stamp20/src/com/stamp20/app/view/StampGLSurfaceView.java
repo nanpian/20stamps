@@ -360,7 +360,15 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
 			gl.glLoadIdentity(); // 重置当前的模型观察矩阵
 			gl.glPushMatrix();
+			try {
 			renderResult();
+			} catch (Exception e ) {
+				try {
+					renderResult();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 			gl.glPopMatrix();
 
 		}
