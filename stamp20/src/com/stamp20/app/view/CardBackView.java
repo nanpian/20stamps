@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -37,6 +38,8 @@ public class CardBackView extends View {
 	private boolean isCaptureBmp = false;
 	public onMeasuredListener listener = null;
     private Rect mImageRect;
+    private Bitmap mSourceBitmap;
+
 	public interface onGeneratedCardBackBmpListener {
 		public void onGeneratedCardBackBmp();
 	}
@@ -90,11 +93,34 @@ public class CardBackView extends View {
 		}
 		this.cardBackColor = Color.WHITE;
 
-		this.cardBackBitmap = createWhiteBitmap(cardBackBitmap);
-        this.cardBackBitmap = colorBitmap(cardBackBitmap, Color.WHITE);
+		//this.cardBackBitmap = createWhiteBitmap(cardBackBitmap);
+       // this.cardBackBitmap = colorBitmap(cardBackBitmap, Color.WHITE);
+
+
 		// test color mask function
 		//this.cardBackBitmap = maskWithColor(cardBackBitmap, Color.GREEN);
 	}
+
+    public Bitmap getAlphaSrcBitmap(){
+        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(), mSourceBitmap.getHeight(), mSourceBitmap.getConfig());
+        Bitmap cover = BitmapFactory.decodeResource(getResources(), R.drawable.card_back_view_overlay);
+
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setAlpha(200);
+        canvas.drawBitmap(mSourceBitmap, 0, 0, null);
+        Matrix matrix = new Matrix();
+        matrix.setScale(bitmap.getWidth()*1.0f/cover.getWidth(), bitmap.getHeight()*1.0f/cover.getHeight());
+        canvas.concat(matrix);
+        canvas.drawBitmap(cover, 0, 0, paint);
+
+        return bitmap;
+    }
+
+    public void setImageUri(Uri imageUri){
+        mSourceBitmap = ImageUtil.loadDownsampledBitmap(getContext(), imageUri, 2);
+        this.cardBackBitmap = getAlphaSrcBitmap();
+    }
 
 	private Bitmap createWhiteBitmap(Bitmap cardBackBitmapSource) {
 		int mBitmapHeight = cardBackBitmapSource.getHeight();
@@ -244,13 +270,13 @@ public class CardBackView extends View {
             if (widthMode == MeasureSpec.EXACTLY){
                 width = widthSize;
             }else {
-                width = Math.min(imWidth, widthSize);
+                width = Math.min(widthSize, imWidth + getPaddingLeft() + getPaddingRight());
             }
 
             if (heightMode == MeasureSpec.EXACTLY){
                 height = heightSize;
             }else {
-                height = Math.min(imHeight, heightSize);
+                height = Math.min(heightSize, imHeight + getPaddingTop() + getPaddingBottom());
             }
             setMeasuredDimension(width, height);
     }

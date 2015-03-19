@@ -351,7 +351,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		}
 		Log.i("zhudewei", "onDrawFrame, the bitmap is " + resultBitmap);
 		//放入系统内存中
-		Bitmap resultBitmapCorner = toRoundCorner(resultBitmap,30);
+		Bitmap resultBitmapCorner = toRoundCorner(resultBitmap,50);
 		CardBmpCache mCache = CardBmpCache.getCacheInstance();
 		mCache.putFront(resultBitmapCorner);
 	}
@@ -365,12 +365,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	    final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());  
 	    final RectF rectF = new RectF(rect);  
 	    final float roundPx = pixels;  
-	    paint.setAntiAlias(true);  
-	    canvas.drawARGB(0, 0, 0, 0);  
-	    paint.setColor(color);  
-	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);  
+	    paint.setAntiAlias(true);
+	    canvas.drawARGB(0, 0, 0, 0);
+	    paint.setColor(color);
+	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
 	    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));  
-	    canvas.drawBitmap(bitmap, rect, rect, paint);  
+	    canvas.drawBitmap(bitmap, rect, rect, paint);
 	    return output;  
 	}  
 

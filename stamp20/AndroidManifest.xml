@@ -85,7 +85,7 @@
         </provider>
 
         <activity
-            android:name=".activities.ImageLoaderActivity"
+            android:name="com.stamp20.gallary.GallaryActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
@@ -113,10 +113,10 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name="com.stamp20.app.activities.ShowFBImageActivity"
+            android:name="com.stamp20.gallary.facebook.ShowFBImageActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity android:name="com.stamp20.app.activities.InstagramAuthView" >
+        <activity android:name="com.stamp20.gallary.instagram.InstagramAuthView" >
         </activity>
         <activity android:name="com.stamp20.app.activities.ShopCartItemsActivity" >
         </activity>

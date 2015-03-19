@@ -17,8 +17,8 @@ import android.util.Log;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
-import com.stamp20.app.instagram.InstagramTokenKeeper;
 import com.stamp20.app.util.StringUtils;
+import com.stamp20.gallary.instagram.InstagramTokenKeeper;
 
 public class Setting {
 			

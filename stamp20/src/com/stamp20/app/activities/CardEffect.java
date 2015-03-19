@@ -11,23 +11,29 @@ import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampViewConstants;
 import com.stamp20.app.view.ZoomImageView;
 import com.stamp20.app.view.CardBackView.onGeneratedCardBackBmpListener;
+import com.stamp20.gallary.GallaryActivity;
 
 import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.media.effect.EffectContext;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Gallery;
@@ -58,7 +64,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	private RelativeLayout buttonLayout;
 	private Button choose_photo;
 	private Button change_design;
-	private RelativeLayout cardview;
+	private RelativeLayout cardview, background_layout;
 	private Button customback;
 	private Integer templateId;
 	
@@ -83,7 +89,8 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 				Log.d(Tag, "handleMessage--MSG_SELECT_PICTURE");
 				templateId = (Integer) msg.obj;
 				if (templateId != -1) {
-					background_envelop.setImageResource(templateId);
+                     background_envelop.setImageBitmap(getAlphaBackView(templateId));
+					//background_envelop.setImageResource(templateId);
 				}
 				break;
 			default:
@@ -91,7 +98,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 			}
 		}
 	};
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -124,7 +131,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 			@Override
 			public void onClick(View arg0) {
 				Intent data = new Intent();
-				data.setClass(getBaseContext(), ImageLoaderActivity.class);
+				data.setClass(getBaseContext(), GallaryActivity.class);
 				startActivity(data);
 			}
 		});
@@ -133,16 +140,19 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		change_design = (Button) findViewById(R.id.choose_template);
 		change_design.setOnClickListener(this);
 		background_envelop = (ImageView) findViewById(R.id.background_envelop);
-		
+        background_layout = (RelativeLayout)findViewById(R.id.background_layout);
+        cardview = (RelativeLayout)findViewById(R.id.cardview);
+        cardview.setOnTouchListener(this);
 		setupEvelopHeight();
 
 		select_photo_button = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
 		select_photo_button.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 			@Override
-			public void onFocusChange(View arg0, boolean arg1) {
-				// TODO Auto-generated method stub
-				select_photo_button.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+			public void onFocusChange(View arg0, boolean hasfocus) {
+                if (hasfocus){
+                    select_photo_button.setAlpha(.3f);
+                }
 			}
 			
 		});
@@ -168,24 +178,48 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 						mGPUImageView.requestRender();
 					}
 				});
-		cardview = (RelativeLayout)findViewById(R.id.cardview);
-		cardview.setOnTouchListener(this);
 		//galleryFilter.setVisibility(View.GONE);
 		customback = (Button)findViewById(R.id.customback);
 		customback.setOnClickListener(this);
 	}
 
+    public Bitmap getAlphaBackView(int viewId){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), viewId);
+        Bitmap back = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        Canvas canvas = new Canvas(back);
+        Paint paint = new Paint();
+        paint.setAlpha(150);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return back;
+    }
+
 	private void setupEvelopHeight() {
-		int W=getWindowManager().getDefaultDisplay().getWidth();//获取屏幕高度
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenWidth = metrics.widthPixels;
 		Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
 				R.drawable.cards_christmas);
 		int w= cardTemplate.getWidth();
 		int h= cardTemplate.getHeight();
-		LayoutParams params = new LayoutParams(2*W/3,(h*2*W)/(3*w));
+
+		LayoutParams params = new LayoutParams(5*screenWidth/6,(h*5*screenWidth)/(6*w));
 		params.addRule(RelativeLayout.CENTER_IN_PARENT);
-		background_envelop.setLayoutParams(params );
+        background_envelop.setLayoutParams(params);
 		background_envelop.setVisibility(View.VISIBLE);
+
+        resetChoseLayout(110);
 	}
+
+    public void resetChoseLayout(int distance){
+        LayoutParams layout = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        if (distance == 0){
+            layout.addRule(RelativeLayout.CENTER_IN_PARENT);
+        }else {
+            layout.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            layout.topMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, distance, getResources().getDisplayMetrics());
+        }
+        background_layout.setLayoutParams(layout);
+    }
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -199,6 +233,8 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	private void processExtraData() {
 		Intent intent = getIntent();
 		if (intent != null) {
+            //here we need to ajust the layout
+            resetChoseLayout(0);
 			imageUri = (Uri) intent.getParcelableExtra("imageUri");
 			Log.d(Tag, "uri=" + imageUri);
 			if (imageUri != null) {
@@ -295,6 +331,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 				public void OnCardBitmapGeneratedListener() {
 					Intent intent = new Intent();
 					intent.setClass(getApplicationContext(), CardBackActivity.class);
+                    intent.putExtra("imageUri", imageUri);
 					startActivity(intent);
 					mGPUImageView.setOnCardBitmapGeneratedListener(null);
 				}			
@@ -333,7 +370,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
     private void selectPicture() {
     	mIsChangingPhoto = true;
 		Intent data = new Intent();
-		data.setClass(getBaseContext(), ImageLoaderActivity.class);
+		data.setClass(getBaseContext(), GallaryActivity.class);
 		startActivity(data);
     }
 

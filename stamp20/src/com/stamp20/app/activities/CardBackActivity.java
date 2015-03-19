@@ -1,17 +1,11 @@
 package com.stamp20.app.activities;
 
-import com.stamp20.app.adapter.ChooseBackColorAdapter;
-import com.stamp20.app.util.CardBmpCache;
-import com.stamp20.app.util.FontManager;
-import com.stamp20.app.view.CardBackView;
-import com.stamp20.app.R;
-
-import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,10 +16,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.stamp20.app.R;
+import com.stamp20.app.adapter.ChooseBackColorAdapter;
+import com.stamp20.app.util.CardBmpCache;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.CardBackView;
+import com.stamp20.app.view.CardBackView2;
+
 public class CardBackActivity extends Activity implements OnClickListener {	
 
 	private static CardBackActivity instance;
-	private CardBackView cardBackView;
+	private CardBackView2 cardBackView;
 	private Gallery gallery_choose_back;
 	private ChooseBackColorAdapter chooseBackColorAdapter;
 	private Button customEnvelope;
@@ -33,6 +34,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
 	private Button add_line;
 	private ImageView header_previous;
 	private TextView header_title;
+    private Uri mImageUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +43,19 @@ public class CardBackActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_card_back);
 		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
 		instance = this;
+        Intent intent = getIntent();
+        mImageUri = intent.getParcelableExtra("imageUri");
 		initView();
 	}
 
 	private void initView() {
-		cardBackView = (CardBackView) findViewById(R.id.cardbackview);
+		cardBackView = (CardBackView2) findViewById(R.id.cardbackview);
+        cardBackView.setImageUri(mImageUri);
 		customEnvelope = (Button)findViewById(R.id.customenvelope);
 		customEnvelope.setOnClickListener(this);
 		add_blank = (Button)findViewById(R.id.add_blank);
 		add_blank.setOnClickListener(this);
+        setBtnSelectState(add_blank, Color.parseColor("#f1c40f"), R.drawable.activity_card_back_blank_click);
 		add_line = (Button)findViewById(R.id.add_line);
 		add_line.setOnClickListener(this);
 		header_previous = (ImageView)findViewById(R.id.header_previous);
@@ -67,6 +73,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
 			}
 		});*/
 		chooseBackColorAdapter = new ChooseBackColorAdapter(CardBackActivity.this);
+        chooseBackColorAdapter.setImageUri(mImageUri);
 		gallery_choose_back = (Gallery)findViewById(R.id.activity_card_back_select_back);
 		gallery_choose_back.setSelection(0);
 		gallery_choose_back.setAnimationDuration(3000);
@@ -77,7 +84,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
 					int position, long id) {
 				chooseBackColorAdapter.setSelectItem(position);
 				int color = chooseBackColorAdapter.getColor(position);
-				cardBackView.setCardBackColor(color);
+				cardBackView.setCardBackColor(color, position);
 				cardBackView.invalidate();
 			}
 		});
@@ -97,7 +104,6 @@ public class CardBackActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
 
@@ -111,7 +117,6 @@ public class CardBackActivity extends Activity implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.add_blank:
 			cardBackView.setHasLine(false);

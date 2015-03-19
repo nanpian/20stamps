@@ -48,21 +48,35 @@
         android:paddingBottom="@dimen/com_facebook_loginview_padding_bottom"
         />
     
+
     <GridView
-        android:id="@+id/main_grid"
+        android:id="@+id/main_child_grid"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:cacheColorHint="@android:color/transparent"
         android:columnWidth="90dip"
         android:gravity="center"
-        android:horizontalSpacing="10dip"
+        android:horizontalSpacing="5dip"
         android:listSelector="@android:color/transparent"
-        android:numColumns="3"
+        android:numColumns="auto_fit"
+        android:padding="5dip"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dip"
+        android:verticalSpacing="5dip"
         android:visibility="gone" >
     </GridView>
+    
+    <ListView
+        android:id="@+id/main_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@color/gray"
+        android:dividerHeight="1dp"
+        android:listSelector="@drawable/home_listview_item"
+        android:scrollbars="none"
+        android:visibility="gone" >
+    </ListView>
     
     <Button
         android:id="@+id/facebook_logout_button"

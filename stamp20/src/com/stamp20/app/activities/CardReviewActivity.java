@@ -11,8 +11,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
@@ -28,6 +35,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CardReviewActivity extends Activity implements OnClickListener {
 	private ImageView header_previous;
 	private TextView header_title;
@@ -39,6 +52,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 	private Bitmap cardBmpFront;
 	private boolean isFrontNow;
 	private ImageView backgroundEvelopImage;
+    private Button mShareDesign;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +65,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 	}
 
 	private void initView() {
+        mShareDesign = (Button)findViewById(R.id.card_back_share);
+        mShareDesign.setOnClickListener(this);
 		header_previous = (ImageView) findViewById(R.id.header_previous);
 		header_previous.setOnClickListener(this);
 		header_title = (TextView) findViewById(R.id.header_title);
@@ -59,14 +75,15 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 		review_button.setOnClickListener(this);
 		display_front = (Button) findViewById(R.id.display_front);
 		display_front.setOnClickListener(this);
+        setBtnSelectState(display_front, Color.parseColor("#f1c40f"), R.drawable.activity_card_review_click);
 		display_back = (Button) findViewById(R.id.display_back);
 		display_back.setOnClickListener(this);
 		
 		backgroundEvelopImage = (ImageView)findViewById(R.id.activity_envelope_img);
-		setupBackLocAndSize();
+		//setupBackLocAndSize();
 		
 		activity_envelope_img = (ImageView) findViewById(R.id.activity_envelope_img2);
-		setupImageLocSize();
+		//setupImageLocSize();
 
 		CardBmpCache mCache = CardBmpCache.getCacheInstance();
 		cardBmpFront = mCache.getFront();
@@ -117,11 +134,17 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.display_front:
 			 if(!isFrontNow) {
+                 setBtnSelectState(display_front, Color.parseColor("#f1c40f"), R.drawable.activity_card_review_click);
+                 setBtnSelectState(display_back, Color.WHITE, R.drawable.activity_card_back_blank_null);
 				 applyRotation(0,90,0);
 			 }
 			break;
 		case R.id.display_back:
-			 if(isFrontNow)applyRotation(0,90,0);
+			 if(isFrontNow){
+                 setBtnSelectState(display_back, Color.parseColor("#f1c40f"), R.drawable.activity_card_back_blank_click);
+                 setBtnSelectState(display_front, Color.WHITE, R.drawable.activity_card_review_null);
+                 applyRotation(0,90,0);
+             }
 			break;
 		case R.id.card_add_to_cart:
 			//add to cart
@@ -132,8 +155,50 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 			intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
 			startActivity(intent);
 			break;
+        case R.id.card_back_share:
+            File file = saveFontBitmap(CardBmpCache.getCacheInstance().getFront());
+            Intent intentShare = new Intent();
+            intentShare.setAction(Intent.ACTION_SEND);
+            intentShare.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            intentShare.setType("image/png");
+            startActivity(Intent.createChooser(intentShare, "Share"));
+            break;
 		}
 	}
+
+    /**
+     * 图片分享后有黑圆角，只能保存为png格式
+     * @param bitmap
+     * @return
+     */
+    public File saveFontBitmap(Bitmap bitmap){
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String name = "stamp20_" + dateFormat.format(new Date()) + ".png";
+        File file = new File(path, name);
+        if (!path.exists()){
+            path.mkdirs();
+        }
+
+        if (file.exists()){
+            file.delete();
+        }
+
+        try {
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //更新系统图库
+        sendBroadcast(new Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.fromFile(file)));
+        return file;
+    }
 
 	private void applyRotation(float start, float end, final int viewId) {
 		final float centerX = activity_envelope_img.getWidth() / 2.0f;
@@ -153,11 +218,11 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 						// 实现翻转后再翻回来，要设置正反面标志位
 						if (isFrontNow) {
 							activity_envelope_img.setImageBitmap(cardBmpBack);
-							setupImageLocSize2();
+						//	setupImageLocSize2();
 							isFrontNow = false;
 						} else {
 							isFrontNow = true;
-							setupImageLocSize();
+						//	setupImageLocSize();
 							activity_envelope_img.setImageBitmap(cardBmpFront);		
 						}
 						Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(
@@ -181,5 +246,13 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 		activity_envelope_img.startAnimation(rotation);
 
 	}
+
+    public void setBtnSelectState(Button button, int color, int drawableId){
+        button.setTextColor(color);
+        Drawable drawable = this.getResources().getDrawable(drawableId);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        button.setCompoundDrawables(drawable, null, null, null);
+        button.setCompoundDrawablePadding(5);
+    }
 
 }

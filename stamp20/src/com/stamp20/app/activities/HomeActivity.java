@@ -31,6 +31,7 @@ import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.PhotoFromWhoRecorder;
 import com.stamp20.app.view.ImageUtil;
+import com.stamp20.gallary.GallaryActivity;
 
 public class HomeActivity extends BaseTitleActivity implements View.OnClickListener{
 
@@ -56,7 +57,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
             if(msg.what == SWITCH_CURRENT_PICTURE){
                 TransitionDrawable transitionDrawable=null;  
                 transitionDrawable= new TransitionDrawable(new Drawable[] {  
-                        mDrawables[mCurrentPicNum % mDrawableIDs.size()],//实现从0 1 2 3 4 5 0 1 2.。。这样的不停转变  
+                        mDrawables[mCurrentPicNum % mDrawableIDs.size()],//瀹炵幇浠�0 1 2 3 4 5 0 1 2.銆傘�傝繖鏍风殑涓嶅仠杞彉  
                         mDrawables[(mCurrentPicNum + 1) % mDrawableIDs.size()] });  
                 mCurrentPicNum++;  
                 mBackgroundImageView.setImageDrawable(transitionDrawable);
@@ -81,7 +82,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         mBackgroundImageView.setImageDrawable(getResources().getDrawable(R.drawable.background_home_baby_shower));
         initBackgroundArrays();
         
-        /*获得合适的drawable资源*/  
+        /*鑾峰緱鍚堥�傜殑drawable璧勬簮*/  
         BitmapFactory.Options opts = new BitmapFactory.Options();  
         opts.inJustDecodeBounds = true;  
         BitmapFactory.decodeResource(getResources(), R.drawable.background_home_baby_shower, opts);  
@@ -89,7 +90,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         opts.inJustDecodeBounds = false;  
         mDrawables=new Drawable[mDrawableIDs.size()];  
         try {  
-            for (int i = 0; i < mDrawableIDs.size(); i++) {// for循环，加载5个drawable资源  
+            for (int i = 0; i < mDrawableIDs.size(); i++) {// for寰幆锛屽姞杞�5涓猟rawable璧勬簮  
                 Bitmap bmp = BitmapFactory.decodeResource(getResources(), mDrawableIDs.get(i), opts);  
                 mDrawables[i] = new BitmapDrawable(bmp);  
             }  
@@ -122,7 +123,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == mButtonGreen.getId()){
             startActivity(new Intent(HomeActivity.this,
-                    ImageLoaderActivity.class));
+                    GallaryActivity.class));
             PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "stamp");
         }else if(v.getId() == mButtonRed.getId()){
             startActivity(new Intent(HomeActivity.this,

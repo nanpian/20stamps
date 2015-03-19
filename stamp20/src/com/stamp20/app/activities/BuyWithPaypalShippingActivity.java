@@ -2,9 +2,16 @@ package com.stamp20.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,8 +23,9 @@ import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Constant.Pay_method;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
+import com.stamp20.app.util.UserProfile;
 
-public class BuyWithPaypalShippingActivity extends Activity implements View.OnClickListener{
+public class BuyWithPaypalShippingActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener{
 
     private ImageView headerPrevious;
     private TextView headerTitle;
@@ -25,11 +33,12 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
     private TextView headerButton;
     private ViewGroup header;
     private ViewGroup tail;
-    
+    private TextView emailTextViewHint;
+    private TextView emailTextView;
     private TextView shippingMethodStandard;
     private TextView shippingMethodPriority;
     private TextView shippingMethodOneday;
-    
+    private SharedPreferences mSharedPreferences;
     private ShippingAddressFragment mShippingAddressFragment;
 
     private int paystyle;
@@ -42,6 +51,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         paystyle = getIntent().getIntExtra(Constant.PAY_STYLE, 0);
         setContentView(R.layout.activity_buy_with_paypay_shipping);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         init();
     }
 
@@ -59,6 +69,12 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         tailTitle = (TextView) findViewById(R.id.tail_text);
         tailTitle.setText(R.string.next_review);
 
+        emailTextViewHint = (TextView) findViewById(R.id.confirmation_email_hint);
+        emailTextView = (TextView) findViewById(R.id.editText_confirmation_email);
+        getData(UserProfile.EMAIL, emailTextViewHint, R.string.email_confirmed, emailTextView);
+        emailTextView.addTextChangedListener(emailTextViewWatcher);
+        emailTextView.setOnFocusChangeListener(this);
+        
         shippingMethodStandard = (TextView) findViewById(R.id.shipping_method_standard);
         shippingMethodPriority = (TextView) findViewById(R.id.shipping_method_priority);
         shippingMethodOneday = (TextView) findViewById(R.id.shipping_method_oneday);
@@ -72,7 +88,39 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         }
         setActivityColor();
     }
+    
+    TextWatcher emailTextViewWatcher = new TextWatcher() {
+        
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+        }
+        
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+        }
+        
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if(s.length() != 0){
+                emailTextViewHint.setText(R.string.email_confirmed);
+            } else {
+                emailTextViewHint.setText("");
+            }
+        }
+    };
 
+    private void getData(String userProfile, TextView hint, int resId, TextView editText) {
+        String value = mSharedPreferences.getString(UserProfile.EMAIL, "");
+        if (!value.isEmpty()) {
+            hint.setText(resId);
+            editText.setText(value);
+        } else {
+            hint.setText("");
+        }
+    }
     private void setActivityColor() {
         // TODO Auto-generated method stub
         switch (paystyle) {
@@ -104,6 +152,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
             break;
         case R.id.header_right:
         case R.id.tail:
+            saveUserProfile();
 //            if (ValidityCheckUtil.isValidityEmailAddress(emailEditText.getText().toString())) {
                 Intent reviewIntent = new Intent(this, paystyle == 0 ? BuyWithPaypalReviewActivity.class : PaymentInfoActivity.class);
                 startActivity(reviewIntent);
@@ -129,6 +178,14 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         }
     }
     
+    private void saveUserProfile() {
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString(UserProfile.EMAIL, emailTextView.getText().toString())
+        .putString(UserProfile.SHIP_METHOD, paymethod.toString())
+        .commit();
+        mShippingAddressFragment.saveUserProfile();
+    }
+
     private void resetPaymethodUI(Pay_method method){
         Log.d(this, "resetPaymethodUI method:" + method);
         shippingMethodStandard.setCompoundDrawablesRelative(null, null, null, null);
@@ -142,6 +199,16 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
             shippingMethodPriority.setCompoundDrawablesRelative(null, null, drawable, null);
         } else if (method == Constant.Pay_method.Oneday){
             shippingMethodOneday.setCompoundDrawablesRelative(null, null, drawable, null);
+        }
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        // TODO Auto-generated method stub
+        if(hasFocus){
+            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color_blue_focus));
+        } else {
+            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color));
         }
     }
 

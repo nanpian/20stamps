@@ -10,13 +10,13 @@
     <include layout="@layout/header"
         android:id="@+id/include" />
 
-    <com.stamp20.app.view.CardBackView
+    <com.stamp20.app.view.CardBackView2
         android:id="@+id/cardbackview"
         android:layout_width="fill_parent"
-        android:layout_height="260dp"
+        android:layout_height="240dp"
         android:layout_marginTop="40dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:layout_below="@+id/include"
         android:layout_centerHorizontal="true" />
 
@@ -39,7 +39,7 @@
             android:id="@+id/add_blank"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="30dp"
             android:layout_toLeftOf="@id/middle_divider"
             android:background="@color/image_button_background"
             android:drawableLeft="@drawable/sel_cardback_blank_click_button"
@@ -51,7 +51,7 @@
             android:id="@+id/add_line"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="30dp"
             android:layout_toRightOf="@id/middle_divider"
             android:background="@color/image_button_background"
             android:drawableLeft="@drawable/sel_cardback_line_click_button"

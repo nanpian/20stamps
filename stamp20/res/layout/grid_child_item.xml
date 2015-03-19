@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" >
 
-    <com.stamp20.app.imageloader.MyImageView
+    <com.stamp20.app.view.MyImageView
         android:id="@+id/child_image"
         android:scaleType="centerCrop"
         android:layout_width="100dp"

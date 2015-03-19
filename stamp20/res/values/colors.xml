@@ -23,6 +23,8 @@
     <color name="color_text_blue">#009cde</color>
     <color name="paypal_background">#f7f7f7</color>
     <color name="paypal_text_hint_color">#AAAAAA</color>
+    <color name="paypal_text_hint_color_blue_focus">#009cde</color>
+    <color name="paypal_text_hint_color_green_focus">#5fb336</color>
     <color name="paypal_text_edittext_color">#616C6D</color>
     <color name="paypal_text_per_sheet_color">#f1c407</color>
     <color name="paypal_popwindow_text_done_color">#009cde</color>
