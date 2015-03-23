@@ -60,10 +60,6 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        userParseObject = new UserProfileParse();
-        userParseObject.put(UserProfile.FIRST_NAME, "Jianyong");
-        userParseObject.pinInBackground();
-        userParseObject.saveInBackground();
         Log.d(this, "onCreate");
     }
 

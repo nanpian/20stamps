@@ -105,6 +105,7 @@ public class ShopCartView extends View {
 	    Log.i(TAG, "stampBackgroundHeight is : " + stampBackgroundHeight);
 	    Log.i(TAG, "stampBackgroundWidth is : " + stampBackgroundWidth);
 	    backgroundPaint.setColor(Color.RED);
+	    backgroundPaint.setAntiAlias(true);
 	    //缩放和移动
 	    backgroundMatrix.postScale(xRate, yRate);
 	    backgroundMatrix.postTranslate(stampBackgroundTranslateX, stampBackgroundTranslateY);

@@ -87,6 +87,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/sel_home_green_button"
         android:text="ADD TO CART"
+        android:textSize="20sp"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

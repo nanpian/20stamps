@@ -52,6 +52,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         setContentView(R.layout.activity_buy_with_paypay_shipping);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        paymethod = Constant.Pay_method.Standard;
         init();
     }
 
@@ -183,6 +184,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         editor.putString(UserProfile.EMAIL, emailTextView.getText().toString())
         .putString(UserProfile.SHIP_METHOD, paymethod.toString())
         .commit();
+        Log.d(this, "paymethod:" + paymethod.toString());
         mShippingAddressFragment.saveUserProfile();
     }
 

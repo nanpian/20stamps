@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/select_letter"
+                    android:paddingTop="10dp"
                     android:textColor="@color/sel_cards_choose_button"
                     android:textSize="16sp" />
 
@@ -47,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
+                    android:paddingTop="20dp"
                     android:orientation="horizontal"
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp" >

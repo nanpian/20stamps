@@ -30,6 +30,8 @@ import com.stamp20.app.util.Log;
 
 public class GallaryActivity extends FragmentActivity implements OnClickListener, OnPageChangeListener {
 
+	public static long OUT_OF_TIME = 10000;
+	
     private ImageView headerPrevious = null;
     private TextView headerTitle = null;
 
@@ -82,7 +84,7 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
-      Log.i("wangpeng14", "finish authentication" + requestCode);
+      Log.i(this, "finish authentication" + requestCode);
       if (requestCode == InstagramAlbumFragment.REQUEST_CODE_SELECT_INSTAGRAM_AUTH){
     	  mDatas.get(3).onActivityResult(requestCode, resultCode, data);
       }else

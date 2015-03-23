@@ -10,6 +10,8 @@ import com.parse.ParseUser;
 
 @ParseClassName("Design")
 public class Design extends ParseObject {
+    
+    private static Design mInstance;
 
 	/**
 	 * empty constructor required by parse 
@@ -20,14 +22,30 @@ public class Design extends ParseObject {
 	/*
 	 * constructor for creating an empty design with random localId
 	 * */
-	public static Design getNewDesign()
+	private static Design getNewDesign()
 	{
-		Design newD = new Design();
+		mInstance = new Design();
 		Random rand = new Random();
 		int randomNum = rand.nextInt(268435455);
 		int randomNum2 = rand.nextInt(268435455);
-		newD.setDesignIdLocal("D"+Integer.toHexString(randomNum)+Integer.toHexString(randomNum2));
-		return newD;
+		mInstance.setDesignIdLocal("D"+Integer.toHexString(randomNum)+Integer.toHexString(randomNum2));
+		return mInstance;
+	}
+	
+	/**
+	 * 应使用该接口获取Design实例，以保证每次只有一个design，在进入到选照片页面的时候应将mInstance置空以重新获取实例
+	 * @return
+	 */
+	public static Design getInstance(){
+	    if(mInstance != null){
+	        return mInstance;
+	    } else {
+	        return getNewDesign();
+	    }
+	}
+	
+	public static void clearInstance(){
+	    mInstance = null;
 	}
 	
 	//Id local
@@ -225,6 +243,10 @@ public class Design extends ParseObject {
 		  }
 		}
 		return sb.toString();
+	}
+	
+	public static void upload(){
+	    getInstance().saveInBackground();
 	}
 	
 	// string constants in database

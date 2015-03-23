@@ -20,6 +20,7 @@ import android.widget.PopupWindow.OnDismissListener;
 
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
+import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
@@ -214,6 +215,7 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     	String[] rateArray = this.getResources().getStringArray(R.array.stamp_rate_title);
     	mTextSelectRate.setText(rateArray[id]);
         chooseRateStampView.setRateBitmapId(id, isH);
+        Design.getInstance().setPrice(Integer.valueOf(rateArray[id]));
         mCRP.dismiss();
     }
     /*和底部弹出的PopupWindow相关 END*/

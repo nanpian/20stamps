@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Log;
 
 public class PhotoAlbumFragment extends GallaryFragment implements OnItemClickListener, GallaryLoader{
@@ -142,6 +143,7 @@ public class PhotoAlbumFragment extends GallaryFragment implements OnItemClickLi
     
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	    Design.clearInstance();
 		if (!isGridChildView) {
 			isGridChildView = true;
 			updateLayout(position);

@@ -69,8 +69,10 @@
                 android:layout_weight="1"
                 android:background="@drawable/green_round_button"
                 android:text="@string/shop_checkout"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
                 android:textAllCaps="true"
-                android:textSize="16sp" />
+                 />
         </LinearLayout>
     </LinearLayout>
 

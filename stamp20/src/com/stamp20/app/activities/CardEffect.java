@@ -156,6 +156,20 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 			}
 			
 		});
+		
+		select_photo_button.setOnTouchListener(new OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    	select_photo_button.setAlpha(.3f);
+                    }else if(event.getAction() == MotionEvent.ACTION_UP){
+                    	select_photo_button.setAlpha(1f);
+                    }
+                    return false;
+            }
+            
+    });
 		mGPUImageView = (CardGLSurfaceView) findViewById(R.id.cardgpuimage);
 		galleryFilter = (Gallery) findViewById(R.id.galleryFilter);
 		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);

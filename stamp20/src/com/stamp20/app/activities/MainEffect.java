@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.adapter.ImageEffectAdapter;
+import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.ImageUtil;
@@ -56,7 +57,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 	public ImageView mStampFrame;
 	private ImageView mRotateView;
 	private RelativeLayout mFrameLayout;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

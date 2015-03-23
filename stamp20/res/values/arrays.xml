@@ -56,6 +56,20 @@
         <item>1st Class Letter 12oz or 11z odd</item>
     </string-array>
 
+    <integer-array name="stamp_rate_price">
+        <item>34</item>
+        <item>49</item>
+        <item>70</item>
+        <item>91</item>
+        <item>112</item>
+        <item>98</item>
+        <item>119</item>
+        <item>140</item>
+        <item>161</item>
+        <item>182</item>
+        <item>203</item>
+        <item>560</item>
+    </integer-array>
     <integer-array name="shop_cart_background">
         <item>@drawable/cards_new_year_gray</item>
         <item>@drawable/cards_christmas</item>

@@ -1,15 +1,12 @@
 package com.stamp20.app;
 
-import org.jinstagram.auth.InstagramAuthService;
-import org.jinstagram.auth.oauth.InstagramService;
-
 import android.app.Application;
 import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
-import com.stamp20.app.data.UserProfileParse;
+import com.stamp20.app.data.Design;
 
 public class Stamp20Application extends Application {
 	static final String TAG = "Stamp20Application";
@@ -18,7 +15,8 @@ public class Stamp20Application extends Application {
 	  public void onCreate() {
 	    super.onCreate();
 	    Log.e(TAG,"stamp 20 application start");
-	    ParseObject.registerSubclass(UserProfileParse.class);
+//	    ParseObject.registerSubclass(UserProfileParse.class);
+	    ParseObject.registerSubclass(Design.class);
 	    Parse.initialize(this, 
 	        "lrvQWDyUVWC2iNG7ZvK1PfSAKSgIQ0MWtVu6jIhf",
 	        "0V96uKLLzg2DYcCT7ndlI0HULdOh297tIP8RUk4d"

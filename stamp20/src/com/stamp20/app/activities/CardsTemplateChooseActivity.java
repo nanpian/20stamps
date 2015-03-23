@@ -38,8 +38,21 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     private static int sOutAnimDuration = 180;
     private TextView mCancel;
     private ImageView mListChange;
-    private static int sTemplateList[] = {R.drawable.cards_new_year, R.drawable.cards_christmas, 
-        R.drawable.cards_year_sheep,R.drawable.cards_love};
+    private static int sTemplateList[] = {R.drawable.x_christmas2_front, R.drawable.x_christmas3_front, R.drawable.x_christmas4_front,
+    	R.drawable.x_christmas5_front, R.drawable.x_congrats1_front, R.drawable.x_greeting1_front,
+    	R.drawable.x_holiday1_front,R.drawable.x_holiday2_front,R.drawable.x_holiday3_front,
+    	R.drawable.x_holiday4_front, R.drawable.x_invitation1_front,
+    	R.drawable.x_invitation2_front, R.drawable.x_love1_front,
+    	R.drawable.x_love3_front, R.drawable.x_love4_front,
+    	R.drawable.x_new_year2_front, R.drawable.x_new_year4_front,
+    	R.drawable.x_new_year5_front, R.drawable.x_new_year6_front,
+    	R.drawable.x_new_year7_front, R.drawable.x_save_the_date1_front,
+    	R.drawable.x_thanks1_front, R.drawable.x_thanks2_front,
+    	R.drawable.x_thanks3_front,
+    	//R.drawable.x_use_your_photo1_front,
+    	//R.drawable.x_use_your_photo2_front, R.drawable.x_use_your_photo3_front,
+       // R.drawable.cards_year_sheep,R.drawable.cards_love
+        };
     //add for template change
     private Uri mSrcImageUri = null;
     private Bitmap mSrcImage = null;

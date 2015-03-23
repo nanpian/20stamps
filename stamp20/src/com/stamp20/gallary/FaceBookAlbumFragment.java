@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,7 +58,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements OnClickLis
 		super.onCreate(savedInstanceState);
 		mContext = getActivity();
 		// Check if there is a currently logged in user
-        // and it's linked to a Facebook account.        
+        // and it's linked to a FaceBook account.        
         currentUser = ParseUser.getCurrentUser();
         if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
         	isLinked = true;        	
@@ -154,7 +155,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements OnClickLis
 	public void onClick(View v) {
 		switch(v.getId()){
 			case R.id.facebook_login_button:
-				progressDialog = GallaryProgressDialog.show(mContext,null,true,false,null);
+				progressDialog = GallaryProgressDialog.show(mContext,true,GallaryActivity.OUT_OF_TIME,false,null);
 		        
 		        List<String> permissions = Arrays.asList("public_profile", "email", "user_photos");
 		        ParseFacebookUtils.logIn(permissions, getActivity(), new LogInCallback() {
@@ -216,7 +217,20 @@ public class FaceBookAlbumFragment extends GallaryFragment implements OnClickLis
     	
     	@Override
     	protected void onPreExecute (){
-    		progress = GallaryProgressDialog.show(mContext,null,true,false,null);
+    		progress = GallaryProgressDialog.show(mContext,true,GallaryActivity.OUT_OF_TIME,false,
+    				new GallaryProgressDialog.OnCancelListener() {							
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void onTimeCancel(DialogInterface dialog) {
+								// TODO Auto-generated method stub
+								Log.e("wangpeng", "get Facebook albums out time, need add response");								
+							}
+						});
     	}
     	
 		@Override
@@ -254,7 +268,20 @@ public class FaceBookAlbumFragment extends GallaryFragment implements OnClickLis
     	
     	@Override
     	protected void onPreExecute (){
-    		progress = GallaryProgressDialog.show(mContext,null,true,false,null);
+    		progress = GallaryProgressDialog.show(mContext,true,GallaryActivity.OUT_OF_TIME,false,
+    			new GallaryProgressDialog.OnCancelListener() {							
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						// TODO Auto-generated method stub
+					
+					}
+				
+					@Override
+					public void onTimeCancel(DialogInterface dialog) {
+						// TODO Auto-generated method stub
+						Log.e("wangpeng", "get Facebook photos out time, need add response");								
+					}
+			});
     	}
     	
 		@Override
