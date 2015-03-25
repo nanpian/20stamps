@@ -22,12 +22,13 @@ import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.CardBackView;
 import com.stamp20.app.view.CardBackView2;
+import com.stamp20.app.view.HorizontalListView;
 
 public class CardBackActivity extends Activity implements OnClickListener {	
 
 	private static CardBackActivity instance;
 	private CardBackView2 cardBackView;
-	private Gallery gallery_choose_back;
+	private HorizontalListView gallery_choose_back;
 	private ChooseBackColorAdapter chooseBackColorAdapter;
 	private Button customEnvelope;
 	private Button add_blank;
@@ -74,9 +75,9 @@ public class CardBackActivity extends Activity implements OnClickListener {
 		});*/
 		chooseBackColorAdapter = new ChooseBackColorAdapter(CardBackActivity.this);
         chooseBackColorAdapter.setImageUri(mImageUri);
-		gallery_choose_back = (Gallery)findViewById(R.id.activity_card_back_select_back);
+		gallery_choose_back = (HorizontalListView)findViewById(R.id.activity_card_back_select_back);
 		gallery_choose_back.setSelection(0);
-		gallery_choose_back.setAnimationDuration(3000);
+		//gallery_choose_back.setAnimationDuration(3000);
 		gallery_choose_back.setAdapter(chooseBackColorAdapter);
 		gallery_choose_back.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			private String currentfiltername;

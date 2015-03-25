@@ -33,12 +33,12 @@
         android:textSize="33sp"
         android:id="@+id/line_white" />
     
-    <Gallery
+    <com.stamp20.app.view.HorizontalListView
         android:id="@+id/activity_card_envelope"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
         android:layout_below="@id/line_white"
         android:layout_marginTop="5dp"
-        android:spacing="8dp" />
+      />
 
 </RelativeLayout>

@@ -38,21 +38,37 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     private static int sOutAnimDuration = 180;
     private TextView mCancel;
     private ImageView mListChange;
-    private static int sTemplateList[] = {R.drawable.x_christmas2_front, R.drawable.x_christmas3_front, R.drawable.x_christmas4_front,
-    	R.drawable.x_christmas5_front, R.drawable.x_congrats1_front, R.drawable.x_greeting1_front,
-    	R.drawable.x_holiday1_front,R.drawable.x_holiday2_front,R.drawable.x_holiday3_front,
-    	R.drawable.x_holiday4_front, R.drawable.x_invitation1_front,
-    	R.drawable.x_invitation2_front, R.drawable.x_love1_front,
-    	R.drawable.x_love3_front, R.drawable.x_love4_front,
-    	R.drawable.x_new_year2_front, R.drawable.x_new_year4_front,
-    	R.drawable.x_new_year5_front, R.drawable.x_new_year6_front,
-    	R.drawable.x_new_year7_front, R.drawable.x_save_the_date1_front,
-    	R.drawable.x_thanks1_front, R.drawable.x_thanks2_front,
-    	R.drawable.x_thanks3_front,
+    private static boolean isFromMain = true;
+	private static int sTemplateList2[] = { R.drawable.x_christmas2_front,
+			R.drawable.x_christmas3_front, R.drawable.x_christmas4_front,
+			R.drawable.x_christmas5_front, R.drawable.x_congrats1_front,
+			R.drawable.x_greeting1_front, R.drawable.x_holiday1_front,
+			R.drawable.x_holiday2_front, R.drawable.x_holiday3_front,
+			R.drawable.x_holiday4_front, R.drawable.x_invitation1_front,
+			R.drawable.x_invitation2_front, R.drawable.x_love1_front,
+			R.drawable.x_love3_front, R.drawable.x_love4_front,
+			R.drawable.x_new_year2_front, R.drawable.x_new_year4_front,
+			R.drawable.x_new_year5_front, R.drawable.x_new_year6_front,
+			R.drawable.x_new_year7_front, R.drawable.x_save_the_date1_front,
+			R.drawable.x_thanks1_front, R.drawable.x_thanks2_front,
+			R.drawable.x_thanks3_front,
     	//R.drawable.x_use_your_photo1_front,
     	//R.drawable.x_use_your_photo2_front, R.drawable.x_use_your_photo3_front,
        // R.drawable.cards_year_sheep,R.drawable.cards_love
         };
+	private static int sTemplateList[] = { R.drawable.xx_christmas2_front,
+		R.drawable.xx_christmas3_front, R.drawable.xx_christmas4_front,
+		R.drawable.xx_christmas5_front, R.drawable.xx_congrats1_front,
+		R.drawable.xx_greeting1_front, R.drawable.xx_holiday1_front,
+		R.drawable.xx_holiday2_front, R.drawable.xx_holiday3_front,
+		R.drawable.xx_holiday4_front, R.drawable.xx_invitation1_front,
+		R.drawable.xx_invitation2_front, R.drawable.xx_love1_front,
+		R.drawable.xx_love3_front, R.drawable.xx_love4_front,
+		R.drawable.xx_new_year2_front, R.drawable.xx_new_year4_front,
+		R.drawable.xx_new_year5_front, R.drawable.xx_new_year6_front,
+		R.drawable.xx_new_year7_front, R.drawable.xx_save_the_date1_front,
+		R.drawable.xx_thanks1_front, R.drawable.xx_thanks2_front,
+		R.drawable.xx_thanks3_front,};
     //add for template change
     private Uri mSrcImageUri = null;
     private Bitmap mSrcImage = null;
@@ -68,11 +84,15 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         //add for template change 
         Intent intent = getIntent();
         if(intent != null) {
+        	isFromMain = false;
 			mSrcImageUri = (Uri)intent.getParcelableExtra(CardEffect.SRC_IMAGE_URI);
 			if (mSrcImageUri != null) {
 				mSrcImage = ImageUtil.loadDownsampledBitmap(this, mSrcImageUri,
 						2);
 			}
+			
+		} else {
+			isFromMain = true;
 		}
         
         mListChange = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.list_change);
@@ -235,7 +255,11 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         Intent data = new Intent();
        // data.setClass(this, CardsActivity.class);
         data.setClass(this, CardEffect.class);
-        data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList[position]);
+        if (isFromMain) {
+            data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList[position]);
+        } else {
+        	 data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList2[position]);
+        }
         //setResult(RESULT_OK, data); //这理有2个参数(int resultCode, Intent intent)
         if (mSrcImageUri != null) {
         	this.setResult(RESULT_OK, data);

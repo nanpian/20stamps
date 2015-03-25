@@ -92,13 +92,12 @@
                 android:textColor="@color/sel_cards_choose_button" />
         </RelativeLayout>
 
-        <Gallery
+        <com.stamp20.app.view.HorizontalListView
             android:id="@+id/galleryFilter"
             android:layout_width="fill_parent"
             android:layout_height="90dp"
             android:layout_below="@id/buttonid"
             android:layout_marginTop="6dp"
-            android:spacing="8dp"
             android:visibility="gone" />
     </RelativeLayout>
 

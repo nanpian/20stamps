@@ -13,7 +13,7 @@
     <com.stamp20.app.view.CardBackView2
         android:id="@+id/cardbackview"
         android:layout_width="fill_parent"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
@@ -60,13 +60,12 @@
             android:textColor="@color/sel_cards_choose_button" />
     </RelativeLayout>
 
-    <Gallery
+    <com.stamp20.app.view.HorizontalListView
         android:id="@+id/activity_card_back_select_back"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
         android:layout_below="@id/buttonid"
-        android:layout_marginTop="5dp"
-        android:spacing="8dp" />
+        android:layout_marginTop="5dp" />
 
     <Button
         android:id="@+id/customenvelope"

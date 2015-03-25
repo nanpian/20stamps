@@ -7,6 +7,7 @@ import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.stamp20.app.data.Design;
+import com.stamp20.gallary.features.FeaturePhoto;
 
 public class Stamp20Application extends Application {
 	static final String TAG = "Stamp20Application";
@@ -17,6 +18,8 @@ public class Stamp20Application extends Application {
 	    Log.e(TAG,"stamp 20 application start");
 //	    ParseObject.registerSubclass(UserProfileParse.class);
 	    ParseObject.registerSubclass(Design.class);
+	    ParseObject.registerSubclass(FeaturePhoto.class);
+	    
 	    Parse.initialize(this, 
 	        "lrvQWDyUVWC2iNG7ZvK1PfSAKSgIQ0MWtVu6jIhf",
 	        "0V96uKLLzg2DYcCT7ndlI0HULdOh297tIP8RUk4d"

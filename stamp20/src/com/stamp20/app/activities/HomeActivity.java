@@ -57,7 +57,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
             if(msg.what == SWITCH_CURRENT_PICTURE){
                 TransitionDrawable transitionDrawable=null;  
                 transitionDrawable= new TransitionDrawable(new Drawable[] {  
-                        mDrawables[mCurrentPicNum % mDrawableIDs.size()],//瀹炵幇浠�0 1 2 3 4 5 0 1 2.銆傘�傝繖鏍风殑涓嶅仠杞彉  
+                        mDrawables[mCurrentPicNum % mDrawableIDs.size()],
                         mDrawables[(mCurrentPicNum + 1) % mDrawableIDs.size()] });  
                 mCurrentPicNum++;  
                 mBackgroundImageView.setImageDrawable(transitionDrawable);
@@ -82,7 +82,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         mBackgroundImageView.setImageDrawable(getResources().getDrawable(R.drawable.background_home_baby_shower));
         initBackgroundArrays();
         
-        /*鑾峰緱鍚堥�傜殑drawable璧勬簮*/  
+        
         BitmapFactory.Options opts = new BitmapFactory.Options();  
         opts.inJustDecodeBounds = true;  
         BitmapFactory.decodeResource(getResources(), R.drawable.background_home_baby_shower, opts);  
@@ -90,7 +90,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         opts.inJustDecodeBounds = false;  
         mDrawables=new Drawable[mDrawableIDs.size()];  
         try {  
-            for (int i = 0; i < mDrawableIDs.size(); i++) {// for寰幆锛屽姞杞�5涓猟rawable璧勬簮  
+            for (int i = 0; i < mDrawableIDs.size(); i++) { 
                 Bitmap bmp = BitmapFactory.decodeResource(getResources(), mDrawableIDs.get(i), opts);  
                 mDrawables[i] = new BitmapDrawable(bmp);  
             }  

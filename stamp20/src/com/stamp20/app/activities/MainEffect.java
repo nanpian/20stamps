@@ -95,14 +95,14 @@ public class MainEffect extends Activity implements OnTouchListener,
 	
 	private void LoadImageFilter(Uri imageUri) {
 		// TODO Auto-generated method stub
-		Gallery gallery = (Gallery) findViewById(R.id.galleryFilter);
+		com.stamp20.app.view.HorizontalListView gallery = (com.stamp20.app.view.HorizontalListView) findViewById(R.id.galleryFilter);
 		effectAdapter = new ImageEffectAdapter(MainEffect.this, mEffectContext);
 		effectAdapter.setImageResource(imageUri);
 		mGPUImageView.setEffectAdapter(effectAdapter);
 		currentfilterID = 0;
 		gallery.setAdapter(effectAdapter);
 		gallery.setSelection(0);
-		gallery.setAnimationDuration(3000);
+		//gallery.setAnimationDuration(3000);
 		gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long id) {

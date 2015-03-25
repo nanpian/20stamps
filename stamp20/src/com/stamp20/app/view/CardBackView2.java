@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -53,6 +55,7 @@ public class CardBackView2 extends View{
         int height = 0;
         int imWidth = 0;
         int imHeight = 0;
+        float radio = 0.0f;
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -60,6 +63,7 @@ public class CardBackView2 extends View{
         if (mCardbackBitmap != null){
             imWidth = mCardbackBitmap.getWidth();
             imHeight = mCardbackBitmap.getHeight();
+            radio = imWidth*1.0f/imHeight;
         }
         if (widthMode == MeasureSpec.EXACTLY){
             width = widthSize;
@@ -71,6 +75,9 @@ public class CardBackView2 extends View{
             height = heightSize;
         }else {
             height = Math.min(heightSize, imHeight + getPaddingTop() + getPaddingBottom());
+        }
+        if (radio != 0){
+            height = (int)(width*1.0f/radio);
         }
         setMeasuredDimension(width, height);
     }
@@ -97,6 +104,7 @@ public class CardBackView2 extends View{
                     mViewHeight-getPaddingTop()-getPaddingBottom());
             canvas.drawBitmap(mCardbackBitmap, mRectSrc, mRectDes, null);
 
+
             if (mIsShowLine){
                 canvas.drawBitmap(mCardbackLineBitmap, (mViewWidth - mCardbackLineBitmap.getWidth())/2, 0, null);
             }
@@ -104,8 +112,8 @@ public class CardBackView2 extends View{
     }
 
     public void initView(){
-//        this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
-//                R.drawable.activity_card_back_shape);
+        this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.activity_card_back_shape_white);
         this.mCardbackBottomBitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.activity_card_back_bottom_logo);
         this.mCardbackLineBitmap = BitmapFactory.decodeResource(getResources(),
@@ -117,6 +125,9 @@ public class CardBackView2 extends View{
     }
 
     public Bitmap getAlphaSrcBitmap(){
+        if(mSourceBitmap == null){
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888);
         Bitmap cover = BitmapFactory.decodeResource(getResources(), R.drawable.card_back_view_overlay);
         Canvas canvas = new Canvas(bitmap);
@@ -134,6 +145,8 @@ public class CardBackView2 extends View{
     }
 
     public Bitmap getRoundAlphaBitmap(Bitmap src){
+        if (src == null)
+            return null;
         Bitmap bitmap = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -142,7 +155,9 @@ public class CardBackView2 extends View{
         Canvas canvas = new Canvas(bitmap);
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         final RectF rectF = new RectF(rect);
-        canvas.drawRoundRect(rectF, 70, 70, paint);
+      //  canvas.drawRoundRect(rectF, 100, 100, paint);
+        final Rect rectSrc = new Rect(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
+        canvas.drawBitmap(mCardbackBitmap, rectSrc, rect, null);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(src, 0, 0, paint);
 
@@ -159,15 +174,23 @@ public class CardBackView2 extends View{
     public Bitmap getRoundCornerBitmap(){
         Bitmap bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
         Paint paint = new Paint();
-        paint.reset();
         paint.setColor(mBackColor);
         paint.setAntiAlias(true); // 设置抗锯齿,也即是边缘做平滑处理
 
         Canvas canvas = new Canvas(bitmap);
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-        canvas.drawRoundRect(rectF, 70, 70, paint);
-
+//        final RectF rectF = new RectF(rect);
+//        canvas.drawRoundRect(rectF, 70, 70, paint);
+        //use colormatrix to set the color
+        ColorMatrix colorMatrix = new ColorMatrix();
+        int r = Color.red(mBackColor);
+        int g = Color.green(mBackColor);
+        int b = Color.blue(mBackColor);
+        colorMatrix.setScale(r*1.0f/255, g*1.0f/255, b*1.0f/255, 1.0f);
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
+        final Rect rectSrc = new Rect(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
+        canvas.drawBitmap(mCardbackBitmap, rectSrc, rect, paint);
+        paint.reset();
         int left = 0;
         int top = mViewHeight - mCardbackBottomBitmap.getHeight();
         Matrix matrix = new Matrix();
@@ -182,8 +205,12 @@ public class CardBackView2 extends View{
     public void setCardBackColor(int color, int position) {
         this.mBackColor = color;
         if (position == 0){
+            this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.activity_card_back_shape_white);
             this.mCardbackBitmap = getRoundAlphaBitmap(getAlphaSrcBitmap());
         }else{
+            this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.activity_card_back_shape_white);
             this.mCardbackBitmap = getRoundCornerBitmap();
         }
     }

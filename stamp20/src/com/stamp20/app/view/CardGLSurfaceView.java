@@ -351,18 +351,37 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		}
 		Log.i("zhudewei", "onDrawFrame, the bitmap is " + resultBitmap);
 		//放入系统内存中
-		Bitmap resultBitmapCorner = toRoundCorner(resultBitmap,50);
+//		Bitmap resultBitmapCorner = toRoundCorner(resultBitmap,100);
+        Bitmap resultBitmapCorner = toRoundCorner2(resultBitmap);
 		CardBmpCache mCache = CardBmpCache.getCacheInstance();
 		mCache.putFront(resultBitmapCorner);
 	}
-	
-	public  Bitmap toRoundCorner(Bitmap bitmap, int pixels) {  
-	    Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),  
-	            bitmap.getHeight(), Config.ARGB_8888);  
-	    Canvas canvas = new Canvas(output);  
+	public Bitmap toRoundCorner2(Bitmap bitmap){
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Config.ARGB_8888);
+        Bitmap cover = BitmapFactory.decodeResource(getResources(),
+                R.drawable.activity_card_back_shape_white);
+        Rect rectSrc = new Rect(0, 0, cover.getWidth(), cover.getHeight());
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        Canvas canvas = new Canvas(output);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        canvas.drawBitmap(cover, rectSrc, rect, null);
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return output;
+    }
+
+	public  Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
+        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(),
+                templatedid);
+	    Bitmap output = Bitmap.createBitmap(cover.getWidth(),
+                cover.getHeight(), Config.ARGB_8888);
+	    Canvas canvas = new Canvas(output);
 	    final int color = 0xff424242;  
 	    final Paint paint = new Paint();  
-	    final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());  
+	    final Rect rect = new Rect(0, 0, cover.getWidth(), cover.getHeight());
+        final Rect rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 	    final RectF rectF = new RectF(rect);  
 	    final float roundPx = pixels;  
 	    paint.setAntiAlias(true);
@@ -370,7 +389,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	    paint.setColor(color);
 	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
 	    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));  
-	    canvas.drawBitmap(bitmap, rect, rect, paint);
+	    canvas.drawBitmap(bitmap, rectSrc, rect, paint);
 	    return output;  
 	}  
 

@@ -7,6 +7,7 @@ import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.CardGLSurfaceView;
 import com.stamp20.app.view.CardGLSurfaceView.OnCardBitmapGeneratedListener;
+import com.stamp20.app.view.HorizontalListView;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampViewConstants;
 import com.stamp20.app.view.ZoomImageView;
@@ -38,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -53,7 +55,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	private Uri imageUri;
 	private Bitmap loadedBitmap;
 	public ImageView background_envelop, select_photo_button;
-	private Gallery galleryFilter;
+	private HorizontalListView galleryFilter;
 	private ImageView headerPrevious;
 	private TextView headerTitle;
 	private ImageEffectAdapter effectAdapter;
@@ -171,14 +173,14 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
             
     });
 		mGPUImageView = (CardGLSurfaceView) findViewById(R.id.cardgpuimage);
-		galleryFilter = (Gallery) findViewById(R.id.galleryFilter);
+		galleryFilter = (HorizontalListView) findViewById(R.id.galleryFilter);
 		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
 		mGPUImageView.setEffectAdapter(effectAdapter);
 		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
 		currentfilterID = 0;
 		galleryFilter.setAdapter(effectAdapter);
 		galleryFilter.setSelection(5);
-		galleryFilter.setAnimationDuration(3000);
+		//galleryFilter.setAnimationDuration(3000);
 		galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					private String currentfiltername;
 					public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -295,7 +297,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		galleryFilter.setVisibility(View.VISIBLE);
 		galleryFilter.setAdapter(effectAdapter);
 		galleryFilter.setSelection(0);
-		galleryFilter.setAnimationDuration(3000);
+		//galleryFilter.setAnimationDuration(3000);
 		galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					private String currentfiltername;
 					public void onItemClick(AdapterView<?> arg0, View arg1,
