@@ -41,22 +41,25 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
     private TextView headerTitle;
 
     public ShopCartItemsActivity() {
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_cartitems_activity);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         mCache = BitmapCache.getCache();
+        initListView();
+        initView();
+    }
+
+    private void initListView() {
         boolean addNewItems = getIntent().getBooleanExtra(ADD_ITEMS_TOCAET, false);
         if (addNewItems) {
             ShopStampItem stapItem = new ShopStampItem(mCache.get(), 0.0f, 0.0f);
             data.add(stapItem);
         }
-        initView();
+        
     }
 
     public void initView() {

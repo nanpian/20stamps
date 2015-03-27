@@ -178,6 +178,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		mGPUImageView.setEffectAdapter(effectAdapter);
 		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
 		currentfilterID = 0;
+		effectAdapter.setSelectItem(0);
 		galleryFilter.setAdapter(effectAdapter);
 		galleryFilter.setSelection(5);
 		//galleryFilter.setAnimationDuration(3000);

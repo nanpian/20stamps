@@ -3,7 +3,7 @@
 <!-- 连框颜色值 -->
 <item> 
     <shape>
-       <solid android:color="#ffff4c34"/> 
+       <solid android:color="#5fff4c34"/> 
     </shape> 
 </item>
 </layer-list>

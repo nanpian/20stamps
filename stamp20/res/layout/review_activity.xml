@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#282828" 
-    android:id="@+id/root">
+    android:background="#282828" >
 
     <LinearLayout
         android:id="@+id/review_root"
@@ -37,12 +37,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
                     android:text="@string/select_letter"
-                    android:paddingTop="10dp"
                     android:textColor="@color/sel_cards_choose_button"
                     android:textSize="16sp" />
 
-                <LinearLayout
+                <!--
+                     <LinearLayout
                     android:id="@+id/layout_btn_selcet_rate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -79,7 +80,16 @@
                         android:textSize="12sp" >
                     </Button>
                 </LinearLayout>
-            </LinearLayout>
+                -->
+
+                    <Button
+                        android:id="@+id/btn_share_design"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/cardback_share_design_drawable" />
+                </LinearLayout>
         </RelativeLayout>
 
         <include layout="@layout/tail" />

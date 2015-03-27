@@ -279,7 +279,10 @@ public class Design extends ParseObject {
 	private final static String Source3FileLocal = "Source3Local";
 	private final static String Source3FileServer = "Source3Server";//parsefile
 	private final static String Source3FileServerUrl = "SourceS3erverUrl";
-	
 	private final static String UploadStatus="UploadStatus";
+	
+	public static final String BitmapByte = "BitmapByte";
+	public static final String StampReview = "StampReview";
+	public static final String StampFileName = "Review.png";
 
 }

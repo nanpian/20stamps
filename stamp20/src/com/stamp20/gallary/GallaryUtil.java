@@ -11,8 +11,8 @@ import com.stamp20.app.util.Log;
 import com.stamp20.app.util.PhotoFromWhoRecorder;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -21,9 +21,9 @@ import android.os.AsyncTask;
 
 public class GallaryUtil {
 	static public final String IMG_URI_EXTRA = "imageUri";
-	
+	private static Uri u;
 	static public void goToEffectActivity(Context context, String uri){
-		Uri u = Uri.parse(uri);
+		u = Uri.parse(uri);
 		
 		String fromStampOrCard = PhotoFromWhoRecorder.readFromWhich(context);
 
@@ -42,6 +42,9 @@ public class GallaryUtil {
 		}
 	}
 	
+	public static Uri getPhotoUri(){
+	    return u;
+	}
 	static public void goToEffectAfterDownLoad(Context context, String url){
 		new DownloadImageTask(context).execute(url);
 	}
@@ -56,7 +59,20 @@ public class GallaryUtil {
 		
     	@Override
     	protected void onPreExecute (){
-    		progress = ProgressDialog.show(mContext, "", "Download", true);
+    		progress = GallaryProgressDialog.show(mContext,true,GallaryActivity.OUT_OF_TIME,false,
+    				new GallaryProgressDialog.OnCancelListener() {							
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void onTimeCancel(DialogInterface dialog) {
+								// TODO Auto-generated method stub
+								Log.e("wangpeng", "download out time, need add response");								
+							}
+						});
     	}
     	
 		@Override

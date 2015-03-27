@@ -1,14 +1,11 @@
 package com.stamp20.app.activities;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import org.objenesis.instantiator.basic.NewInstanceInstantiator;
 
 import lenovo.jni.ImageUtils;
 import android.app.Activity;
@@ -19,7 +16,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.view.animation.Animation;
@@ -30,18 +26,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ProgressCallback;
-import com.parse.SaveCallback;
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
-import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
-import com.stamp20.app.util.BitmapUtils;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
-import com.stamp20.app.util.UploadToParse;
+import com.stamp20.app.util.ParseUtil;
 
 public class ReviewActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "ReviewActivity";
@@ -55,7 +45,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 
     private TextView tailText = null;
 
-    private Button saveDesign;
+//    private Button saveDesign;
     private Button shareDesign;
 
     private ImageView blurBlackground;
@@ -63,7 +53,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     private boolean isFirstBlur = true;
     private BlurBackground blurProcess = null;
     
-    private UploadToParse mUploadToParse;
+    private ParseUtil mUploadToParse;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,16 +72,16 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 
         headerTitle.setText(R.string.review_title);
 
-        saveDesign = (Button) findViewById(R.id.btn_save_design);
+//        saveDesign = (Button) findViewById(R.id.btn_save_design);
         shareDesign = (Button) findViewById(R.id.btn_share_design);
-        saveDesign.setOnClickListener(this);
+//        saveDesign.setOnClickListener(this);
         shareDesign.setOnClickListener(this);
 
         mCache = BitmapCache.getCache();
         mReviewer = (ImageView) findViewById(R.id.reviewer);
         mReviewer.setImageBitmap(mCache.get());
-        mUploadToParse = new UploadToParse(mCache.get());
-        mUploadToParse.uploadImage();
+//        mUploadToParse = new UploadToParse(mCache.get());
+//        mUploadToParse.uploadImage();
         
         blurBlackground = (ImageView) findViewById(R.id.blur_background);
         reviewForeground = findViewById(R.id.review_root);
@@ -116,21 +106,21 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
             startActivity(intent);
             finish();
             break;
-        case R.id.btn_save_design:
-            File pic = saveBitmapToPic(mCache.get());
-            if (pic == null)
-                Log.e(TAG, "save design error");
-            else {
-                Log.d(TAG, "save design ok");
-                /*
-                 * Intent send = new Intent();
-                 * send.setAction(Intent.ACTION_SEND); send.setType("image/*");
-                 * send.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pic));
-                 * startActivity(Intent.createChooser(send, "Share"));
-                 */
-                Toast.makeText(this, pic.getName() + " saved", Toast.LENGTH_SHORT).show();
-            }
-            break;
+//        case R.id.btn_save_design:
+//            File pic = saveBitmapToPic(mCache.get());
+//            if (pic == null)
+//                Log.e(TAG, "save design error");
+//            else {
+//                Log.d(TAG, "save design ok");
+//                /*
+//                 * Intent send = new Intent();
+//                 * send.setAction(Intent.ACTION_SEND); send.setType("image/*");
+//                 * send.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pic));
+//                 * startActivity(Intent.createChooser(send, "Share"));
+//                 */
+//                Toast.makeText(this, pic.getName() + " saved", Toast.LENGTH_SHORT).show();
+//            }
+//            break;
         case R.id.btn_share_design:
             File tmp = saveBitmapToTmp(mCache.get());
             if (tmp == null) {
