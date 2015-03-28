@@ -40,5 +40,13 @@
         <attr name="editTextSize" format="dimension" />
         <attr name="editTextColor" format="reference|color" />
     </declare-styleable>
+    <declare-styleable name="RoundNumber">
+        <attr name="textSize" format="dimension" />
+        <attr name="textColor" format="reference|color" />
+        <attr name="text" format="string" />
+        <attr name="radius" format="dimension" />
+        <attr name="cycleColor" format="reference|color" />
+        <attr name="background" format="reference|color" />
+    </declare-styleable>
 
 </resources>

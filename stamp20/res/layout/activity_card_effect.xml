@@ -103,12 +103,13 @@
 
     <Button
         android:id="@+id/customback"
+        android:tag="forBoldText"
         android:layout_width="fill_parent"
-        android:layout_height="55dp"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/sel_home_green_button"
-        android:text="Next: CUSTOMIZE BACK"
+        android:text="NEXT: CUSTOMIZE BACK"
         android:textSize="20sp"
         android:textColor="@android:color/white" />
 

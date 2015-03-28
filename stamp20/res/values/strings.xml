@@ -67,5 +67,6 @@
     <string name="postage_stamps">postage stamps</string>
     <string name="postage">postage</string>
     <string name="view_cart">view cart</string>
+    <string name="is_it_real_postage">is it real postage?</string>
 
 </resources>

@@ -20,6 +20,7 @@ public class ParseUtil {
 
     public ParseUtil(Bitmap bitmap) {
         this.bitmap = bitmap;
+        mDesign.pinInBackground();
         Design.upload();
     }
 
@@ -38,11 +39,7 @@ public class ParseUtil {
                 if (arg0 == 100) {
                     // upload success
                     mDesign.put(Design.StampReview, file);
-                    try {
-                        mDesign.pin();// 保存Design至本地
-                    } catch (ParseException e1) {
-                        Log.e(this, "UploadToParse, save to local db failed");
-                    }
+                    mDesign.pinInBackground();// 保存Design至本地
                     mDesign.saveInBackground(new SaveCallback() {
 
                         @Override

@@ -62,7 +62,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
 		header_previous = (ImageView)findViewById(R.id.header_previous);
 		header_previous.setOnClickListener(this);
 		header_title = (TextView)findViewById(R.id.header_title);
-		header_title.setText("Review");
+		header_title.setText("Customize Back");
 /*		cardBackView.setOnMeasuredListener(new onMeasuredListener(){
 			@Override
 			public void onMeasuredListener(int width, int height) {

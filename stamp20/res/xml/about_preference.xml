@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <Preference
+        android:key="is_real_postage"
+        android:widgetLayout="@layout/preference_widget_customer"
+        android:title="@string/is_it_real_postage" />
+
+</PreferenceScreen>

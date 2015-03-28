@@ -1,6 +1,7 @@
 package com.stamp20.app.activities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,8 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
-import com.stamp20.app.ShopStampItem;
 import com.stamp20.app.adapter.ShopCartItemsAdapter;
+import com.stamp20.app.data.Cart;
+import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
@@ -32,7 +34,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
     private LinearLayout layoutAddMore;
     public static final String ADD_ITEMS_TOCAET = "add_new_items";
     private ShopCartItemsAdapter shopItemsAdapter;
-    private static ArrayList<ShopStampItem> data = new ArrayList<ShopStampItem>();
+    private List<Design> mDesigns;
     private BitmapCache mCache = null;
     private ImageView backHomeView;
     private Button btnPaypal;
@@ -48,11 +50,13 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_cartitems_activity);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-        mCache = BitmapCache.getCache();
-        initListView();
+//        mCache = BitmapCache.getCache();
+ //       initListView();
+        mDesigns = Cart.getInstance().getDesigns();
         initView();
     }
 
+    /*
     private void initListView() {
         boolean addNewItems = getIntent().getBooleanExtra(ADD_ITEMS_TOCAET, false);
         if (addNewItems) {
@@ -61,7 +65,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         }
         
     }
-
+*/
     public void initView() {
         layoutInflater = getLayoutInflater();
 //        textHeaderTile = (TextView) findViewById(R.id.home_header_title);
@@ -86,7 +90,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         layoutAddMore.setOnClickListener(this);
         // listCartItems.addHeaderView(layoutTest);
         listCartItems.addFooterView(layoutListFooter);
-        shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this, data);
+        shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this, mDesigns);
         listCartItems.setAdapter(shopItemsAdapter);
     }
 
@@ -96,8 +100,10 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         Intent intent = new Intent();
         switch (v.getId()) {
         case R.id.header_previous:
+        case R.id.shop_add_more:
             intent.setClass(ShopCartItemsActivity.this, HomeActivity.class);
             startActivity(intent);
+            finish();
             break;
         case R.id.shop_cartitems_papal:
             intent.putExtra(Constant.PAY_STYLE, 0);

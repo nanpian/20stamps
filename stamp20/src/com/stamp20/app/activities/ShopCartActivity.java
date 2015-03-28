@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.data.Cart;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.ParseUtil;
@@ -102,8 +103,12 @@ public class ShopCartActivity extends Activity implements OnClickListener {
             break;
         case R.id.btn_shop_addto_chart:
             // 保存design
-            ParseUtil mUploadToParse = new ParseUtil(mCache.get());
-            mUploadToParse.uploadImage();
+            //UploadToParse mUploadToParse = new UploadToParse(mCache.get());
+            //mUploadToParse.uploadImage();
+            
+        	//save to cart
+        	Cart cart = Cart.getInstance();
+            cart.addDesign(mCache.get(), 20);
             
             Intent intent_add_to_chart = new Intent();
             intent_add_to_chart.setClass(ShopCartActivity.this, ShopCartItemsActivity.class);

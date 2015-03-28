@@ -180,6 +180,7 @@
             android:name="io.card.payment.CardIOActivity"
             android:configChanges="keyboardHidden|orientation" />
         <activity android:name="io.card.payment.DataEntryActivity" />
+        <activity android:name="com.stamp20.app.activities.AboutActivity" />
     </application>
 
 </manifest>

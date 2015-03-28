@@ -21,10 +21,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
-import com.stamp20.app.data.UserProfileParse;
+import com.stamp20.app.data.UserProfile;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
-import com.stamp20.app.util.UserProfile;
 import com.stamp20.app.wheel.adapter.CityAdapter;
 import com.stamp20.app.wheel.widget.OnWheelChangedListener;
 import com.stamp20.app.wheel.widget.WheelView;
@@ -54,7 +53,7 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
     private int selectedCityIndex = 0;
     String chooseCities[];
 
-    UserProfileParse userParseObject;
+    UserProfile userParseObject;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,13 +132,13 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
     }
 
     private void loadUserProfile() {
-        getData(UserProfile.FIRST_NAME, firstNameHint, R.string.first_name, firstNameEditText);
-        getData(UserProfile.SECOND_NAME, secondNameHint, R.string.second_name, secondNameEditText);
-        getData(UserProfile.ADDRESS_LINE_1, addressLine1Hint, R.string.address_line_1, addressLine1EditText);
-        getData(UserProfile.ADDRESS_LINE_2, addressLine2Hint, R.string.address_line_2, addressLine2EditText);
-        getData(UserProfile.COUNTRY, cityHint, R.string.address_city, cityEditText);
-        getData(UserProfile.STATE, stateHint, R.string.address_state, stateEditText);
-        getData(UserProfile.ZIP, zipHint, R.string.address_zip, zipEditText);
+        getData(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameHint, R.string.first_name, firstNameEditText);
+        getData(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameHint, R.string.second_name, secondNameEditText);
+        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1Hint, R.string.address_line_1, addressLine1EditText);
+        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2Hint, R.string.address_line_2, addressLine2EditText);
+        getData(com.stamp20.app.util.UserProfile.COUNTRY, cityHint, R.string.address_city, cityEditText);
+        getData(com.stamp20.app.util.UserProfile.STATE, stateHint, R.string.address_state, stateEditText);
+        getData(com.stamp20.app.util.UserProfile.ZIP, zipHint, R.string.address_zip, zipEditText);
     }
 
     private void getData(String userProfile, TextView hint, int resId, TextView editText) {
@@ -159,13 +158,13 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
 
     public void saveUserProfile() {
         Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-        editor.putString(UserProfile.FIRST_NAME, firstNameEditText.getText().toString());
-        editor.putString(UserProfile.SECOND_NAME, secondNameEditText.getText().toString());
-        editor.putString(UserProfile.ADDRESS_LINE_1, addressLine1EditText.getText().toString());
-        editor.putString(UserProfile.ADDRESS_LINE_2, addressLine2EditText.getText().toString());
-        editor.putString(UserProfile.COUNTRY, cityEditText.getText().toString());
-        editor.putString(UserProfile.STATE, stateEditText.getText().toString());
-        editor.putString(UserProfile.ZIP, zipEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1EditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2EditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.COUNTRY, cityEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.STATE, stateEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ZIP, zipEditText.getText().toString());
         editor.commit();
     }
 

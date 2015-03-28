@@ -29,6 +29,7 @@ public class Design extends ParseObject {
 		int randomNum = rand.nextInt(268435455);
 		int randomNum2 = rand.nextInt(268435455);
 		mInstance.setDesignIdLocal("D"+Integer.toHexString(randomNum)+Integer.toHexString(randomNum2));
+		mInstance.setCount(1);
 		return mInstance;
 	}
 	
@@ -95,7 +96,15 @@ public class Design extends ParseObject {
 	public void setPrice(int mPrice) {
 		put(Price, mPrice);
 	}
-
+	
+	//Count
+	public int getCount(){
+		return this.getInt(Count);
+	}
+	public void setCount(int count){
+		put(Count, count);
+	}
+	
 	//Options
 	public List<String> getOptions() {
 		return this.getList(Options);
@@ -258,7 +267,8 @@ public class Design extends ParseObject {
 	private final static String DeviceId  = "DeviceId";
 	
 	private final static String TaxableAmount = "TaxableAmount"; //taxable amount, !=price when it's stamp
-	private final static String Price = "Price";//price from device
+	private final static String Price = "Price";//price from device, single design
+	private final static String Count = "Count";//the count of design
 	private final static String Options ="Options";//array of option values
 	private final static String User = "User";//ParseUser object
 	private final static String Orientation ="Orientation"; //orientation of stamps

@@ -3,10 +3,10 @@ package com.stamp20.app.data;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
-@ParseClassName("UserProfileParse")
-public class UserProfileParse extends ParseObject{
+@ParseClassName("UserProfile")
+public class UserProfile extends ParseObject{
 
-    public UserProfileParse() {
+    public UserProfile() {
     }
     
     public String getUserProfileParseId() {

@@ -74,7 +74,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/sel_home_green_button"
-        android:text="Next: ENVELOPE"
+        android:text="NEXT: ENVELOPE"
         android:textSize="20sp"
         android:textColor="@android:color/white" />
 

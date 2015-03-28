@@ -1,6 +1,7 @@
 package com.stamp20.app.adapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -18,8 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseFile;
+import com.squareup.picasso.Picasso;
 import com.stamp20.app.R;
-import com.stamp20.app.ShopStampItem;
+import com.stamp20.app.data.Cart;
+import com.stamp20.app.data.Design;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
@@ -27,19 +31,19 @@ public class ShopCartItemsAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
     private Context mContext;
-    private ArrayList<ShopStampItem> stampItems;
+    private List<Design> mDesigns;
 
-    public ShopCartItemsAdapter(Context context, ArrayList<ShopStampItem> stampItems) {
+    public ShopCartItemsAdapter(Context context, List<Design> designs) {
         // TODO Auto-generated constructor stub
         mContext = context;
-        this.stampItems = stampItems;
+        this.mDesigns = designs;
         layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return stampItems.size() < 0 ? 0 : stampItems.size();
+        return mDesigns.size() < 0 ? 0 : mDesigns.size();
     }
 
     @Override
@@ -82,15 +86,24 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         FontManager.changeFonts(mContext, viewHolder.itemPersheet);
         FontManager.changeFonts(mContext, viewHolder.itemUnitPrice);
 
-        viewHolder.stampItemView.setImageBitmap(stampItems.get(position).getBmpItemView());
+        String id = mDesigns.get(position).getDesignIdLocal();
+        Log.i("wangpeng", "design id: " + id);
+        Bitmap src = Cart.getInstance().getCachedBitmap(id);
+        if(src != null)
+        	viewHolder.stampItemView.setImageBitmap(src);
+        else{
+        	viewHolder.stampItemView.setImageResource(R.drawable.activity_card_review_click);
+        }
+        
         viewHolder.addView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                int stampSize = stampItems.get(pos).getItemSize();
+                int stampSize = mDesigns.get(pos).getCount();
                 stampSize += 1;
-                stampItems.get(pos).setItemSize(stampSize);
+                mDesigns.get(pos).setCount(stampSize);
+                Cart.getInstance().updateDesignCount(mDesigns.get(pos), stampSize);
                 // 更新方式？？
                 notifyDataSetChanged();
             }
@@ -100,17 +113,18 @@ public class ShopCartItemsAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                int stampSize = stampItems.get(pos).getItemSize();
+                int stampSize = mDesigns.get(pos).getCount();
                 stampSize -= 1;
                 if (stampSize <= 1) {
                     stampSize = 1;
                 }
-                stampItems.get(pos).setItemSize(stampSize);
+                mDesigns.get(pos).setCount(stampSize);
+                Cart.getInstance().updateDesignCount(mDesigns.get(pos), stampSize);
                 // 更新方式？？
                 notifyDataSetChanged();
             }
         });
-        viewHolder.textItemSize.setText(Integer.toString(stampItems.get(position).getItemSize()));
+        viewHolder.textItemSize.setText(Integer.toString(mDesigns.get(pos).getCount()));
         viewHolder.itemDeleteView.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -125,7 +139,6 @@ public class ShopCartItemsAdapter extends BaseAdapter {
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO Auto-generated method stub
                         deleteItems(pos);
-                        Toast.makeText(mContext, "posistion is : ", Toast.LENGTH_LONG).show();
                     }
                 });
                 dialog.setNegativeButton("Cancel", null);
@@ -136,7 +149,8 @@ public class ShopCartItemsAdapter extends BaseAdapter {
     }
 
     private void deleteItems(int posotion) {
-        stampItems.remove(posotion);
+        Cart.getInstance().deleteDesign(mDesigns.get(posotion));
+        mDesigns.remove(posotion);
         notifyDataSetChanged();
     }
 

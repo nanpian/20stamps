@@ -18,8 +18,9 @@
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/download_cancel_unpress" />
+            android:src="@drawable/icon_add" />
 
         <TextView
             android:id="@+id/shop_add_more_btn"
@@ -43,16 +44,14 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_margin="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/warning" />
+            android:src="@drawable/icon_offer" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dip"
             android:text="@string/shop_cartitems_coupon"
             android:textColor="@color/black"
             android:textSize="16sp" />

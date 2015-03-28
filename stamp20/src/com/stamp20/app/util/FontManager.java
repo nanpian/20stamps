@@ -39,7 +39,7 @@ public class FontManager {
                     ((TextView) v).setTypeface(mTypefaceNormal);
                 }
             } else if (v instanceof Button) {
-                ((Button) v).setTypeface(mTypefaceNormal);
+                ((Button) v).setTypeface(mTypefaceBold);
             } else if (v instanceof EditText) {
                 ((EditText) v).setTypeface(mTypefaceNormal);
             } else if (v instanceof ViewGroup) {

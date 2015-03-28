@@ -18,6 +18,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
@@ -33,6 +34,7 @@ import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.util.PhotoFromWhoRecorder;
 import com.stamp20.app.view.ImageUtil;
+import com.stamp20.app.view.RoundNumber;
 import com.stamp20.gallary.GallaryActivity;
 
 public class HomeActivity extends BaseTitleActivity implements View.OnClickListener {
@@ -52,6 +54,9 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     private ViewGroup mLinearLayoutNoLocalDesign;
     private Button btnPostage, btnPostageStamp;
     private Button btnCards, btnGettingCards;
+    private Button btnViewCart;
+    private ImageButton btnCoupons, btnAbout;
+    private RoundNumber mLocalDesignNumber;
 
     private final static int ANIMATION_DURATION = 1000;
     private final static int CHANGE_PICTURE_DURATION = 2000;
@@ -81,17 +86,24 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         super.onCreateNoTitle();
         setContentView(R.layout.activity_home);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+        btnCoupons = (ImageButton) findViewById(R.id.btn_coupons);
+        btnAbout = (ImageButton) findViewById(R.id.btn_about);
         mLinearLayoutHasLocalDesign = (ViewGroup) findViewById(R.id.layout_has_local_design);
         mLinearLayoutNoLocalDesign = (ViewGroup) findViewById(R.id.layout_has_no_local_design);
         btnPostage = (Button) findViewById(R.id.btn_postage);
         btnPostageStamp = (Button) findViewById(R.id.btn_postage_stamp);
         btnCards = (Button) findViewById(R.id.btn_cards);
         btnGettingCards = (Button) findViewById(R.id.btn_getting_cards);
+        btnViewCart = (Button) findViewById(R.id.btn_view_cart);
+        mLocalDesignNumber = (RoundNumber) findViewById(R.id.local_design_number);
 
+        btnCoupons.setOnClickListener(this);
+        btnAbout.setOnClickListener(this);
         btnPostage.setOnClickListener(this);
         btnPostageStamp.setOnClickListener(this);
         btnCards.setOnClickListener(this);
         btnGettingCards.setOnClickListener(this);
+        btnViewCart.setOnClickListener(this);
 
         mBackgroundImageView = (ImageView) this.findViewById(R.id.background);
         mBackgroundImageView.setScaleType(ScaleType.FIT_XY);
@@ -146,6 +158,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
 
     private void getLocalDesignSuccess(List<Design> designs) {
         if (designs != null && designs.size() >= 1) {
+            mLocalDesignNumber.setText(String.valueOf(designs.size()));
             mLinearLayoutNoLocalDesign.setVisibility(View.GONE);
             mLinearLayoutHasLocalDesign.setVisibility(View.VISIBLE);
 
@@ -170,6 +183,11 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+        case R.id.btn_coupons:
+            break;
+        case R.id.btn_about:
+            showAboutInfo();
+            break;
         case R.id.btn_cards:
         case R.id.btn_getting_cards:
             startActivity(new Intent(HomeActivity.this, CardsTemplateChooseActivity.class));
@@ -182,19 +200,13 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
             PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "stamp");
             break;
         case R.id.btn_view_cart:
+            startActivity(new Intent(HomeActivity.this, ShopCartItemsActivity.class));
             break;
         }
-        // if (v.getId() == mButtonGreen.getId()) {
-        // startActivity(new Intent(HomeActivity.this, GallaryActivity.class));
-        // PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(),
-        // "stamp");
-        // } else if (v.getId() == mButtonRed.getId()) {
-        // startActivity(new Intent(HomeActivity.this,
-        // CardsTemplateChooseActivity.class));
-        // // startActivity(new Intent(HomeActivity.this,
-        // // OpenGL10ZoomMoveDemo.class));
-        // PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(),
-        // "card");
-        // }
+    }
+
+    private void showAboutInfo() {
+        Intent aboutIntent = new Intent(this, AboutActivity.class);
+        startActivity(aboutIntent);
     }
 }
