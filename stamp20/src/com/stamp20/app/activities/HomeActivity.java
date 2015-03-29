@@ -28,6 +28,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
+import com.stamp20.app.R.anim;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
@@ -184,6 +185,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.btn_coupons:
+            coupons();
             break;
         case R.id.btn_about:
             showAboutInfo();
@@ -205,8 +207,15 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         }
     }
 
+    private void coupons() {
+        Intent couponsIntent = new Intent(this, CouponsActivity.class);
+        startActivity(couponsIntent);
+        overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
+    }
+
     private void showAboutInfo() {
         Intent aboutIntent = new Intent(this, AboutActivity.class);
+//        Intent aboutIntent = new Intent(this, AboutDetailsActivity.class);
         startActivity(aboutIntent);
     }
 }

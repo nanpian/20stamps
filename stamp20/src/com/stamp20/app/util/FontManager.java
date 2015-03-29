@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
@@ -33,15 +32,23 @@ public class FontManager {
         for (int i = 0; i < root.getChildCount(); i++) {
             View v = root.getChildAt(i);
             if (v instanceof TextView) {
-                if (v.getId() == R.id.header_title || v.getId() == R.id.tail_text) {
+                if (v.getId() == R.id.header_title || v.getId() == R.id.tail_text || (v.getTag() != null && v.getTag().equals("forBoldText"))) {
                     ((TextView) v).setTypeface(mTypefaceBold);
                 } else {
                     ((TextView) v).setTypeface(mTypefaceNormal);
                 }
             } else if (v instanceof Button) {
-                ((Button) v).setTypeface(mTypefaceBold);
+                if (v.getTag() != null && v.getTag().equals("forBoldText")) {
+                    ((Button) v).setTypeface(mTypefaceBold);
+                } else {
+                    ((Button) v).setTypeface(mTypefaceNormal);
+                }
             } else if (v instanceof EditText) {
-                ((EditText) v).setTypeface(mTypefaceNormal);
+                if (v.getTag() != null && v.getTag().equals("forBoldText")) {
+                    ((EditText) v).setTypeface(mTypefaceBold);
+                } else {
+                    ((EditText) v).setTypeface(mTypefaceNormal);
+                }
             } else if (v instanceof ViewGroup) {
                 changeFonts((ViewGroup) v, activity);
             }

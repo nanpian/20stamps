@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/root"
     android:background="@color/activity_background_gray">
 
     <include
@@ -88,6 +89,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/sel_home_green_button"
         android:text="ADD TO CART"
+        android:tag="forBoldText"
         android:textSize="20sp"
         android:textColor="@android:color/white" />
 

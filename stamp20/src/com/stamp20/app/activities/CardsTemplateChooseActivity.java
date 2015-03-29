@@ -36,7 +36,7 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     private ListView mListView;
     private static int sInAnimDuration = 240;
     private static int sOutAnimDuration = 180;
-    private TextView mCancel;
+    private ImageView mCancel;
     private ImageView mListChange;
     private static boolean isFromMain = true;
 	private static int sTemplateList2[] = { R.drawable.x_christmas2_front,
@@ -113,15 +113,13 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         
         mCancel = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.cancel);
         mCancel.setOnClickListener(this);
-        mCancel.setTextColor(getResources().getColorStateList(R.color.sel_cards_choose_button));
+        //mCancel.setTextColor(getResources().getColorStateList(R.color.sel_cards_choose_button));
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == mListChange.getId()){
             isListView = !isListView;
-            Log.i("xixia", "onClick listview count is : " + mListView.getChildCount());
-            Log.i("xixia", "onClick gridview count is : " + mGridView.getChildCount());
             if(!isListView){
                 mListView.setLayoutAnimation(getListViewAnimOut());
                 mListView.setLayoutAnimationListener(new TemplateAnimationListener(mListView, mGridView));
@@ -200,7 +198,6 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
 
         @Override
         public int getCount() {
-        	Log.i("xixia", "view count is : " + sTemplateList.length);
             return sTemplateList.length;
         }
 
@@ -251,23 +248,22 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         }else if(parent == mGridView){
             strParent = "mGridView";
         }
-        Log.i("xixia", strParent + " --- position : " + position);
         Intent data = new Intent();
-       // data.setClass(this, CardsActivity.class);
+
         data.setClass(this, CardEffect.class);
         if (isFromMain) {
             data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList[position]);
         } else {
         	 data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList2[position]);
         }
-        //setResult(RESULT_OK, data); //这理有2个参数(int resultCode, Intent intent)
+
         if (mSrcImageUri != null) {
         	this.setResult(RESULT_OK, data);
             this.finish();
 		}else {
 			startActivity(data);
 		}
-       // startActivity(data);
+
         
     }
 }

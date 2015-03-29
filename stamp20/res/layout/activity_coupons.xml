@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_gray"
+    android:orientation="vertical" >
+
+    <include layout="@layout/coupons_header" />
+
+    <Chronometer
+        android:id="@+id/chronometer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:drawablePadding="20dp"
+        android:drawableStart="@drawable/icon_clock"
+        android:format="HH:MM:SS"
+        android:gravity="top"
+        android:textColor="@color/choose_rate_button_pressed_color"
+        android:textSize="50sp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/get_coupons"
+        android:layout_width="fill_parent"
+        android:layout_height="265dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="visible" >
+
+        <LinearLayout
+            style="@style/coupons_layout_style"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/white"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:tag="forBoldText"
+                    android:text="@string/get"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:tag="forBoldText"
+                    android:text="15%"
+                    android:textColor="@color/tabbar_green_background"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|start"
+                    android:tag="forBoldText"
+                    android:text="@string/off"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:paddingEnd="5dp"
+                    android:tag="forBoldText"
+                    android:text="@string/code"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|start"
+                    android:paddingStart="5dp"
+                    android:tag="forBoldText"
+                    android:text="@string/july"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_coupons"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_get_coupons"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/sel_home_green_button"
+            android:gravity="center"
+            android:tag="forBoldText"
+            android:text="@string/copy_coupon_code"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/share_coupons"
+        android:layout_width="fill_parent"
+        android:layout_height="265dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:gravity="center"
+            android:tag="forBoldText"
+            android:text="@string/to_get_your_coupon"
+            android:textAllCaps="true"
+            android:textColor="@color/gray"
+            android:textSize="16sp" >
+        </TextView>
+
+        <Button
+            android:id="@+id/btn_share_on_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/sel_facebook_button"
+            android:drawableStart="@drawable/icon_facebook"
+            android:gravity="center"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:tag="forBoldText"
+            android:text="@string/share_on_facebook"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:tag="forBoldText"
+            android:text="@string/or"
+            android:textAllCaps="true"
+            android:textColor="@color/gray_half"
+            android:textSize="16sp" >
+        </TextView>
+
+        <Button
+            android:id="@+id/btn_share_on_twitter"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/sel_twitter_button"
+            android:drawableStart="@drawable/icon_twitter"
+            android:gravity="center"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:tag="forBoldText"
+            android:text="@string/share_on_twitter"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cancel_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:visibility="gone" >
+    </TextView>
+
+</LinearLayout>

@@ -3,9 +3,8 @@
 <!-- 连框颜色值 -->
 <item> 
     <shape>
-       <solid android:color="#7f404042"/>
-       <corners android:topLeftRadius="2dp" />
-       <corners android:bottomLeftRadius="2dp" />
+       <solid android:color="@color/color_twitter"/> 
+       <corners android:radius="5dp"/>
     </shape> 
 </item>
 </layer-list>

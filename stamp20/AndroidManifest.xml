@@ -181,6 +181,8 @@
             android:configChanges="keyboardHidden|orientation" />
         <activity android:name="io.card.payment.DataEntryActivity" />
         <activity android:name="com.stamp20.app.activities.AboutActivity" />
+        <activity android:name="com.stamp20.app.activities.CouponsActivity" />
+        <activity android:name="com.stamp20.app.activities.AboutDetailsActivity" />
     </application>
 
 </manifest>

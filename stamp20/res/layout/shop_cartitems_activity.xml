@@ -71,6 +71,7 @@
                 android:text="@string/shop_checkout"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
+                android:tag="forBoldText"
                 android:textAllCaps="true"
                  />
         </LinearLayout>

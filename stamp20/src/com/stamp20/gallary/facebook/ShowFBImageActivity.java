@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
-import com.stamp20.app.activities.MainActivity;
+import com.stamp20.app.activities.MainEffect;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Image;
 import com.stamp20.app.util.Log;
@@ -129,7 +129,7 @@ public class ShowFBImageActivity extends Activity implements OnItemClickListener
 	    	}
 	    	
 	        Uri uri = Uri.fromFile(file);
-	        Intent intent = new Intent(ShowFBImageActivity.this, MainActivity.class);
+	        Intent intent = new Intent(ShowFBImageActivity.this, MainEffect.class);
 	        intent.putExtra("imageUri", uri);
 	        
 			return intent;

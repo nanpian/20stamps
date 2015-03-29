@@ -24,6 +24,9 @@
     <style name="header_right_text_style" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/bg_header_right_text</item>
     </style>
+    <style name="coupons_layout_style" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/coupons_layout</item>
+    </style>
 
     <style name="paypal_edittext_style" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/bg_edittext</item>

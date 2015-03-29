@@ -1,24 +1,27 @@
-<RelativeLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/activity_background_gray"
-    android:id="@+id/root">
-    <RelativeLayout 
+    android:background="@color/activity_background_gray" >
+
+    <RelativeLayout
         android:id="@+id/header_layout"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_width="match_parent">
-	    <TextView android:id="@+id/header_title"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"
-	        android:layout_alignParentBottom="true"
-	        android:text="Choose a Template"
-	        android:textSize="20sp"
-	        android:textColor="#ffffff"/>
-        <TextView 
+        android:layout_alignParentTop="true" >
+
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Choose a Template"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+        <!--
+             <TextView 
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,33 +31,48 @@
 	        android:textSize="18sp"
             android:text="Cancel"
             />
-	    <ImageView 
-	        android:id="@+id/list_change"
-	        android:layout_width="30dp"
-	        android:layout_height="30dp"
-	        android:layout_marginRight="10dp"
-	        android:scaleType="fitXY"
-	        android:layout_alignParentBottom="true"
-	        android:layout_alignParentRight="true"
+        -->
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/header_previous"
+            android:src="@drawable/btn_back" />
+
+        <ImageView
+            android:id="@+id/list_change"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:clickable="true"
-	        android:src="@drawable/sel_cards_templat_change_enlarge_button"
-	        />        
+            android:scaleType="fitXY"
+            android:src="@drawable/sel_cards_templat_change_enlarge_button" />
     </RelativeLayout>
-	<RelativeLayout 
-	    android:layout_below="@id/header_layout"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent">
-	    <GridView 
-	        android:id="@+id/gridview"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:numColumns="2">
-	    </GridView>
-	    <ListView 
-	        android:id="@+id/listview"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:divider="@color/activity_background_gray">
-	    </ListView>
-	</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_layout" >
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="2" >
+        </GridView>
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@color/activity_background_gray" >
+        </ListView>
+    </RelativeLayout>
+
 </RelativeLayout>

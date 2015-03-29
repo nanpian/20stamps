@@ -9,6 +9,7 @@
     <color name="black">#000000</color>
     <color name="darkgray">#333333</color>
     <color name="gray">#5c5856</color>
+    <color name="gray_half">#7f5c5856</color>
     <color name="lightgray">#878787</color>
     <color name="superlightgray">#b1b1b1</color>
     <color name="header_background_line_color">#e8493a</color>
@@ -34,4 +35,9 @@
     <color name="design_finish_frag_product_info_title_textcolor">#333333</color>
     <color name="design_finish_frag_product_info_value_textcolor">#666666</color>
     <color name="choose_rate_button_pressed_color">#fff1c40f</color>
+    <color name="color_coupons">#FF8F1C</color>
+    <color name="color_facebook">#49639E</color>
+    <color name="color_twitter">#03ACEE</color>
+    <color name="color_facebook_pressed">#7f49639E</color>
+    <color name="color_twitter_pressed">#7f03ACEE</color>
 </resources>

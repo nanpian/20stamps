@@ -71,6 +71,7 @@
         android:id="@+id/customenvelope"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
+        android:tag="forBoldText"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/sel_home_green_button"

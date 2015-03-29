@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
+    android:id="@+id/root"
     android:background="@color/activity_background_gray">
 
     <include layout="@layout/header" />
@@ -22,23 +24,35 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/sel_home_green_button"
         android:text="NEXT: Review"
+        android:tag="forBoldText"
         android:textSize="20sp"
         android:textColor="@android:color/white" />
 
     <TextView
+        android:id="@+id/envelope_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/activity_envelope_img"
-        android:text="LineWhite"
+        android:text="Linen White"
         android:textSize="33sp"
-        android:id="@+id/line_white" />
+        />
+     <TextView
+        android:id="@+id/envelope_name2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/envelope_name"
+        android:text="Linen White"
+        android:textColor="#a6adb3"
+        android:textSize="20sp"
+         />
     
     <com.stamp20.app.view.HorizontalListView
         android:id="@+id/activity_card_envelope"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:layout_below="@id/line_white"
+        android:layout_below="@id/envelope_name2"
         android:layout_marginTop="5dp"
       />
 

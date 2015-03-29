@@ -84,7 +84,7 @@ public class SplashActivity extends Activity {
                         true);
         if(Constant.debugMainActivity() && Log.DEBUG){
             startActivity(new Intent(SplashActivity.this,
-                    MainActivity.class));
+                    MainEffect.class));
                 return;
         }
         if(Constant.debugCardsActivity() && Log.DEBUG){

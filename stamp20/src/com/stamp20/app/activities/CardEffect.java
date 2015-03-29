@@ -9,6 +9,7 @@ import com.stamp20.app.view.CardGLSurfaceView;
 import com.stamp20.app.view.CardGLSurfaceView.OnCardBitmapGeneratedListener;
 import com.stamp20.app.view.HorizontalListView;
 import com.stamp20.app.view.ImageUtil;
+import com.stamp20.app.view.ScollerRelativeView;
 import com.stamp20.app.view.StampViewConstants;
 import com.stamp20.app.view.ZoomImageView;
 import com.stamp20.app.view.CardBackView.onGeneratedCardBackBmpListener;
@@ -67,6 +68,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	private Button choose_photo;
 	private Button change_design;
 	private RelativeLayout cardview, background_layout;
+	private com.stamp20.app.view.ScollerRelativeView scrollPicArea;
 	private Button customback;
 	private Integer templateId;
 	
@@ -103,9 +105,9 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+
 		super.onCreate(savedInstanceState);
-		Log.i(Tag, "in onCreate activity!!");
+
 		setContentView(R.layout.activity_card_effect);
 		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
 		instance = this;
@@ -149,7 +151,6 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 
 		select_photo_button = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
 		select_photo_button.setOnFocusChangeListener(new OnFocusChangeListener() {
-
 			@Override
 			public void onFocusChange(View arg0, boolean hasfocus) {
                 if (hasfocus){
@@ -160,7 +161,6 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		});
 		
 		select_photo_button.setOnTouchListener(new OnTouchListener(){
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                     if(event.getAction() == MotionEvent.ACTION_DOWN){
@@ -181,7 +181,6 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		effectAdapter.setSelectItem(0);
 		galleryFilter.setAdapter(effectAdapter);
 		galleryFilter.setSelection(5);
-		//galleryFilter.setAnimationDuration(3000);
 		galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					private String currentfiltername;
 					public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -198,6 +197,10 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		//galleryFilter.setVisibility(View.GONE);
 		customback = (Button)findViewById(R.id.customback);
 		customback.setOnClickListener(this);
+		
+		//首先需要设置背景色为深色
+		customback.setBackgroundDrawable(getResources().getDrawable(R.drawable.dra_home_green_button_pressed_true));
+		scrollPicArea = (ScollerRelativeView) findViewById(R.id.pic_area);
 	}
 
     public Bitmap getAlphaBackView(int viewId){
@@ -297,8 +300,8 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		mGPUImageView.setVisibility(View.VISIBLE);
 		galleryFilter.setVisibility(View.VISIBLE);
 		galleryFilter.setAdapter(effectAdapter);
+		
 		galleryFilter.setSelection(0);
-		//galleryFilter.setAnimationDuration(3000);
 		galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					private String currentfiltername;
 					public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -312,6 +315,11 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 						mGPUImageView.requestRender();
 					}
 				});
+		//恢复浅色调
+		customback.setBackgroundDrawable(getResources().getDrawable(R.drawable.sel_home_green_button));
+		customback.setTextColor(0xffffffff);
+		scrollPicArea.scrollBy(0, -800);
+		scrollPicArea.smoothScollToY(800, 3000);
 	}
 
 	@Override

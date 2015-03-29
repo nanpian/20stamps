@@ -7,12 +7,12 @@
 
     <include layout="@layout/header" />
 
-    <RelativeLayout
+    <com.stamp20.app.view.ScollerRelativeView
         android:id="@+id/pic_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:background="@color/activity_background_gray" >
+        android:background="@color/activity_background_gray">
 
         <RelativeLayout
             android:id="@+id/cardview"
@@ -99,7 +99,7 @@
             android:layout_below="@id/buttonid"
             android:layout_marginTop="6dp"
             android:visibility="gone" />
-    </RelativeLayout>
+   </com.stamp20.app.view.ScollerRelativeView>
 
     <Button
         android:id="@+id/customback"
@@ -111,6 +111,6 @@
         android:background="@drawable/sel_home_green_button"
         android:text="NEXT: CUSTOMIZE BACK"
         android:textSize="20sp"
-        android:textColor="@android:color/white" />
+        android:textColor="#5e6c5b" />
 
 </RelativeLayout>

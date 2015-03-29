@@ -98,6 +98,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 		com.stamp20.app.view.HorizontalListView gallery = (com.stamp20.app.view.HorizontalListView) findViewById(R.id.galleryFilter);
 		effectAdapter = new ImageEffectAdapter(MainEffect.this, mEffectContext);
 		effectAdapter.setImageResource(imageUri);
+		effectAdapter.setSelectItem(0);
 		mGPUImageView.setEffectAdapter(effectAdapter);
 		currentfilterID = 0;
 		gallery.setAdapter(effectAdapter);

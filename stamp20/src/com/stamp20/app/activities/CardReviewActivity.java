@@ -50,6 +50,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 	private ImageView activity_envelope_img;
 	private Bitmap cardBmpBack;
 	private Bitmap cardBmpFront;
+	private Bitmap cardBmpEnvelop;
 	private boolean isFrontNow;
 	private ImageView backgroundEvelopImage;
     private Button mShareDesign;
@@ -59,8 +60,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_card_review);
-		// FontManager.changeFonts((RelativeLayout) findViewById(R.id.root),
-		// this);
+		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root),
+		 this);
 		initView();
 	}
 
@@ -90,6 +91,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 		activity_envelope_img.setImageBitmap(cardBmpFront);
 		CardBmpCache bmpCache = CardBmpCache.getCacheInstance();
 		cardBmpBack = bmpCache.getBack();
+		backgroundEvelopImage.setImageBitmap(bmpCache.getEnve());
 		isFrontNow = true;
 	}
 

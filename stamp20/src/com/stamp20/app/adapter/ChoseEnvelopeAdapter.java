@@ -1,7 +1,10 @@
 package com.stamp20.app.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -31,10 +34,19 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private Bitmap cardBackShape;
-    private Bitmap mSourceBitmap;
-    private static int sCardsBackList[] = {R.drawable.card_back_white, R.drawable.card_back_lite_grey,
-    	R.drawable.card_back_red,R.drawable.card_back_green
-        }; 
+	private Bitmap mSourceBitmap;
+	private static int sCardsBackList[] = { R.drawable.card_back_white,
+			R.drawable.card_back_lite_grey, R.drawable.card_back_red,
+			R.drawable.card_back_green };
+	
+	public class NamePairs {
+		public String name1;
+		public String name2;
+		public NamePairs(String name11, String name22) {
+			name1 = name11;
+			name2 = name22;
+		}
+	}
 
 	public ChoseEnvelopeAdapter(Context c) {
 		mContext = c;
@@ -43,24 +55,30 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 		colorArray.add(new ColorArray(Color.parseColor("#E0EEEE")));
 		colorArray.add(new ColorArray(Color.parseColor("#DC143C")));
 		colorArray.add(new ColorArray(Color.parseColor("#008B00")));
-		
+        
+		namepairArray.add(new NamePairs("Linen White", "Linen White"));
+		namepairArray.add(new NamePairs("Linen Crean", "Linen Cream"));
+		namepairArray.add(new NamePairs("Holiday Red", "Here comes Santa Claus"));
+		namepairArray.add(new NamePairs("Holiday Green", "Holiday Green"));
+
 		this.cardBackShape = BitmapFactory.decodeResource(
 				mContext.getResources(), R.drawable.activity_card_back_shape);
 	}
 
-    public void setImageUri(Uri imageUri){
-        Log.i("jiangtao4", "in setImageUri");
-        mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
-        //here we use for add the blur image
-        if (mSourceBitmap != null){
-            colorArray.add(0, new ColorArray(Color.WHITE));
-            mSourceBitmap = getAlphaSrcBitmap();
-        }
-    }
+	public void setImageUri(Uri imageUri) {
+		mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
+		// here we use for add the blur image
+		if (mSourceBitmap != null) {
+			colorArray.add(0, new ColorArray(Color.WHITE));
+			mSourceBitmap = getAlphaSrcBitmap();
+		}
+	}
 
 	private List<ColorArray> colorArray = new ArrayList<ColorArray>();
+	private List<NamePairs> namepairArray = new ArrayList<NamePairs>();
 	private int selectItem;
-	public void setSelectItem (int selectId) {
+
+	public void setSelectItem(int selectId) {
 		this.selectItem = selectId;
 		notifyDataSetChanged();
 	}
@@ -75,7 +93,6 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-        Log.i("jiangtao4", "in getCount");
 		return colorArray.size();
 	}
 
@@ -89,41 +106,51 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-	
+
 	public int getColor(int position) {
 		return position < colorArray.size() ? colorArray.get(position).color
 				: null;
 	}
+	
+	public NamePairs getNamePairs(int position) {
+		return position < namepairArray.size() ? namepairArray.get(position)
+				: null;
+	}
+
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		convertView = mInflater.inflate(R.layout.gallery_choose_color_layout, null);
+		convertView = mInflater.inflate(R.layout.gallery_choose_color_layout,
+				null);
 		// FontManager.changeFonts(mContext,
 		// (LinearLayout)convertView.findViewById(R.id.root));
 		RoundedImageView imageView = null;
 		TextView textView = null;
-		imageView = (RoundedImageView) convertView.findViewById(R.id.image_item);
+		imageView = (RoundedImageView) convertView
+				.findViewById(R.id.image_item);
 		textView = (TextView) convertView.findViewById(R.id.text_item);
-        if (mSourceBitmap != null){
-            if (position == 0){
-                imageView.setImageBitmap(mSourceBitmap);
-            }else {
-                imageView.setImageResource(sCardsBackList[position-1]);
-            }
-        }else {
-            imageView.setImageResource(sCardsBackList[position]);
-        }
+		if (mSourceBitmap != null) {
+			if (position == 0) {
+				imageView.setImageBitmap(mSourceBitmap);
+			} else {
+				imageView.setImageResource(sCardsBackList[position - 1]);
+			}
+		} else {
+			imageView.setImageResource(sCardsBackList[position]);
+		}
 		if (selectItem == position) {
 			// 处理点击放大效果，注意，这里还要加入边框效果，需要UI
 			imageView.setBorderColor(Color.parseColor("#f1c40f"));
-			ObjectAnimator xAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1.1f);
-			ObjectAnimator yAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1.1f);
+			ObjectAnimator xAnimator = ObjectAnimator.ofFloat(imageView,
+					"scaleX", 1.1f);
+			ObjectAnimator yAnimator = ObjectAnimator.ofFloat(imageView,
+					"scaleY", 1.1f);
 			xAnimator.setDuration(500);
 			yAnimator.setDuration(500);
 			AnimatorSet animatorSet = new AnimatorSet();
 			animatorSet.play(xAnimator).with(yAnimator);
 			animatorSet.start();
-			//textView.setTextColor(Color.parseColor("#f1c40f"));
+			// textView.setTextColor(Color.parseColor("#f1c40f"));
 			// imageView.setBackgroundResource(R.drawable.bg_filter_item_selected);
 		} else {
 			// imageView.setLayoutParams(new LinearLayout.LayoutParams(width,
@@ -136,20 +163,23 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-    public Bitmap getAlphaSrcBitmap(){
-        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(), mSourceBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_back_view_overlay);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        paint.setAlpha(200);
-        canvas.drawBitmap(mSourceBitmap, 0, 0, null);
-        Matrix matrix = new Matrix();
-        matrix.setScale(bitmap.getWidth()*1.0f/cover.getWidth(), bitmap.getHeight()*1.0f/cover.getHeight());
-        canvas.concat(matrix);
-        canvas.drawBitmap(cover, 0, 0, paint);
+	public Bitmap getAlphaSrcBitmap() {
+		Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(),
+				mSourceBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(),
+				R.drawable.card_back_view_overlay);
+		Canvas canvas = new Canvas(bitmap);
+		Paint paint = new Paint();
+		paint.setAlpha(200);
+		canvas.drawBitmap(mSourceBitmap, 0, 0, null);
+		Matrix matrix = new Matrix();
+		matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(),
+				bitmap.getHeight() * 1.0f / cover.getHeight());
+		canvas.concat(matrix);
+		canvas.drawBitmap(cover, 0, 0, paint);
 
-        return bitmap;
-    }
+		return bitmap;
+	}
 
 	public Bitmap maskWithColor(Bitmap cardBackBitmapSource, int maskcolor) {
 		int mBitmapHeight = cardBackBitmapSource.getHeight();
@@ -183,8 +213,8 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 				mBitmapHeight);
 		return newBmp;
 	}
-	
-	public Bitmap maskWithTransparent(Bitmap cardBackBitmapSource ) {
+
+	public Bitmap maskWithTransparent(Bitmap cardBackBitmapSource) {
 		return cardBackBitmapSource;
 	}
 }

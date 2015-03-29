@@ -534,7 +534,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements OnClickLi
 			    	}
 			    	
 			        Uri uri = Uri.fromFile(file);
-			        Intent intent = new Intent(mContext, MainActivity.class);
+			        Intent intent = new Intent(mContext, MainEffect.class);
 			        intent.putExtra("imageUri", uri);
 			        
 					return intent;

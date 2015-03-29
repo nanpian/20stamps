@@ -18,7 +18,7 @@
     <string name="share_design">Share Design</string>
     <string name="item_addto_chart">Item Added to Cart</string>
     <string name="shop_custom">customize</string>
-    <string name="shop_addto_chart">add to chart</string>
+    <string name="shop_addto_chart">add to cart</string>
     <string name="shop_skipto_chart">Skip to cart</string>
     <string name="shop_text_bundle">Make a Bundle. Save $10!</string>
     <string name="shop_cartitems_title">Cart</string>
@@ -68,5 +68,25 @@
     <string name="postage">postage</string>
     <string name="view_cart">view cart</string>
     <string name="is_it_real_postage">is it real postage?</string>
-
+    <string name="copy_coupon_code">copy coupon code</string>
+    <string name="get">get</string>
+    <string name="off">off</string>
+    <string name="code">code:</string>
+    <string name="july">July</string>
+    <string name="cancel">Cancel</string>
+    <string name="to_get_your_coupon">to get your coupon</string>
+    <string name="share_on_facebook">Share on Facebook</string>
+    <string name="or">or</string>
+    <string name="share_on_twitter">Share on Twitter</string>
+    <string name="about">About</string>
+    <string name="about_1">is it real postage?</string>
+    <string name="about_2">More FAQ</string>
+    <string name="about_3">Contact Support</string>
+    <string name="about_4">Wibesite</string>
+    <string name="about_5">Terms of Service</string>
+    <string name="about_6">Privacy Policy</string>
+    <string name="about_7">Shipping $ Return Policy</string>
+    <string name="about_8">Rate us on App Store</string>
+    <string name="about_9">Clear Data and Cache</string>
+    <string name="about_10">Version</string>
 </resources>
