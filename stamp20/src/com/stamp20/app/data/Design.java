@@ -10,6 +10,8 @@ import com.parse.ParseUser;
 
 @ParseClassName("Design")
 public class Design extends ParseObject {
+	public static String TYPE_STAMP = "type_stamp";
+	public static String TYPE_CARD = "type_card";
     
     private static Design mInstance;
 
@@ -89,12 +91,36 @@ public class Design extends ParseObject {
 		put(TaxableAmount, mTaxableAmount);
 	}
 
-	//Price
-	public int getPrice() {
-		return this.getInt(Price);
+	// review picture
+	public byte[] getReview(){
+		return this.getBytes(BitmapByte);
 	}
-	public void setPrice(int mPrice) {
-		put(Price, mPrice);
+	public void setReview(byte[] s){
+		put(BitmapByte, s);
+	}
+	
+	// Rate
+	public int getRate(){
+		return this.getInt(Rate);
+	}
+	public void setRate(int rate){
+		put(Rate, rate);
+	}
+	
+	//Unit Price
+	public int getUnitPrice() {
+		return this.getInt(UnitPrice);
+	}
+	public void setUnitPrice(int mPrice) {
+		put(UnitPrice, mPrice);
+	}
+	
+	// Total Price
+	public String getTotalPrice(){
+		return this.getString(TotalPrice);
+	}
+	public void setTotalPrice(String price){
+		put(TotalPrice, price);
 	}
 	
 	//Count
@@ -103,6 +129,14 @@ public class Design extends ParseObject {
 	}
 	public void setCount(int count){
 		put(Count, count);
+	}
+	
+	//type
+	public String getType(){
+		return this.getString(Type);
+	}
+	public void setType(String t){
+		put(Type, t);
 	}
 	
 	//Options
@@ -267,11 +301,14 @@ public class Design extends ParseObject {
 	private final static String DeviceId  = "DeviceId";
 	
 	private final static String TaxableAmount = "TaxableAmount"; //taxable amount, !=price when it's stamp
-	private final static String Price = "Price";//price from device, single design
+	private final static String Rate = "Rate";
+	private final static String UnitPrice = "UnitPrice";//price from device, single design
+	private final static String TotalPrice = "TotalPrice";
 	private final static String Count = "Count";//the count of design
 	private final static String Options ="Options";//array of option values
 	private final static String User = "User";//ParseUser object
 	private final static String Orientation ="Orientation"; //orientation of stamps
+	private final static String Type = "Type"; //type: stamp or card
 	
 	private final static String ThumbFileOneLocal = "Thumb1Local";
 	private final static String ThumbFileOneServer = "Thumb1Server";//parsefile

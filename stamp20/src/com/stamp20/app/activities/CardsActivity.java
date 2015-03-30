@@ -1,7 +1,5 @@
 package com.stamp20.app.activities;
 
-import java.util.Currency;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
+import com.stamp20.app.util.CardsTemplateUtils;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ImageUtil;
@@ -54,7 +52,7 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
     public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
 
 	private static final CharSequence titleName = "Customize Front";
-        
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -91,6 +89,9 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
     }
 
     private void changeTemplate(){
+        Intent intent = new Intent();
+        intent.setClass(CardsActivity.this,
+                CardsTemplateChooseActivity.class);
         startActivityForResult(new Intent(CardsActivity.this,
                 CardsTemplateChooseActivity.class), ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE);
     }
@@ -108,8 +109,8 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
             Uri uri = data.getData();
             mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
         } else if(requestCode == ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE && resultCode == RESULT_OK) {
-            int tmplateId = data.getIntExtra(ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN, tmplateId));
+            int temPos = data.getIntExtra(ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN, CardsTemplateUtils.getTransTemplateId(temPos)));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

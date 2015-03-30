@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.anim.ListView2GridViewLayoutAnimationController;
+import com.stamp20.app.util.CardsTemplateUtils;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.ImageUtil;
 
@@ -38,53 +37,21 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     private static int sOutAnimDuration = 180;
     private ImageView mCancel;
     private ImageView mListChange;
-    private static boolean isFromMain = true;
-	private static int sTemplateList2[] = { R.drawable.x_christmas2_front,
-			R.drawable.x_christmas3_front, R.drawable.x_christmas4_front,
-			R.drawable.x_christmas5_front, R.drawable.x_congrats1_front,
-			R.drawable.x_greeting1_front, R.drawable.x_holiday1_front,
-			R.drawable.x_holiday2_front, R.drawable.x_holiday3_front,
-			R.drawable.x_holiday4_front, R.drawable.x_invitation1_front,
-			R.drawable.x_invitation2_front, R.drawable.x_love1_front,
-			R.drawable.x_love3_front, R.drawable.x_love4_front,
-			R.drawable.x_new_year2_front, R.drawable.x_new_year4_front,
-			R.drawable.x_new_year5_front, R.drawable.x_new_year6_front,
-			R.drawable.x_new_year7_front, R.drawable.x_save_the_date1_front,
-			R.drawable.x_thanks1_front, R.drawable.x_thanks2_front,
-			R.drawable.x_thanks3_front,
-    	//R.drawable.x_use_your_photo1_front,
-    	//R.drawable.x_use_your_photo2_front, R.drawable.x_use_your_photo3_front,
-       // R.drawable.cards_year_sheep,R.drawable.cards_love
-        };
-	private static int sTemplateList[] = { R.drawable.xx_christmas2_front,
-		R.drawable.xx_christmas3_front, R.drawable.xx_christmas4_front,
-		R.drawable.xx_christmas5_front, R.drawable.xx_congrats1_front,
-		R.drawable.xx_greeting1_front, R.drawable.xx_holiday1_front,
-		R.drawable.xx_holiday2_front, R.drawable.xx_holiday3_front,
-		R.drawable.xx_holiday4_front, R.drawable.xx_invitation1_front,
-		R.drawable.xx_invitation2_front, R.drawable.xx_love1_front,
-		R.drawable.xx_love3_front, R.drawable.xx_love4_front,
-		R.drawable.xx_new_year2_front, R.drawable.xx_new_year4_front,
-		R.drawable.xx_new_year5_front, R.drawable.xx_new_year6_front,
-		R.drawable.xx_new_year7_front, R.drawable.xx_save_the_date1_front,
-		R.drawable.xx_thanks1_front, R.drawable.xx_thanks2_front,
-		R.drawable.xx_thanks3_front,};
+    private boolean isFromMain = true;
     //add for template change
     private Uri mSrcImageUri = null;
     private Bitmap mSrcImage = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_template_choose);
         RelativeLayout root = (RelativeLayout) this.findViewById(R.id.root);
         FontManager.changeFonts(root, this);
-        
-        //add for template change 
+        //add for template change
         Intent intent = getIntent();
-        if(intent != null) {
-        	isFromMain = false;
+        if(intent != null && intent.getBooleanExtra(CardsTemplateUtils.ACTIVITY_CHANGE_TEMPLATE, false)) {
+            isFromMain = false;
 			mSrcImageUri = (Uri)intent.getParcelableExtra(CardEffect.SRC_IMAGE_URI);
 			if (mSrcImageUri != null) {
 				mSrcImage = ImageUtil.loadDownsampledBitmap(this, mSrcImageUri,
@@ -114,6 +81,11 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
         mCancel = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.cancel);
         mCancel.setOnClickListener(this);
         //mCancel.setTextColor(getResources().getColorStateList(R.color.sel_cards_choose_button));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -198,7 +170,7 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
 
         @Override
         public int getCount() {
-            return sTemplateList.length;
+            return CardsTemplateUtils.getTemplateSize();
         }
 
         @Override
@@ -224,7 +196,11 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
             if (mSrcImage != null) {
 				iv.setBackground(new BitmapDrawable(mSrcImage));
 			}
-            iv.setImageResource(sTemplateList[position]);
+            if (isFromMain){
+                iv.setImageResource(CardsTemplateUtils.getTemplateId(position));
+            }else {
+                iv.setImageResource(CardsTemplateUtils.getTransTemplateId(position));
+            }
             return convertView;
         }
     }
@@ -252,9 +228,9 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
 
         data.setClass(this, CardEffect.class);
         if (isFromMain) {
-            data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList[position]);
+            data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, position);
         } else {
-        	 data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, sTemplateList2[position]);
+        	data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, position);
         }
 
         if (mSrcImageUri != null) {
@@ -263,7 +239,5 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
 		}else {
 			startActivity(data);
 		}
-
-        
     }
 }

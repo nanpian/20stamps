@@ -16,7 +16,7 @@ public class OrderItem extends ParseObject {
 		setDesignIdParse("");
 		setDeviceName(design.getDeviceName());
 		setDeviceId(design.getDeviceId());
-		setPrice(design.getPrice());
+		setPrice(design.getUnitPrice());
 		setTaxableAmount(design.getTaxableAmount());
 		
 		setThumbFileOneLocal(design.getThumbFileOneLocal());

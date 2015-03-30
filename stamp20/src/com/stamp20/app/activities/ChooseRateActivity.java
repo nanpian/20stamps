@@ -215,7 +215,7 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     	String[] rateArray = this.getResources().getStringArray(R.array.stamp_rate_title);
     	mTextSelectRate.setText(rateArray[id]);
         chooseRateStampView.setRateBitmapId(id, isH);
-        Design.getInstance().setPrice(Integer.valueOf(rateArray[id]));
+        Design.getInstance().setUnitPrice(Integer.valueOf(rateArray[id]));
         mCRP.dismiss();
     }
     /*和底部弹出的PopupWindow相关 END*/

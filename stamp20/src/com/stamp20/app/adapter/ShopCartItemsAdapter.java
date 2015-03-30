@@ -8,6 +8,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,10 +86,9 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         FontManager.changeFonts(mContext, viewHolder.itemPrice);
         FontManager.changeFonts(mContext, viewHolder.itemPersheet);
         FontManager.changeFonts(mContext, viewHolder.itemUnitPrice);
-
-        String id = mDesigns.get(position).getDesignIdLocal();
-        Log.i("wangpeng", "design id: " + id);
-        Bitmap src = Cart.getInstance().getCachedBitmap(id);
+ 
+        byte[] review = mDesigns.get(position).getReview();
+        Bitmap src = BitmapFactory.decodeByteArray(review, 0, review.length);
         if(src != null)
         	viewHolder.stampItemView.setImageBitmap(src);
         else{

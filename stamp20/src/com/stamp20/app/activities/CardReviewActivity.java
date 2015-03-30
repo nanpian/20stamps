@@ -2,6 +2,8 @@ package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
 import com.stamp20.app.anim.Rotate3dAnimation;
+import com.stamp20.app.data.Cart;
+import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
@@ -150,12 +152,14 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.card_add_to_cart:
 			//add to cart
-			BitmapCache mCache = BitmapCache.getCache();
-			mCache.put(cardBmpFront);
+			Cart cart = Cart.getInstance();
+			cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
+
 			Intent intent = new Intent();
 			intent.setClass(this, ShopCartItemsActivity.class);
 			intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
 			startActivity(intent);
+			finish();
 			break;
         case R.id.card_back_share:
             File file = saveFontBitmap(CardBmpCache.getCacheInstance().getFront());

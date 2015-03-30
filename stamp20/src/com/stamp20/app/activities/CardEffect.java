@@ -1,21 +1,5 @@
 package com.stamp20.app.activities;
 
-import com.stamp20.app.R;
-import com.stamp20.app.R.string;
-import com.stamp20.app.adapter.ImageEffectAdapter;
-import com.stamp20.app.util.Constant;
-import com.stamp20.app.util.FontManager;
-import com.stamp20.app.view.CardGLSurfaceView;
-import com.stamp20.app.view.CardGLSurfaceView.OnCardBitmapGeneratedListener;
-import com.stamp20.app.view.HorizontalListView;
-import com.stamp20.app.view.ImageUtil;
-import com.stamp20.app.view.ScollerRelativeView;
-import com.stamp20.app.view.StampViewConstants;
-import com.stamp20.app.view.ZoomImageView;
-import com.stamp20.app.view.CardBackView.onGeneratedCardBackBmpListener;
-import com.stamp20.gallary.GallaryActivity;
-
-import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,15 +19,24 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.stamp20.app.R;
+import com.stamp20.app.adapter.ImageEffectAdapter;
+import com.stamp20.app.util.CardsTemplateUtils;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.CardGLSurfaceView;
+import com.stamp20.app.view.CardGLSurfaceView.OnCardBitmapGeneratedListener;
+import com.stamp20.app.view.HorizontalListView;
+import com.stamp20.app.view.ImageUtil;
+import com.stamp20.app.view.ScollerRelativeView;
+import com.stamp20.app.view.StampViewConstants;
+import com.stamp20.gallary.GallaryActivity;
 
 public class CardEffect extends Activity implements OnClickListener,OnTouchListener{
 
@@ -76,6 +69,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	public static final int REQUEST_CODE_FOR_TEMPLATE = 1;
 	public static final String SRC_IMAGE_URI = "imageUri";
 	private boolean mIsChangingPhoto = false;
+    private int mTemplatePos = 0;
 
 	Handler mHandler = new Handler() {
 
@@ -115,10 +109,11 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		mIsChangingPhoto = false;
 		Intent getFromChooseTemp = getIntent();
 		if (getFromChooseTemp != null) {
-			int tmplateId = getFromChooseTemp.getIntExtra(
+			int tempPos = getFromChooseTemp.getIntExtra(
 					ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            mTemplatePos = tempPos;
 			mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN,
-					tmplateId));
+					CardsTemplateUtils.getTemplateId(tempPos)));
 		}
 
 	}
@@ -258,6 +253,8 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 			imageUri = (Uri) intent.getParcelableExtra("imageUri");
 			Log.d(Tag, "uri=" + imageUri);
 			if (imageUri != null) {
+                Log.i("jiangtao4", "mTemplatePos is : " + mTemplatePos );
+                templateId = CardsTemplateUtils.getTransTemplateId(mTemplatePos);
 				if (templateId != -1) {
 					background_envelop.setImageResource(templateId);
 					mGPUImageView.changetemplate(templateId);//change backguard 
@@ -293,7 +290,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 		super.onPause();
 		mGPUImageView.onPause();
 	}
-	
+
 	private void refreshView() {
 		select_photo_button.setVisibility(View.GONE);
 		buttonLayout.setVisibility(View.VISIBLE);
@@ -324,7 +321,6 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.header_previous:
 			finish();
@@ -372,11 +368,12 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.i(Tag, "in result activity!!");
 		if (requestCode == REQUEST_CODE_FOR_TEMPLATE && resultCode == RESULT_OK) {
-			int tempid = data.getIntExtra(
+			int temPos = data.getIntExtra(
 					ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
-			templateId = tempid;
-			background_envelop.setImageResource(tempid);
-			mGPUImageView.changetemplate(tempid);//change backguard
+            mTemplatePos = temPos;
+			templateId = CardsTemplateUtils.getTransTemplateId(temPos);
+			background_envelop.setImageResource(templateId);
+			mGPUImageView.changetemplate(templateId);//change backguard
 			mGPUImageView.requestRender();
 		}
 	};
@@ -389,6 +386,7 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
     	Intent intent = new Intent();
     	intent.setClass(CardEffect.this, CardsTemplateChooseActivity.class);
     	intent.putExtra(SRC_IMAGE_URI, imageUri);
+        intent.putExtra(CardsTemplateUtils.ACTIVITY_CHANGE_TEMPLATE, true);
     	startActivityForResult(intent, REQUEST_CODE_FOR_TEMPLATE);
     }
 	

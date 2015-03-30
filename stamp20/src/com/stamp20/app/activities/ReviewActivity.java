@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.data.Cart;
+import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
@@ -107,7 +108,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
         	if(cart.isEmpty()){        		
         		intent.setClass(this, ShopCartActivity.class);
         	}else{
-        		cart.addDesign(mCache.get(), 20);
+        		cart.addDesign(mCache.get(), 20, Design.TYPE_STAMP);
         		intent.setClass(this, ShopCartItemsActivity.class);
         	}
         	startActivity(intent);

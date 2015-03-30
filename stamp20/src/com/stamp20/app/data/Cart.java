@@ -6,7 +6,6 @@ import java.util.List;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.stamp20.app.util.BitmapUtils;
@@ -21,10 +20,9 @@ public class Cart {
 	}
 	private boolean mIsEmpty;
 	private UserProfile mUser;
-	private HashMap<String, Bitmap> mCached;
+	
 	private Cart(){
 		mIsEmpty = true;
-		mCached = new HashMap<String, Bitmap>(10);
 	}
 	
 	public boolean isEmpty(){
@@ -49,45 +47,47 @@ public class Cart {
 		return c;
 	}
 	
-	public void addDesign(Design d){
-		d.pinInBackground(new SaveCallback(){
-			@Override
-			public void done(ParseException e) {
-				if(e != null){
-					Log.e("wangpeng","add to cart error" );	
-					e.printStackTrace();
-				}
-			}});
+	public int getCardsCount(){
+		int c = 0;
+		ParseQuery<Design> q = ParseQuery.getQuery(Design.class);
+		q.fromLocalDatastore();
+		q.whereEqualTo("Type", Design.TYPE_CARD);
+		try{
+			c = q.count();
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		return c;
 	}
 	
-	public void addDesign(Bitmap src, int rate){
+	public void addDesign(Design d){
+		try{
+			d.pin();
+		}catch(ParseException e){
+			Log.e("wangpeng","add to cart error" );	
+			e.printStackTrace();
+		}
+	}
+	
+	public void addDesign(Bitmap src, int rate, String type){
 		Design design = Design.getInstance();
 		
-		//byte[] data = BitmapUtils.Bitmap2Bytes(src);
-        //ParseFile file = new ParseFile("review.png", data);
-        //try{
-        //	file.save();
-        //}catch(ParseException e){
-        //	Log.e("wangpeng", "save file error");
-        //	e.printStackTrace();
-        //}
-
-		//design.put("reviewImage", file);                
-        // TODO add price
-        design.setPrice(2*rate+3);
-        mCached.put(design.getDesignIdLocal(), src);
+		byte[] data = BitmapUtils.Bitmap2Bytes(src);
+		design.setReview(data);
+		design.setRate(rate);
+        design.setUnitPrice(2*rate+3);
+        design.setType(type);
         
         this.addDesign(design);
 	}
 	
 	public void deleteDesign(Design d){
-		mCached.remove(d.getDesignIdLocal());
-		d.unpinInBackground(new DeleteCallback(){
-			@Override
-			public void done(ParseException e) {
-				if(e != null)
-					Log.e("wangpeng", "delete design error");
-			}});
+		try{
+			d.unpin();
+		}catch(ParseException e){
+			Log.e("wangpeng", "delete design error");
+			e.printStackTrace();
+		}
 	}
 	
 	public void deleteDesign(String id){
@@ -104,7 +104,6 @@ public class Cart {
 					return;
 				}
 				deleteDesign(arg0.get(0));
-				mCached.remove(arg0.get(0).getDesignIdLocal());
 			}});
 	}
 	
@@ -158,11 +157,7 @@ public class Cart {
 			Log.i("wangpeng", ds.toString());
 		return ds;
 	}
-	
-	public Bitmap getCachedBitmap(String id){
-		return mCached.get(id);
-	}
-	
+		
 	public void upStream(SaveCallback s){
 		
 	}

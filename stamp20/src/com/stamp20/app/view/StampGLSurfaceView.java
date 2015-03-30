@@ -280,7 +280,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         this.setRenderer(this);
         this.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mDesign.setOrientation(isHorizontal ? "H" : "V");
-        mDesign.setPrice(getDefaultPrice());
+        mDesign.setUnitPrice(getDefaultPrice());
     }
 
     private int getDefaultPrice() {
