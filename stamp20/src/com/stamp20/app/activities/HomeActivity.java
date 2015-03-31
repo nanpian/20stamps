@@ -29,6 +29,7 @@ import com.parse.ParseQuery;
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.R.anim;
+import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
@@ -139,35 +140,20 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        getLocalDesign();
+        updateLayout();
     }
-
-    private void getLocalDesign() {
-        ParseQuery<Design> query = ParseQuery.getQuery("Design");
-        query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<Design>() {
-            public void done(List<Design> designs, ParseException e) {
-                if (e == null) {
-                    Log.d(this, "getMyLocalDesign: success..." + designs.size());
-                    getLocalDesignSuccess(designs);
-                } else {
-                    Log.d(this, "getMyLocalDesign: failed...");
-                }
-            }
-        });
-    }
-
-    private void getLocalDesignSuccess(List<Design> designs) {
-        if (designs != null && designs.size() >= 1) {
-            mLocalDesignNumber.setText(String.valueOf(designs.size()));
-            mLinearLayoutNoLocalDesign.setVisibility(View.GONE);
-            mLinearLayoutHasLocalDesign.setVisibility(View.VISIBLE);
-
-        } else {
-            mLinearLayoutHasLocalDesign.setVisibility(View.GONE);
-            mLinearLayoutNoLocalDesign.setVisibility(View.VISIBLE);
-        }
-    }
+    
+    private void updateLayout(){
+    	Cart c = Cart.getInstance();
+    	if(c.isEmpty()){
+    		mLinearLayoutHasLocalDesign.setVisibility(View.GONE);
+    		mLinearLayoutNoLocalDesign.setVisibility(View.VISIBLE);
+    	}else{
+    		mLinearLayoutNoLocalDesign.setVisibility(View.GONE);
+    		mLinearLayoutHasLocalDesign.setVisibility(View.VISIBLE);
+    		mLocalDesignNumber.setText(String.valueOf(c.getCount()));
+    	}
+	}
 
     private void initBackgroundArrays() {
         TypedArray typedArray = getResources().obtainTypedArray(R.array.home_background);

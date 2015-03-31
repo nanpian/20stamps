@@ -182,15 +182,20 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
              * */
             @Override
             protected Bitmap doInBackground(Void... unused) {
-                mChooseRateRoot.buildDrawingCache();
+            	/* 临时解决bug, 点击more会FC */
+                /*mChooseRateRoot.buildDrawingCache();
                 Bitmap source = mChooseRateRoot.getDrawingCache();
-                return ImageUtils.fastBlur(source, 100);
+
+                return ImageUtils.fastBlur(source, 100);*/
+            	return null;
             }
             
             @Override
             protected void onPostExecute(Bitmap result) {
                 mBlurImageView.setVisibility(View.VISIBLE);
-                mBlurImageView.setImageBitmap(result);
+                if(null != result){
+                    mBlurImageView.setImageBitmap(result);
+                }
                 mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, 
                         new AnimationListener() {
                     
@@ -215,7 +220,8 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     	String[] rateArray = this.getResources().getStringArray(R.array.stamp_rate_title);
     	mTextSelectRate.setText(rateArray[id]);
         chooseRateStampView.setRateBitmapId(id, isH);
-        Design.getInstance().setUnitPrice(Integer.valueOf(rateArray[id]));
+        /* 暂时移除这个逻辑，因为这里返回的是String */
+        // Design.getInstance().setUnitPrice(Integer.valueOf(rateArray[id]));
         mCRP.dismiss();
     }
     /*和底部弹出的PopupWindow相关 END*/

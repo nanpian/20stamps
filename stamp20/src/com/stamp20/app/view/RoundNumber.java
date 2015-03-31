@@ -73,13 +73,13 @@ public class RoundNumber extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        width = getWidth();
-        height = getHeight();
-        Log.d(this, "width : " + width + ", height: " + height);
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        width = getWidth();
+        height = getHeight();
+        Log.d(this, "onLayout, width : " + width + ", height: " + height);
         if (changed) {
             super.onLayout(changed, left, top, right, bottom);
         }
