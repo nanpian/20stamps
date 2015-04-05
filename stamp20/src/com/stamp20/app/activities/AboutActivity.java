@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ public class AboutActivity extends Activity implements OnItemClickListener {
     ListView aboutListview;
     AboutAdapter mAboutAdapter;
     private TextView headerTitle;
+	private ImageView header_previous;
     private static String titleName = "About";
 
     @Override
@@ -29,6 +32,15 @@ public class AboutActivity extends Activity implements OnItemClickListener {
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(titleName);
         aboutListview = (ListView) findViewById(R.id.about_list);
+        header_previous = (ImageView) findViewById(R.id.header_previous);
+        header_previous.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+			    finish();
+			}
+        	
+        });
         mAboutAdapter = new AboutAdapter(this);
         aboutListview.setAdapter(mAboutAdapter);
         aboutListview.setOnItemClickListener(this);

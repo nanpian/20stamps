@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 
@@ -15,6 +16,7 @@ public class PaymentInfoActivity extends Activity implements OnCheckedChangeList
 
     private ShippingAddressFragment mShippingAddressFragment;
     private CheckBox sameAsCheckBox;
+	private TextView headerTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class PaymentInfoActivity extends Activity implements OnCheckedChangeList
     }
 
     private void initView() {
+        headerTitle = (TextView) findViewById(R.id.header_title);
+        headerTitle.setText(R.string.shipping_title_2);
         sameAsCheckBox = (CheckBox) findViewById(R.id.checkbox_same_as_shipping_address);
         sameAsCheckBox.setOnCheckedChangeListener(this);
         if (mShippingAddressFragment == null) {
