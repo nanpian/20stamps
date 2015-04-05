@@ -253,7 +253,6 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
 			imageUri = (Uri) intent.getParcelableExtra("imageUri");
 			Log.d(Tag, "uri=" + imageUri);
 			if (imageUri != null) {
-                Log.i("jiangtao4", "mTemplatePos is : " + mTemplatePos );
                 templateId = CardsTemplateUtils.getTransTemplateId(mTemplatePos);
 				if (templateId != -1) {
 					background_envelop.setImageResource(templateId);

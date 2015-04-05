@@ -210,7 +210,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 		final float centerX = activity_envelope_img.getWidth() / 2.0f;
 		final float centerY = activity_envelope_img.getHeight() / 2.0f;
 		Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX,
-				centerY, 200.0f, true);
+				centerY, 300.0f, true);
 		rotation.setDuration(500);
 		rotation.setInterpolator(new AccelerateInterpolator());
 		rotation.setAnimationListener(new AnimationListener() {
@@ -232,7 +232,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 							activity_envelope_img.setImageBitmap(cardBmpFront);		
 						}
 						Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(
-								-90, 0, centerX, centerY, 200.0f, false);
+								-90, 0, centerX, centerY, 300.0f, false);
 						rotatiomAnimation.setDuration(500);
 						rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
 						activity_envelope_img.startAnimation(rotatiomAnimation);

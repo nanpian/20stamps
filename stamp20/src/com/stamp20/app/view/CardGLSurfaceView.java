@@ -1,8 +1,5 @@
 package com.stamp20.app.view;
 
-import static javax.microedition.khronos.opengles.GL10.GL_RGBA;
-import static javax.microedition.khronos.opengles.GL10.GL_UNSIGNED_BYTE;
-
 import java.nio.IntBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -16,6 +13,7 @@ import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.Log;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
@@ -37,6 +35,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.widget.ImageView;
 
 public class CardGLSurfaceView extends GLSurfaceView implements
 		GLSurfaceView.Renderer {
@@ -58,6 +57,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	public Context mContext;
 	private int mImageWidth;
 	private int mImageHeight;
+	private float centerPointX;
+	private float centerPointY;
 	private Integer templatedid = R.drawable.cards_new_year;
 	/**
 	 * 初始化状态常量
@@ -186,11 +187,11 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 
 		totalRatio = initRatio = 1;
 		
-		//获取贺卡宽度，作为GLSurfaceView绘制的宽度
-		Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
-				R.drawable.cards_christmas);
-		cardTemplateWidth = cardTemplate.getWidth();
-		cardTemplateHeight = cardTemplate.getHeight();
+		//获取贺卡实际宽度，作为GLSurfaceView绘制的宽度
+	    ImageView cardBitmapView = (ImageView) ((Activity) mContext).findViewById(R.id.background_envelop);
+		cardTemplateWidth = cardBitmapView.getWidth();
+		cardTemplateHeight = cardBitmapView.getHeight();
+
 		this.requestRender();
 	}
 
@@ -254,7 +255,6 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			// if an effect is chosen initialize it and apply it to the texture
 			if (currentfilterID != 0) {
 				Log.i(Tag, "onDrawFrame the filter name is " + currentfiltername);
-				Log.i(Tag, "onDrawFrame the filter name is " + currentfiltername);
                 try {
 				mCurrentEffect = effectAdapter.createEffect(currentfilterID,
 						mEffectContext);
@@ -281,18 +281,10 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 			}
 		} else {
 			mHandler.sendEmptyMessage(INIT_FRAME);
-
 			gl.glLoadIdentity(); // 重置当前的模型观察矩阵
 			gl.glPushMatrix();
 			renderResult();
 			gl.glPopMatrix();
-			/*
-			 * if (currentStatus == STATUS_CAPTURE) { Log.i(Tag,
-			 * "onDrawFrame , generateStamp the gl is " + gl);
-			 * generateStamp(gl); if (stamplistener != null) {
-			 * notifyStampGernerated(); Log.i(Tag,
-			 * "onDrawFrame ,notify stamp generated!"); } }
-			 */
 		}
 	}
 	
@@ -324,18 +316,20 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		Bitmap cardBitmap = null;
 	    cardBitmap = BitmapFactory.decodeResource(mContext.getResources(),
 	    		templatedid);
+	    ImageView cardBitmapView = (ImageView) ((Activity) mContext).findViewById(R.id.background_envelop);
 		// deltaW为白色边框的条宽度
-		int mWidth = cardBitmap.getWidth();
-		int mHeight = cardBitmap.getHeight();
+
+		int mWidth = cardBitmapView.getWidth();
+		int mHeight = cardBitmapView.getHeight();
 		
 		Bitmap glBitmap = SavePixels((surfaceWidth - mWidth)/2,(surfaceHeight - mHeight) / 2,mWidth,mHeight,mGL);
+        Bitmap cardScaledBitmap = Bitmap.createScaledBitmap(cardBitmap, mWidth, mHeight, true);
+		resultBitmap = Bitmap.createBitmap(mWidth, mHeight, Config.ARGB_8888);
 
-		resultBitmap = Bitmap.createBitmap(cardBitmap.getWidth(),
-				cardBitmap.getHeight(), Config.ARGB_8888);
 		try {
 			Canvas cv = new Canvas(resultBitmap);
 			cv.drawBitmap(glBitmap, 0, 0, null);
-			cv.drawBitmap(cardBitmap, 0, 0, null);
+			cv.drawBitmap(cardScaledBitmap, 0, 0, null);
 
 			cv.save(Canvas.ALL_SAVE_FLAG);
 			cv.restore();
@@ -474,21 +468,23 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 				} else if (lastFingerDis - fingerDis > 15) {
 					currentStatus = STATUS_ZOOM_IN;
 				}
+				initRatio = 1.0f;
 				// 进行缩放倍数检查，最大只允许将图片放大4倍，最小可以缩小到初始化比例的1/2
-				if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 4 * initRatio)
+				if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 2 * initRatio)
 						|| (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio / 2)) {
 					scaledRatio = (float) (fingerDis / lastFingerDis);
 					totalRatio = totalRatio * scaledRatio;
-					if (totalRatio > 4 * initRatio) {
-						totalRatio = 4 * initRatio;
+					if (totalRatio > 2 * initRatio) {
+						totalRatio = 2 * initRatio;
 					} else if (totalRatio < initRatio / 2) {
 						totalRatio = initRatio / 2;
 					}
+					CardEffect.instance.background_envelop.setAlpha(StampViewConstants.PAINT_TRANSPRANT);		
+					zoomGLSurfaceView(totalRatio);
 					lastFingerDis = fingerDis;
 				}
 
-				CardEffect.instance.background_envelop.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
-				zoomGLSurfaceView(totalRatio);
+
 			}
 			break;
 		case MotionEvent.ACTION_POINTER_UP:
@@ -517,6 +513,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 	
 	private void zoomGLSurfaceView(float ratio) {
 		// TODO Auto-generated method stub
+        float translateX = 0f;
+        float translateY = 0f;
+        //translateX = totalTranslateX * ratio - centerPointX * (1 - ratio);
+        //translateY = totalTranslateY * ratio - centerPointY * (1 - ratio);
+        totalTranslateX = totalTranslateX;
+        totalTranslateY = totalTranslateY;
 		this.requestRender();
 	}
 
@@ -530,6 +532,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 		float yPoint0 = event.getY(0);
 		float xPoint1 = event.getX(1);
 		float yPoint1 = event.getY(1);
+        centerPointX = (xPoint0 + xPoint1) / 2;
+        centerPointY = (yPoint0 + yPoint1) / 2;
 	}
 	
 	/**

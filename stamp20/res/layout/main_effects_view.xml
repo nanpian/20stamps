@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#00000000" >
+            android:background="#00ffffff" >
 
             <com.stamp20.app.view.StampGLSurfaceView
                 android:id="@+id/zoomgpuimage"
@@ -38,10 +38,11 @@
                     android:id="@+id/background_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginLeft="1dp"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/background_stamp_h_transparent_pierced" />
 
                 <ImageView

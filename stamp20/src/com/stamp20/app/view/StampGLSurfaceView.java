@@ -165,6 +165,14 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
     private int surfaceHeight;
     // the stamp bitmap finally produce
     private Bitmap bitmap;
+    
+    private int stampFrameWidth;
+
+    private int stampFrameHeight;
+
+	private float centerPointX;
+
+	private float centerPointY;
 
     public ImageView getStampFrame() {
         return stampFrame;
@@ -205,10 +213,6 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         }
 
     };
-
-    private int stampFrameWidth;
-
-    private int stampFrameHeight;
 
     public Bitmap getSourceBitmap() {
         return sourceBitmap;
@@ -343,8 +347,10 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
                 mCurrentEffect = null;
             }
             renderResult();
-            generateStamp(gl);
-            mHandler.sendEmptyMessage(UPDATE_FRAME);
+            synchronized(this) {
+                generateStamp(gl);
+                mHandler.sendEmptyMessage(UPDATE_FRAME);
+            }
             GLES20.glClearColor(0.15686f, 0.15686f, 0.15686f, 1.0f);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
             if (currentStatus == STATUS_CAPTURE) {
@@ -418,6 +424,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         bitmap = Bitmap.createBitmap(frameBitmap.getWidth(), frameBitmap.getHeight(), Config.ARGB_8888);
         try {
             Canvas cv = new Canvas(bitmap);
+            //Notice!!! the  delta w and delta h -5 is set manually!!!
             cv.drawBitmap(glBitmap, deltaW, deltaH, null);
             cv.drawBitmap(frameBitmap, 0, 0, null);
 
@@ -479,9 +486,10 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
     }
 
     @Override
-    public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
+    public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
         // TODO Auto-generated method stub
-
+        //gl.glDisable(GL10.GL_DITHER);
+        //gl.glEnable(GL10.GL_DEPTH_TEST);
     }
 
     @Override
@@ -509,6 +517,8 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         float yPoint0 = event.getY(0);
         float xPoint1 = event.getX(1);
         float yPoint1 = event.getY(1);
+        centerPointX = (xPoint0 + xPoint1) / 2;
+        centerPointY = (yPoint0 + yPoint1) / 2;
     }
 
     /**
@@ -566,21 +576,23 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
                 } else if (lastFingerDis - fingerDis > 15) {
                     currentStatus = STATUS_ZOOM_IN;
                 }
+                initRatio = 1.0f;
                 // 进行缩放倍数检查，最大只允许将图片放大4倍，最小可以缩小到初始化比例的1/2
-                if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 4 * initRatio)
+                if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 2 * initRatio)
                         || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio / 2)) {
                     scaledRatio = (float) (fingerDis / lastFingerDis);
                     totalRatio = totalRatio * scaledRatio;
-                    if (totalRatio > 4 * initRatio) {
-                        totalRatio = 4 * initRatio;
+                    if (totalRatio > 2 * initRatio) {
+                        totalRatio = 2 * initRatio;
                     } else if (totalRatio < initRatio / 2) {
                         totalRatio = initRatio / 2;
                     }
+                    stampFrame.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+                    zoomGLSurfaceView(totalRatio);
                     lastFingerDis = fingerDis;
                 }
 
-                stampFrame.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
-                zoomGLSurfaceView(totalRatio);
+
             }
             break;
         case MotionEvent.ACTION_POINTER_UP:
@@ -624,6 +636,12 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
 
     private void zoomGLSurfaceView(float ratio) {
         // TODO Auto-generated method stub
+        float translateX = 0f;
+        float translateY = 0f;
+       // translateX = totalTranslateX * ratio + centerPointX * (1 - ratio);
+       // translateY = totalTranslateY * ratio + centerPointY * (1 - ratio);
+        totalTranslateX = totalTranslateX;
+        totalTranslateY = totalTranslateY;
         this.requestRender();
     }
 

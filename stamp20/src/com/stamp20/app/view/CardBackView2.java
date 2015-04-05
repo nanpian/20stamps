@@ -106,7 +106,11 @@ public class CardBackView2 extends View{
 
 
             if (mIsShowLine){
-                canvas.drawBitmap(mCardbackLineBitmap, (mViewWidth - mCardbackLineBitmap.getWidth())/2, 0, null);
+            	Matrix martrix = new Matrix();
+            	Bitmap dstLinebmp = Bitmap.createScaledBitmap(mCardbackLineBitmap, (int)(mViewWidth), (int)(mCardbackLineBitmap.getHeight()), true);
+                canvas.drawBitmap(dstLinebmp, (mViewWidth - dstLinebmp.getWidth())/2, 0, null);
+                dstLinebmp.recycle();
+                dstLinebmp = null;
             }
         }
     }

@@ -121,7 +121,9 @@ public class MainEffect extends Activity implements OnTouchListener,
 	}
 
 	private void initImage(Uri uri) {
-		mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
+		bitmap = ImageUtil.loadDownsampledBitmap(mContext, uri, 2);
+		mGPUImageView.setSourceBitmap(bitmap);
+		//mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
 	}
 
 	Handler mHandler = new Handler() {

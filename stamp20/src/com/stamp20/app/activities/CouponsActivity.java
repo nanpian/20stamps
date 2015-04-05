@@ -85,8 +85,8 @@ public class CouponsActivity extends Activity implements OnClickListener {
     }
 
     private void cancel_share() {
-        applyRotation(getCouponsViewGroup, 0, -90, true);
-        applyRotation(shareCouponsViewGroup, 90, -180, false);
+        applyRotation(shareCouponsViewGroup, 0, 90, false);
+       // applyRotation(shareCouponsViewGroup, -90, 0, false);
 
     }
 
@@ -99,17 +99,17 @@ public class CouponsActivity extends Activity implements OnClickListener {
     }
 
     private void getCoupons() {
-        applyRotation(getCouponsViewGroup, 0, -90, false);
-        applyRotation(shareCouponsViewGroup, 90, 0, true);
+        applyRotation(getCouponsViewGroup, 0, 90, true);
+        //applyRotation(shareCouponsViewGroup, -90, 0, true);
 
     }
 
-    private void applyRotation(final ViewGroup v, float start, float end, final boolean show) {
+    private void applyRotation(final ViewGroup v, float start, float end, final boolean isFront) {
         final float centerX = getCouponsViewGroup.getVisibility() == View.VISIBLE ? getCouponsViewGroup.getWidth() / 2.0f : shareCouponsViewGroup
                 .getWidth() / 2.0f;
         final float centerY = getCouponsViewGroup.getVisibility() == View.VISIBLE ? getCouponsViewGroup.getHeight() / 2.0f : shareCouponsViewGroup
                 .getHeight() / 2.0f;
-        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX, centerY, 200.0f, true);
+        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX, centerY, 300.0f, true);
         rotation.setDuration(500);
         rotation.setInterpolator(new AccelerateInterpolator());
         rotation.setAnimationListener(new AnimationListener() {
@@ -119,13 +119,23 @@ public class CouponsActivity extends Activity implements OnClickListener {
                 v.post(new Runnable() {
                     @Override
                     public void run() {
-                        v.setVisibility(show ? View.VISIBLE : View.GONE);
+                    	if (isFront) {
+                    		getCouponsViewGroup.setVisibility(View.GONE);
+                    		shareCouponsViewGroup.setVisibility(View.VISIBLE);
+                    	} else {
+                    		shareCouponsViewGroup.setVisibility(View.GONE);
+                    		getCouponsViewGroup.setVisibility(View.VISIBLE);
+                    	}
                         btnCancel.setVisibility(shareCouponsViewGroup.getVisibility());
 
-                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 200.0f, false);
+                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f, false);
                         rotatiomAnimation.setDuration(500);
                         rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
-                        v.startAnimation(rotatiomAnimation);
+                        if (isFront) {
+                        	shareCouponsViewGroup.startAnimation(rotatiomAnimation);
+                        } else {
+                        	getCouponsViewGroup.startAnimation(rotatiomAnimation);
+                        }
                     }
                 });
 
