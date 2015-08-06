@@ -21,229 +21,215 @@ import com.stamp20.app.filter.GLToolbox;
 import com.stamp20.app.filter.TextureRenderer;
 
 @SuppressLint("NewApi")
-public class ImageBlurRender implements GLSurfaceView.Renderer{
+public class ImageBlurRender implements GLSurfaceView.Renderer {
 
-	public ImageBlurRender(Context context) {
-		this.context = context;
-	}
-	private Context context;
-	private TextureRenderer mTexRenderer = new TextureRenderer();
-	private int[] mTextures = new int[2];
-	private EffectContext mEffectContext;
-	private Effect mEffect;
-	private int mImageWidth;
-	private int mImageHeight;
-	private boolean mInitialized = false;
-	public int mCurrentEffect = 1;
-	private Bitmap srcBitmap;
-	
-	public void setBlurBitmapSrc(Bitmap bitmap){
-		this.srcBitmap = bitmap;
-	}
+    public ImageBlurRender(Context context) {
+        this.context = context;
+    }
 
-	@Override
-	public void onDrawFrame(GL10 arg0) {
-		//if (!mInitialized) {
-			// Only need to do this once
-			mEffectContext = EffectContext.createWithCurrentGlContext();
-			mTexRenderer.init();
-			loadTextures();
-			mInitialized = true;
-		//}
+    private Context context;
+    private TextureRenderer mTexRenderer = new TextureRenderer();
+    private int[] mTextures = new int[2];
+    private EffectContext mEffectContext;
+    private Effect mEffect;
+    private int mImageWidth;
+    private int mImageHeight;
+    private boolean mInitialized = false;
+    public int mCurrentEffect = 1;
+    private Bitmap srcBitmap;
 
-		// if an effect is chosen initialize it and apply it to the texture
-		initEffect();
-		applyEffect();
-		renderResult();
-	}
+    public void setBlurBitmapSrc(Bitmap bitmap) {
+        this.srcBitmap = bitmap;
+    }
 
-	@Override
-	public void onSurfaceChanged(GL10 arg0, int width, int height) {
-		if (mTexRenderer != null) {
-			mTexRenderer.updateViewSize(width, height);
-		}
-	}
+    @Override
+    public void onDrawFrame(GL10 arg0) {
+        // if (!mInitialized) {
+        // Only need to do this once
+        mEffectContext = EffectContext.createWithCurrentGlContext();
+        mTexRenderer.init();
+        loadTextures();
+        mInitialized = true;
+        // }
 
-	@Override
-	public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
-	}
+        // if an effect is chosen initialize it and apply it to the texture
+        initEffect();
+        applyEffect();
+        renderResult();
+    }
 
-	private void loadTextures() {
-		// Generate textures
-		GLES20.glGenTextures(2, mTextures, 0);
+    @Override
+    public void onSurfaceChanged(GL10 arg0, int width, int height) {
+        if (mTexRenderer != null) {
+            mTexRenderer.updateViewSize(width, height);
+        }
+    }
 
-//		// Load input bitmap
-//		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
-//				R.drawable.filter_sample_black);
-		mImageWidth = srcBitmap.getWidth();
-		mImageHeight = srcBitmap.getHeight();
-		mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
+    @Override
+    public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
+    }
 
-		// Upload to texture
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
-		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, srcBitmap, 0);
+    private void loadTextures() {
+        // Generate textures
+        GLES20.glGenTextures(2, mTextures, 0);
 
-		// Set texture parameters
-		GLToolbox.initTexParams();
-	}
+        // // Load input bitmap
+        // Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+        // R.drawable.filter_sample_black);
+        mImageWidth = srcBitmap.getWidth();
+        mImageHeight = srcBitmap.getHeight();
+        mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
 
-	private void initEffect() {
-		 EffectFactory effectFactory = mEffectContext.getFactory();
-	        if (mEffect != null) {
-	            mEffect.release();
-	        }
-	        Log.i("jiangtao", "mCurrentEffect is : " + mCurrentEffect);
-	        /**
-	         * Initialize the correct effect based on the selected menu/action item
-	         */
-	        switch (mCurrentEffect) {
+        // Upload to texture
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, srcBitmap, 0);
 
-	            case 0:
-	                break;
+        // Set texture parameters
+        GLToolbox.initTexParams();
+    }
 
-	            case 1:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_AUTOFIX);
-	                mEffect.setParameter("scale", 0.5f);
-	                break;
+    private void initEffect() {
+        EffectFactory effectFactory = mEffectContext.getFactory();
+        if (mEffect != null) {
+            mEffect.release();
+        }
+        Log.i("jiangtao", "mCurrentEffect is : " + mCurrentEffect);
+        /**
+         * Initialize the correct effect based on the selected menu/action item
+         */
+        switch (mCurrentEffect) {
 
-	            case 2:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_BLACKWHITE);
-	                mEffect.setParameter("black", .1f);
-	                mEffect.setParameter("white", .7f);
-	                break;
+        case 0:
+            break;
 
-	            case 3:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_BRIGHTNESS);
-	                mEffect.setParameter("brightness", 2.0f);
-	                break;
+        case 1:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_AUTOFIX);
+            mEffect.setParameter("scale", 0.5f);
+            break;
 
-	            case 4:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_CONTRAST);
-	                mEffect.setParameter("contrast", 1.4f);
-	                break;
+        case 2:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_BLACKWHITE);
+            mEffect.setParameter("black", .1f);
+            mEffect.setParameter("white", .7f);
+            break;
 
-	            case 5:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_CROSSPROCESS);
-	                break;
+        case 3:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_BRIGHTNESS);
+            mEffect.setParameter("brightness", 2.0f);
+            break;
 
-	            case 6:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_DOCUMENTARY);
-	                break;
+        case 4:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_CONTRAST);
+            mEffect.setParameter("contrast", 1.4f);
+            break;
 
-	            case 7:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_DUOTONE);
-	                mEffect.setParameter("first_color", Color.YELLOW);
-	                mEffect.setParameter("second_color", Color.DKGRAY);
-	                break;
+        case 5:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_CROSSPROCESS);
+            break;
 
-	            case 8:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_FILLLIGHT);
-	                mEffect.setParameter("strength", .8f);
-	                break;
+        case 6:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_DOCUMENTARY);
+            break;
 
-	            case 9:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_FISHEYE);
-	                mEffect.setParameter("scale", .5f);
-	                break;
+        case 7:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_DUOTONE);
+            mEffect.setParameter("first_color", Color.YELLOW);
+            mEffect.setParameter("second_color", Color.DKGRAY);
+            break;
 
-	            case 10:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_FLIP);
-	                mEffect.setParameter("vertical", true);
-	                break;
+        case 8:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_FILLLIGHT);
+            mEffect.setParameter("strength", .8f);
+            break;
 
-	            case 11:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_FLIP);
-	                mEffect.setParameter("horizontal", true);
-	                break;
+        case 9:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FISHEYE);
+            mEffect.setParameter("scale", .5f);
+            break;
 
-	            case 12:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_GRAIN);
-	                mEffect.setParameter("strength", 1.0f);
-	                break;
+        case 10:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP);
+            mEffect.setParameter("vertical", true);
+            break;
 
-	            case 13:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_GRAYSCALE);
-	                break;
+        case 11:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP);
+            mEffect.setParameter("horizontal", true);
+            break;
 
-	            case 14:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_LOMOISH);
-	                break;
+        case 12:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_GRAIN);
+            mEffect.setParameter("strength", 1.0f);
+            break;
 
-	            case 15:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_NEGATIVE);
-	                break;
+        case 13:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_GRAYSCALE);
+            break;
 
-	            case 16:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_POSTERIZE);
-	                break;
+        case 14:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_LOMOISH);
+            break;
 
-	            case 17:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_ROTATE);
-	                mEffect.setParameter("angle", 180);
-	                break;
+        case 15:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_NEGATIVE);
+            break;
 
-	            case 18:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_SATURATE);
-	                mEffect.setParameter("scale", .5f);
-	                break;
+        case 16:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_POSTERIZE);
+            break;
 
-	            case 19:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_SEPIA);
-	                break;
+        case 17:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_ROTATE);
+            mEffect.setParameter("angle", 180);
+            break;
 
-	            case 20:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_SHARPEN);
-	                break;
+        case 18:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SATURATE);
+            mEffect.setParameter("scale", .5f);
+            break;
 
-	            case 21:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_TEMPERATURE);
-	                mEffect.setParameter("scale", .9f);
-	                break;
+        case 19:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SEPIA);
+            break;
 
-	            case 22:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_TINT);
-	                mEffect.setParameter("tint", Color.MAGENTA);
-	                break;
+        case 20:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SHARPEN);
+            break;
 
-	            case 23:
-	                mEffect = effectFactory.createEffect(
-	                        EffectFactory.EFFECT_VIGNETTE);
-	                mEffect.setParameter("scale", .5f);
-	                break;
+        case 21:
+            mEffect = effectFactory
+                    .createEffect(EffectFactory.EFFECT_TEMPERATURE);
+            mEffect.setParameter("scale", .9f);
+            break;
 
-	            default:
-	                break;
+        case 22:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_TINT);
+            mEffect.setParameter("tint", Color.MAGENTA);
+            break;
 
-	        }
-	}
+        case 23:
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_VIGNETTE);
+            mEffect.setParameter("scale", .5f);
+            break;
 
-	private void applyEffect() {
-		mEffect.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1]);
-	}
+        default:
+            break;
 
-	private void renderResult() {
-		mTexRenderer.renderTexture(mTextures[1]);
-	}
+        }
+    }
+
+    private void applyEffect() {
+        mEffect.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1]);
+    }
+
+    private void renderResult() {
+        mTexRenderer.renderTexture(mTextures[1]);
+    }
 }
