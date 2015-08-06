@@ -1,13 +1,9 @@
 package com.stamp20.app.activities;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 import com.stamp20.app.R;
 import com.stamp20.app.adapter.ChoseEnvelopeAdapter;
 import com.stamp20.app.adapter.ChoseEnvelopeAdapter.NamePairs;
 import com.stamp20.app.util.FontManager;
-import com.stamp20.app.util.Log;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.view.HorizontalListView;
 
@@ -20,14 +16,12 @@ import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-import android.graphics.Bitmap.Config;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;

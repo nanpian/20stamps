@@ -24,8 +24,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.data.Cart;
