@@ -99,27 +99,32 @@ public class ShopCartActivity extends Activity implements OnClickListener {
         switch (view.getId()) {
         case R.id.btn_shop_customize:
             Intent intent = new Intent(this, MainEffect.class);
-            intent.putExtra(GallaryUtil.IMG_URI_EXTRA, GallaryUtil.getPhotoUri());
+            intent.putExtra(GallaryUtil.IMG_URI_EXTRA,
+                    GallaryUtil.getPhotoUri());
             startActivity(intent);
             break;
         case R.id.btn_shop_addto_chart:
             // 保存design
-            //UploadToParse mUploadToParse = new UploadToParse(mCache.get());
-            //mUploadToParse.uploadImage();
-            
-        	//save to cart
-        	Cart cart = Cart.getInstance();
+            // UploadToParse mUploadToParse = new UploadToParse(mCache.get());
+            // mUploadToParse.uploadImage();
+
+            // save to cart
+            Cart cart = Cart.getInstance();
             cart.addDesign(mCache.get(), 20, Design.TYPE_STAMP);
-            
+
             Intent intent_add_to_chart = new Intent();
-            intent_add_to_chart.setClass(ShopCartActivity.this, ShopCartItemsActivity.class);
-            intent_add_to_chart.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
+            intent_add_to_chart.setClass(ShopCartActivity.this,
+                    ShopCartItemsActivity.class);
+            intent_add_to_chart.putExtra(
+                    ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
             startActivity(intent_add_to_chart);
             break;
         case R.id.btn_shop_skipto:
             Intent intent_skip_to_chart = new Intent();
-            intent_skip_to_chart.setClass(ShopCartActivity.this, ShopCartItemsActivity.class);
-            intent_skip_to_chart.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, false);
+            intent_skip_to_chart.setClass(ShopCartActivity.this,
+                    ShopCartItemsActivity.class);
+            intent_skip_to_chart.putExtra(
+                    ShopCartItemsActivity.ADD_ITEMS_TOCAET, false);
             startActivity(intent_skip_to_chart);
             break;
         case R.id.header_previous:
@@ -149,18 +154,24 @@ public class ShopCartActivity extends Activity implements OnClickListener {
         mHeader = (LinearLayout) findViewById(R.id.header);
         AlphaAnimation alpAni = new AlphaAnimation(0.0f, 1.0f);
         alpAni.setDuration(2000);
-        mShopviewInsert = (LinearLayout) mLayoutInflater.inflate(R.layout.shop_view_insert, null);
+        mShopviewInsert = (LinearLayout) mLayoutInflater.inflate(
+                R.layout.shop_view_insert, null);
         // FontManager.changeFonts(this,
         // (LinearLayout)mShopviewInsert.findViewById(R.id.shop_insert_view));
-        FontManager.changeFonts((LinearLayout) mShopviewInsert.findViewById(R.id.shop_insert_view), this);
+        FontManager.changeFonts((LinearLayout) mShopviewInsert
+                .findViewById(R.id.shop_insert_view), this);
         mShopviewInsert.setAnimation(alpAni);
-        mShopStampView = (ShopCartView) mShopviewInsert.findViewById(R.id.shop_stamp_view);
+        mShopStampView = (ShopCartView) mShopviewInsert
+                .findViewById(R.id.shop_stamp_view);
         mShopStampView.setmBpStampSource(mCache.get());
         // mShopStampView.setBackground(getResources().getDrawable(R.drawable.cards_christmas));
         // mShopStampView.setImageBitmap(mCache.get());
-        btnAddtoChart = (Button) mShopviewInsert.findViewById(R.id.btn_shop_customize);
-        btnCustomize = (Button) mShopviewInsert.findViewById(R.id.btn_shop_addto_chart);
-        btnSkiptoCart = (Button) mShopviewInsert.findViewById(R.id.btn_shop_skipto);
+        btnAddtoChart = (Button) mShopviewInsert
+                .findViewById(R.id.btn_shop_customize);
+        btnCustomize = (Button) mShopviewInsert
+                .findViewById(R.id.btn_shop_addto_chart);
+        btnSkiptoCart = (Button) mShopviewInsert
+                .findViewById(R.id.btn_shop_skipto);
 
         btnAddtoChart.setOnClickListener(this);
         btnCustomize.setOnClickListener(this);
@@ -168,7 +179,9 @@ public class ShopCartActivity extends Activity implements OnClickListener {
     }
 
     public void displayChart() {
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.3f, 1.0f, 1.3f, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.3f, 1.0f,
+                1.3f, Animation.RELATIVE_TO_SELF, .5f,
+                Animation.RELATIVE_TO_SELF, .5f);
         scaleAnimation.setDuration(1000);
         // 通过CycleInterpolator添加imageview的抖动
         scaleAnimation.setInterpolator(new CycleInterpolator(1f));
@@ -190,14 +203,17 @@ public class ShopCartActivity extends Activity implements OnClickListener {
             public void onAnimationEnd(Animation arg0) {
                 // TODO Auto-generated method stub
                 mItemCheck.setVisibility(View.VISIBLE);
-                mScollerRelativeView.smoothScollToY((computeScrollDis() < 0) ? 0 : computeScrollDis(), TIME_DURATION);
+                mScollerRelativeView.smoothScollToY(
+                        (computeScrollDis() < 0) ? 0 : computeScrollDis(),
+                        TIME_DURATION);
 
                 mHandler.postDelayed(new Runnable() {
 
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                                RelativeLayout.LayoutParams.MATCH_PARENT,
                                 RelativeLayout.LayoutParams.WRAP_CONTENT);
                         // 如何设置
                         params.topMargin = 100;
@@ -218,7 +234,9 @@ public class ShopCartActivity extends Activity implements OnClickListener {
         int currentPos = mMoveView.getTop();
         // 获得购物车滚动的位置
         scrollDis = currentPos - getActionBarHeight() - 40;
-        Log.i(TAG, "currentPos is : " + currentPos + " getActionBarHeight is : " + getActionBarHeight() + ", scroll is : " + scrollDis);
+        Log.i(TAG, "currentPos is : " + currentPos
+                + " getActionBarHeight is : " + getActionBarHeight()
+                + ", scroll is : " + scrollDis);
         return scrollDis;
     }
 

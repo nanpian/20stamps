@@ -18,6 +18,10 @@ public class BitmapCache {
 
     public void put(Bitmap src) {
         if (src != null && (date == null || !date.sameAs(src))) {
+            if (date!=null) {
+                date.recycle();
+                date = null;
+            }
             date = Bitmap.createBitmap(src);
         }
     }

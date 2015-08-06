@@ -1,7 +1,6 @@
 package com.stamp20.app.activities;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,14 +22,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
-import com.stamp20.app.R.anim;
 import com.stamp20.app.data.Cart;
-import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
@@ -39,7 +33,14 @@ import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.RoundNumber;
 import com.stamp20.gallary.GallaryActivity;
 
-public class HomeActivity extends BaseTitleActivity implements View.OnClickListener {
+/**
+ * 
+ * 首页动画变化，这里需要关注内存泄露的问题
+ * @author zhudewei
+ *
+ */
+public class HomeActivity extends BaseTitleActivity implements
+        View.OnClickListener {
 
     private ArrayList<Integer> mDrawableIDs = new ArrayList<Integer>();
     /*
@@ -49,7 +50,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
      * R.drawable.background_home_save_the_date,
      * R.drawable.background_home_wedding };
      */
-    private Drawable[] mDrawables;
+    private BitmapDrawable[] mDrawables;
     private ImageView mBackgroundImageView;
     private int mCurrentPicNum = 0;
     private ViewGroup mLinearLayoutHasLocalDesign;
@@ -65,15 +66,26 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     private final static float MAX_ALPHA = 1.0f;
     private final static float MIN_ALPHA_0 = 0.0f;
     private final static float MIN_ALPHA_1 = 0.1f;
+    private Boolean isPaused = false;
 
-    private final static int SWITCH_CURRENT_PICTURE = 1;
+    private final int SWITCH_CURRENT_PICTURE = 1;
+
+    private Timer timer;
+    private TimerTask timerTask;
+
     Handler mHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
+            if (isPaused)
+                return;
             if (msg.what == SWITCH_CURRENT_PICTURE) {
                 TransitionDrawable transitionDrawable = null;
-                transitionDrawable = new TransitionDrawable(new Drawable[] { mDrawables[mCurrentPicNum % mDrawableIDs.size()],
-                        mDrawables[(mCurrentPicNum + 1) % mDrawableIDs.size()] });
+                transitionDrawable = new TransitionDrawable(
+                        new Drawable[] {
+                                mDrawables[mCurrentPicNum % mDrawableIDs.size()],
+                                mDrawables[(mCurrentPicNum + 1)
+                                        % mDrawableIDs.size()] });
                 mCurrentPicNum++;
                 mBackgroundImageView.setImageDrawable(transitionDrawable);
                 /* mBackgroundImageView.setScaleType(ScaleType.CENTER_CROP); */
@@ -82,6 +94,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         }
     };
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -109,54 +122,83 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
 
         mBackgroundImageView = (ImageView) this.findViewById(R.id.background);
         mBackgroundImageView.setScaleType(ScaleType.FIT_XY);
-        mBackgroundImageView.setImageDrawable(getResources().getDrawable(R.drawable.background_home_baby_shower));
+        mBackgroundImageView.setImageDrawable(getResources().getDrawable(
+                R.drawable.background_home_baby_shower));
         initBackgroundArrays();
 
+    }
+
+    /**
+     * 图片切换开始
+     */
+    private void startTimerTask() {
+        if (timerTask == null) {
+            timer = new Timer();
+            timerTask = new TimerTask() {
+
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    mHandler.sendEmptyMessage(SWITCH_CURRENT_PICTURE);
+                }
+            };
+            timer.schedule(timerTask, CHANGE_PICTURE_DURATION
+                    - ANIMATION_DURATION, CHANGE_PICTURE_DURATION);
+        }
+
+    }
+
+    /**
+     * 图片切换结束
+     */
+    private void stopTimerTask() {
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+    
+    /**
+     * 加载图片
+     */
+    private void loadImageMem(){
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(getResources(), R.drawable.background_home_baby_shower, opts);
+        BitmapFactory.decodeResource(getResources(),
+                R.drawable.background_home_baby_shower, opts);
         opts.inSampleSize = ImageUtil.computeSampleSize(opts, -1, 1280 * 960);
         opts.inJustDecodeBounds = false;
-        mDrawables = new Drawable[mDrawableIDs.size()];
+        mDrawables = new BitmapDrawable[mDrawableIDs.size()];
         try {
             for (int i = 0; i < mDrawableIDs.size(); i++) {
-                Bitmap bmp = BitmapFactory.decodeResource(getResources(), mDrawableIDs.get(i), opts);
-                mDrawables[i] = new BitmapDrawable(bmp);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                        mDrawableIDs.get(i), opts);
+                mDrawables[i] = new BitmapDrawable(bitmap);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mHandler.sendEmptyMessage(SWITCH_CURRENT_PICTURE);
-            }
-
-        }, CHANGE_PICTURE_DURATION - ANIMATION_DURATION, CHANGE_PICTURE_DURATION);
     }
 
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        updateLayout();
+    private void updateLayout() {
+        Cart c = Cart.getInstance();
+        if (c.isEmpty()) {
+            mLinearLayoutHasLocalDesign.setVisibility(View.GONE);
+            mLinearLayoutNoLocalDesign.setVisibility(View.VISIBLE);
+        } else {
+            mLinearLayoutNoLocalDesign.setVisibility(View.GONE);
+            mLinearLayoutHasLocalDesign.setVisibility(View.VISIBLE);
+            mLocalDesignNumber.setText(String.valueOf(c.getCount()));
+        }
     }
-    
-    private void updateLayout(){
-    	Cart c = Cart.getInstance();
-    	if(c.isEmpty()){
-    		mLinearLayoutHasLocalDesign.setVisibility(View.GONE);
-    		mLinearLayoutNoLocalDesign.setVisibility(View.VISIBLE);
-    	}else{
-    		mLinearLayoutNoLocalDesign.setVisibility(View.GONE);
-    		mLinearLayoutHasLocalDesign.setVisibility(View.VISIBLE);
-    		mLocalDesignNumber.setText(String.valueOf(c.getCount()));
-    	}
-	}
 
     private void initBackgroundArrays() {
-        TypedArray typedArray = getResources().obtainTypedArray(R.array.home_background);
+        TypedArray typedArray = getResources().obtainTypedArray(
+                R.array.home_background);
         if (null != typedArray) {
             if (Constant.debugXixiaLog()) {
                 Log.i("xixia", "typedArray:" + typedArray.length());
@@ -172,23 +214,32 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         switch (v.getId()) {
         case R.id.btn_coupons:
             coupons();
+            finish();
             break;
         case R.id.btn_about:
             showAboutInfo();
+            finish();
             break;
         case R.id.btn_cards:
         case R.id.btn_getting_cards:
-            startActivity(new Intent(HomeActivity.this, CardsTemplateChooseActivity.class));
-            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "card");
+            startActivity(new Intent(HomeActivity.this,
+                    CardsTemplateChooseActivity.class));
+            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(),
+                    "card");
+            finish();
             break;
 
         case R.id.btn_postage:
         case R.id.btn_postage_stamp:
             startActivity(new Intent(HomeActivity.this, GallaryActivity.class));
-            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "stamp");
+            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(),
+                    "stamp");
+            finish();
             break;
         case R.id.btn_view_cart:
-            startActivity(new Intent(HomeActivity.this, ShopCartItemsActivity.class));
+            startActivity(new Intent(HomeActivity.this,
+                    ShopCartItemsActivity.class));
+            finish();
             break;
         }
     }
@@ -201,7 +252,50 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
 
     private void showAboutInfo() {
         Intent aboutIntent = new Intent(this, AboutActivity.class);
-//        Intent aboutIntent = new Intent(this, AboutDetailsActivity.class);
+        // Intent aboutIntent = new Intent(this, AboutDetailsActivity.class);
         startActivity(aboutIntent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isPaused = true;
+        mHandler.removeMessages(SWITCH_CURRENT_PICTURE);
+        stopTimerTask();
+        //recycleMem();
+    }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        loadImageMem();
+        startTimerTask();
+        isPaused = false;
+        updateLayout();
+    }
+
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        // 回收内存
+        recycleMem();
+    }
+
+    private void recycleMem() {
+        if (mDrawables != null) {
+            for (int i = 0; i < mDrawables.length; i++) {
+                BitmapDrawable drawableForRecyle = mDrawables[i];
+                Bitmap bitmapForRecycle = drawableForRecyle.getBitmap();
+                if (bitmapForRecycle != null) {
+                    bitmapForRecycle.recycle();
+                    bitmapForRecycle = null;
+                }
+                drawableForRecyle.setCallback(null);
+                drawableForRecyle = null;
+            }
+            mDrawables = null;
+        }
     }
 }

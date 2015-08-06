@@ -2,9 +2,11 @@ package com.stamp20.app.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import android.R.integer;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -16,6 +18,7 @@ import android.media.effect.EffectContext;
 import android.media.effect.EffectFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.stamp20.app.R;
 import com.stamp20.app.filter.ImageBlurRender;
@@ -46,6 +50,7 @@ public class ImageEffectAdapter extends BaseAdapter {
     private ImageBlurRender mImageBlurRender;
     private PixelBuffer mGlPBuffer;
     private Map<String, Bitmap> mBlutImageMap = new HashMap<String, Bitmap>();
+    private Boolean canPreview = true;
 
     /**
      * @param c
@@ -104,7 +109,15 @@ public class ImageEffectAdapter extends BaseAdapter {
 
     public void clearPreviewHashMap() {
         if (mBlutImageMap != null) {
+            for (int i=0;i<mBlutImageMap.size();i++) {
+                Bitmap bitmap = mBlutImageMap.get(i);
+                if (bitmap!=null && !bitmap.isRecycled()) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+            }
             mBlutImageMap.clear();
+            
         }
     }
 
@@ -337,13 +350,19 @@ public class ImageEffectAdapter extends BaseAdapter {
                 viewHolder.mImageView.setBackground(mContext.getResources()
                         .getDrawable(R.drawable.blur_image_null));
                 viewHolder.mImageView.setTag(effectName);
-                //注意，生成预览图，这里会有egl_bad_match的错误，原因不明，耗费了很多时间在处理这个bug上
-                try {
-                    new BlurAsyncTask(position, effectName,
-                            viewHolder.mImageView).execute(imageBitmap);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    viewHolder.mImageView.setImageBitmap(imageBitmap);
+                // 注意，生成预览图，这里会有egl_bad_match的错误，原因不明，耗费了很多时间在处理这个bug上
+                if (canPreview) {
+                    try {
+                        new BlurAsyncTask(position, effectName,
+                                viewHolder.mImageView).execute(imageBitmap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        canPreview = false;
+                        viewHolder.mImageView.setImageBitmap(imageBitmap);
+                        Toast.makeText(mContext, "Cannot Preview, just use source image", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                        viewHolder.mImageView.setImageBitmap(imageBitmap);
                 }
             }
         } else {
@@ -393,8 +412,9 @@ public class ImageEffectAdapter extends BaseAdapter {
             mGlPBuffer.setRenderer(mImageBlurRender);
             mImageBlurRender.mCurrentEffect = mPosition;
             try {
-                bitmap = mGlPBuffer.getBitmap(null,null);
+                bitmap = mGlPBuffer.getBitmap(null, null);
             } catch (Exception e) {
+
                 return bitmap;
             }
             return bitmap;

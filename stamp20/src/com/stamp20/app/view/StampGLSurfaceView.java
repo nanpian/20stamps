@@ -221,7 +221,10 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
     public void setSourceBitmap(Bitmap sourceBitmap) {
 
         currentStatus = STATUS_INIT;
-
+        if (this.sourceBitmap!=null) {
+            this.sourceBitmap.recycle();
+            this.sourceBitmap = null;
+        }
         this.sourceBitmap = sourceBitmap;
 
         int bitmapWidth = sourceBitmap.getWidth();
@@ -430,6 +433,8 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
 
             cv.save(Canvas.ALL_SAVE_FLAG);
             cv.restore();
+            frameBitmap.recycle();
+            frameBitmap = null;
             glBitmap.recycle();
             glBitmap = null;
         } catch (Exception e) {

@@ -38,169 +38,178 @@ import com.stamp20.app.view.ScollerRelativeView;
 import com.stamp20.app.view.StampViewConstants;
 import com.stamp20.gallary.GallaryActivity;
 
-public class CardEffect extends Activity implements OnClickListener,OnTouchListener{
+public class CardEffect extends Activity implements OnClickListener,
+        OnTouchListener {
 
-	protected static final int REQUEST_CODE = 1001;
-	private static final String Tag = "CardEffect";
-	private static final CharSequence titleName = "Customize Front";
-	protected static final int MSG_SELECT_PICTURE = 1002;
-	protected static final int MSG_CHANGE_DESIGN = 1003;
-	public static CardEffect instance;
-	private Uri imageUri;
-	private Bitmap loadedBitmap;
-	public ImageView background_envelop, select_photo_button;
-	private HorizontalListView galleryFilter;
-	private ImageView headerPrevious;
-	private TextView headerTitle;
-	private ImageEffectAdapter effectAdapter;
-	private EffectContext mEffectContext = null;
-	private CardGLSurfaceView mGPUImageView;
-	public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
-	private int currentfilterID;
-	private RelativeLayout buttonLayout;
-	private Button choose_photo;
-	private Button change_design;
-	private RelativeLayout cardview, background_layout;
-	private com.stamp20.app.view.ScollerRelativeView scrollPicArea;
-	private Button customback;
-	private Integer templateId;
-	
-	//add for change the background templte
-	public static final int REQUEST_CODE_FOR_TEMPLATE = 1;
-	public static final String SRC_IMAGE_URI = "imageUri";
-	private boolean mIsChangingPhoto = false;
+    protected static final int REQUEST_CODE = 1001;
+    private static final String Tag = "CardEffect";
+    private static final CharSequence titleName = "Customize Front";
+    protected static final int MSG_SELECT_PICTURE = 1002;
+    protected static final int MSG_CHANGE_DESIGN = 1003;
+    public static CardEffect instance;
+    private Uri imageUri;
+    private Bitmap loadedBitmap;
+    public ImageView background_envelop, select_photo_button;
+    private HorizontalListView galleryFilter;
+    private ImageView headerPrevious;
+    private TextView headerTitle;
+    private ImageEffectAdapter effectAdapter;
+    private EffectContext mEffectContext = null;
+    private CardGLSurfaceView mGPUImageView;
+    public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
+    private int currentfilterID;
+    private RelativeLayout buttonLayout;
+    private Button choose_photo;
+    private Button change_design;
+    private RelativeLayout cardview, background_layout;
+    private com.stamp20.app.view.ScollerRelativeView scrollPicArea;
+    private Button customback;
+    private Integer templateId;
+
+    // add for change the background templte
+    public static final int REQUEST_CODE_FOR_TEMPLATE = 1;
+    public static final String SRC_IMAGE_URI = "imageUri";
+    private boolean mIsChangingPhoto = false;
     private int mTemplatePos = 0;
 
-	Handler mHandler = new Handler() {
+    Handler mHandler = new Handler() {
 
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MSG_SELECT_PICTURE:
-				Log.d(Tag, "handleMessage--MSG_SELECT_PICTURE");
-				Uri uri = (Uri) msg.obj;
-				// bitmap = ImageUtil.loadDownsampledBitmap(CardsActivity.this,
-				// uri, 2);
-				// zoomImageView.setImageBitmap(bitmap);
-				break;
-			case MSG_CHANGE_DESIGN:
-				Log.d(Tag, "handleMessage--MSG_SELECT_PICTURE");
-				templateId = (Integer) msg.obj;
-				if (templateId != -1) {
-                     background_envelop.setImageBitmap(getAlphaBackView(templateId));
-					//background_envelop.setImageResource(templateId);
-				}
-				break;
-			default:
-				break;
-			}
-		}
-	};
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-
-		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.activity_card_effect);
-		FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-		instance = this;
-		initView();
-		mIsChangingPhoto = false;
-		Intent getFromChooseTemp = getIntent();
-		if (getFromChooseTemp != null) {
-			int tempPos = getFromChooseTemp.getIntExtra(
-					ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
-            mTemplatePos = tempPos;
-			mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN,
-					CardsTemplateUtils.getTemplateId(tempPos)));
-		}
-
-	}
-
-	private void initView() {
-
-		headerPrevious = (ImageView) findViewById(R.id.header_previous);
-		headerPrevious.setOnClickListener(this);
-		headerTitle = (TextView) findViewById(R.id.header_title);
-		headerTitle.setText(titleName);
-		buttonLayout = (RelativeLayout) findViewById(R.id.buttonid);
-		ImageView useMyPhoto = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
-		useMyPhoto.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Intent data = new Intent();
-				data.setClass(getBaseContext(), GallaryActivity.class);
-				startActivity(data);
-			}
-		});
-		choose_photo = (Button) findViewById(R.id.choose_photo);
-		choose_photo.setOnClickListener(this);
-		change_design = (Button) findViewById(R.id.choose_template);
-		change_design.setOnClickListener(this);
-		background_envelop = (ImageView) findViewById(R.id.background_envelop);
-        background_layout = (RelativeLayout)findViewById(R.id.background_layout);
-        cardview = (RelativeLayout)findViewById(R.id.cardview);
-        cardview.setOnTouchListener(this);
-		setupEvelopHeight();
-
-		select_photo_button = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
-		select_photo_button.setOnFocusChangeListener(new OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View arg0, boolean hasfocus) {
-                if (hasfocus){
-                    select_photo_button.setAlpha(.3f);
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case MSG_SELECT_PICTURE:
+                Log.d(Tag, "handleMessage--MSG_SELECT_PICTURE");
+                Uri uri = (Uri) msg.obj;
+                // bitmap = ImageUtil.loadDownsampledBitmap(CardsActivity.this,
+                // uri, 2);
+                // zoomImageView.setImageBitmap(bitmap);
+                break;
+            case MSG_CHANGE_DESIGN:
+                Log.d(Tag, "handleMessage--MSG_SELECT_PICTURE");
+                templateId = (Integer) msg.obj;
+                if (templateId != -1) {
+                    background_envelop
+                            .setImageBitmap(getAlphaBackView(templateId));
+                    // background_envelop.setImageResource(templateId);
                 }
-			}
-			
-		});
-		
-		select_photo_button.setOnTouchListener(new OnTouchListener(){
+                break;
+            default:
+                break;
+            }
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_card_effect);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+        instance = this;
+        initView();
+        mIsChangingPhoto = false;
+        Intent getFromChooseTemp = getIntent();
+        if (getFromChooseTemp != null) {
+            int tempPos = getFromChooseTemp.getIntExtra(
+                    ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            mTemplatePos = tempPos;
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN,
+                    CardsTemplateUtils.getTemplateId(tempPos)));
+        }
+
+    }
+
+    private void initView() {
+
+        headerPrevious = (ImageView) findViewById(R.id.header_previous);
+        headerPrevious.setOnClickListener(this);
+        headerTitle = (TextView) findViewById(R.id.header_title);
+        headerTitle.setText(titleName);
+        buttonLayout = (RelativeLayout) findViewById(R.id.buttonid);
+        ImageView useMyPhoto = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
+        useMyPhoto.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent data = new Intent();
+                data.setClass(getBaseContext(), GallaryActivity.class);
+                startActivity(data);
+            }
+        });
+        choose_photo = (Button) findViewById(R.id.choose_photo);
+        choose_photo.setOnClickListener(this);
+        change_design = (Button) findViewById(R.id.choose_template);
+        change_design.setOnClickListener(this);
+        background_envelop = (ImageView) findViewById(R.id.background_envelop);
+        background_layout = (RelativeLayout) findViewById(R.id.background_layout);
+        cardview = (RelativeLayout) findViewById(R.id.cardview);
+        cardview.setOnTouchListener(this);
+        setupEvelopHeight();
+
+        select_photo_button = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
+        select_photo_button
+                .setOnFocusChangeListener(new OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View arg0, boolean hasfocus) {
+                        if (hasfocus) {
+                            select_photo_button.setAlpha(.3f);
+                        }
+                    }
+
+                });
+
+        select_photo_button.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                    if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    	select_photo_button.setAlpha(.3f);
-                    }else if(event.getAction() == MotionEvent.ACTION_UP){
-                    	select_photo_button.setAlpha(1f);
-                    }
-                    return false;
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    select_photo_button.setAlpha(.3f);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    select_photo_button.setAlpha(1f);
+                }
+                return false;
             }
-            
-    });
-		mGPUImageView = (CardGLSurfaceView) findViewById(R.id.cardgpuimage);
-		galleryFilter = (HorizontalListView) findViewById(R.id.galleryFilter);
-		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
-		mGPUImageView.setEffectAdapter(effectAdapter);
-		effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
-		currentfilterID = 0;
-		effectAdapter.setSelectItem(0);
-		galleryFilter.setAdapter(effectAdapter);
-		galleryFilter.setSelection(5);
-		galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					private String currentfiltername;
-					public void onItemClick(AdapterView<?> arg0, View arg1,
-							int position, long id) {
-						effectAdapter.setSelectItem(position);
-						currentfiltername = effectAdapter.getFilterName(position);
-						currentfilterID = effectAdapter.getFilterID(position);
-						mGPUImageView.setCurrentfilterID(currentfilterID);
-						mGPUImageView.setCurrentfiltername(currentfiltername);
-						Log.i(Tag, "zhudewei the filter is "+ currentfiltername);
-						mGPUImageView.requestRender();
-					}
-				});
-		//galleryFilter.setVisibility(View.GONE);
-		customback = (Button)findViewById(R.id.customback);
-		customback.setOnClickListener(this);
-		
-		//首先需要设置背景色为深色
-		customback.setBackgroundDrawable(getResources().getDrawable(R.drawable.dra_home_green_button_pressed_true));
-		scrollPicArea = (ScollerRelativeView) findViewById(R.id.pic_area);
-	}
 
-    public Bitmap getAlphaBackView(int viewId){
+        });
+        mGPUImageView = (CardGLSurfaceView) findViewById(R.id.cardgpuimage);
+        galleryFilter = (HorizontalListView) findViewById(R.id.galleryFilter);
+        effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
+        mGPUImageView.setEffectAdapter(effectAdapter);
+        effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
+        currentfilterID = 0;
+        effectAdapter.setSelectItem(0);
+        galleryFilter.setAdapter(effectAdapter);
+        galleryFilter.setSelection(5);
+        galleryFilter
+                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    private String currentfiltername;
+
+                    public void onItemClick(AdapterView<?> arg0, View arg1,
+                            int position, long id) {
+                        effectAdapter.setSelectItem(position);
+                        currentfiltername = effectAdapter
+                                .getFilterName(position);
+                        currentfilterID = effectAdapter.getFilterID(position);
+                        mGPUImageView.setCurrentfilterID(currentfilterID);
+                        mGPUImageView.setCurrentfiltername(currentfiltername);
+                        Log.i(Tag, "zhudewei the filter is "
+                                + currentfiltername);
+                        mGPUImageView.requestRender();
+                    }
+                });
+        // galleryFilter.setVisibility(View.GONE);
+        customback = (Button) findViewById(R.id.customback);
+        customback.setOnClickListener(this);
+
+        // 首先需要设置背景色为深色
+        customback.setBackgroundDrawable(getResources().getDrawable(
+                R.drawable.dra_home_green_button_pressed_true));
+        scrollPicArea = (ScollerRelativeView) findViewById(R.id.pic_area);
+    }
+
+    public Bitmap getAlphaBackView(int viewId) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), viewId);
-        Bitmap back = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        Bitmap back = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), bitmap.getConfig());
         Canvas canvas = new Canvas(back);
         Paint paint = new Paint();
         paint.setAlpha(150);
@@ -208,200 +217,232 @@ public class CardEffect extends Activity implements OnClickListener,OnTouchListe
         return back;
     }
 
-	private void setupEvelopHeight() {
+    private void setupEvelopHeight() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenWidth = metrics.widthPixels;
-		Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
-				R.drawable.cards_christmas);
-		int w= cardTemplate.getWidth();
-		int h= cardTemplate.getHeight();
+        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
+                R.drawable.cards_christmas);
+        int w = cardTemplate.getWidth();
+        int h = cardTemplate.getHeight();
 
-		LayoutParams params = new LayoutParams(5*screenWidth/6,(h*5*screenWidth)/(6*w));
-		params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        LayoutParams params = new LayoutParams(5 * screenWidth / 6,
+                (h * 5 * screenWidth) / (6 * w));
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
         background_envelop.setLayoutParams(params);
-		background_envelop.setVisibility(View.VISIBLE);
+        background_envelop.setVisibility(View.VISIBLE);
 
         resetChoseLayout(110);
-	}
+    }
 
-    public void resetChoseLayout(int distance){
-        LayoutParams layout = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        if (distance == 0){
+    public void resetChoseLayout(int distance) {
+        LayoutParams layout = new LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
+        if (distance == 0) {
             layout.addRule(RelativeLayout.CENTER_IN_PARENT);
-        }else {
+        } else {
             layout.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            layout.topMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, distance, getResources().getDisplayMetrics());
+            layout.topMargin = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, distance, getResources()
+                            .getDisplayMetrics());
         }
         background_layout.setLayoutParams(layout);
     }
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
-		super.onNewIntent(intent);
-		Log.i(Tag, "on new intent");
-		setIntent(intent);// must store the new intent unless getIntent() will
-		processExtraData();// return the old one
-	}
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // TODO Auto-generated method stub
+        super.onNewIntent(intent);
+        Log.i(Tag, "on new intent");
+        setIntent(intent);// must store the new intent unless getIntent() will
+        processExtraData();// return the old one
+    }
 
-	private void processExtraData() {
-		Intent intent = getIntent();
-		if (intent != null) {
-            //here we need to ajust the layout
+    private void processExtraData() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            // here we need to ajust the layout
             resetChoseLayout(0);
-			imageUri = (Uri) intent.getParcelableExtra("imageUri");
-			Log.d(Tag, "uri=" + imageUri);
-			if (imageUri != null) {
-                templateId = CardsTemplateUtils.getTransTemplateId(mTemplatePos);
-				if (templateId != -1) {
-					background_envelop.setImageResource(templateId);
-					mGPUImageView.changetemplate(templateId);//change backguard 
-				}
-				loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri,2);
-				refreshView();
-				
-				effectAdapter.setImageResource(imageUri);
-				//click change photo button, need to init some data
-				if (mIsChangingPhoto) {
-					effectAdapter.clearPreviewHashMap();
-					String filtername = effectAdapter.getFilterName(0);
-					currentfilterID = effectAdapter.getFilterID(0);
-					Log.i(Tag, "change photo id is : " + currentfilterID + "filtername is : " + filtername);
-					mGPUImageView.setCurrentfilterID(currentfilterID);
-					mGPUImageView.setCurrentfiltername(filtername);
-				}
-				mGPUImageView.setSourceBitmap(loadedBitmap);
-				//mGPUImageView.requestRender();
-			} else {
-			}
-		}
-	}
+            imageUri = (Uri) intent.getParcelableExtra("imageUri");
+            Log.d(Tag, "uri=" + imageUri);
+            if (imageUri != null) {
+                templateId = CardsTemplateUtils
+                        .getTransTemplateId(mTemplatePos);
+                if (templateId != -1) {
+                    background_envelop.setImageResource(templateId);
+                    mGPUImageView.changetemplate(templateId);// change backguard
+                }
+                loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri,
+                        2);
+                refreshView();
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		mGPUImageView.onResume();
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		mGPUImageView.onPause();
-	}
+                effectAdapter.setImageResource(imageUri);
+                // click change photo button, need to init some data
+                if (mIsChangingPhoto) {
+                    effectAdapter.clearPreviewHashMap();
+                    String filtername = effectAdapter.getFilterName(0);
+                    currentfilterID = effectAdapter.getFilterID(0);
+                    Log.i(Tag, "change photo id is : " + currentfilterID
+                            + "filtername is : " + filtername);
+                    mGPUImageView.setCurrentfilterID(currentfilterID);
+                    mGPUImageView.setCurrentfiltername(filtername);
+                }
+                mGPUImageView.setSourceBitmap(loadedBitmap);
+                // mGPUImageView.requestRender();
+            } else {
+            }
+        }
+    }
 
-	private void refreshView() {
-		select_photo_button.setVisibility(View.GONE);
-		buttonLayout.setVisibility(View.VISIBLE);
-		mGPUImageView.setVisibility(View.VISIBLE);
-		galleryFilter.setVisibility(View.VISIBLE);
-		galleryFilter.setAdapter(effectAdapter);
-		
-		galleryFilter.setSelection(0);
-		galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					private String currentfiltername;
-					public void onItemClick(AdapterView<?> arg0, View arg1,
-							int position, long id) {
-						effectAdapter.setSelectItem(position);
-						currentfiltername = effectAdapter.getFilterName(position);
-						currentfilterID = effectAdapter.getFilterID(position);
-						mGPUImageView.setCurrentfilterID(currentfilterID);
-						mGPUImageView.setCurrentfiltername(currentfiltername);
-						Log.i(Tag, "zhudewei the filter is "+ currentfiltername);
-						mGPUImageView.requestRender();
-					}
-				});
-		//恢复浅色调
-		customback.setBackgroundDrawable(getResources().getDrawable(R.drawable.sel_home_green_button));
-		customback.setTextColor(0xffffffff);
-		scrollPicArea.scrollBy(0, -800);
-		scrollPicArea.smoothScollToY(800, 3000);
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGPUImageView.onResume();
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.header_previous:
-			finish();
-			break;
-		case R.id.choose_photo:
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGPUImageView.onPause();
+    }
+
+    private void refreshView() {
+        select_photo_button.setVisibility(View.GONE);
+        buttonLayout.setVisibility(View.VISIBLE);
+        mGPUImageView.setVisibility(View.VISIBLE);
+        galleryFilter.setVisibility(View.VISIBLE);
+        galleryFilter.setAdapter(effectAdapter);
+
+        galleryFilter.setSelection(0);
+        galleryFilter
+                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    private String currentfiltername;
+
+                    public void onItemClick(AdapterView<?> arg0, View arg1,
+                            int position, long id) {
+                        effectAdapter.setSelectItem(position);
+                        currentfiltername = effectAdapter
+                                .getFilterName(position);
+                        currentfilterID = effectAdapter.getFilterID(position);
+                        mGPUImageView.setCurrentfilterID(currentfilterID);
+                        mGPUImageView.setCurrentfiltername(currentfiltername);
+                        Log.i(Tag, "zhudewei the filter is "
+                                + currentfiltername);
+                        mGPUImageView.requestRender();
+                    }
+                });
+        // 恢复浅色调
+        customback.setBackgroundDrawable(getResources().getDrawable(
+                R.drawable.sel_home_green_button));
+        customback.setTextColor(0xffffffff);
+        scrollPicArea.scrollBy(0, -800);
+        scrollPicArea.smoothScollToY(800, 3000);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.header_previous:
+            finish();
+            break;
+        case R.id.choose_photo:
             com.stamp20.app.util.Log.d(this, "mChoosePhoto.click");
             selectPicture();
-			break;
-		case R.id.choose_template:
-			select_photo_button.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+            break;
+        case R.id.choose_template:
+            select_photo_button.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
             com.stamp20.app.util.Log.d(this, "mChooseTemplate.click");
             changeTemplate();
-			break;
-		case R.id.customback:
-	/*		mGPUImageView.setCaptureBmp(true);
-			mGPUImageView.setonGeneratedCardBackBmpListener(new onGeneratedCardBackBmpListener() {
-				@Override
-				public void onGeneratedCardBackBmp() {
-					Intent intent = new Intent();
-					intent.setClass(getApplicationContext(), CardEnvelopeActivity.class);
-					startActivity(intent);
-				}
-				
-			});*/
-			mGPUImageView.setCaptureFront();
-			mGPUImageView.requestRender();
-			mGPUImageView.setOnCardBitmapGeneratedListener(new OnCardBitmapGeneratedListener() {
-				@Override
-				public void OnCardBitmapGeneratedListener() {
-					Intent intent = new Intent();
-					intent.setClass(getApplicationContext(), CardBackActivity.class);
-                    intent.putExtra("imageUri", imageUri);
-					startActivity(intent);
-					mGPUImageView.setOnCardBitmapGeneratedListener(null);
-				}			
-			});
-			
-			break;
-		default:
-			break;
-		}
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i(Tag, "in result activity!!");
-		if (requestCode == REQUEST_CODE_FOR_TEMPLATE && resultCode == RESULT_OK) {
-			int temPos = data.getIntExtra(
-					ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            break;
+        case R.id.customback:
+            /*
+             * mGPUImageView.setCaptureBmp(true);
+             * mGPUImageView.setonGeneratedCardBackBmpListener(new
+             * onGeneratedCardBackBmpListener() {
+             * 
+             * @Override public void onGeneratedCardBackBmp() { Intent intent =
+             * new Intent(); intent.setClass(getApplicationContext(),
+             * CardEnvelopeActivity.class); startActivity(intent); }
+             * 
+             * });
+             */
+            mGPUImageView.setCaptureFront();
+            mGPUImageView.requestRender();
+            mGPUImageView
+                    .setOnCardBitmapGeneratedListener(new OnCardBitmapGeneratedListener() {
+                        @Override
+                        public void OnCardBitmapGeneratedListener() {
+                            Intent intent = new Intent();
+                            intent.setClass(getApplicationContext(),
+                                    CardBackActivity.class);
+                            intent.putExtra("imageUri", imageUri);
+                            startActivity(intent);
+                            mGPUImageView
+                                    .setOnCardBitmapGeneratedListener(null);
+                        }
+                    });
+
+            break;
+        default:
+            break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(Tag, "in result activity!!");
+        if (requestCode == REQUEST_CODE_FOR_TEMPLATE && resultCode == RESULT_OK) {
+            int temPos = data.getIntExtra(
+                    ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
             mTemplatePos = temPos;
-			templateId = CardsTemplateUtils.getTransTemplateId(temPos);
-			background_envelop.setImageResource(templateId);
-			mGPUImageView.changetemplate(templateId);//change backguard
-			mGPUImageView.requestRender();
-		}
-	};
-	
-    private void changeTemplate(){
-//        startActivity(new Intent(CardEffect.this,
-//                CardsTemplateChooseActivity.class));
-//        finish();
-    	mIsChangingPhoto = false;
-    	Intent intent = new Intent();
-    	intent.setClass(CardEffect.this, CardsTemplateChooseActivity.class);
-    	intent.putExtra(SRC_IMAGE_URI, imageUri);
+            templateId = CardsTemplateUtils.getTransTemplateId(temPos);
+            background_envelop.setImageResource(templateId);
+            mGPUImageView.changetemplate(templateId);// change backguard
+            mGPUImageView.requestRender();
+        }
+    };
+
+    private void changeTemplate() {
+        // startActivity(new Intent(CardEffect.this,
+        // CardsTemplateChooseActivity.class));
+        // finish();
+        mIsChangingPhoto = false;
+        Intent intent = new Intent();
+        intent.setClass(CardEffect.this, CardsTemplateChooseActivity.class);
+        intent.putExtra(SRC_IMAGE_URI, imageUri);
         intent.putExtra(CardsTemplateUtils.ACTIVITY_CHANGE_TEMPLATE, true);
-    	startActivityForResult(intent, REQUEST_CODE_FOR_TEMPLATE);
+        startActivityForResult(intent, REQUEST_CODE_FOR_TEMPLATE);
     }
-	
+
     private void selectPicture() {
-    	mIsChangingPhoto = true;
-		Intent data = new Intent();
-		data.setClass(getBaseContext(), GallaryActivity.class);
-		startActivity(data);
+        mIsChangingPhoto = true;
+        Intent data = new Intent();
+        data.setClass(getBaseContext(), GallaryActivity.class);
+        startActivity(data);
     }
 
-	@Override
-	public boolean onTouch(View view, MotionEvent event) {
-		// TODO Auto-generated method stub
-		mGPUImageView.cardViewonTouchProcessing(this, event);
-		return true;
-	}
-
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        // TODO Auto-generated method stub
+        mGPUImageView.cardViewonTouchProcessing(this, event);
+        return true;
+    }
+    
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        // 回收内存
+        if (effectAdapter != null)
+            effectAdapter.clearPreviewHashMap();
+        if (mGPUImageView != null) {
+            Bitmap tmpForRecycle = mGPUImageView.getSourceBitmap();
+            if (tmpForRecycle!=null) {
+                tmpForRecycle.recycle();
+                tmpForRecycle = null;
+            }
+        }
+        super.onDestroy();
+    }
 
 }

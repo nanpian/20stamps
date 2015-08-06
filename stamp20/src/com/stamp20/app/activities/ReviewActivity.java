@@ -47,14 +47,14 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 
     private TextView tailText = null;
 
-//    private Button saveDesign;
+    // private Button saveDesign;
     private Button shareDesign;
 
     private ImageView blurBlackground;
     private View reviewForeground;
     private boolean isFirstBlur = true;
     private BlurBackground blurProcess = null;
-    
+
     private ParseUtil mUploadToParse;
 
     @Override
@@ -74,17 +74,17 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 
         headerTitle.setText(R.string.review_title);
 
-//        saveDesign = (Button) findViewById(R.id.btn_save_design);
+        // saveDesign = (Button) findViewById(R.id.btn_save_design);
         shareDesign = (Button) findViewById(R.id.btn_share_design);
-//        saveDesign.setOnClickListener(this);
+        // saveDesign.setOnClickListener(this);
         shareDesign.setOnClickListener(this);
 
         mCache = BitmapCache.getCache();
         mReviewer = (ImageView) findViewById(R.id.reviewer);
         mReviewer.setImageBitmap(mCache.get());
-//        mUploadToParse = new UploadToParse(mCache.get());
-//        mUploadToParse.uploadImage();
-        
+        // mUploadToParse = new UploadToParse(mCache.get());
+        // mUploadToParse.uploadImage();
+
         blurBlackground = (ImageView) findViewById(R.id.blur_background);
         reviewForeground = findViewById(R.id.review_root);
         blurProcess = new BlurBackground(blurBlackground);
@@ -103,32 +103,33 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
             finish();
             break;
         case R.id.tail:
-        	Cart cart = Cart.getInstance();
-        	Intent intent = new Intent();
-        	if(cart.isEmpty()){        		
-        		intent.setClass(this, ShopCartActivity.class);
-        	}else{
-        		cart.addDesign(mCache.get(), 20, Design.TYPE_STAMP);
-        		intent.setClass(this, ShopCartItemsActivity.class);
-        	}
-        	startActivity(intent);
+            Cart cart = Cart.getInstance();
+            Intent intent = new Intent();
+            if (cart.isEmpty()) {
+                intent.setClass(this, ShopCartActivity.class);
+            } else {
+                cart.addDesign(mCache.get(), 20, Design.TYPE_STAMP);
+                intent.setClass(this, ShopCartItemsActivity.class);
+            }
+            startActivity(intent);
             finish();
             break;
-//        case R.id.btn_save_design:
-//            File pic = saveBitmapToPic(mCache.get());
-//            if (pic == null)
-//                Log.e(TAG, "save design error");
-//            else {
-//                Log.d(TAG, "save design ok");
-//                /*
-//                 * Intent send = new Intent();
-//                 * send.setAction(Intent.ACTION_SEND); send.setType("image/*");
-//                 * send.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pic));
-//                 * startActivity(Intent.createChooser(send, "Share"));
-//                 */
-//                Toast.makeText(this, pic.getName() + " saved", Toast.LENGTH_SHORT).show();
-//            }
-//            break;
+        // case R.id.btn_save_design:
+        // File pic = saveBitmapToPic(mCache.get());
+        // if (pic == null)
+        // Log.e(TAG, "save design error");
+        // else {
+        // Log.d(TAG, "save design ok");
+        // /*
+        // * Intent send = new Intent();
+        // * send.setAction(Intent.ACTION_SEND); send.setType("image/*");
+        // * send.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pic));
+        // * startActivity(Intent.createChooser(send, "Share"));
+        // */
+        // Toast.makeText(this, pic.getName() + " saved",
+        // Toast.LENGTH_SHORT).show();
+        // }
+        // break;
         case R.id.btn_share_design:
             File tmp = saveBitmapToTmp(mCache.get());
             if (tmp == null) {
@@ -138,7 +139,8 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
                 Intent send = new Intent();
                 send.setAction(Intent.ACTION_SEND);
                 send.setType("image/*");
-                final Uri uri = FileProvider.getUriForFile(this, "com.stamp20.fileprovider", tmp);
+                final Uri uri = FileProvider.getUriForFile(this,
+                        "com.stamp20.fileprovider", tmp);
                 send.putExtra(Intent.EXTRA_STREAM, uri);
                 startActivity(Intent.createChooser(send, "Share"));
             }
@@ -154,43 +156,47 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     private long mDuration = 1000;
 
     private void closeBlurWindow() {
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration, new AnimationListener() {
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(
+                mEndAlpha, mStartAlpha, false, mDuration,
+                new AnimationListener() {
 
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                blurBlackground.setClickable(false);
-                blurBlackground.setVisibility(View.GONE);
-                reviewForeground.setVisibility(View.VISIBLE);
-            }
-        }));
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        blurBlackground.setClickable(false);
+                        blurBlackground.setVisibility(View.GONE);
+                        reviewForeground.setVisibility(View.VISIBLE);
+                    }
+                }));
     }
 
     private void startBlurWindow() {
         reviewForeground.setVisibility(View.GONE);
         blurBlackground.setVisibility(View.VISIBLE);
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, new AnimationListener() {
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(
+                mStartAlpha, mEndAlpha, false, mDuration,
+                new AnimationListener() {
 
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                blurBlackground.setClickable(true);
-            }
-        }));
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        blurBlackground.setClickable(true);
+                    }
+                }));
     }
 
     private class BlurBackground extends AsyncTask<View, Void, Bitmap> {
@@ -215,9 +221,12 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     }
 
     private File saveBitmapToPic(Bitmap src) {
-        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
+        File path = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + "/stamp20");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-        String name = "stamp20_" + sdf.format(new Date(System.currentTimeMillis())) + ".jpeg";
+        String name = "stamp20_"
+                + sdf.format(new Date(System.currentTimeMillis())) + ".jpeg";
         Log.d(TAG, "path: " + path + ", name: " + name);
         File file = new File(path, name);
         try {
@@ -234,7 +243,8 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
          * file.getAbsolutePath(), name, null); }catch(FileNotFoundException e){
          * Log.e(TAG, "insert image error"); }
          */
-        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.fromFile(file)));
         return file;
     }
 

@@ -1,6 +1,7 @@
 package com.stamp20.app.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +19,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.anim.Rotate3dAnimation;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
+import com.stamp20.gallary.GallaryActivity;
 
 public class CouponsActivity extends Activity implements OnClickListener {
 
@@ -67,6 +69,7 @@ public class CouponsActivity extends Activity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.header_previous:
+            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
             finish();
             break;
         case R.id.btn_get_coupons:
