@@ -83,10 +83,11 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/tail"
         android:layout_width="fill_parent"
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/sel_home_green_button" >
+        android:background="@drawable/tail_button" >
 
         <ImageView
             android:id="@+id/tail_icon"
@@ -98,7 +99,6 @@
             android:src="@drawable/icon_addtocart" />
 
         <RelativeLayout
-            android:id="@+id/tail"
             android:layout_width="fill_parent"
             android:layout_height="65dp"
             android:layout_alignParentBottom="true" >

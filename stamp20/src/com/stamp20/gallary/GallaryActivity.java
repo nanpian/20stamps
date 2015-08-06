@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -25,6 +26,7 @@ import com.parse.ParseUser;
 import com.stamp20.app.R;
 import com.stamp20.gallary.FeaturedAlbumFragment;
 import com.stamp20.gallary.PhotoAlbumFragment;
+import com.stamp20.app.activities.AboutActivity;
 import com.stamp20.app.activities.CouponsActivity;
 import com.stamp20.app.activities.HomeActivity;
 import com.stamp20.app.util.FontManager;
@@ -85,6 +87,16 @@ public class GallaryActivity extends FragmentActivity implements
             // showUserDetailsActivity();
         }
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
+            startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

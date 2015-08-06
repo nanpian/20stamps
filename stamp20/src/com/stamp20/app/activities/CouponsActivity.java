@@ -3,6 +3,7 @@ package com.stamp20.app.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -64,6 +65,16 @@ public class CouponsActivity extends Activity implements OnClickListener {
         super.finish();
         overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
     }
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
+            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public void onClick(View v) {
@@ -89,7 +100,7 @@ public class CouponsActivity extends Activity implements OnClickListener {
 
     private void cancel_share() {
         applyRotation(shareCouponsViewGroup, 0, 90, false);
-       // applyRotation(shareCouponsViewGroup, -90, 0, false);
+        // applyRotation(shareCouponsViewGroup, -90, 0, false);
 
     }
 
@@ -103,16 +114,18 @@ public class CouponsActivity extends Activity implements OnClickListener {
 
     private void getCoupons() {
         applyRotation(getCouponsViewGroup, 0, 90, true);
-        //applyRotation(shareCouponsViewGroup, -90, 0, true);
+        // applyRotation(shareCouponsViewGroup, -90, 0, true);
 
     }
 
-    private void applyRotation(final ViewGroup v, float start, float end, final boolean isFront) {
-        final float centerX = getCouponsViewGroup.getVisibility() == View.VISIBLE ? getCouponsViewGroup.getWidth() / 2.0f : shareCouponsViewGroup
-                .getWidth() / 2.0f;
-        final float centerY = getCouponsViewGroup.getVisibility() == View.VISIBLE ? getCouponsViewGroup.getHeight() / 2.0f : shareCouponsViewGroup
-                .getHeight() / 2.0f;
-        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX, centerY, 300.0f, true);
+    private void applyRotation(final ViewGroup v, float start, float end,
+            final boolean isFront) {
+        final float centerX = getCouponsViewGroup.getVisibility() == View.VISIBLE ? getCouponsViewGroup
+                .getWidth() / 2.0f : shareCouponsViewGroup.getWidth() / 2.0f;
+        final float centerY = getCouponsViewGroup.getVisibility() == View.VISIBLE ? getCouponsViewGroup
+                .getHeight() / 2.0f : shareCouponsViewGroup.getHeight() / 2.0f;
+        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX,
+                centerY, 300.0f, true);
         rotation.setDuration(500);
         rotation.setInterpolator(new AccelerateInterpolator());
         rotation.setAnimationListener(new AnimationListener() {
@@ -122,22 +135,27 @@ public class CouponsActivity extends Activity implements OnClickListener {
                 v.post(new Runnable() {
                     @Override
                     public void run() {
-                    	if (isFront) {
-                    		getCouponsViewGroup.setVisibility(View.GONE);
-                    		shareCouponsViewGroup.setVisibility(View.VISIBLE);
-                    	} else {
-                    		shareCouponsViewGroup.setVisibility(View.GONE);
-                    		getCouponsViewGroup.setVisibility(View.VISIBLE);
-                    	}
-                        btnCancel.setVisibility(shareCouponsViewGroup.getVisibility());
-
-                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f, false);
-                        rotatiomAnimation.setDuration(500);
-                        rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
                         if (isFront) {
-                        	shareCouponsViewGroup.startAnimation(rotatiomAnimation);
+                            getCouponsViewGroup.setVisibility(View.GONE);
+                            shareCouponsViewGroup.setVisibility(View.VISIBLE);
                         } else {
-                        	getCouponsViewGroup.startAnimation(rotatiomAnimation);
+                            shareCouponsViewGroup.setVisibility(View.GONE);
+                            getCouponsViewGroup.setVisibility(View.VISIBLE);
+                        }
+                        btnCancel.setVisibility(shareCouponsViewGroup
+                                .getVisibility());
+
+                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(
+                                -90, 0, centerX, centerY, 300.0f, false);
+                        rotatiomAnimation.setDuration(500);
+                        rotatiomAnimation
+                                .setInterpolator(new DecelerateInterpolator());
+                        if (isFront) {
+                            shareCouponsViewGroup
+                                    .startAnimation(rotatiomAnimation);
+                        } else {
+                            getCouponsViewGroup
+                                    .startAnimation(rotatiomAnimation);
                         }
                     }
                 });

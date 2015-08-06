@@ -63,9 +63,6 @@ public class HomeActivity extends BaseTitleActivity implements
 
     private final static int ANIMATION_DURATION = 1000;
     private final static int CHANGE_PICTURE_DURATION = 2000;
-    private final static float MAX_ALPHA = 1.0f;
-    private final static float MIN_ALPHA_0 = 0.0f;
-    private final static float MIN_ALPHA_1 = 0.1f;
     private Boolean isPaused = false;
 
     private final int SWITCH_CURRENT_PICTURE = 1;

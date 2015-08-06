@@ -32,19 +32,23 @@ public class CardBackView2 extends View{
     private Bitmap mSourceBitmap;
     private int mBackColor;
     private boolean mIsShowLine = false;
+    private Context mContext;
 
     public CardBackView2(Context context) {
         super(context);
+        mContext = context;
         initView();
     }
 
     public CardBackView2(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
         initView();
     }
 
     public CardBackView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
         initView();
     }
 
@@ -125,7 +129,7 @@ public class CardBackView2 extends View{
     }
 
     public void setImageUri(Uri imageUri){
-        mSourceBitmap = ImageUtil.loadDownsampledBitmap(getContext(), imageUri, 2);
+        mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
     }
 
     public Bitmap getAlphaSrcBitmap(){

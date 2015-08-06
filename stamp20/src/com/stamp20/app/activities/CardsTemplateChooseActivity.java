@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,6 +125,16 @@ public class CardsTemplateChooseActivity extends Activity implements
             CardsTemplateChooseActivity.this.setResult(RESULT_CANCELED);
             CardsTemplateChooseActivity.this.finish();
         }
+    }
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
+            mCancel.performClick();
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private class TemplateAnimationListener implements AnimationListener {
