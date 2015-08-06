@@ -34,6 +34,7 @@ import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.util.ParseUtil;
+import com.stamp20.app.view.WaitProgressBar;
 
 public class ReviewActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "ReviewActivity";
@@ -56,6 +57,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     private BlurBackground blurProcess = null;
 
     private ParseUtil mUploadToParse;
+    private WaitProgressBar waitProgressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,8 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
         // mUploadToParse = new UploadToParse(mCache.get());
         // mUploadToParse.uploadImage();
 
+        waitProgressBar = (WaitProgressBar) findViewById(R.id.progress_bar);
+
         blurBlackground = (ImageView) findViewById(R.id.blur_background);
         reviewForeground = findViewById(R.id.review_root);
         blurProcess = new BlurBackground(blurBlackground);
@@ -103,6 +107,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
             finish();
             break;
         case R.id.tail:
+            waitProgressBar.setVisibility(View.VISIBLE);
             Cart cart = Cart.getInstance();
             Intent intent = new Intent();
             if (cart.isEmpty()) {
@@ -111,6 +116,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
                 cart.addDesign(mCache.get(), 20, Design.TYPE_STAMP);
                 intent.setClass(this, ShopCartItemsActivity.class);
             }
+            waitProgressBar.setVisibility(View.GONE);
             startActivity(intent);
             finish();
             break;

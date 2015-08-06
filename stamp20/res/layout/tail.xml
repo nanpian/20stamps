@@ -3,28 +3,41 @@
     android:id="@+id/tail"
     android:layout_width="match_parent"
     android:layout_height="65dp"
-    android:background="@drawable/tail_button"
     android:layout_gravity="bottom"
-    android:clickable="true"
-     >
-    
-    <ImageView android:id="@+id/tail_icon"
+    android:background="@drawable/tail_button"
+    android:clickable="true" >
+
+    <ImageView
+        android:id="@+id/tail_icon"
         android:layout_width="26dp"
         android:layout_height="26dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="35dp"
+        android:layout_marginStart="35dp"
         android:scaleType="fitXY"
-        android:src="@drawable/icon_addtocart"
-        />
+        android:src="@drawable/icon_addtocart" />
 
-    <TextView android:id="@+id/tail_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="ADD TO CART"
-        android:textSize="20sp"
-        android:textColor="#ffffff"
-        />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true" >
+
+        <TextView
+            android:id="@+id/tail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="ADD TO CART"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+
+        <com.stamp20.app.view.WaitProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="34dip"
+            android:layout_height="34dip"
+            android:layout_centerInParent="true"
+            android:max="100"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.WaitProgressBar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -46,7 +47,7 @@ import java.util.Date;
 public class CardReviewActivity extends Activity implements OnClickListener {
     private ImageView header_previous;
     private TextView header_title;
-    private Button review_button;
+    private RelativeLayout review_button;
     private Button display_front;
     private Button display_back;
     private ImageView activity_envelope_img;
@@ -56,6 +57,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
     private boolean isFrontNow;
     private ImageView backgroundEvelopImage;
     private Button mShareDesign;
+    private WaitProgressBar waitProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         header_previous.setOnClickListener(this);
         header_title = (TextView) findViewById(R.id.header_title);
         header_title.setText("Review");
-        review_button = (Button) findViewById(R.id.card_add_to_cart);
+        review_button = (RelativeLayout) findViewById(R.id.tail);
         review_button.setOnClickListener(this);
         display_front = (Button) findViewById(R.id.display_front);
         display_front.setOnClickListener(this);
@@ -87,6 +89,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 
         activity_envelope_img = (ImageView) findViewById(R.id.activity_envelope_img2);
         // setupImageLocSize();
+
+        waitProgressBar = (WaitProgressBar) this.findViewById(R.id.progress_bar);
 
         CardBmpCache mCache = CardBmpCache.getCacheInstance();
         cardBmpFront = mCache.getFront();
@@ -154,14 +158,23 @@ public class CardReviewActivity extends Activity implements OnClickListener {
                 applyRotation(0, 90, 0);
             }
             break;
-        case R.id.card_add_to_cart:
+        case R.id.tail:
             // add to cart
-            Cart cart = Cart.getInstance();
-            cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
+            waitProgressBar.setVisibility(View.VISIBLE);
+            //new Thread(new Runnable() {
+
+              //  @Override
+              //  public void run() {
+                    // TODO Auto-generated method stub
+                    Cart cart = Cart.getInstance();
+                    cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
+             //   }
+           // }).start();
 
             Intent intent = new Intent();
             intent.setClass(this, ShopCartItemsActivity.class);
             intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
+            waitProgressBar.setVisibility(View.GONE);
             startActivity(intent);
             finish();
             break;

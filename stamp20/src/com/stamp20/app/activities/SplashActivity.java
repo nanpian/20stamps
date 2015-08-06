@@ -19,7 +19,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        FontManager.changeFonts((FrameLayout)findViewById(R.id.root), this);
+        FontManager.changeFonts((FrameLayout) findViewById(R.id.root), this);
         new Thread(new Runnable() {
 
             @Override
@@ -38,75 +38,40 @@ public class SplashActivity extends Activity {
                 });
             }
         }).start();
-        /*final ImageView imageView = (ImageView) this
-                .findViewById(R.id.fullscreen_content);
-        final Animation animation = AnimationUtils.loadAnimation(this,
-                R.anim.splash_activity_scale);
-        animation.setAnimationListener(new AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {}
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                下面这句用于控制动画结束以后，保持默认状态
-                animation.setFillAfter(true);
-                boolean firstStart = SplashActivity.this.getSharedPreferences(
-                        Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE)
-                        .getBoolean(
-                                Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
-                                true);
-                if (firstStart) {
-                    startActivity(new Intent(SplashActivity.this,
-                            WelcomeActivity.class));
-                } else {
-                    startActivity(new Intent(SplashActivity.this,
-                            MainActivity.class));
-                }
-                finish();
-            }
-        });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                imageView.startAnimation(animation);
-            }
-        }, 500);*/
+        /*
+         * final ImageView imageView = (ImageView) this
+         * .findViewById(R.id.fullscreen_content); final Animation animation =
+         * AnimationUtils.loadAnimation(this, R.anim.splash_activity_scale);
+         * animation.setAnimationListener(new AnimationListener() {
+         * 
+         * @Override public void onAnimationStart(Animation animation) {}
+         * 
+         * @Override public void onAnimationRepeat(Animation animation) {}
+         * 
+         * @Override public void onAnimationEnd(Animation animation) {
+         * 下面这句用于控制动画结束以后，保持默认状态 animation.setFillAfter(true); boolean
+         * firstStart = SplashActivity.this.getSharedPreferences(
+         * Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE) .getBoolean(
+         * Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART, true); if (firstStart) {
+         * startActivity(new Intent(SplashActivity.this,
+         * WelcomeActivity.class)); } else { startActivity(new
+         * Intent(SplashActivity.this, MainActivity.class)); } finish(); } });
+         * new Handler().postDelayed(new Runnable() {
+         * 
+         * @Override public void run() { imageView.startAnimation(animation); }
+         * }, 500);
+         */
     }
-    
-    private void startNextActivity(){
+
+    private void startNextActivity() {
         boolean firstStart = SplashActivity.this.getSharedPreferences(
                 Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE)
-                .getBoolean(
-                        Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
-                        true);
-        if(Constant.debugMainActivity() && Log.DEBUG){
-            startActivity(new Intent(SplashActivity.this,
-                    MainEffect.class));
-                return;
-        }
-        if(Constant.debugCardsActivity() && Log.DEBUG){
-            startActivity(new Intent(SplashActivity.this,
-                CardsActivity.class));
-            return;
-        }
-        if(Constant.debugCardsTemplateChooseActivity() && Log.DEBUG){
-            startActivity(new Intent(SplashActivity.this,
-                CardsTemplateChooseActivity.class));
-            return;
-        }
-        if (firstStart || (Constant.debugGuideActivity() && Log.DEBUG)) {
-            startActivity(new Intent(SplashActivity.this,
-                    GuideActivity.class));
-            return;
-        } else {
-            /*startActivity(new Intent(SplashActivity.this,
-                    MainActivity.class));*/
-            startActivity(new Intent(SplashActivity.this,
-                    HomeActivity.class));
-            return;
-        }
+                .getBoolean(Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART, true);
+
+        /*
+         * startActivity(new Intent(SplashActivity.this, MainActivity.class));
+         */
+        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+        return;
     }
 }

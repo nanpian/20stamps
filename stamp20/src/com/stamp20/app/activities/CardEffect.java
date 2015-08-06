@@ -274,7 +274,7 @@ public class CardEffect extends Activity implements OnClickListener,
                     mGPUImageView.changetemplate(templateId);// change backguard
                 }
                 loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri,
-                        2);
+                        4);
                 refreshView();
 
                 effectAdapter.setImageResource(imageUri);
@@ -428,7 +428,7 @@ public class CardEffect extends Activity implements OnClickListener,
         mGPUImageView.cardViewonTouchProcessing(this, event);
         return true;
     }
-    
+
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
@@ -437,7 +437,7 @@ public class CardEffect extends Activity implements OnClickListener,
             effectAdapter.clearPreviewHashMap();
         if (mGPUImageView != null) {
             Bitmap tmpForRecycle = mGPUImageView.getSourceBitmap();
-            if (tmpForRecycle!=null) {
+            if (tmpForRecycle != null) {
                 tmpForRecycle.recycle();
                 tmpForRecycle = null;
             }
