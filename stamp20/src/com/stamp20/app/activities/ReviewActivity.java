@@ -58,6 +58,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 
     private ParseUtil mUploadToParse;
     private WaitProgressBar waitProgressBar;
+    private RelativeLayout reviewButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,9 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
         tailText = (TextView) findViewById(R.id.tail_text);
 
         headerPrevious.setOnClickListener(this);
-        findViewById(R.id.tail).setOnClickListener(this);
+        
+        reviewButton = (RelativeLayout) this.findViewById(R.id.tail);
+        reviewButton.setOnClickListener(this);
 
         headerTitle.setText(R.string.review_title);
 
@@ -107,6 +110,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
             finish();
             break;
         case R.id.tail:
+            reviewButton.setEnabled(false);
             waitProgressBar.setVisibility(View.VISIBLE);
             Cart cart = Cart.getInstance();
             Intent intent = new Intent();
@@ -117,6 +121,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
                 intent.setClass(this, ShopCartItemsActivity.class);
             }
             waitProgressBar.setVisibility(View.GONE);
+            reviewButton.setEnabled(true);
             startActivity(intent);
             finish();
             break;

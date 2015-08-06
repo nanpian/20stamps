@@ -151,6 +151,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             break;
         case R.id.tail:
             // add to cart
+            review_button.setEnabled(false);
             waitProgressBar.setVisibility(View.VISIBLE);
             //new Thread(new Runnable() {
 
@@ -167,6 +168,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
             waitProgressBar.setVisibility(View.GONE);
             startActivity(intent);
+            review_button.setEnabled(true);
             finish();
             break;
         case R.id.card_back_share:
