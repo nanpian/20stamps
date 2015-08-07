@@ -221,7 +221,7 @@ public class MainEffect extends Activity implements OnTouchListener,
         // TODO Auto-generated method stub
         mStampFrame.setImageResource(resId);
     }
-    
+
     // 变换相框
     @Override
     public void changeStampFrame(Bitmap bitmap) {

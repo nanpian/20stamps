@@ -32,6 +32,7 @@ import com.stamp20.app.util.CardsTemplateUtils;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.CardGLSurfaceView;
 import com.stamp20.app.view.CardGLSurfaceView.OnCardBitmapGeneratedListener;
+import com.stamp20.app.view.StampGLSurfaceView.ChangeUIInterface;
 import com.stamp20.app.view.HorizontalListView;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.ScollerRelativeView;
@@ -46,7 +47,6 @@ public class CardEffect extends Activity implements OnClickListener,
     private static final CharSequence titleName = "Customize Front";
     protected static final int MSG_SELECT_PICTURE = 1002;
     protected static final int MSG_CHANGE_DESIGN = 1003;
-    public static CardEffect instance;
     private Uri imageUri;
     private Bitmap loadedBitmap;
     public ImageView background_envelop, select_photo_button;
@@ -106,7 +106,6 @@ public class CardEffect extends Activity implements OnClickListener,
 
         setContentView(R.layout.activity_card_effect);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-        instance = this;
         initView();
         mIsChangingPhoto = false;
         Intent getFromChooseTemp = getIntent();
@@ -171,6 +170,9 @@ public class CardEffect extends Activity implements OnClickListener,
 
         });
         mGPUImageView = (CardGLSurfaceView) findViewById(R.id.cardgpuimage);
+
+        mGPUImageView.setEnvelop(background_envelop);
+
         galleryFilter = (HorizontalListView) findViewById(R.id.galleryFilter);
         effectAdapter = new ImageEffectAdapter(CardEffect.this, mEffectContext);
         mGPUImageView.setEffectAdapter(effectAdapter);

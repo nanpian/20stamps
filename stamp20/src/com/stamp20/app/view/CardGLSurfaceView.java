@@ -12,6 +12,7 @@ import com.stamp20.app.activities.TextureRenderer;
 import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.Log;
+import com.stamp20.app.view.StampGLSurfaceView.ChangeUIInterface;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -165,8 +166,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
             if (msg.what == UPDATE_CARD) {
-                CardEffect.instance.background_envelop
-                        .setImageBitmap(resultBitmap);
+                background_envelop.setImageBitmap(resultBitmap);
             } else if (msg.what == INIT_FRAME) {
             }
         }
@@ -489,7 +489,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                 movedDistanceY = yMove - lastYMove;
                 lastXMove = xMove;
                 lastYMove = yMove;
-                CardEffect.instance.background_envelop
+                background_envelop
                         .setAlpha(StampViewConstants.PAINT_TRANSPRANT);
                 moveGLSurfaceView();
             } else if (event.getPointerCount() == 2) {
@@ -512,7 +512,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                     } else if (totalRatio < initRatio / 2) {
                         totalRatio = initRatio / 2;
                     }
-                    CardEffect.instance.background_envelop
+                    background_envelop
                             .setAlpha(StampViewConstants.PAINT_TRANSPRANT);
                     zoomGLSurfaceView(totalRatio);
                     lastFingerDis = fingerDis;
@@ -526,8 +526,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                 lastXMove = -1;
                 lastYMove = -1;
             }
-            CardEffect.instance.background_envelop
-                    .setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            background_envelop.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
             currentStatus = STATUS_NONE;
             this.requestRender();
             break;
@@ -535,8 +534,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
             // 手指离开屏幕时将临时值还原
             lastXMove = -1;
             lastYMove = -1;
-            CardEffect.instance.background_envelop
-                    .setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            background_envelop.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
             currentStatus = STATUS_NONE;
             this.requestRender();
             break;
@@ -626,6 +624,18 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         }
     }
 
+    ChangeUIInterface changeUiInterface = null;
+
+    public void setChangeUIInterface(ChangeUIInterface uiInterface) {
+        this.changeUiInterface = uiInterface;
+    }
+
+    public interface ChangeUIInterface {
+        public void changeBackEnvelop(Bitmap bitmap);
+
+        public void changeBackEnvelop(int resId);
+    }
+
     public interface OnCardBitmapGeneratedListener {
         public void OnCardBitmapGeneratedListener();
     }
@@ -650,6 +660,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     private void applyEffect() {
         mCurrentEffect.apply(mTextures[0], mImageWidth, mImageHeight,
                 mTextures[1]);
+    }
+
+    public ImageView background_envelop;
+
+    public void setEnvelop(ImageView imageView) {
+        background_envelop = imageView;
     }
 
 }
