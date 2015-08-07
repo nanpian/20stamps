@@ -232,6 +232,9 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         stampFrameBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_stamp_h_transparent_pierced);
         stampFrameWidth = stampFrameBitmap.getWidth();
         stampFrameHeight = stampFrameBitmap.getHeight();
+        // recycle stamp frame memory.
+        stampFrameBitmap.recycle();
+        stampFrameBitmap = null;
         Log.i(Tag, "the bitmap width is " + bitmapWidth + " the bitmap height is " + bitmapHeight);
         Log.i(Tag, "the stamp framewidth is " + stampFrameWidth + " the stamp frame height is " + stampFrameHeight);
         totalTranslateX = 0;

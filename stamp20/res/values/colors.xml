@@ -4,6 +4,7 @@
     <color name="activity_cards_choose_photo_text_pressed">#fff7c71f</color>
     <color name="image_button_background">#00ffffff</color>
     <color name="red">#900</color>
+    <color name="yellow">#FF9900</color>
     <color name="white">#FFFFFF</color>
     <color name="offwhite">#EEEEEE</color>
     <color name="black">#000000</color>

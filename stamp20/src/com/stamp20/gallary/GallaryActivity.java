@@ -3,7 +3,10 @@ package com.stamp20.gallary;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -26,8 +29,6 @@ import com.parse.ParseUser;
 import com.stamp20.app.R;
 import com.stamp20.gallary.FeaturedAlbumFragment;
 import com.stamp20.gallary.PhotoAlbumFragment;
-import com.stamp20.app.activities.AboutActivity;
-import com.stamp20.app.activities.CouponsActivity;
 import com.stamp20.app.activities.HomeActivity;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
@@ -45,11 +46,12 @@ public class GallaryActivity extends FragmentActivity implements
     private ImageButton mPhotoAlbumButton;;
     private ImageButton mFaceBookAlbumButton;
     private ImageButton mInstagramAlbumButton;
-    private ImageView mImageSelectedIndicator;
+    private View mImageSelectedIndicator;
     private List<GallaryFragment> mDatas;
     private FragmentPagerAdapter mAdapter;
 
     private int mScreen1_4;
+    private int margin_left;
     private int mCurrentPageIndex = 1;
 
     @Override
@@ -64,11 +66,13 @@ public class GallaryActivity extends FragmentActivity implements
             public void onClick(View arg0) {
                 if (mViewPager != null && mDatas != null) {
                     if (!mDatas.get(mCurrentPageIndex).onBackClick()) {
-                        startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
+                        startActivity(new Intent(GallaryActivity.this,
+                                HomeActivity.class));
                         finish();
                     }
                 } else {
-                    startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
+                    startActivity(new Intent(GallaryActivity.this,
+                            HomeActivity.class));
                     finish();
                 }
             }
@@ -90,8 +94,8 @@ public class GallaryActivity extends FragmentActivity implements
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
             startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
             finish();
             return true;
@@ -110,8 +114,14 @@ public class GallaryActivity extends FragmentActivity implements
                     data);
     }
 
+    // 将indicator宽度设置为和icon_featured_album.png相等
     private void initSelectedImage() {
-        mImageSelectedIndicator = (ImageView) findViewById(R.id.image_source_selected);
+
+        Bitmap icon = BitmapFactory.decodeResource(getResources(),
+                R.drawable.icon_featured_album);
+        int icon_width = icon.getWidth();
+
+        mImageSelectedIndicator = (View) findViewById(R.id.image_source_selected);
         Display display = getWindow().getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
         display.getMetrics(outMetrics);
@@ -119,11 +129,20 @@ public class GallaryActivity extends FragmentActivity implements
 
         mScreen1_4 = outMetrics.widthPixels / 4;
         Log.d(this, "mScreen1_4" + mScreen1_4);
+
+        // 计算距离左边缘间隔
+        margin_left = (outMetrics.widthPixels - icon_width * 4) / 8;
+
+        // 动态设置indicator的宽高,宽度和icon宽度一致
         LayoutParams lp = (LayoutParams) mImageSelectedIndicator
                 .getLayoutParams();
-        lp.width = mScreen1_4;
-        lp.leftMargin = mCurrentPageIndex * mScreen1_4;
+        lp.width = icon_width;
+        lp.leftMargin = mCurrentPageIndex * mScreen1_4 + margin_left;
         mImageSelectedIndicator.setLayoutParams(lp);
+
+        // recycle bitmap memory
+        icon.recycle();
+        icon = null;
     }
 
     private void initView() {
@@ -182,23 +201,28 @@ public class GallaryActivity extends FragmentActivity implements
         LayoutParams lp = (LayoutParams) mImageSelectedIndicator
                 .getLayoutParams();
         if (mCurrentPageIndex == 0 && position == 0) {// 0->1
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset
-                    * mScreen1_4);
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4
+                    + positionOffset + margin_left * mScreen1_4);
         } else if (mCurrentPageIndex == 1 && position == 0) {// 1->0
             lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1)
-                    * mScreen1_4);
+                    * mScreen1_4)
+                    + margin_left;
         } else if (mCurrentPageIndex == 1 && position == 1) {// 1->2
             lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset
-                    * mScreen1_4);
+                    * mScreen1_4)
+                    + margin_left;
         } else if (mCurrentPageIndex == 2 && position == 1) {// 2->1
             lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1)
-                    * mScreen1_4);
+                    * mScreen1_4)
+                    + margin_left;
         } else if (mCurrentPageIndex == 2 && position == 2) {// 2->3
             lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset
-                    * mScreen1_4);
+                    * mScreen1_4)
+                    + margin_left;
         } else if (mCurrentPageIndex == 3 && position == 2) {// 3->2
             lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1)
-                    * mScreen1_4);
+                    * mScreen1_4)
+                    + margin_left;
         }
 
         mImageSelectedIndicator.setLayoutParams(lp);
