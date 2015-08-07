@@ -48,6 +48,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
     private Button btnCheckout;
     private ImageView headerPrevious;
     private TextView headerTitle;
+    private Boolean fromHome = false;
 
     public ShopCartItemsActivity() {
     }
@@ -60,6 +61,15 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         // mCache = BitmapCache.getCache();
         // initListView();
         mDesigns = Cart.getInstance().getDesigns();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            if (intent.getStringExtra("from") != null
+                    && intent.getStringExtra("from").equals("home")) {
+                fromHome = true;
+            }
+        }
+
         initView();
     }
 
@@ -133,11 +143,14 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
-            startActivity(new Intent(ShopCartItemsActivity.this,
-                    HomeActivity.class));
-            finish();
-            return true;
+            if (fromHome) {
+                startActivity(new Intent(ShopCartItemsActivity.this,
+                        HomeActivity.class));
+                finish();
+                return true;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }

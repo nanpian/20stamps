@@ -38,8 +38,7 @@ import com.stamp20.gallary.GallaryActivity;
  * @author zhudewei
  *
  */
-public class HomeActivity extends BaseTitleActivity implements
-        View.OnClickListener {
+public class HomeActivity extends BaseTitleActivity implements View.OnClickListener {
 
     private ArrayList<Integer> mDrawableIDs = new ArrayList<Integer>();
     /*
@@ -77,11 +76,8 @@ public class HomeActivity extends BaseTitleActivity implements
                 return;
             if (msg.what == SWITCH_CURRENT_PICTURE) {
                 TransitionDrawable transitionDrawable = null;
-                transitionDrawable = new TransitionDrawable(
-                        new Drawable[] {
-                                mDrawables[mCurrentPicNum % mDrawableIDs.size()],
-                                mDrawables[(mCurrentPicNum + 1)
-                                        % mDrawableIDs.size()] });
+                transitionDrawable = new TransitionDrawable(new Drawable[] { mDrawables[mCurrentPicNum % mDrawableIDs.size()],
+                        mDrawables[(mCurrentPicNum + 1) % mDrawableIDs.size()] });
                 mCurrentPicNum++;
                 mBackgroundImageView.setImageDrawable(transitionDrawable);
                 /* mBackgroundImageView.setScaleType(ScaleType.CENTER_CROP); */
@@ -117,8 +113,7 @@ public class HomeActivity extends BaseTitleActivity implements
 
         mBackgroundImageView = (ImageView) this.findViewById(R.id.background);
         mBackgroundImageView.setScaleType(ScaleType.FIT_XY);
-        mBackgroundImageView.setImageDrawable(getResources().getDrawable(
-                R.drawable.background_home_baby_shower));
+        mBackgroundImageView.setImageDrawable(getResources().getDrawable(R.drawable.background_home_baby_shower));
         initBackgroundArrays();
 
     }
@@ -137,8 +132,7 @@ public class HomeActivity extends BaseTitleActivity implements
                     mHandler.sendEmptyMessage(SWITCH_CURRENT_PICTURE);
                 }
             };
-            timer.schedule(timerTask, CHANGE_PICTURE_DURATION
-                    - ANIMATION_DURATION, CHANGE_PICTURE_DURATION);
+            timer.schedule(timerTask, CHANGE_PICTURE_DURATION - ANIMATION_DURATION, CHANGE_PICTURE_DURATION);
         }
 
     }
@@ -164,15 +158,13 @@ public class HomeActivity extends BaseTitleActivity implements
     private void loadImageMem() {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(getResources(),
-                R.drawable.background_home_baby_shower, opts);
+        BitmapFactory.decodeResource(getResources(), R.drawable.background_home_baby_shower, opts);
         opts.inSampleSize = ImageUtil.computeSampleSize(opts, -1, 1280 * 960);
         opts.inJustDecodeBounds = false;
         mDrawables = new BitmapDrawable[mDrawableIDs.size()];
         try {
             for (int i = 0; i < mDrawableIDs.size(); i++) {
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                        mDrawableIDs.get(i), opts);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), mDrawableIDs.get(i), opts);
                 mDrawables[i] = new BitmapDrawable(bitmap);
             }
         } catch (Exception e) {
@@ -193,8 +185,7 @@ public class HomeActivity extends BaseTitleActivity implements
     }
 
     private void initBackgroundArrays() {
-        TypedArray typedArray = getResources().obtainTypedArray(
-                R.array.home_background);
+        TypedArray typedArray = getResources().obtainTypedArray(R.array.home_background);
         if (null != typedArray) {
             for (int i = 0; i < typedArray.length(); i++) {
                 mDrawableIDs.add(typedArray.getResourceId(i, 0));
@@ -215,23 +206,21 @@ public class HomeActivity extends BaseTitleActivity implements
             break;
         case R.id.btn_cards:
         case R.id.btn_getting_cards:
-            startActivity(new Intent(HomeActivity.this,
-                    CardsTemplateChooseActivity.class));
-            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(),
-                    "card");
+            startActivity(new Intent(HomeActivity.this, CardsTemplateChooseActivity.class));
+            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "card");
             finish();
             break;
 
         case R.id.btn_postage:
         case R.id.btn_postage_stamp:
             startActivity(new Intent(HomeActivity.this, GallaryActivity.class));
-            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(),
-                    "stamp");
+            PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "stamp");
             finish();
             break;
         case R.id.btn_view_cart:
-            startActivity(new Intent(HomeActivity.this,
-                    ShopCartItemsActivity.class));
+            Intent intent = new Intent(HomeActivity.this, ShopCartItemsActivity.class);
+            intent.putExtra("from", "home");
+            startActivity(intent);
             finish();
             break;
         }
