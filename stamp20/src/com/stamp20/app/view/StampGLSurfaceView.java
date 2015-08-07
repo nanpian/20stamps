@@ -33,6 +33,7 @@ import com.stamp20.app.activities.TextureRenderer;
 import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
+import com.stamp20.app.util.GLBaseUtil;
 import com.stamp20.app.util.Log;
 
 public class StampGLSurfaceView extends GLSurfaceView implements
@@ -285,7 +286,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
     public StampGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if (!supportsOpenGLES2(context)) {
+        if (!GLBaseUtil.supportsOpenGLES2(context)) {
             throw new IllegalStateException(
                     "OpenGL ES 2.0 is not supported on this phone.");
         }
@@ -300,21 +301,6 @@ public class StampGLSurfaceView extends GLSurfaceView implements
     private int getDefaultPrice() {
         int[] price = getResources().getIntArray(R.array.stamp_rate_price);
         return price[0];
-    }
-
-    /**
-     * Checks if OpenGL ES 2.0 is supported on the current device.
-     *
-     * @param context
-     *            the context
-     * @return true, if successful
-     */
-    private boolean supportsOpenGLES2(final Context context) {
-        final ActivityManager activityManager = (ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        final ConfigurationInfo configurationInfo = activityManager
-                .getDeviceConfigurationInfo();
-        return configurationInfo.reqGlEsVersion >= 0x20000;
     }
 
     private void renderResult() {

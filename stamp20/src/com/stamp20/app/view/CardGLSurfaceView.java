@@ -11,6 +11,7 @@ import com.stamp20.app.activities.GLToolbox;
 import com.stamp20.app.activities.TextureRenderer;
 import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.CardBmpCache;
+import com.stamp20.app.util.GLBaseUtil;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.view.StampGLSurfaceView.ChangeUIInterface;
 
@@ -203,7 +204,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 
     public CardGLSurfaceView(Context context) {
         super(context);
-        if (!supportsOpenGLES2(context)) {
+        if (!GLBaseUtil.supportsOpenGLES2(context)) {
             throw new IllegalStateException(
                     "OpenGL ES 2.0 is not supported on this phone.");
         }
@@ -216,7 +217,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
 
     public CardGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if (!supportsOpenGLES2(context)) {
+        if (!GLBaseUtil.supportsOpenGLES2(context)) {
             throw new IllegalStateException(
                     "OpenGL ES 2.0 is not supported on this phone.");
         }
@@ -225,21 +226,6 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         this.setEGLContextClientVersion(2);
         this.setRenderer(this);
         this.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-    }
-
-    /**
-     * Checks if OpenGL ES 2.0 is supported on the current device.
-     *
-     * @param context
-     *            the context
-     * @return true, if successful
-     */
-    private boolean supportsOpenGLES2(final Context context) {
-        final ActivityManager activityManager = (ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        final ConfigurationInfo configurationInfo = activityManager
-                .getDeviceConfigurationInfo();
-        return configurationInfo.reqGlEsVersion >= 0x20000;
     }
 
     @Override
