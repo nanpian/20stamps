@@ -8,7 +8,6 @@ import java.nio.IntBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.R.integer;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
@@ -30,7 +29,6 @@ import android.widget.RelativeLayout;
 
 import com.stamp20.app.R;
 import com.stamp20.app.activities.GLToolbox;
-import com.stamp20.app.activities.MainEffect;
 import com.stamp20.app.activities.TextureRenderer;
 import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.data.Design;
@@ -201,18 +199,14 @@ public class StampGLSurfaceView extends GLSurfaceView implements
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
             if (msg.what == UPDATE_FRAME) {
-                MainEffect.instance.mStampFrame.setImageBitmap(bitmap);
+                //MainEffect.instance.mStampFrame.setImageBitmap(bitmap);
+                changeUiInterface.changeStampFrame(bitmap);
             } else if (msg.what == INIT_FRAME) {
                 if (isHorizontal) {
-                    MainEffect.instance.mStampFrame
-                            .setImageBitmap(BitmapFactory.decodeResource(
-                                    mContext.getResources(),
-                                    R.drawable.background_stamp_h_transparent_pierced));
+                    changeUiInterface.changeStampFrame(R.drawable.background_stamp_h_transparent_pierced);
                 } else {
-                    MainEffect.instance.mStampFrame
-                            .setImageBitmap(BitmapFactory.decodeResource(
-                                    mContext.getResources(),
-                                    R.drawable.background_stamp_v_transparent_pierced));
+                    changeUiInterface.changeStampFrame(R.drawable.background_stamp_v_transparent_pierced);
+
                 }
             }
         }
@@ -698,6 +692,11 @@ public class StampGLSurfaceView extends GLSurfaceView implements
     public void setOnMoveOrZoomListener(OnMoveOrZoomListener l) {
         listener = l;
     }
+    
+    ChangeUIInterface changeUiInterface = null;
+    public void setChangeUIInterface(ChangeUIInterface uiInterface) {
+        this.changeUiInterface = uiInterface;
+    }
 
     public interface OnMoveOrZoomListener {
         public void onMoveOrZoomListener(boolean flag, float ratio,
@@ -706,6 +705,11 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
     public interface OnStampBitmapGeneratedListener {
         public void OnStampBitmapGeneratedListener();
+    }
+    
+    public interface ChangeUIInterface {
+        public void changeStampFrame(Bitmap bitmap);
+        public void changeStampFrame(int resId);
     }
 
     public void onRotateClick(Context mContext, RelativeLayout frameLayout) {
@@ -724,19 +728,18 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
     public void showAnimation(RelativeLayout mView, boolean isHorizontal) {
         if (isHorizontal) {
-            MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
-                    .decodeResource(mContext.getResources(),
-                            R.drawable.background_stamp_v_transparent_pierced));
+            changeUiInterface.changeStampFrame(R.drawable.background_stamp_v_transparent_pierced);
+            if (changeUiInterface!=null) {
+                changeUiInterface.changeStampFrame(bitmap);
+            }
             isHorizontal = false;
             currentStatus = STATUS_INIT;
-            MainEffect.instance.mGPUImageView.requestRender();
+            this.requestRender();
         } else {
-            MainEffect.instance.mStampFrame.setImageBitmap(BitmapFactory
-                    .decodeResource(mContext.getResources(),
-                            R.drawable.background_stamp_h_transparent_pierced));
+            changeUiInterface.changeStampFrame(R.drawable.background_stamp_h_transparent_pierced);
             isHorizontal = true;
             currentStatus = STATUS_INIT;
-            MainEffect.instance.mGPUImageView.requestRender();
+            this.requestRender();
         }
     }
 

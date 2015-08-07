@@ -28,15 +28,15 @@ import com.stamp20.app.view.HorizontalListView;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampGLSurfaceView;
 import com.stamp20.app.view.StampGLSurfaceView.OnStampBitmapGeneratedListener;
+import com.stamp20.app.view.StampGLSurfaceView.ChangeUIInterface;
 
 public class MainEffect extends Activity implements OnTouchListener,
-        OnStampBitmapGeneratedListener, OnClickListener {
+        OnStampBitmapGeneratedListener,ChangeUIInterface, OnClickListener {
 
     private Context mContext;
     private Bitmap bitmap;
 
     private static final CharSequence titleName = "Customize";
-    public static MainEffect instance;
     public StampGLSurfaceView mGPUImageView;
     private FrameLayout touchArea;
     private static final int MSG_SELECT_PICTURE = 1000;
@@ -60,7 +60,6 @@ public class MainEffect extends Activity implements OnTouchListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        instance = this;
         setContentView(R.layout.main_effects_view);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
@@ -87,6 +86,7 @@ public class MainEffect extends Activity implements OnTouchListener,
         touchArea.setOnTouchListener(this);
 
         mGPUImageView.setStampFrame(mStampFrame);
+        mGPUImageView.setChangeUIInterface(this);
         initImage(uri);
     }
 
@@ -174,8 +174,8 @@ public class MainEffect extends Activity implements OnTouchListener,
 
     @Override
     public void OnStampBitmapGeneratedListener() {
-        // TODO Auto-generated method stub
-        Constant.LogXixia("MainEffect before start ChooseRateActivity, mGPUImageView.isHorizontal:"
+        // TODO Auto-generated method stubs
+        Log.d(Tag,"MainEffect before start ChooseRateActivity, mGPUImageView.isHorizontal:"
                 + mGPUImageView.isHorizontal);
         Intent intent = new Intent(this, ChooseRateActivity.class);
         intent.putExtra(Constant.STAMP_IS_HORIZONTAL,
@@ -213,6 +213,20 @@ public class MainEffect extends Activity implements OnTouchListener,
         // TODO Auto-generated method stub
         mGPUImageView.onResume();
         super.onResume();
+    }
+
+    // 变换相框
+    @Override
+    public void changeStampFrame(int resId) {
+        // TODO Auto-generated method stub
+        mStampFrame.setImageResource(resId);
+    }
+    
+    // 变换相框
+    @Override
+    public void changeStampFrame(Bitmap bitmap) {
+        // TODO Auto-generated method stub
+        mStampFrame.setImageBitmap(bitmap);
     }
 
 }
