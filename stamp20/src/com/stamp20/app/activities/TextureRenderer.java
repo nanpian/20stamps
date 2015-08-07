@@ -97,7 +97,7 @@ public class TextureRenderer {
 
         // Set viewport
         Log.i(Tag, "total translate x is " + totalTranslateX + "total translate y is " + totalTranslateY + " totalratio is " + totalRatio);
-        GLES20.glViewport(totalTranslateX, -totalTranslateY, (int) (mViewWidth * totalRatio), (int) (mViewHeight * totalRatio));
+        GLES20.glViewport((int)(totalTranslateX*totalRatio), -(int)(totalTranslateY*totalRatio), (int) (mViewWidth * totalRatio), (int) (mViewHeight * totalRatio));
         GLToolbox.checkGlError("glViewport");
 
         // Disable blending

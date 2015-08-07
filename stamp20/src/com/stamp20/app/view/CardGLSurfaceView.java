@@ -6,19 +6,14 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.stamp20.app.R;
-import com.stamp20.app.activities.CardEffect;
 import com.stamp20.app.activities.GLToolbox;
 import com.stamp20.app.activities.TextureRenderer;
 import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.GLBaseUtil;
 import com.stamp20.app.util.Log;
-import com.stamp20.app.view.StampGLSurfaceView.ChangeUIInterface;
-
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -270,10 +265,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Re
             }
         } else {
             mHandler.sendEmptyMessage(INIT_FRAME);
-            gl.glLoadIdentity(); // 重置当前的模型观察矩阵
-            gl.glPushMatrix();
             renderResult();
-            gl.glPopMatrix();
+
         }
     }
 
@@ -313,11 +306,6 @@ public class CardGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Re
         Bitmap glBitmap = SavePixels((surfaceWidth - mWidth) / 2, (surfaceHeight - mHeight) / 2, mWidth, mHeight, mGL);
         Bitmap cardScaledBitmap = Bitmap.createScaledBitmap(cardBitmap, mWidth, mHeight, true);
 
-        if (resultBitmap != null) {
-            resultBitmap.recycle();
-            resultBitmap = null;
-        }
-
         resultBitmap = Bitmap.createBitmap(mWidth, mHeight, Config.ARGB_8888);
 
         try {
@@ -331,7 +319,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Re
             glBitmap = null;
         } catch (Exception e) {
             Log.i("zhudewei", "onDrawFrame, the bitmap exception");
-            resultBitmap = null;
+            //resultBitmap.recycle();
+            //resultBitmap = null;
             e.getStackTrace();
         }
         Log.i("zhudewei", "onDrawFrame, the bitmap is " + resultBitmap);
@@ -513,10 +502,10 @@ public class CardGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Re
         // TODO Auto-generated method stub
         float translateX = 0f;
         float translateY = 0f;
-        // translateX = totalTranslateX * ratio - centerPointX * (1 - ratio);
-        // translateY = totalTranslateY * ratio - centerPointY * (1 - ratio);
-        totalTranslateX = totalTranslateX;
-        totalTranslateY = totalTranslateY;
+        translateX = totalTranslateX * scaledRatio - centerPointX * (1 - scaledRatio);
+        translateY = totalTranslateY * scaledRatio - centerPointY * (1 - scaledRatio);
+        totalTranslateX = translateX;
+        totalTranslateY = translateY;
         this.requestRender();
     }
 

@@ -631,10 +631,10 @@ public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         // TODO Auto-generated method stub
         float translateX = 0f;
         float translateY = 0f;
-        // translateX = totalTranslateX * ratio + centerPointX * (1 - ratio);
-        // translateY = totalTranslateY * ratio + centerPointY * (1 - ratio);
-        totalTranslateX = totalTranslateX;
-        totalTranslateY = totalTranslateY;
+        translateX = totalTranslateX * scaledRatio + centerPointX * (1 - scaledRatio);
+        translateY = totalTranslateY * scaledRatio + centerPointY * (1 - scaledRatio);
+        totalTranslateX = translateX;
+        totalTranslateY = translateY;
         this.requestRender();
     }
 
