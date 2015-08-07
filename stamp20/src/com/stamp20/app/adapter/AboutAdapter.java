@@ -3,11 +3,6 @@ package com.stamp20.app.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.stamp20.app.R;
-import com.stamp20.app.adapter.ImageEffectAdapter.ViewHolder;
-import com.stamp20.app.makeramen.RoundedImageView;
-import com.stamp20.app.util.FontManager;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +10,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.stamp20.app.R;
+import com.stamp20.app.util.FontManager;
+
 public class AboutAdapter extends BaseAdapter {
+    private List<String> aboutArray = new ArrayList<String>();
+    private int[] aboutstring = { R.string.about_1, R.string.about_2, R.string.about_3, R.string.about_4,
+            R.string.about_5, R.string.about_6, R.string.about_7, R.string.about_8, R.string.about_9, R.string.about_10 };
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<String> aboutArray = new ArrayList<String>();
-    private int[] aboutstring = { R.string.about_1, R.string.about_2, R.string.about_3, R.string.about_4, R.string.about_5, R.string.about_6, R.string.about_7,
-            R.string.about_8, R.string.about_9, R.string.about_10 };
 
     public AboutAdapter(Context context) {
         mContext = context;

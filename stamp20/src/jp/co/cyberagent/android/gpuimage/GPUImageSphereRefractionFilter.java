@@ -20,23 +20,38 @@ import android.graphics.PointF;
 import android.opengl.GLES20;
 
 public class GPUImageSphereRefractionFilter extends GPUImageFilter {
-    public static final String SPHERE_FRAGMENT_SHADER = "" + "varying highp vec2 textureCoordinate;\n" + "\n" + "uniform sampler2D inputImageTexture;\n" + "\n"
-            + "uniform highp vec2 center;\n" + "uniform highp float radius;\n" + "uniform highp float aspectRatio;\n"
-            + "uniform highp float refractiveIndex;\n" + "\n" + "void main()\n" + "{\n"
+    public static final String SPHERE_FRAGMENT_SHADER = ""
+            + "varying highp vec2 textureCoordinate;\n"
+            + "\n"
+            + "uniform sampler2D inputImageTexture;\n"
+            + "\n"
+            + "uniform highp vec2 center;\n"
+            + "uniform highp float radius;\n"
+            + "uniform highp float aspectRatio;\n"
+            + "uniform highp float refractiveIndex;\n"
+            + "\n"
+            + "void main()\n"
+            + "{\n"
             + "highp vec2 textureCoordinateToUse = vec2(textureCoordinate.x, (textureCoordinate.y * aspectRatio + 0.5 - 0.5 * aspectRatio));\n"
             + "highp float distanceFromCenter = distance(center, textureCoordinateToUse);\n"
-            + "lowp float checkForPresenceWithinSphere = step(distanceFromCenter, radius);\n" + "\n" + "distanceFromCenter = distanceFromCenter / radius;\n"
-            + "\n" + "highp float normalizedDepth = radius * sqrt(1.0 - distanceFromCenter * distanceFromCenter);\n"
-            + "highp vec3 sphereNormal = normalize(vec3(textureCoordinateToUse - center, normalizedDepth));\n" + "\n"
-            + "highp vec3 refractedVector = refract(vec3(0.0, 0.0, -1.0), sphereNormal, refractiveIndex);\n" + "\n"
-            + "gl_FragColor = texture2D(inputImageTexture, (refractedVector.xy + 1.0) * 0.5) * checkForPresenceWithinSphere;     \n" + "}\n";
+            + "lowp float checkForPresenceWithinSphere = step(distanceFromCenter, radius);\n"
+            + "\n"
+            + "distanceFromCenter = distanceFromCenter / radius;\n"
+            + "\n"
+            + "highp float normalizedDepth = radius * sqrt(1.0 - distanceFromCenter * distanceFromCenter);\n"
+            + "highp vec3 sphereNormal = normalize(vec3(textureCoordinateToUse - center, normalizedDepth));\n"
+            + "\n"
+            + "highp vec3 refractedVector = refract(vec3(0.0, 0.0, -1.0), sphereNormal, refractiveIndex);\n"
+            + "\n"
+            + "gl_FragColor = texture2D(inputImageTexture, (refractedVector.xy + 1.0) * 0.5) * checkForPresenceWithinSphere;     \n"
+            + "}\n";
 
+    private float mAspectRatio;
+    private int mAspectRatioLocation;
     private PointF mCenter;
     private int mCenterLocation;
     private float mRadius;
     private int mRadiusLocation;
-    private float mAspectRatio;
-    private int mAspectRatioLocation;
     private float mRefractiveIndex;
     private int mRefractiveIndexLocation;
 
@@ -81,17 +96,6 @@ public class GPUImageSphereRefractionFilter extends GPUImageFilter {
     }
 
     /**
-     * The index of refraction for the sphere, with a default of 0.71
-     *
-     * @param refractiveIndex
-     *            default 0.71
-     */
-    public void setRefractiveIndex(float refractiveIndex) {
-        mRefractiveIndex = refractiveIndex;
-        setFloat(mRefractiveIndexLocation, refractiveIndex);
-    }
-
-    /**
      * The center about which to apply the distortion, with a default of (0.5,
      * 0.5)
      *
@@ -113,5 +117,16 @@ public class GPUImageSphereRefractionFilter extends GPUImageFilter {
     public void setRadius(float radius) {
         mRadius = radius;
         setFloat(mRadiusLocation, radius);
+    }
+
+    /**
+     * The index of refraction for the sphere, with a default of 0.71
+     *
+     * @param refractiveIndex
+     *            default 0.71
+     */
+    public void setRefractiveIndex(float refractiveIndex) {
+        mRefractiveIndex = refractiveIndex;
+        setFloat(mRefractiveIndexLocation, refractiveIndex);
     }
 }

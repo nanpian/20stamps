@@ -29,12 +29,12 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     /** The default max value */
     private static final int DEFAULT_MIN_VALUE = 0;
 
-    // Values
-    private int minValue;
-    private int maxValue;
-
     // format
     private String format;
+    private int maxValue;
+
+    // Values
+    private int minValue;
 
     /**
      * Constructor
@@ -81,16 +81,16 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     }
 
     @Override
+    public int getItemsCount() {
+        return maxValue - minValue + 1;
+    }
+
+    @Override
     public CharSequence getItemText(int index) {
         if (index >= 0 && index < getItemsCount()) {
             int value = minValue + index;
             return format != null ? String.format(format, value) : Integer.toString(value);
         }
         return null;
-    }
-
-    @Override
-    public int getItemsCount() {
-        return maxValue - minValue + 1;
     }
 }

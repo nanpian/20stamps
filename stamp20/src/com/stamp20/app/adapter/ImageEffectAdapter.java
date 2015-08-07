@@ -2,30 +2,23 @@ package com.stamp20.app.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import android.R.integer;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.effect.Effect;
 import android.media.effect.EffectContext;
 import android.media.effect.EffectFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,20 +30,79 @@ import com.stamp20.app.filter.PixelBuffer;
 import com.stamp20.app.makeramen.RoundedImageView;
 import com.stamp20.app.util.BitmapUtils;
 import com.stamp20.app.util.FontManager;
-import com.stamp20.app.view.ImageUtil;
 
 public class ImageEffectAdapter extends BaseAdapter {
 
-    private Context mContext;
-    private LayoutInflater mInflater;
-    public Effect mEffect;
-    private Uri imageUri;
-    private Bitmap imageBitmap;
-    private EffectContext mEffectContext;
-    private ImageBlurRender mImageBlurRender;
-    private PixelBuffer mGlPBuffer;
-    private Map<String, Bitmap> mBlutImageMap = new HashMap<String, Bitmap>();
+    public class BlurAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
+
+        private String mEffctName;
+        private int mPosition;
+        private RoundedImageView mRoundedImageView;
+
+        public BlurAsyncTask(int pos, String name, RoundedImageView imageView) {
+            this.mPosition = pos;
+            this.mEffctName = name;
+            this.mRoundedImageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Bitmap... param) {
+            Bitmap bitmap = param[0];
+            mGlPBuffer = new PixelBuffer(bitmap.getWidth(), bitmap.getHeight());
+            mGlPBuffer.setRenderer(mImageBlurRender);
+            mImageBlurRender.mCurrentEffect = mPosition;
+            try {
+                bitmap = mGlPBuffer.getBitmap(null, null);
+            } catch (Exception e) {
+
+                return bitmap;
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            if (((String) mRoundedImageView.getTag()).equals(mEffctName)) {
+                mRoundedImageView.setImageBitmap(result);
+            }
+            mBlutImageMap.put(mEffctName, result);
+        }
+    }
+    private class FilterInfo {
+        public int filterID;
+        public String filterName;
+        public Effect mEffect;
+        public int selectItem;
+
+        public FilterInfo(int filterid, String filtername, Effect meffect) {
+            this.filterID = filterid;
+            this.filterName = filtername;
+            this.mEffect = meffect;
+        }
+
+    }
+    public static class ViewHolder {
+        public RoundedImageView mImageView;
+        public TextView mTextView;
+    }
     private Boolean canPreview = true;
+    private List<FilterInfo> filterArray = new ArrayList<FilterInfo>();
+    private Bitmap imageBitmap;
+    private Uri imageUri;
+    private Map<String, Bitmap> mBlutImageMap = new HashMap<String, Bitmap>();
+    private Context mContext;
+    public Effect mEffect;
+
+    private EffectContext mEffectContext;
+
+    private PixelBuffer mGlPBuffer;
+
+    private ImageBlurRender mImageBlurRender;
+
+    private LayoutInflater mInflater;
+
+    private int selectItem = -1;
 
     /**
      * @param c
@@ -97,15 +149,6 @@ public class ImageEffectAdapter extends BaseAdapter {
 
     }
 
-    public void setImageResource(Uri imageUri) {
-        this.imageUri = imageUri;
-        // imageBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
-        // for the preview blur imageview, just using 200*200 size to reduce the
-        // memorry
-        imageBitmap = BitmapUtils.decodeUri(imageUri, mContext.getContentResolver(), 200);
-        mImageBlurRender.setBlurBitmapSrc(imageBitmap);
-    }
-
     public void clearPreviewHashMap() {
         if (mBlutImageMap != null) {
             for (int i = 0; i < mBlutImageMap.size(); i++) {
@@ -119,13 +162,6 @@ public class ImageEffectAdapter extends BaseAdapter {
 
         }
     }
-
-    public Effect createEffect(int currentfilterID, EffectContext mEffectContext2) {
-        // TODO Auto-generated method stub
-        mEffectContext = mEffectContext2;
-        return mEffect = createEffect(currentfilterID);
-    }
-
     public Effect createEffect(int mCurrentEffect) {
 
         EffectFactory effectFactory = null;
@@ -268,22 +304,11 @@ public class ImageEffectAdapter extends BaseAdapter {
         return mEffect;
     }
 
-    private class FilterInfo {
-        public int filterID;
-        public String filterName;
-        public Effect mEffect;
-        public int selectItem;
-
-        public FilterInfo(int filterid, String filtername, Effect meffect) {
-            this.filterID = filterid;
-            this.filterName = filtername;
-            this.mEffect = meffect;
-        }
-
+    public Effect createEffect(int currentfilterID, EffectContext mEffectContext2) {
+        // TODO Auto-generated method stub
+        mEffectContext = mEffectContext2;
+        return mEffect = createEffect(currentfilterID);
     }
-
-    private List<FilterInfo> filterArray = new ArrayList<FilterInfo>();
-    private int selectItem = -1;
 
     @Override
     public int getCount() {
@@ -291,13 +316,13 @@ public class ImageEffectAdapter extends BaseAdapter {
         return filterArray.size();
     }
 
+    public int getFilterID(int position) {
+        return position < filterArray.size() ? filterArray.get(position).filterID : 0;
+    }
+
     public String getFilterName(int position) {
         // TODO Auto-generated method stub
         return position < filterArray.size() ? filterArray.get(position).filterName : null;
-    }
-
-    public int getFilterID(int position) {
-        return position < filterArray.size() ? filterArray.get(position).filterID : 0;
     }
 
     @Override
@@ -372,46 +397,13 @@ public class ImageEffectAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public class BlurAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
-
-        private int mPosition;
-        private String mEffctName;
-        private RoundedImageView mRoundedImageView;
-
-        public BlurAsyncTask(int pos, String name, RoundedImageView imageView) {
-            this.mPosition = pos;
-            this.mEffctName = name;
-            this.mRoundedImageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Bitmap... param) {
-            Bitmap bitmap = param[0];
-            mGlPBuffer = new PixelBuffer(bitmap.getWidth(), bitmap.getHeight());
-            mGlPBuffer.setRenderer(mImageBlurRender);
-            mImageBlurRender.mCurrentEffect = mPosition;
-            try {
-                bitmap = mGlPBuffer.getBitmap(null, null);
-            } catch (Exception e) {
-
-                return bitmap;
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            if (((String) mRoundedImageView.getTag()).equals(mEffctName)) {
-                mRoundedImageView.setImageBitmap(result);
-            }
-            mBlutImageMap.put(mEffctName, result);
-        }
-    }
-
-    public static class ViewHolder {
-        public RoundedImageView mImageView;
-        public TextView mTextView;
+    public void setImageResource(Uri imageUri) {
+        this.imageUri = imageUri;
+        // imageBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
+        // for the preview blur imageview, just using 200*200 size to reduce the
+        // memorry
+        imageBitmap = BitmapUtils.decodeUri(imageUri, mContext.getContentResolver(), 200);
+        mImageBlurRender.setBlurBitmapSrc(imageBitmap);
     }
 
     /**

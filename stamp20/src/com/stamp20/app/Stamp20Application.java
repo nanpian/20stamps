@@ -12,8 +12,18 @@ import com.stamp20.gallary.features.FeaturePhoto;
 
 public class Stamp20Application extends Application {
 
-    static final String TAG = "Stamp20Application";
     protected static Stamp20Application instance;
+    static final String TAG = "Stamp20Application";
+
+    public static Stamp20Application getInstance() {
+        return instance;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        instance = this;
+    }
 
     @Override
     public void onCreate() {
@@ -28,15 +38,5 @@ public class Stamp20Application extends Application {
 
         ParseFacebookUtils.initialize("713170092123951");
 
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        instance = this;
-    }
-
-    public static Stamp20Application getInstance() {
-        return instance;
     }
 }

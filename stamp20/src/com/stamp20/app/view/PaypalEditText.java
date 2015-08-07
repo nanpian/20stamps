@@ -1,7 +1,5 @@
 package com.stamp20.app.view;
 
-import com.stamp20.app.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -9,21 +7,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.stamp20.app.R;
+
 public class PaypalEditText extends LinearLayout {
 
-    private TextView hint;
+    private LayoutParams editParams;
     private EditText editText;
-
-    private int hintTextColor;
-    private int hintTextSize;
-    private String hintText;
 
     private int editTextColor;
     private int editTextSize;
     private String editTextText;
 
+    private TextView hint;
     private LayoutParams hintParams;
-    private LayoutParams editParams;
+    private String hintText;
+
+    private int hintTextColor;
+    private int hintTextSize;
 
     public PaypalEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -52,8 +52,8 @@ public class PaypalEditText extends LinearLayout {
 
         setBackgroundColor(0xffffffff);
 
-        hintParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        editParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        hintParams = new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+        editParams = new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         addView(hint, hintParams);
         addView(editText, editParams);
     }

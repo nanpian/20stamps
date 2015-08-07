@@ -3,7 +3,6 @@ package com.stamp20.gallary;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.R.integer;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,8 +26,6 @@ import android.widget.TextView;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.stamp20.app.R;
-import com.stamp20.gallary.FeaturedAlbumFragment;
-import com.stamp20.gallary.PhotoAlbumFragment;
 import com.stamp20.app.activities.HomeActivity;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
@@ -40,75 +37,18 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
     private ImageView headerPrevious = null;
     private TextView headerTitle = null;
 
-    private ViewPager mViewPager;
-    private ImageButton mFeaturedAlbumButton;
-    private ImageButton mPhotoAlbumButton;;
-    private ImageButton mFaceBookAlbumButton;
-    private ImageButton mInstagramAlbumButton;
-    private View mImageSelectedIndicator;
-    private List<GallaryFragment> mDatas;
     private FragmentPagerAdapter mAdapter;
-
-    private int mScreen1_4;
     private int margin_left;
-    private int mCurrentPageIndex = 1;
+    private int mCurrentPageIndex = 1;;
+    private List<GallaryFragment> mDatas;
+    private ImageButton mFaceBookAlbumButton;
+    private ImageButton mFeaturedAlbumButton;
+    private View mImageSelectedIndicator;
+    private ImageButton mInstagramAlbumButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // getActionBar().hide();
-        setContentView(R.layout.activity_load_image_main);
-        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
-        headerPrevious = (ImageView) findViewById(R.id.header_previous);
-        headerPrevious.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (mViewPager != null && mDatas != null) {
-                    if (!mDatas.get(mCurrentPageIndex).onBackClick()) {
-                        startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
-                        finish();
-                    }
-                } else {
-                    startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
-                    finish();
-                }
-            }
-
-        });
-        headerTitle = (TextView) findViewById(R.id.header_title);
-        headerTitle.setText(R.string.select_a_picture);
-        initSelectedImage();
-        initView();
-
-        // Check if there is a currently logged in user
-        // and it's linked to a Facebook account.
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
-            // Go to the user info activity
-            // showUserDetailsActivity();
-        }
-
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
-            startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
-            finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i(this, "finish authentication" + requestCode);
-        if (requestCode == InstagramAlbumFragment.REQUEST_CODE_SELECT_INSTAGRAM_AUTH) {
-            mDatas.get(3).onActivityResult(requestCode, resultCode, data);
-        } else
-            ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
-    }
+    private ImageButton mPhotoAlbumButton;
+    private int mScreen1_4;
+    private ViewPager mViewPager;
 
     // 将indicator宽度设置为和icon_featured_album.png相等
     private void initSelectedImage() {
@@ -116,7 +56,7 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon_featured_album);
         int icon_width = icon.getWidth();
 
-        mImageSelectedIndicator = (View) findViewById(R.id.image_source_selected);
+        mImageSelectedIndicator = findViewById(R.id.image_source_selected);
         Display display = getWindow().getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
         display.getMetrics(outMetrics);
@@ -182,9 +122,81 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
     }
 
     @Override
-    public void onPageScrollStateChanged(int position) {
-        // TODO Auto-generated method stub
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(this, "finish authentication" + requestCode);
+        if (requestCode == InstagramAlbumFragment.REQUEST_CODE_SELECT_INSTAGRAM_AUTH) {
+            mDatas.get(3).onActivityResult(requestCode, resultCode, data);
+        } else
+            ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.button_featured_album:
+            mViewPager.setCurrentItem(0);
+            break;
+        case R.id.button_photo_album:
+            mViewPager.setCurrentItem(1);
+            break;
+        case R.id.button_fb_album:
+            mViewPager.setCurrentItem(2);
+            break;
+        case R.id.button_instagram_album:
+            mViewPager.setCurrentItem(3);
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // getActionBar().hide();
+        setContentView(R.layout.activity_load_image_main);
+        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
+        headerPrevious = (ImageView) findViewById(R.id.header_previous);
+        headerPrevious.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (mViewPager != null && mDatas != null) {
+                    if (!mDatas.get(mCurrentPageIndex).onBackClick()) {
+                        startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
+                        finish();
+                    }
+                } else {
+                    startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
+                    finish();
+                }
+            }
+
+        });
+        headerTitle = (TextView) findViewById(R.id.header_title);
+        headerTitle.setText(R.string.select_a_picture);
+        initSelectedImage();
+        initView();
+
+        // Check if there is a currently logged in user
+        // and it's linked to a Facebook account.
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
+            // Go to the user info activity
+            // showUserDetailsActivity();
+        }
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
+            startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -210,6 +222,12 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
     }
 
     @Override
+    public void onPageScrollStateChanged(int position) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public void onPageSelected(int position) {
         mCurrentPageIndex = position;
         setFragmentStatus(position);
@@ -222,27 +240,6 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
                 mDatas.get(i).onFront();
             else
                 mDatas.get(i).onBackground();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.button_featured_album:
-            mViewPager.setCurrentItem(0);
-            break;
-        case R.id.button_photo_album:
-            mViewPager.setCurrentItem(1);
-            break;
-        case R.id.button_fb_album:
-            mViewPager.setCurrentItem(2);
-            break;
-        case R.id.button_instagram_album:
-            mViewPager.setCurrentItem(3);
-            break;
-
-        default:
-            break;
         }
     }
 

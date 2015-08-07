@@ -20,23 +20,35 @@ import android.graphics.PointF;
 import android.opengl.GLES20;
 
 public class GPUImageBulgeDistortionFilter extends GPUImageFilter {
-    public static final String BULGE_FRAGMENT_SHADER = "" + "varying highp vec2 textureCoordinate;\n" + "\n" + "uniform sampler2D inputImageTexture;\n" + "\n"
-            + "uniform highp float aspectRatio;\n" + "uniform highp vec2 center;\n" + "uniform highp float radius;\n" + "uniform highp float scale;\n" + "\n"
-            + "void main()\n" + "{\n"
+    public static final String BULGE_FRAGMENT_SHADER = ""
+            + "varying highp vec2 textureCoordinate;\n"
+            + "\n"
+            + "uniform sampler2D inputImageTexture;\n"
+            + "\n"
+            + "uniform highp float aspectRatio;\n"
+            + "uniform highp vec2 center;\n"
+            + "uniform highp float radius;\n"
+            + "uniform highp float scale;\n"
+            + "\n"
+            + "void main()\n"
+            + "{\n"
             + "highp vec2 textureCoordinateToUse = vec2(textureCoordinate.x, (textureCoordinate.y * aspectRatio + 0.5 - 0.5 * aspectRatio));\n"
-            + "highp float dist = distance(center, textureCoordinateToUse);\n" + "textureCoordinateToUse = textureCoordinate;\n" + "\n"
-            + "if (dist < radius)\n" + "{\n" + "textureCoordinateToUse -= center;\n" + "highp float percent = 1.0 - ((radius - dist) / radius) * scale;\n"
-            + "percent = percent * percent;\n" + "\n" + "textureCoordinateToUse = textureCoordinateToUse * percent;\n" + "textureCoordinateToUse += center;\n"
-            + "}\n" + "\n" + "gl_FragColor = texture2D(inputImageTexture, textureCoordinateToUse );    \n" + "}\n";
+            + "highp float dist = distance(center, textureCoordinateToUse);\n"
+            + "textureCoordinateToUse = textureCoordinate;\n" + "\n" + "if (dist < radius)\n" + "{\n"
+            + "textureCoordinateToUse -= center;\n"
+            + "highp float percent = 1.0 - ((radius - dist) / radius) * scale;\n" + "percent = percent * percent;\n"
+            + "\n" + "textureCoordinateToUse = textureCoordinateToUse * percent;\n"
+            + "textureCoordinateToUse += center;\n" + "}\n" + "\n"
+            + "gl_FragColor = texture2D(inputImageTexture, textureCoordinateToUse );    \n" + "}\n";
 
-    private float mScale;
-    private int mScaleLocation;
-    private float mRadius;
-    private int mRadiusLocation;
-    private PointF mCenter;
-    private int mCenterLocation;
     private float mAspectRatio;
     private int mAspectRatioLocation;
+    private PointF mCenter;
+    private int mCenterLocation;
+    private float mRadius;
+    private int mRadiusLocation;
+    private float mScale;
+    private int mScaleLocation;
 
     public GPUImageBulgeDistortionFilter() {
         this(0.25f, 0.5f, new PointF(0.5f, 0.5f));
@@ -79,6 +91,18 @@ public class GPUImageBulgeDistortionFilter extends GPUImageFilter {
     }
 
     /**
+     * The center about which to apply the distortion, with a default of (0.5,
+     * 0.5)
+     *
+     * @param center
+     *            default (0.5, 0.5)
+     */
+    public void setCenter(PointF center) {
+        mCenter = center;
+        setPoint(mCenterLocation, center);
+    }
+
+    /**
      * The radius of the distortion, ranging from 0.0 to 1.0, with a default of
      * 0.25
      *
@@ -100,17 +124,5 @@ public class GPUImageBulgeDistortionFilter extends GPUImageFilter {
     public void setScale(float scale) {
         mScale = scale;
         setFloat(mScaleLocation, scale);
-    }
-
-    /**
-     * The center about which to apply the distortion, with a default of (0.5,
-     * 0.5)
-     *
-     * @param center
-     *            default (0.5, 0.5)
-     */
-    public void setCenter(PointF center) {
-        mCenter = center;
-        setPoint(mCenterLocation, center);
     }
 }

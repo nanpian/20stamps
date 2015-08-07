@@ -1,14 +1,14 @@
 package com.stamp20.gallary;
 
 public class Photo {
-    public static int PHOTO_NET_TYPE = 1;
     public static int PHOTO_LOC_TYPE = 2;
+    public static int PHOTO_NET_TYPE = 1;
     public static int PHOTO_UNKNOW_TYPE = 0;
 
     private String mName;
-    private String mUri;
     private String mThumnailUri;
     private int mType;
+    private String mUri;
 
     public Photo(String name, String uri, int type) {
         this.mName = name;
@@ -25,15 +25,15 @@ public class Photo {
         return this.mName;
     }
 
-    public String getUri() {
-        return this.mUri;
-    }
-
     public String getThumnailUri() {
         return this.mThumnailUri;
     }
 
     public int getType() {
         return this.mType;
+    }
+
+    public String getUri() {
+        return this.mUri;
     }
 }

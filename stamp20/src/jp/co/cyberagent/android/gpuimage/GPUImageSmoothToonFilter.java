@@ -16,8 +16,6 @@
 
 package jp.co.cyberagent.android.gpuimage;
 
-import android.opengl.GLES20;
-
 /**
  * This uses a similar process as the GPUImageToonFilter, only it precedes the
  * toon effect with a Gaussian blur to smooth out noise.
@@ -46,6 +44,18 @@ public class GPUImageSmoothToonFilter extends GPUImageFilterGroup {
         setQuantizationLevels(10.0f);
     }
 
+    public void setBlurSize(float value) {
+        blurFilter.setBlurSize(value);
+    }
+
+    public void setQuantizationLevels(float value) {
+        toonFilter.setQuantizationLevels(value);
+    }
+
+    public void setTexelHeight(float value) {
+        toonFilter.setTexelHeight(value);
+    }
+
     /**
      * Accessors
      */
@@ -53,20 +63,8 @@ public class GPUImageSmoothToonFilter extends GPUImageFilterGroup {
         toonFilter.setTexelWidth(value);
     }
 
-    public void setTexelHeight(float value) {
-        toonFilter.setTexelHeight(value);
-    }
-
-    public void setBlurSize(float value) {
-        blurFilter.setBlurSize(value);
-    }
-
     public void setThreshold(float value) {
         toonFilter.setThreshold(value);
-    }
-
-    public void setQuantizationLevels(float value) {
-        toonFilter.setQuantizationLevels(value);
     }
 
 }

@@ -6,7 +6,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.effect.Effect;
 import android.media.effect.EffectContext;
@@ -14,78 +13,27 @@ import android.media.effect.EffectFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
-import android.util.Log;
-
-import com.stamp20.app.R;
-import com.stamp20.app.filter.GLToolbox;
-import com.stamp20.app.filter.TextureRenderer;
 
 @SuppressLint("NewApi")
 public class ImageBlurRender implements GLSurfaceView.Renderer {
 
+    private Context context;
+
+    public int mCurrentEffect = 1;
+    private Effect mEffect;
+    private EffectContext mEffectContext;
+    private int mImageHeight;
+    private int mImageWidth;
+    private boolean mInitialized = false;
+    private TextureRenderer mTexRenderer = new TextureRenderer();
+    private int[] mTextures = new int[2];
+    private Bitmap srcBitmap;
     public ImageBlurRender(Context context) {
         this.context = context;
     }
 
-    private Context context;
-    private TextureRenderer mTexRenderer = new TextureRenderer();
-    private int[] mTextures = new int[2];
-    private EffectContext mEffectContext;
-    private Effect mEffect;
-    private int mImageWidth;
-    private int mImageHeight;
-    private boolean mInitialized = false;
-    public int mCurrentEffect = 1;
-    private Bitmap srcBitmap;
-
-    public void setBlurBitmapSrc(Bitmap bitmap) {
-        this.srcBitmap = bitmap;
-    }
-
-    @Override
-    public void onDrawFrame(GL10 arg0) {
-        // if (!mInitialized) {
-        // Only need to do this once
-        mEffectContext = EffectContext.createWithCurrentGlContext();
-        mTexRenderer.init();
-        loadTextures();
-        mInitialized = true;
-        // }
-
-        // if an effect is chosen initialize it and apply it to the texture
-        initEffect();
-        applyEffect();
-        renderResult();
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 arg0, int width, int height) {
-        if (mTexRenderer != null) {
-            mTexRenderer.updateViewSize(width, height);
-        }
-    }
-
-    @Override
-    public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
-    }
-
-    private void loadTextures() {
-        // Generate textures
-        GLES20.glGenTextures(2, mTextures, 0);
-
-        // // Load input bitmap
-        // Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
-        // R.drawable.filter_sample_black);
-        mImageWidth = srcBitmap.getWidth();
-        mImageHeight = srcBitmap.getHeight();
-        mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
-
-        // Upload to texture
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, srcBitmap, 0);
-
-        // Set texture parameters
-        GLToolbox.initTexParams();
+    private void applyEffect() {
+        mEffect.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1]);
     }
 
     private void initEffect() {
@@ -93,7 +41,6 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
         if (mEffect != null) {
             mEffect.release();
         }
-        Log.i("jiangtao", "mCurrentEffect is : " + mCurrentEffect);
         /**
          * Initialize the correct effect based on the selected menu/action item
          */
@@ -217,11 +164,57 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
         }
     }
 
-    private void applyEffect() {
-        mEffect.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1]);
+    private void loadTextures() {
+        // Generate textures
+        GLES20.glGenTextures(2, mTextures, 0);
+
+        // // Load input bitmap
+        // Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+        // R.drawable.filter_sample_black);
+        mImageWidth = srcBitmap.getWidth();
+        mImageHeight = srcBitmap.getHeight();
+        mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
+
+        // Upload to texture
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, srcBitmap, 0);
+
+        // Set texture parameters
+        GLToolbox.initTexParams();
+    }
+
+    @Override
+    public void onDrawFrame(GL10 arg0) {
+        // if (!mInitialized) {
+        // Only need to do this once
+        mEffectContext = EffectContext.createWithCurrentGlContext();
+        mTexRenderer.init();
+        loadTextures();
+        mInitialized = true;
+        // }
+
+        // if an effect is chosen initialize it and apply it to the texture
+        initEffect();
+        applyEffect();
+        renderResult();
+    }
+
+    @Override
+    public void onSurfaceChanged(GL10 arg0, int width, int height) {
+        if (mTexRenderer != null) {
+            mTexRenderer.updateViewSize(width, height);
+        }
+    }
+
+    @Override
+    public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
     }
 
     private void renderResult() {
         mTexRenderer.renderTexture(mTextures[1]);
+    }
+
+    public void setBlurBitmapSrc(Bitmap bitmap) {
+        this.srcBitmap = bitmap;
     }
 }

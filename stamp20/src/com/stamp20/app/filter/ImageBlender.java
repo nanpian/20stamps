@@ -27,24 +27,24 @@ import com.stamp20.app.util.Image;
  *
  */
 public class ImageBlender {
-    public float Mixture = 0.9f;// 0.5f
-
     public static class BlendMode {
-        public static int Normal = 0;
         public static int Additive = 1;
-        public static int Subractive = 2;
-        public static int Multiply = 3;
-        public static int Overlay = 4;
-        public static int ColorDodge = 5;
         public static int ColorBurn = 6;
-        public static int Lighten = 7;
+        public static int ColorDodge = 5;
         public static int Darken = 8;
-        public static int Reflect = 9;
-        public static int Glow = 10;
-        public static int LinearLight = 11;
         public static int Frame = 12;/* photo frame */
+        public static int Glow = 10;
+        public static int Lighten = 7;
+        public static int LinearLight = 11;
+        public static int Multiply = 3;
+        public static int Normal = 0;
+        public static int Overlay = 4;
+        public static int Reflect = 9;
+        public static int Subractive = 2;
 
     }
+
+    public float Mixture = 0.9f;// 0.5f
 
     public int Mode = BlendMode.Multiply;
 

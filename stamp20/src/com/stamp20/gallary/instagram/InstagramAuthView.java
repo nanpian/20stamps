@@ -5,8 +5,6 @@ import org.jinstagram.auth.model.Token;
 import org.jinstagram.auth.model.Verifier;
 import org.jinstagram.auth.oauth.InstagramService;
 
-import com.stamp20.app.util.FontManager;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -20,35 +18,71 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.stamp20.app.util.FontManager;
+
 public class InstagramAuthView extends Activity {
 
-    private static final String REDIRECT_URI = "http://yourcallback.com/";
-    private static final String CLIENTSECRET = "af2bbd2d48304b0bb0fee2b3cf3fa35a";
-    public static final String CLIENTID = "ea0e8b0e8d5d4db1b2a5d56449fe3cc4";
+    private class GetTokenTask extends AsyncTask<String, Void, Token> {
 
-    private WebView mWebview;
+        InstagramService mS;
+
+        public GetTokenTask(InstagramService s) {
+            mS = s;
+        }
+
+        @Override
+        protected Token doInBackground(String... params) {
+            Verifier verifier = new Verifier(params[0]);
+            Token accessToken = mS.getAccessToken(null, verifier);
+            return accessToken;
+        }
+
+        @Override
+        protected void onPostExecute(Token result) {
+            onTokenRetrieved(result.getToken());
+        }
+
+    }
+    public static final String CLIENTID = "ea0e8b0e8d5d4db1b2a5d56449fe3cc4";
+    private static final String CLIENTSECRET = "af2bbd2d48304b0bb0fee2b3cf3fa35a";
+
+    private static boolean DEBUGLOG = true;
+    private static final String REDIRECT_URI = "http://yourcallback.com/";
+    private boolean _visible = false;
+
     private WebChromeClient mChromeClient;
+    private WebView mWebview;
+
     private ProgressDialog progressDialog;
 
-    private boolean _visible = false;
-    private static boolean DEBUGLOG = true;
+    private String extractCodeFromURL(String url) {
+        return url.substring(url.indexOf("code") + 5);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final InstagramService service = new InstagramAuthService().apiKey(CLIENTID).apiSecret(CLIENTSECRET).callback(REDIRECT_URI).build();
+        final InstagramService service = new InstagramAuthService().apiKey(CLIENTID).apiSecret(CLIENTSECRET)
+                .callback(REDIRECT_URI).build();
 
         String url = service.getAuthorizationUrl(null);
 
         mWebview = new WebView(this);
         mChromeClient = new WebChromeClient() {
+            @Override
             public boolean onConsoleMessage(android.webkit.ConsoleMessage consoleMessage) {
                 if (DEBUGLOG)
                     Log.i("case", "InstagramAuthView-console:" + consoleMessage);
                 return false;
             };
 
+            @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (DEBUGLOG)
                     Log.d("case", "InstagramAuthView-onProgressChanged:" + newProgress);
@@ -60,19 +94,6 @@ public class InstagramAuthView extends Activity {
         mWebview.setWebChromeClient(mChromeClient);
 
         mWebview.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (!_visible)
-                    return false;
-                if (url.startsWith(REDIRECT_URI)) {
-                    String code = extractCodeFromURL(url);
-                    Log.i("case", "InstagramAuthView-code=" + code);
-                    new GetTokenTask(service).execute(code);
-                    return true;
-                }
-                return false;
-            }
-
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (!_visible)
@@ -105,18 +126,22 @@ public class InstagramAuthView extends Activity {
                 });
                 super.onPageStarted(view, url, favicon);
             }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (!_visible)
+                    return false;
+                if (url.startsWith(REDIRECT_URI)) {
+                    String code = extractCodeFromURL(url);
+                    Log.i("case", "InstagramAuthView-code=" + code);
+                    new GetTokenTask(service).execute(code);
+                    return true;
+                }
+                return false;
+            }
         });
 
         mWebview.loadUrl(url);
-    }
-
-    private String extractCodeFromURL(String url) {
-        return url.substring(url.indexOf("code") + 5);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -145,28 +170,6 @@ public class InstagramAuthView extends Activity {
         // ParseUser.getCurrentUser().saveEventually();
         setResult(Activity.RESULT_OK);
         this.finish();
-    }
-
-    private class GetTokenTask extends AsyncTask<String, Void, Token> {
-
-        InstagramService mS;
-
-        public GetTokenTask(InstagramService s) {
-            mS = s;
-        }
-
-        @Override
-        protected void onPostExecute(Token result) {
-            onTokenRetrieved(result.getToken());
-        }
-
-        @Override
-        protected Token doInBackground(String... params) {
-            Verifier verifier = new Verifier(params[0]);
-            Token accessToken = mS.getAccessToken(null, verifier);
-            return accessToken;
-        }
-
     }
 
 }

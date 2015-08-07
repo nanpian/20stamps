@@ -12,16 +12,16 @@ public class FbPhotoResult extends ArrayList<FbPhoto> {
         super(cap);
     }
 
+    public void appendMoreFbPhotos(FbPhotoResult more) {
+        this.addAll(more);
+        setNextPhotosUrl(more.getNextPhotosUrl());
+    }
+
     public String getNextPhotosUrl() {
         return nextPhotosUrl;
     }
 
     public void setNextPhotosUrl(String nextPhotosUrl) {
         this.nextPhotosUrl = nextPhotosUrl;
-    }
-
-    public void appendMoreFbPhotos(FbPhotoResult more) {
-        this.addAll(more);
-        setNextPhotosUrl(more.getNextPhotosUrl());
     }
 }

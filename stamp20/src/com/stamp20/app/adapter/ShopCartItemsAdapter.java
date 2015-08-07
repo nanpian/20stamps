@@ -1,6 +1,5 @@
 package com.stamp20.app.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -9,19 +8,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.parse.ParseFile;
-import com.squareup.picasso.Picasso;
 import com.stamp20.app.R;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
@@ -30,8 +24,20 @@ import com.stamp20.app.util.Log;
 
 public class ShopCartItemsAdapter extends BaseAdapter {
 
+    static class ViewHolder {
+        private ImageView addView;
+        private ImageView itemDeleteView;
+        private TextView itemName;
+        private TextView itemPersheet;
+        private TextView itemPrice;
+        private TextView itemUnitPrice;
+        private ImageView reduceView;
+        private ImageView stampItemView;
+        private TextView textItemSize;
+    }
     private LayoutInflater layoutInflater;
     private Context mContext;
+
     private List<Design> mDesigns;
 
     public ShopCartItemsAdapter(Context context, List<Design> designs) {
@@ -39,6 +45,12 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         mContext = context;
         this.mDesigns = designs;
         layoutInflater = LayoutInflater.from(context);
+    }
+
+    private void deleteItems(int posotion) {
+        Cart.getInstance().deleteDesign(mDesigns.get(posotion));
+        mDesigns.remove(posotion);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -146,24 +158,6 @@ public class ShopCartItemsAdapter extends BaseAdapter {
             }
         });
         return view;
-    }
-
-    private void deleteItems(int posotion) {
-        Cart.getInstance().deleteDesign(mDesigns.get(posotion));
-        mDesigns.remove(posotion);
-        notifyDataSetChanged();
-    }
-
-    static class ViewHolder {
-        private ImageView stampItemView;
-        private ImageView addView;
-        private ImageView reduceView;
-        private TextView textItemSize;
-        private ImageView itemDeleteView;
-        private TextView itemName;
-        private TextView itemPrice;
-        private TextView itemPersheet;
-        private TextView itemUnitPrice;
     }
 
 }

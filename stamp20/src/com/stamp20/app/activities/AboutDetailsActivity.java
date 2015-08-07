@@ -1,7 +1,6 @@
 package com.stamp20.app.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,11 +17,20 @@ import com.stamp20.app.util.Log;
 
 public class AboutDetailsActivity extends Activity implements OnClickListener {
 
-    WebView mWebView;
-    private TextView headerTitle;
     private ImageView headerBack;
-    String url;
+    private TextView headerTitle;
+    WebView mWebView;
     String title;
+    String url;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.header_previous:
+            finish();
+            break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +47,15 @@ public class AboutDetailsActivity extends Activity implements OnClickListener {
         mWebView.loadUrl(url);
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-            }
-
-            @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 Log.d(this, "newProgress: " + newProgress);
                 showProgressDialog(newProgress);
                 super.onProgressChanged(view, newProgress);
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
             }
         });
         mWebView.setWebViewClient(new WebViewClient() {
@@ -60,14 +68,5 @@ public class AboutDetailsActivity extends Activity implements OnClickListener {
     }
 
     private void showProgressDialog(int progress) {
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.header_previous:
-            finish();
-            break;
-        }
     }
 }

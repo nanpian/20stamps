@@ -11,28 +11,28 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
-import android.graphics.Rect;
 
 import com.stamp20.app.R;
 import com.stamp20.app.util.Log;
 
 public class CardBackView2 extends View {
-    private static final String TAG = "jiangtao";
+    private static final String TAG = "CardBackView2";
+    private int mBackColor;
     private Bitmap mCardbackBitmap;
     private Bitmap mCardbackBottomBitmap;
     private Bitmap mCardbackLineBitmap;
-    private int mViewWidth;
-    private int mViewHeight;
-    private Rect mRectSrc = new Rect();
-    private Rect mRectDes = new Rect();
-    private Bitmap mSourceBitmap;
-    private int mBackColor;
-    private boolean mIsShowLine = false;
     private Context mContext;
+    private boolean mIsShowLine = false;
+    private Rect mRectDes = new Rect();
+    private Rect mRectSrc = new Rect();
+    private Bitmap mSourceBitmap;
+    private int mViewHeight;
+    private int mViewWidth;
 
     public CardBackView2(Context context) {
         super(context);
@@ -50,82 +50,6 @@ public class CardBackView2 extends View {
         super(context, attrs, defStyleAttr);
         mContext = context;
         initView();
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width = 0;
-        int height = 0;
-        int imWidth = 0;
-        int imHeight = 0;
-        float radio = 0.0f;
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        if (mCardbackBitmap != null) {
-            imWidth = mCardbackBitmap.getWidth();
-            imHeight = mCardbackBitmap.getHeight();
-            radio = imWidth * 1.0f / imHeight;
-        }
-        if (widthMode == MeasureSpec.EXACTLY) {
-            width = widthSize;
-        } else {
-            width = Math.min(widthSize, imWidth + getPaddingLeft() + getPaddingRight());
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY) {
-            height = heightSize;
-        } else {
-            height = Math.min(heightSize, imHeight + getPaddingTop() + getPaddingBottom());
-        }
-        if (radio != 0) {
-            height = (int) (width * 1.0f / radio);
-        }
-        setMeasuredDimension(width, height);
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        if (changed) {
-            Log.i(TAG, "onlayout change");
-            // here we get the viewwidth and viewheight
-            mViewWidth = getMeasuredWidth();
-            mViewHeight = getMeasuredHeight();
-            this.mCardbackBitmap = getRoundAlphaBitmap(getAlphaSrcBitmap());
-        }
-
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        if (mCardbackBitmap != null) {
-            mRectSrc.set(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
-            mRectDes.set(getPaddingLeft(), getPaddingTop(), mViewWidth - getPaddingLeft() - getPaddingRight(), mViewHeight - getPaddingTop()
-                    - getPaddingBottom());
-            canvas.drawBitmap(mCardbackBitmap, mRectSrc, mRectDes, null);
-
-            if (mIsShowLine) {
-                Matrix martrix = new Matrix();
-                Bitmap dstLinebmp = Bitmap.createScaledBitmap(mCardbackLineBitmap, (int) (mViewWidth), (int) (mCardbackLineBitmap.getHeight()), true);
-                canvas.drawBitmap(dstLinebmp, (mViewWidth - dstLinebmp.getWidth()) / 2, 0, null);
-                dstLinebmp.recycle();
-                dstLinebmp = null;
-            }
-        }
-    }
-
-    public void initView() {
-        this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape_white);
-        this.mCardbackBottomBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_bottom_logo);
-        this.mCardbackLineBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lines_back_small);
-    }
-
-    public void setImageUri(Uri imageUri) {
-        mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
     }
 
     public Bitmap getAlphaSrcBitmap() {
@@ -158,7 +82,7 @@ public class CardBackView2 extends View {
 
         Canvas canvas = new Canvas(bitmap);
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
+        new RectF(rect);
         // canvas.drawRoundRect(rectF, 100, 100, paint);
         final Rect rectSrc = new Rect(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
         canvas.drawBitmap(mCardbackBitmap, rectSrc, rect, null);
@@ -206,13 +130,100 @@ public class CardBackView2 extends View {
         return bitmap;
     }
 
+    public Bitmap getScaleLineBitmap() {
+        Bitmap bitmap = null;
+        if (mViewHeight != 0 && mCardbackLineBitmap != null) {
+            Matrix matrix = new Matrix();
+            matrix.setScale(1.0f, mViewHeight * 1.0f / mCardbackLineBitmap.getHeight());
+            bitmap = Bitmap.createBitmap(mCardbackLineBitmap, 0, 0, mCardbackLineBitmap.getWidth(),
+                    mCardbackLineBitmap.getHeight(), matrix, false);
+        }
+        return bitmap;
+    }
+
+    public void initView() {
+        this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape_white);
+        this.mCardbackBottomBitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.activity_card_back_bottom_logo);
+        this.mCardbackLineBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lines_back_small);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mCardbackBitmap != null) {
+            mRectSrc.set(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
+            mRectDes.set(getPaddingLeft(), getPaddingTop(), mViewWidth - getPaddingLeft() - getPaddingRight(),
+                    mViewHeight - getPaddingTop() - getPaddingBottom());
+            canvas.drawBitmap(mCardbackBitmap, mRectSrc, mRectDes, null);
+
+            if (mIsShowLine) {
+                new Matrix();
+                Bitmap dstLinebmp = Bitmap.createScaledBitmap(mCardbackLineBitmap, (mViewWidth),
+                        (mCardbackLineBitmap.getHeight()), true);
+                canvas.drawBitmap(dstLinebmp, (mViewWidth - dstLinebmp.getWidth()) / 2, 0, null);
+                dstLinebmp.recycle();
+                dstLinebmp = null;
+            }
+        }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (changed) {
+            Log.i(TAG, "onlayout change");
+            // here we get the viewwidth and viewheight
+            mViewWidth = getMeasuredWidth();
+            mViewHeight = getMeasuredHeight();
+            this.mCardbackBitmap = getRoundAlphaBitmap(getAlphaSrcBitmap());
+        }
+
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int width = 0;
+        int height = 0;
+        int imWidth = 0;
+        int imHeight = 0;
+        float radio = 0.0f;
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        if (mCardbackBitmap != null) {
+            imWidth = mCardbackBitmap.getWidth();
+            imHeight = mCardbackBitmap.getHeight();
+            radio = imWidth * 1.0f / imHeight;
+        }
+        if (widthMode == MeasureSpec.EXACTLY) {
+            width = widthSize;
+        } else {
+            width = Math.min(widthSize, imWidth + getPaddingLeft() + getPaddingRight());
+        }
+
+        if (heightMode == MeasureSpec.EXACTLY) {
+            height = heightSize;
+        } else {
+            height = Math.min(heightSize, imHeight + getPaddingTop() + getPaddingBottom());
+        }
+        if (radio != 0) {
+            height = (int) (width * 1.0f / radio);
+        }
+        setMeasuredDimension(width, height);
+    }
+
     public void setCardBackColor(int color, int position) {
         this.mBackColor = color;
         if (position == 0) {
-            this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape_white);
+            this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.activity_card_back_shape_white);
             this.mCardbackBitmap = getRoundAlphaBitmap(getAlphaSrcBitmap());
         } else {
-            this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape_white);
+            this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.activity_card_back_shape_white);
             this.mCardbackBitmap = getRoundCornerBitmap();
         }
     }
@@ -222,13 +233,7 @@ public class CardBackView2 extends View {
         this.mCardbackLineBitmap = getScaleLineBitmap();
     }
 
-    public Bitmap getScaleLineBitmap() {
-        Bitmap bitmap = null;
-        if (mViewHeight != 0 && mCardbackLineBitmap != null) {
-            Matrix matrix = new Matrix();
-            matrix.setScale(1.0f, mViewHeight * 1.0f / mCardbackLineBitmap.getHeight());
-            bitmap = Bitmap.createBitmap(mCardbackLineBitmap, 0, 0, mCardbackLineBitmap.getWidth(), mCardbackLineBitmap.getHeight(), matrix, false);
-        }
-        return bitmap;
+    public void setImageUri(Uri imageUri) {
+        mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
     }
 }

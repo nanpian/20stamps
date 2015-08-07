@@ -1,12 +1,10 @@
 package com.stamp20.app.activities;
 
-import com.stamp20.app.R;
-import com.stamp20.app.anim.Rotate3dAnimation;
-import com.stamp20.app.data.Cart;
-import com.stamp20.app.data.Design;
-import com.stamp20.app.util.CardBmpCache;
-import com.stamp20.app.util.FontManager;
-import com.stamp20.app.view.WaitProgressBar;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,37 +24,76 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.stamp20.app.R;
+import com.stamp20.app.anim.Rotate3dAnimation;
+import com.stamp20.app.data.Cart;
+import com.stamp20.app.data.Design;
+import com.stamp20.app.util.CardBmpCache;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.WaitProgressBar;
 
 public class CardReviewActivity extends Activity implements OnClickListener {
+    private ImageView activity_envelope_img;
+    private ImageView backgroundEvelopImage;
+    private Bitmap cardBmpBack;
+    private Bitmap cardBmpEnvelop;
+    private Bitmap cardBmpFront;
+    private Button display_back;
+    private Button display_front;
     private ImageView header_previous;
     private TextView header_title;
-    private RelativeLayout review_button;
-    private Button display_front;
-    private Button display_back;
-    private ImageView activity_envelope_img;
-    private Bitmap cardBmpBack;
-    private Bitmap cardBmpFront;
-    private Bitmap cardBmpEnvelop;
     private boolean isFrontNow;
-    private ImageView backgroundEvelopImage;
     private Button mShareDesign;
+    private RelativeLayout review_button;
     private WaitProgressBar waitProgressBar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private void applyRotation(float start, float end, final int viewId) {
+        final float centerX = activity_envelope_img.getWidth() / 2.0f;
+        final float centerY = activity_envelope_img.getHeight() / 2.0f;
+        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX, centerY, 300.0f, true);
+        rotation.setDuration(500);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        rotation.setAnimationListener(new AnimationListener() {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card_review);
-        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-        initView();
+            @Override
+            public void onAnimationEnd(Animation arg0) { // 动画结束
+                activity_envelope_img.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 图片是用android:src不是android:background,所以使用setImageResource就可以实现图片翻转了。
+                        // 实现翻转后再翻回来，要设置正反面标志位
+                        if (isFrontNow) {
+                            activity_envelope_img.setImageBitmap(cardBmpBack);
+                            // setupImageLocSize2();
+                            isFrontNow = false;
+                        } else {
+                            isFrontNow = true;
+                            // setupImageLocSize();
+                            activity_envelope_img.setImageBitmap(cardBmpFront);
+                        }
+                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f,
+                                false);
+                        rotatiomAnimation.setDuration(500);
+                        rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
+                        activity_envelope_img.startAnimation(rotatiomAnimation);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+        });
+        activity_envelope_img.startAnimation(rotation);
+
     }
 
     private void initView() {
@@ -89,37 +126,6 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         cardBmpBack = bmpCache.getBack();
         backgroundEvelopImage.setImageBitmap(bmpCache.getEnve());
         isFrontNow = true;
-    }
-
-    private void setupBackLocAndSize() {
-        int W = getWindowManager().getDefaultDisplay().getWidth();// 获取屏幕高度
-        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.cards_christmas);
-        int w = cardTemplate.getWidth();
-        int h = cardTemplate.getHeight();
-        LayoutParams params = new LayoutParams(2 * W / 3, (h * 2 * W) / (3 * w));
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        backgroundEvelopImage.setLayoutParams(params);
-        backgroundEvelopImage.setVisibility(View.VISIBLE);
-    }
-
-    private void setupImageLocSize2() {
-        int w = cardBmpBack.getWidth();
-        int h = cardBmpBack.getHeight();
-        LayoutParams params = new LayoutParams(w, h);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        activity_envelope_img.setLayoutParams(params);
-        activity_envelope_img.setVisibility(View.VISIBLE);
-    }
-
-    private void setupImageLocSize() {
-        int W = getWindowManager().getDefaultDisplay().getWidth();// 获取屏幕高度
-        Bitmap cardBackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape);
-        int w = cardBackBitmap.getWidth();
-        int h = cardBackBitmap.getHeight();
-        LayoutParams params = new LayoutParams(w, h);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        activity_envelope_img.setLayoutParams(params);
-        activity_envelope_img.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -175,6 +181,15 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_review);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+        initView();
+    }
+
     /**
      * 图片分享后有黑圆角，只能保存为png格式
      * 
@@ -182,7 +197,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
      * @return
      */
     public File saveFontBitmap(Bitmap bitmap) {
-        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .getAbsolutePath() + "/stamp20");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String name = "stamp20_" + dateFormat.format(new Date()) + ".png";
         File file = new File(path, name);
@@ -208,57 +224,43 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         return file;
     }
 
-    private void applyRotation(float start, float end, final int viewId) {
-        final float centerX = activity_envelope_img.getWidth() / 2.0f;
-        final float centerY = activity_envelope_img.getHeight() / 2.0f;
-        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX, centerY, 300.0f, true);
-        rotation.setDuration(500);
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation.setAnimationListener(new AnimationListener() {
-
-            @Override
-            public void onAnimationEnd(Animation arg0) { // 动画结束
-                activity_envelope_img.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 图片是用android:src不是android:background,所以使用setImageResource就可以实现图片翻转了。
-                        // 实现翻转后再翻回来，要设置正反面标志位
-                        if (isFrontNow) {
-                            activity_envelope_img.setImageBitmap(cardBmpBack);
-                            // setupImageLocSize2();
-                            isFrontNow = false;
-                        } else {
-                            isFrontNow = true;
-                            // setupImageLocSize();
-                            activity_envelope_img.setImageBitmap(cardBmpFront);
-                        }
-                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f, false);
-                        rotatiomAnimation.setDuration(500);
-                        rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
-                        activity_envelope_img.startAnimation(rotatiomAnimation);
-                    }
-                });
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationStart(Animation arg0) {
-            }
-        });
-        activity_envelope_img.startAnimation(rotation);
-
-    }
-
     public void setBtnSelectState(Button button, int color, int drawableId) {
         button.setTextColor(color);
         Drawable drawable = this.getResources().getDrawable(drawableId);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         button.setCompoundDrawables(drawable, null, null, null);
         button.setCompoundDrawablePadding(5);
+    }
+
+    private void setupBackLocAndSize() {
+        int W = getWindowManager().getDefaultDisplay().getWidth();// 获取屏幕高度
+        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.cards_christmas);
+        int w = cardTemplate.getWidth();
+        int h = cardTemplate.getHeight();
+        LayoutParams params = new LayoutParams(2 * W / 3, (h * 2 * W) / (3 * w));
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        backgroundEvelopImage.setLayoutParams(params);
+        backgroundEvelopImage.setVisibility(View.VISIBLE);
+    }
+
+    private void setupImageLocSize() {
+        getWindowManager().getDefaultDisplay().getWidth();
+        Bitmap cardBackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape);
+        int w = cardBackBitmap.getWidth();
+        int h = cardBackBitmap.getHeight();
+        LayoutParams params = new LayoutParams(w, h);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        activity_envelope_img.setLayoutParams(params);
+        activity_envelope_img.setVisibility(View.VISIBLE);
+    }
+
+    private void setupImageLocSize2() {
+        int w = cardBmpBack.getWidth();
+        int h = cardBmpBack.getHeight();
+        LayoutParams params = new LayoutParams(w, h);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        activity_envelope_img.setLayoutParams(params);
+        activity_envelope_img.setVisibility(View.VISIBLE);
     }
 
 }

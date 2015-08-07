@@ -1,12 +1,5 @@
 package com.stamp20.app.activities;
 
-import com.stamp20.app.R;
-import com.stamp20.app.adapter.ChoseEnvelopeAdapter;
-import com.stamp20.app.adapter.ChoseEnvelopeAdapter.NamePairs;
-import com.stamp20.app.util.FontManager;
-import com.stamp20.app.util.CardBmpCache;
-import com.stamp20.app.view.HorizontalListView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,31 +17,27 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
+
+import com.stamp20.app.R;
+import com.stamp20.app.adapter.ChoseEnvelopeAdapter;
+import com.stamp20.app.adapter.ChoseEnvelopeAdapter.NamePairs;
+import com.stamp20.app.util.CardBmpCache;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.HorizontalListView;
 
 public class CardEnvelopeActivity extends Activity implements OnClickListener {
 
-    private ImageView header_previous;
     private ImageView activity_envelope_img;
-    private TextView header_title;
-    private Button review_button;
-    private HorizontalListView gallery_choose_envelope;
     private ChoseEnvelopeAdapter choseEnvelopeAdapter;
-    private Bitmap envolopBitmap;
     private CardBmpCache Envelopcache;
+    private Bitmap envolopBitmap;
+    private HorizontalListView gallery_choose_envelope;
+    private ImageView header_previous;
+    private TextView header_title;
     private TextView name1, name2;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card_envelope);
-        envolopBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_envelope_1);
-        Envelopcache.getCacheInstance().putEnve(envolopBitmap);
-        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-        initView();
-    }
+    private Button review_button;
 
     private void initView() {
         header_previous = (ImageView) findViewById(R.id.header_previous);
@@ -73,6 +62,7 @@ public class CardEnvelopeActivity extends Activity implements OnClickListener {
         // gallery_choose_envelope.setAnimationDuration(3000);
         gallery_choose_envelope.setAdapter(choseEnvelopeAdapter);
         gallery_choose_envelope.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
                 choseEnvelopeAdapter.setSelectItem(position);
                 int color = choseEnvelopeAdapter.getColor(position);
@@ -82,22 +72,6 @@ public class CardEnvelopeActivity extends Activity implements OnClickListener {
                 setEnvelopecolor(color);
             }
         });
-    }
-
-    private void setupEnvelopeImageHeSize() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int screenWidth = metrics.widthPixels;
-        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.cards_christmas);
-        int w = cardTemplate.getWidth();
-        int h = cardTemplate.getHeight();
-
-        LayoutParams params = new LayoutParams(5 * screenWidth / 6, (h * 5 * screenWidth) / (6 * w));
-        params.topMargin = 300;
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        activity_envelope_img.setLayoutParams(params);
-        activity_envelope_img.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -112,6 +86,17 @@ public class CardEnvelopeActivity extends Activity implements OnClickListener {
             startActivity(intent);
             break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_envelope);
+        envolopBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_envelope_1);
+        CardBmpCache.getCacheInstance().putEnve(envolopBitmap);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+        initView();
     }
 
     // renjun1 add 改变信封颜色
@@ -131,8 +116,24 @@ public class CardEnvelopeActivity extends Activity implements OnClickListener {
 
         paint.setColorFilter(colorMatrixColorFilter);
         canvas.drawBitmap(envolopBitmap, 0, 0, paint);
-        Envelopcache.getCacheInstance().putEnve(bitmap);
+        CardBmpCache.getCacheInstance().putEnve(bitmap);
         activity_envelope_img.setImageBitmap(bitmap);
+
+    }
+
+    private void setupEnvelopeImageHeSize() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenWidth = metrics.widthPixels;
+        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.cards_christmas);
+        int w = cardTemplate.getWidth();
+        int h = cardTemplate.getHeight();
+
+        LayoutParams params = new LayoutParams(5 * screenWidth / 6, (h * 5 * screenWidth) / (6 * w));
+        params.topMargin = 300;
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        activity_envelope_img.setLayoutParams(params);
+        activity_envelope_img.setVisibility(View.VISIBLE);
 
     }
 

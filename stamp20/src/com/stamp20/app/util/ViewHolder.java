@@ -4,6 +4,12 @@ import android.util.SparseArray;
 import android.view.View;
 
 public class ViewHolder {
+    @SuppressWarnings("unchecked")
+    public static <T extends View> T findChildView(View view, int id) {
+        View childView = view.findViewById(id);
+        return (T) childView;
+    }
+
     // I added a generic return type to reduce the casting noise in client code
     @SuppressWarnings("unchecked")
     public static <T extends View> T get(View view, int id) {
@@ -17,12 +23,6 @@ public class ViewHolder {
             childView = view.findViewById(id);
             viewHolder.put(id, childView);
         }
-        return (T) childView;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends View> T findChildView(View view, int id) {
-        View childView = view.findViewById(id);
         return (T) childView;
     }
 }

@@ -21,30 +21,19 @@ import android.widget.ImageView;
  */
 public class FrameImageView extends ImageView {
 
-    private int co;
     private int borderwidth;
+    private int co;
 
     public FrameImageView(Context context) {
         super(context);
-    }
-
-    public FrameImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
     }
 
     public FrameImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    // 设置颜色
-    public void setColour(int color) {
-        co = color;
-    }
-
-    // 设置边框宽度
-    public void setBorderWidth(int width) {
-
-        borderwidth = width;
+    public FrameImageView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
     }
 
     @Override
@@ -61,6 +50,17 @@ public class FrameImageView extends ImageView {
         // 设置边框宽度
         paint.setStrokeWidth(borderwidth);
         canvas.drawRect(rec, paint);
+    }
+
+    // 设置边框宽度
+    public void setBorderWidth(int width) {
+
+        borderwidth = width;
+    }
+
+    // 设置颜色
+    public void setColour(int color) {
+        co = color;
     }
 
 }

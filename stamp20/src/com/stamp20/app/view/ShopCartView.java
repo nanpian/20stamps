@@ -19,17 +19,17 @@ public class ShopCartView extends View {
 
     private static final String TAG = "ShopCartView";
 
-    private Bitmap bmpStampBackground;
-    private Bitmap bmpStampSource;
-    private int stampBackgroundWidth;
-    private int stampBackgroundHeight;
-    private int shopViewWidth;
-    private int shopViewHeight;
-    private int sourceWidth;
-    private int sourceHeight;
-    private Matrix matrix = new Matrix();
     private Matrix backgroundMatrix = new Matrix();
     private Paint backgroundPaint = new Paint();
+    private Bitmap bmpStampBackground;
+    private Bitmap bmpStampSource;
+    private Matrix matrix = new Matrix();
+    private int shopViewHeight;
+    private int shopViewWidth;
+    private int sourceHeight;
+    private int sourceWidth;
+    private int stampBackgroundHeight;
+    private int stampBackgroundWidth;
     private Rect stampShowRect = new Rect();
 
     public ShopCartView(Context context) {
@@ -50,46 +50,12 @@ public class ShopCartView extends View {
         initView();
     }
 
-    public void initView() {
-        TypedArray typeArray = getResources().obtainTypedArray(R.array.shop_cart_background);
-        int random = (int) (Math.random() * 2);
-        setBackgroundResource(typeArray.getResourceId(random, 0));
+    public Bitmap getmBmpStampBackground() {
+        return bmpStampBackground;
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // TODO Auto-generated method stub
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        shopViewWidth = MeasureSpec.getSize(widthMeasureSpec);
-        shopViewHeight = MeasureSpec.getSize(heightMeasureSpec);
-
-        initMatrix();
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        // TODO Auto-generated method stub
-        super.onDraw(canvas);
-
-        // if(rectBackground != null){
-        // canvas.drawRect(rectBackground, backgroundPaint);
-        // }
-        // 显示时可以根据框子和原始图的比例进行下缩放
-        canvas.save();
-        if (bmpStampSource != null && matrix != null) {
-            // canvas.clipRect(stampShowRect);
-            canvas.drawBitmap(bmpStampSource, matrix, backgroundPaint);
-        }
-        canvas.restore();
-        if (bmpStampBackground != null && backgroundMatrix != null) {
-            canvas.drawBitmap(bmpStampBackground, backgroundMatrix, backgroundPaint);
-        }
-    }
-
-    public void setBackgroundResource(int resId) {
-        bmpStampBackground = BitmapFactory.decodeResource(getResources(), resId);
-        stampBackgroundWidth = bmpStampBackground.getWidth();
-        stampBackgroundHeight = bmpStampBackground.getHeight();
+    public Bitmap getmBpStampSource() {
+        return bmpStampSource;
     }
 
     public void initMatrix() {
@@ -120,16 +86,51 @@ public class ShopCartView extends View {
         matrix.postTranslate(sourceTranslateX, sourceTranslateY);
     }
 
-    public Bitmap getmBmpStampBackground() {
-        return bmpStampBackground;
+    public void initView() {
+        TypedArray typeArray = getResources().obtainTypedArray(R.array.shop_cart_background);
+        int random = (int) (Math.random() * 2);
+        setBackgroundResource(typeArray.getResourceId(random, 0));
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // TODO Auto-generated method stub
+        super.onDraw(canvas);
+
+        // if(rectBackground != null){
+        // canvas.drawRect(rectBackground, backgroundPaint);
+        // }
+        // 显示时可以根据框子和原始图的比例进行下缩放
+        canvas.save();
+        if (bmpStampSource != null && matrix != null) {
+            // canvas.clipRect(stampShowRect);
+            canvas.drawBitmap(bmpStampSource, matrix, backgroundPaint);
+        }
+        canvas.restore();
+        if (bmpStampBackground != null && backgroundMatrix != null) {
+            canvas.drawBitmap(bmpStampBackground, backgroundMatrix, backgroundPaint);
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // TODO Auto-generated method stub
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        shopViewWidth = MeasureSpec.getSize(widthMeasureSpec);
+        shopViewHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+        initMatrix();
+    }
+
+    @Override
+    public void setBackgroundResource(int resId) {
+        bmpStampBackground = BitmapFactory.decodeResource(getResources(), resId);
+        stampBackgroundWidth = bmpStampBackground.getWidth();
+        stampBackgroundHeight = bmpStampBackground.getHeight();
     }
 
     public void setmBmpStampBackground(Bitmap bmpStampBackground) {
         this.bmpStampBackground = bmpStampBackground;
-    }
-
-    public Bitmap getmBpStampSource() {
-        return bmpStampSource;
     }
 
     public void setmBpStampSource(Bitmap bmpStampSource) {

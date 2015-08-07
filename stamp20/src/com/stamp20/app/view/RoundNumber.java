@@ -15,16 +15,16 @@ import com.stamp20.app.util.Log;
 
 public class RoundNumber extends View {
 
-    private Paint numberPaint, roundPaint, backgroundPaint;
-    private int numberColor, roundColor, backgroundColor;
-    private String number;
-    private float numberSize;
-
-    private float width, height;
-    private float mRadius;
     private FontMetrics fontMetrics;
     private float fontTotalHeight;
+    private float mRadius;
+    private String number;
+
+    private int numberColor, roundColor, backgroundColor;
+    private Paint numberPaint, roundPaint, backgroundPaint;
+    private float numberSize;
     private float offY;
+    private float width, height;
 
     public RoundNumber(Context context) {
         this(context, null);
@@ -71,8 +71,10 @@ public class RoundNumber extends View {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public void onDraw(Canvas canvas) {
+        canvas.drawColor(backgroundColor);
+        canvas.drawCircle(width / 2, height / 2, mRadius, roundPaint);
+        canvas.drawText(number, width / 2, height / 2 + offY, numberPaint);
     }
 
     @Override
@@ -86,10 +88,8 @@ public class RoundNumber extends View {
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
-        canvas.drawColor(backgroundColor);
-        canvas.drawCircle(width / 2, height / 2, mRadius, roundPaint);
-        canvas.drawText(number, width / 2, height / 2 + offY, numberPaint);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     public void setText(String number) {

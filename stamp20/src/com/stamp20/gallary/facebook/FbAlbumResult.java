@@ -12,17 +12,17 @@ public class FbAlbumResult extends ArrayList<FbAlbum> {
         super(cap);
     }
 
+    public void appendMoreFbAlbums(FbAlbumResult more) {
+        this.addAll(more);
+        setNextAlbumsUrl(more.getNextAlbumsUrl());
+    }
+
     public String getNextAlbumsUrl() {
         return nextAlbumsUrl;
     }
 
     public void setNextAlbumsUrl(String nextAlbumsUrl) {
         this.nextAlbumsUrl = nextAlbumsUrl;
-    }
-
-    public void appendMoreFbAlbums(FbAlbumResult more) {
-        this.addAll(more);
-        setNextAlbumsUrl(more.getNextAlbumsUrl());
     }
 
 }

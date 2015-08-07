@@ -48,20 +48,21 @@ public class GPUImageVignetteFilter extends GPUImageFilter {
             + "     gl_FragColor = vec4(mix(rgb.x, vignetteColor.x, percent), mix(rgb.y, vignetteColor.y, percent), mix(rgb.z, vignetteColor.z, percent), 1.0);\n"
             + " }";
 
-    private int mVignetteCenterLocation;
     private PointF mVignetteCenter;
-    private int mVignetteColorLocation;
+    private int mVignetteCenterLocation;
     private float[] mVignetteColor;
-    private int mVignetteStartLocation;
-    private float mVignetteStart;
-    private int mVignetteEndLocation;
+    private int mVignetteColorLocation;
     private float mVignetteEnd;
+    private int mVignetteEndLocation;
+    private float mVignetteStart;
+    private int mVignetteStartLocation;
 
     public GPUImageVignetteFilter() {
         this(new PointF(), new float[] { 0.0f, 0.0f, 0.0f }, 0.3f, 0.75f);
     }
 
-    public GPUImageVignetteFilter(final PointF vignetteCenter, final float[] vignetteColor, final float vignetteStart, final float vignetteEnd) {
+    public GPUImageVignetteFilter(final PointF vignetteCenter, final float[] vignetteColor, final float vignetteStart,
+            final float vignetteEnd) {
         super(NO_FILTER_VERTEX_SHADER, VIGNETTING_FRAGMENT_SHADER);
         mVignetteCenter = vignetteCenter;
         mVignetteColor = vignetteColor;
@@ -94,13 +95,13 @@ public class GPUImageVignetteFilter extends GPUImageFilter {
         setFloatVec3(mVignetteColorLocation, mVignetteColor);
     }
 
-    public void setVignetteStart(final float vignetteStart) {
-        mVignetteStart = vignetteStart;
-        setFloat(mVignetteStartLocation, mVignetteStart);
-    }
-
     public void setVignetteEnd(final float vignetteEnd) {
         mVignetteEnd = vignetteEnd;
         setFloat(mVignetteEndLocation, mVignetteEnd);
+    }
+
+    public void setVignetteStart(final float vignetteStart) {
+        mVignetteStart = vignetteStart;
+        setFloat(mVignetteStartLocation, mVignetteStart);
     }
 }

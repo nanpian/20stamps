@@ -14,20 +14,15 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 
 import com.stamp20.app.util.Log;
 
 public class ImageUtil {
 
     private static final String TAG = "Stamp20";
-
-    public ImageUtil() {
-
-    }
 
     static Bitmap bigBitMap(Bitmap bitmap) {
         Matrix matrix = new Matrix();
@@ -36,15 +31,65 @@ public class ImageUtil {
         return resizeBmp;
     }
 
+    private static void closeSilently(Closeable c) {
+        if (c == null)
+            return;
+        try {
+            c.close();
+        } catch (IOException t) {
+            Log.e(TAG, "close fail ", t);
+        }
+    }
+
+    // 计算合适的图片大小
+    private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+        double w = options.outWidth;
+        double h = options.outHeight;
+
+        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
+        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math.floor(w / minSideLength),
+                Math.floor(h / minSideLength));
+
+        if (upperBound < lowerBound) {
+            // return the larger one when there is no overlapping zone.
+            return lowerBound;
+        }
+
+        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
+            return 1;
+        } else if (minSideLength == -1) {
+            return lowerBound;
+        } else {
+            return upperBound;
+        }
+    }
+
+    // 计算合适的图片大小
+    public static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
+
+        int roundedSize;
+        if (initialSize <= 8) {
+            roundedSize = 1;
+            while (roundedSize < initialSize) {
+                roundedSize <<= 1;
+            }
+        } else {
+            roundedSize = (initialSize + 7) / 8 * 8;
+        }
+
+        return roundedSize;
+    }
+
     public static String getLocalPathFromUri(ContentResolver resolver, Uri uri) {
         Cursor cursor = null;
         String urlReturn = null;
         try {
-            cursor = resolver.query(uri, new String[] { MediaStore.Images.Media.DATA }, null, null, null);
+            cursor = resolver.query(uri, new String[] { MediaColumns.DATA }, null, null, null);
             if (cursor == null) {
                 return null;
             }
-            int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            int index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
             cursor.moveToFirst();
             urlReturn = cursor.getString(index);
         } catch (Exception e) {
@@ -53,26 +98,6 @@ public class ImageUtil {
             cursor.close();
         }
         return urlReturn;
-    }
-
-    /**
-     * Returns the bounds of the bitmap stored at a given Url.
-     */
-    public static Rect loadBitmapBounds(Context context, Uri uri) {
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        loadBitmap(context, uri, o);
-        return new Rect(0, 0, o.outWidth, o.outHeight);
-    }
-
-    /**
-     * Loads a bitmap that has been downsampled using sampleSize from a given
-     * url.
-     */
-    public static Bitmap loadDownsampledBitmap(Context context, Uri uri, int sampleSize) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inMutable = true;
-        options.inSampleSize = sampleSize;
-        return loadBitmap(context, uri, options);
     }
 
     /**
@@ -96,6 +121,15 @@ public class ImageUtil {
     }
 
     /**
+     * Returns the bounds of the bitmap stored at a given Url.
+     */
+    public static Rect loadBitmapBounds(Context context, Uri uri) {
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        loadBitmap(context, uri, o);
+        return new Rect(0, 0, o.outWidth, o.outHeight);
+    }
+
+    /**
      * Loads a bitmap at a given URI that is downsampled so that both sides are
      * smaller than maxSideLength. The Bitmap's original dimensions are stored
      * in the rect originalBounds.
@@ -112,7 +146,8 @@ public class ImageUtil {
      *            use min or max side of the original image
      * @return downsampled bitmap or null if this operation failed.
      */
-    public static Bitmap loadConstrainedBitmap(Uri uri, Context context, int maxSideLength, Rect originalBounds, boolean useMin) {
+    public static Bitmap loadConstrainedBitmap(Uri uri, Context context, int maxSideLength, Rect originalBounds,
+            boolean useMin) {
         if (maxSideLength <= 0 || uri == null || context == null) {
             throw new IllegalArgumentException("bad argument to getScaledBitmap");
         }
@@ -149,75 +184,15 @@ public class ImageUtil {
         return loadDownsampledBitmap(context, uri, sampleSize);
     }
 
-    private static void closeSilently(Closeable c) {
-        if (c == null)
-            return;
-        try {
-            c.close();
-        } catch (IOException t) {
-            Log.e(TAG, "close fail ", t);
-        }
-    }
-
-    // 计算合适的图片大小
-    public static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
-        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
-
-        int roundedSize;
-        if (initialSize <= 8) {
-            roundedSize = 1;
-            while (roundedSize < initialSize) {
-                roundedSize <<= 1;
-            }
-        } else {
-            roundedSize = (initialSize + 7) / 8 * 8;
-        }
-
-        return roundedSize;
-    }
-
-    // 计算合适的图片大小
-    private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
-        double w = options.outWidth;
-        double h = options.outHeight;
-
-        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
-        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math.floor(w / minSideLength), Math.floor(h / minSideLength));
-
-        if (upperBound < lowerBound) {
-            // return the larger one when there is no overlapping zone.
-            return lowerBound;
-        }
-
-        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-            return 1;
-        } else if (minSideLength == -1) {
-            return lowerBound;
-        } else {
-            return upperBound;
-        }
-    }
-
     /**
-     * 按指定宽度和高度缩放图片,不保证宽高比例
-     *
-     * @param bitmap
-     * @param w
-     * @param h
-     * @return
+     * Loads a bitmap that has been downsampled using sampleSize from a given
+     * url.
      */
-    public static Bitmap zoomBitmap(Bitmap bitmap, int w, int h) {
-        if (bitmap == null) {
-            return null;
-        }
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        Matrix matrix = new Matrix();
-        float scaleWidht = ((float) w / width);
-        float scaleHeight = ((float) h / height);
-        matrix.postScale(scaleWidht, scaleHeight);
-        Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-        return newbmp;
+    public static Bitmap loadDownsampledBitmap(Context context, Uri uri, int sampleSize) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inMutable = true;
+        options.inSampleSize = sampleSize;
+        return loadBitmap(context, uri, options);
     }
 
     /**
@@ -242,5 +217,31 @@ public class ImageUtil {
         mCanvas.drawBitmap(mask_SRC, 0, 0, paint);
         paint.setXfermode(null);
         return result;
+    }
+
+    /**
+     * 按指定宽度和高度缩放图片,不保证宽高比例
+     *
+     * @param bitmap
+     * @param w
+     * @param h
+     * @return
+     */
+    public static Bitmap zoomBitmap(Bitmap bitmap, int w, int h) {
+        if (bitmap == null) {
+            return null;
+        }
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        float scaleWidht = ((float) w / width);
+        float scaleHeight = ((float) h / height);
+        matrix.postScale(scaleWidht, scaleHeight);
+        Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        return newbmp;
+    }
+
+    public ImageUtil() {
+
     }
 }

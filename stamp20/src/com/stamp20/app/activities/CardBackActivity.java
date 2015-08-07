@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,34 +19,21 @@ import com.stamp20.app.R;
 import com.stamp20.app.adapter.ChooseBackColorAdapter;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
-import com.stamp20.app.view.CardBackView;
 import com.stamp20.app.view.CardBackView2;
 import com.stamp20.app.view.HorizontalListView;
 
 public class CardBackActivity extends Activity implements OnClickListener {
 
     private static CardBackActivity instance;
-    private CardBackView2 cardBackView;
-    private HorizontalListView gallery_choose_back;
-    private ChooseBackColorAdapter chooseBackColorAdapter;
-    private Button customEnvelope;
     private Button add_blank;
     private Button add_line;
+    private CardBackView2 cardBackView;
+    private ChooseBackColorAdapter chooseBackColorAdapter;
+    private Button customEnvelope;
+    private HorizontalListView gallery_choose_back;
     private ImageView header_previous;
     private TextView header_title;
     private Uri mImageUri;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card_back);
-        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-        instance = this;
-        Intent intent = getIntent();
-        mImageUri = intent.getParcelableExtra("imageUri");
-        initView();
-    }
 
     private void initView() {
         cardBackView = (CardBackView2) findViewById(R.id.cardbackview);
@@ -80,6 +66,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
         gallery_choose_back.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private String currentfiltername;
 
+            @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
                 chooseBackColorAdapter.setSelectItem(position);
                 int color = chooseBackColorAdapter.getColor(position);
@@ -87,31 +74,6 @@ public class CardBackActivity extends Activity implements OnClickListener {
                 cardBackView.invalidate();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        // TODO Auto-generated method stub
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    public void setBtnSelectState(Button button, int color, int drawableId) {
-        button.setTextColor(color);
-        Drawable drawable = this.getResources().getDrawable(drawableId);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        button.setCompoundDrawables(drawable, null, null, null);
-        button.setCompoundDrawablePadding(5);
     }
 
     @Override
@@ -154,6 +116,43 @@ public class CardBackActivity extends Activity implements OnClickListener {
             finish();
             break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_back);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+        instance = this;
+        Intent intent = getIntent();
+        mImageUri = intent.getParcelableExtra("imageUri");
+        initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+    }
+
+    public void setBtnSelectState(Button button, int color, int drawableId) {
+        button.setTextColor(color);
+        Drawable drawable = this.getResources().getDrawable(drawableId);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        button.setCompoundDrawables(drawable, null, null, null);
+        button.setCompoundDrawablePadding(5);
     }
 
 }

@@ -6,41 +6,6 @@ public class DeviceStamp {
 
     // 用来存储不同价格的Stamp信息
 
-    private String name;
-    private int stampValue;
-    private int price;
-    private int taxableAmount;
-    private String imageName;
-
-    public DeviceStamp(String name, int stampValue, int price, String imageName) {
-        super();
-        this.name = name;
-        this.stampValue = stampValue;
-        this.price = price;
-        this.taxableAmount = price - 20 * stampValue;
-        this.imageName = imageName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getStampValue() {
-        return stampValue;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public int getTaxableAmount() {
-        return taxableAmount;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
     static public ArrayList<DeviceStamp> getDeviceStampList() {
         ArrayList<DeviceStamp> l = new ArrayList<DeviceStamp>();
         l.add(new DeviceStamp("Post Card", 34, 1900, "Icon_Postcard"));
@@ -56,6 +21,41 @@ public class DeviceStamp {
         l.add(new DeviceStamp("1st Class Large Envelope 6oz", 203, 1900, "Icon_LargeEnvelope"));
         l.add(new DeviceStamp("Priority (up to 16 oz )", 560, 1900, "Icon_LargeEnvelope"));
         return l;
+    }
+    private String imageName;
+    private String name;
+    private int price;
+    private int stampValue;
+
+    private int taxableAmount;
+
+    public DeviceStamp(String name, int stampValue, int price, String imageName) {
+        super();
+        this.name = name;
+        this.stampValue = stampValue;
+        this.price = price;
+        this.taxableAmount = price - 20 * stampValue;
+        this.imageName = imageName;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getStampValue() {
+        return stampValue;
+    }
+
+    public int getTaxableAmount() {
+        return taxableAmount;
     }
 
 }

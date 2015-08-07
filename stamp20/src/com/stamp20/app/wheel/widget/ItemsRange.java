@@ -23,11 +23,11 @@ package com.stamp20.app.wheel.widget;
  * Range for visible items.
  */
 public class ItemsRange {
-    // First item number
-    private int first;
-
     // Items count
     private int count;
+
+    // First item number
+    private int first;
 
     /**
      * Default constructor. Creates an empty range
@@ -50,6 +50,26 @@ public class ItemsRange {
     }
 
     /**
+     * Tests whether item is contained by range
+     * 
+     * @param index
+     *            the item number
+     * @return true if item is contained
+     */
+    public boolean contains(int index) {
+        return index >= getFirst() && index <= getLast();
+    }
+
+    /**
+     * Get items count
+     * 
+     * @return the count of items
+     */
+    public int getCount() {
+        return count;
+    }
+
+    /**
      * Gets number of first item
      * 
      * @return the number of the first item
@@ -65,25 +85,5 @@ public class ItemsRange {
      */
     public int getLast() {
         return getFirst() + getCount() - 1;
-    }
-
-    /**
-     * Get items count
-     * 
-     * @return the count of items
-     */
-    public int getCount() {
-        return count;
-    }
-
-    /**
-     * Tests whether item is contained by range
-     * 
-     * @param index
-     *            the item number
-     * @return true if item is contained
-     */
-    public boolean contains(int index) {
-        return index >= getFirst() && index <= getLast();
     }
 }

@@ -25,6 +25,7 @@ import com.stamp20.app.wheel.widget.WheelAdapter;
  * 
  * @deprecated Will be removed soon
  */
+@Deprecated
 public class AdapterWheel extends AbstractWheelTextAdapter {
 
     // Source adapter

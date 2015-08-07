@@ -28,28 +28,24 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 public class PixelBuffer {
-    final static String TAG = "PixelBuffer";
     final static boolean LIST_CONFIGS = true;
+    final static String TAG = "PixelBuffer";
 
-    GLSurfaceView.Renderer mRenderer; // borrow this interface
-    int mWidth, mHeight;
+    int[] attrib_list = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
+    Bitmap bitmap;
+    int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+
     Bitmap mBitmap;
-
     EGL10 mEGL;
-    EGLDisplay mEGLDisplay;
-    EGLConfig[] mEGLConfigs;
     EGLConfig mEGLConfig;
+    EGLConfig[] mEGLConfigs;
     EGLContext mEGLContext;
+    EGLDisplay mEGLDisplay;
     EGLSurface mEGLSurface;
     GL10 mGL;
-    int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-    int[] attrib_list = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
+    GLSurfaceView.Renderer mRenderer; // borrow this interface
     String mThreadOwner;
-    Bitmap bitmap;
-
-    public void setBitmapSrc(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
+    int mWidth, mHeight;
 
     public PixelBuffer(int width, int height) {
         mWidth = width;
@@ -73,18 +69,41 @@ public class PixelBuffer {
         mThreadOwner = Thread.currentThread().getName();
     }
 
-    public void setRenderer(GLSurfaceView.Renderer renderer) {
-        mRenderer = renderer;
+    private EGLConfig chooseConfig() {
+        int[] attribList = new int[] { EGL_DEPTH_SIZE, 0, EGL_STENCIL_SIZE, 0, EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8,
+                EGL_BLUE_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_NONE };
 
-        // Does this thread own the OpenGL context?
-        if (!Thread.currentThread().getName().equals(mThreadOwner)) {
-            Log.e(TAG, "setRenderer: This thread does not own the OpenGL context.");
-            return;
+        // No error checking performed, minimum required code to elucidate logic
+        // Expand on this logic to be more selective in choosing a configuration
+        int[] numConfig = new int[1];
+        mEGL.eglChooseConfig(mEGLDisplay, attribList, null, 0, numConfig);
+        int configSize = numConfig[0];
+        mEGLConfigs = new EGLConfig[configSize];
+        mEGL.eglChooseConfig(mEGLDisplay, attribList, mEGLConfigs, configSize, numConfig);
+
+        if (LIST_CONFIGS) {
+            listConfig();
         }
 
-        // Call the renderer initialization routines
-        mRenderer.onSurfaceCreated(mGL, mEGLConfig);
-        mRenderer.onSurfaceChanged(mGL, mWidth, mHeight);
+        return mEGLConfigs[0]; // Best match is probably the first configuration
+    }
+
+    private void convertToBitmap() {
+        Log.i("jiangtao4", "convertToBitmap mHeight is : " + mHeight);
+        IntBuffer ib = IntBuffer.allocate(mWidth * mHeight);
+        IntBuffer ibt = IntBuffer.allocate(mWidth * mHeight);
+        mGL.glReadPixels(0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_BYTE, ib);
+
+        // Convert upside down mirror-reversed image to right-side up normal
+        // image.
+        for (int i = 0; i < mHeight; i++) {
+            for (int j = 0; j < mWidth; j++) {
+                ibt.put((mHeight - i - 1) * mWidth + j, ib.get(i * mWidth + j));
+            }
+        }
+
+        mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+        mBitmap.copyPixelsFromBuffer(ibt);
     }
 
     public Bitmap getBitmap() {
@@ -104,67 +123,6 @@ public class PixelBuffer {
         mRenderer.onDrawFrame(mGL);
         convertToBitmap();
         return mBitmap;
-    }
-
-    private EGLConfig chooseConfig() {
-        int[] attribList = new int[] { EGL_DEPTH_SIZE, 0, EGL_STENCIL_SIZE, 0, EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8, EGL_ALPHA_SIZE, 8,
-                EGL_NONE };
-
-        // No error checking performed, minimum required code to elucidate logic
-        // Expand on this logic to be more selective in choosing a configuration
-        int[] numConfig = new int[1];
-        mEGL.eglChooseConfig(mEGLDisplay, attribList, null, 0, numConfig);
-        int configSize = numConfig[0];
-        mEGLConfigs = new EGLConfig[configSize];
-        mEGL.eglChooseConfig(mEGLDisplay, attribList, mEGLConfigs, configSize, numConfig);
-
-        if (LIST_CONFIGS) {
-            listConfig();
-        }
-
-        return mEGLConfigs[0]; // Best match is probably the first configuration
-    }
-
-    private void listConfig() {
-        Log.i(TAG, "Config List {");
-
-        for (EGLConfig config : mEGLConfigs) {
-            int d, s, r, g, b, a;
-
-            // Expand on this logic to dump other attributes
-            d = getConfigAttrib(config, EGL_DEPTH_SIZE);
-            s = getConfigAttrib(config, EGL_STENCIL_SIZE);
-            r = getConfigAttrib(config, EGL_RED_SIZE);
-            g = getConfigAttrib(config, EGL_GREEN_SIZE);
-            b = getConfigAttrib(config, EGL_BLUE_SIZE);
-            a = getConfigAttrib(config, EGL_ALPHA_SIZE);
-            Log.i(TAG, "    <d,s,r,g,b,a> = <" + d + "," + s + "," + r + "," + g + "," + b + "," + a + ">");
-        }
-
-        Log.i(TAG, "}");
-    }
-
-    private int getConfigAttrib(EGLConfig config, int attribute) {
-        int[] value = new int[1];
-        return mEGL.eglGetConfigAttrib(mEGLDisplay, config, attribute, value) ? value[0] : 0;
-    }
-
-    private void convertToBitmap() {
-        Log.i("jiangtao4", "convertToBitmap mHeight is : " + mHeight);
-        IntBuffer ib = IntBuffer.allocate(mWidth * mHeight);
-        IntBuffer ibt = IntBuffer.allocate(mWidth * mHeight);
-        mGL.glReadPixels(0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_BYTE, ib);
-
-        // Convert upside down mirror-reversed image to right-side up normal
-        // image.
-        for (int i = 0; i < mHeight; i++) {
-            for (int j = 0; j < mWidth; j++) {
-                ibt.put((mHeight - i - 1) * mWidth + j, ib.get(i * mWidth + j));
-            }
-        }
-
-        mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
-        mBitmap.copyPixelsFromBuffer(ibt);
     }
 
     public Bitmap getBitmap(Bitmap inBitmap, IntBuffer buffer) {
@@ -200,13 +158,56 @@ public class PixelBuffer {
         }
 
         // copy to Bitmap
-        if (inBitmap == null || !inBitmap.isMutable() || inBitmap.getWidth() != mWidth || inBitmap.getHeight() != mHeight) {
+        if (inBitmap == null || !inBitmap.isMutable() || inBitmap.getWidth() != mWidth
+                || inBitmap.getHeight() != mHeight) {
             inBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         }
 
         inBitmap.copyPixelsFromBuffer(buffer);
 
         return inBitmap;
+    }
+
+    private int getConfigAttrib(EGLConfig config, int attribute) {
+        int[] value = new int[1];
+        return mEGL.eglGetConfigAttrib(mEGLDisplay, config, attribute, value) ? value[0] : 0;
+    }
+
+    private void listConfig() {
+        Log.i(TAG, "Config List {");
+
+        for (EGLConfig config : mEGLConfigs) {
+            int d, s, r, g, b, a;
+
+            // Expand on this logic to dump other attributes
+            d = getConfigAttrib(config, EGL_DEPTH_SIZE);
+            s = getConfigAttrib(config, EGL_STENCIL_SIZE);
+            r = getConfigAttrib(config, EGL_RED_SIZE);
+            g = getConfigAttrib(config, EGL_GREEN_SIZE);
+            b = getConfigAttrib(config, EGL_BLUE_SIZE);
+            a = getConfigAttrib(config, EGL_ALPHA_SIZE);
+            Log.i(TAG, "    <d,s,r,g,b,a> = <" + d + "," + s + "," + r + "," + g + "," + b + "," + a + ">");
+        }
+
+        Log.i(TAG, "}");
+    }
+
+    public void setBitmapSrc(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public void setRenderer(GLSurfaceView.Renderer renderer) {
+        mRenderer = renderer;
+
+        // Does this thread own the OpenGL context?
+        if (!Thread.currentThread().getName().equals(mThreadOwner)) {
+            Log.e(TAG, "setRenderer: This thread does not own the OpenGL context.");
+            return;
+        }
+
+        // Call the renderer initialization routines
+        mRenderer.onSurfaceCreated(mGL, mEGLConfig);
+        mRenderer.onSurfaceChanged(mGL, mWidth, mHeight);
     }
 
 }

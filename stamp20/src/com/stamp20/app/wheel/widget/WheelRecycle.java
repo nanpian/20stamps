@@ -29,11 +29,11 @@ import android.widget.LinearLayout;
  * Recycle stores wheel items to reuse.
  */
 public class WheelRecycle {
-    // Cached items
-    private List<View> items;
-
     // Cached empty items
     private List<View> emptyItems;
+
+    // Cached items
+    private List<View> items;
 
     // Wheel view
     private WheelView wheel;
@@ -46,6 +46,70 @@ public class WheelRecycle {
      */
     public WheelRecycle(WheelView wheel) {
         this.wheel = wheel;
+    }
+
+    /**
+     * Adds view to specified cache. Creates a cache list if it is null.
+     * 
+     * @param view
+     *            the view to be cached
+     * @param cache
+     *            the cache list
+     * @return the cache list
+     */
+    private List<View> addView(View view, List<View> cache) {
+        if (cache == null) {
+            cache = new LinkedList<View>();
+        }
+
+        cache.add(view);
+        return cache;
+    }
+
+    /**
+     * Clears all views
+     */
+    public void clearAll() {
+        if (items != null) {
+            items.clear();
+        }
+        if (emptyItems != null) {
+            emptyItems.clear();
+        }
+    }
+
+    /**
+     * Gets view from specified cache.
+     * 
+     * @param cache
+     *            the cache
+     * @return the first view from cache.
+     */
+    private View getCachedView(List<View> cache) {
+        if (cache != null && cache.size() > 0) {
+            View view = cache.get(0);
+            cache.remove(0);
+            return view;
+        }
+        return null;
+    }
+
+    /**
+     * Gets empty item view
+     * 
+     * @return the cached empty view
+     */
+    public View getEmptyItem() {
+        return getCachedView(emptyItems);
+    }
+
+    /**
+     * Gets item view
+     * 
+     * @return the cached view
+     */
+    public View getItem() {
+        return getCachedView(items);
     }
 
     /**
@@ -79,54 +143,6 @@ public class WheelRecycle {
     }
 
     /**
-     * Gets item view
-     * 
-     * @return the cached view
-     */
-    public View getItem() {
-        return getCachedView(items);
-    }
-
-    /**
-     * Gets empty item view
-     * 
-     * @return the cached empty view
-     */
-    public View getEmptyItem() {
-        return getCachedView(emptyItems);
-    }
-
-    /**
-     * Clears all views
-     */
-    public void clearAll() {
-        if (items != null) {
-            items.clear();
-        }
-        if (emptyItems != null) {
-            emptyItems.clear();
-        }
-    }
-
-    /**
-     * Adds view to specified cache. Creates a cache list if it is null.
-     * 
-     * @param view
-     *            the view to be cached
-     * @param cache
-     *            the cache list
-     * @return the cache list
-     */
-    private List<View> addView(View view, List<View> cache) {
-        if (cache == null) {
-            cache = new LinkedList<View>();
-        }
-
-        cache.add(view);
-        return cache;
-    }
-
-    /**
      * Adds view to cache. Determines view type (item view or empty one) by
      * index.
      * 
@@ -148,22 +164,6 @@ public class WheelRecycle {
             index %= count;
             items = addView(view, items);
         }
-    }
-
-    /**
-     * Gets view from specified cache.
-     * 
-     * @param cache
-     *            the cache
-     * @return the first view from cache.
-     */
-    private View getCachedView(List<View> cache) {
-        if (cache != null && cache.size() > 0) {
-            View view = cache.get(0);
-            cache.remove(0);
-            return view;
-        }
-        return null;
     }
 
 }

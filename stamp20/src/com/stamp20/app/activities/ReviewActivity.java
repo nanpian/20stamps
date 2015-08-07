@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.data.Cart;
@@ -35,71 +36,75 @@ import com.stamp20.app.util.ParseUtil;
 import com.stamp20.app.view.WaitProgressBar;
 
 public class ReviewActivity extends Activity implements View.OnClickListener {
+    private class BlurBackground extends AsyncTask<View, Void, Bitmap> {
+        ImageView blur;
+
+        BlurBackground(ImageView blur) {
+            this.blur = blur;
+        }
+
+        @Override
+        protected Bitmap doInBackground(View... views) {
+            // TODO Auto-generated method stub
+            views[0].buildDrawingCache();
+            Bitmap source = views[0].getDrawingCache();
+            return ImageUtils.fastBlur(source, 100);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            blur.setImageBitmap(result);
+        }
+    }
+
     private static final String TAG = "ReviewActivity";
 
-    private BitmapCache mCache = null;
+    private ImageView blurBlackground;
 
-    private ImageView mReviewer = null;
-
+    private BlurBackground blurProcess = null;
     private ImageView headerPrevious = null;
+
     private TextView headerTitle = null;
 
-    private TextView tailText = null;
+    private boolean isFirstBlur = true;
+
+    private BitmapCache mCache = null;
+    private long mDuration = 1000;
+    private float mEndAlpha = 1.0f;
+    private ImageView mReviewer = null;
+
+    private float mStartAlpha = 0.001f;
+    private ParseUtil mUploadToParse;
+    private RelativeLayout reviewButton;
+
+    private View reviewForeground;
 
     // private Button saveDesign;
     private Button shareDesign;
 
-    private ImageView blurBlackground;
-    private View reviewForeground;
-    private boolean isFirstBlur = true;
-    private BlurBackground blurProcess = null;
+    private TextView tailText = null;
 
-    private ParseUtil mUploadToParse;
     private WaitProgressBar waitProgressBar;
-    private RelativeLayout reviewButton;
+    private void closeBlurWindow() {
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration,
+                new AnimationListener() {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // getActionBar().hide();
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        blurBlackground.setClickable(false);
+                        blurBlackground.setVisibility(View.GONE);
+                        reviewForeground.setVisibility(View.VISIBLE);
+                    }
 
-        setContentView(R.layout.review_activity);
-        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
 
-        headerPrevious = (ImageView) findViewById(R.id.header_previous);
-        headerTitle = (TextView) findViewById(R.id.header_title);
-        tailText = (TextView) findViewById(R.id.tail_text);
-
-        headerPrevious.setOnClickListener(this);
-
-        reviewButton = (RelativeLayout) this.findViewById(R.id.tail);
-        reviewButton.setOnClickListener(this);
-
-        headerTitle.setText(R.string.review_title);
-
-        // saveDesign = (Button) findViewById(R.id.btn_save_design);
-        shareDesign = (Button) findViewById(R.id.btn_share_design);
-        // saveDesign.setOnClickListener(this);
-        shareDesign.setOnClickListener(this);
-
-        mCache = BitmapCache.getCache();
-        mReviewer = (ImageView) findViewById(R.id.reviewer);
-        mReviewer.setImageBitmap(mCache.get());
-        // mUploadToParse = new UploadToParse(mCache.get());
-        // mUploadToParse.uploadImage();
-
-        waitProgressBar = (WaitProgressBar) findViewById(R.id.progress_bar);
-
-        blurBlackground = (ImageView) findViewById(R.id.blur_background);
-        reviewForeground = findViewById(R.id.review_root);
-        blurProcess = new BlurBackground(blurBlackground);
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+                }));
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
@@ -159,73 +164,51 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 
     }
 
-    private float mStartAlpha = 0.001f;
-    private float mEndAlpha = 1.0f;
-    private long mDuration = 1000;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // getActionBar().hide();
 
-    private void closeBlurWindow() {
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration, new AnimationListener() {
+        setContentView(R.layout.review_activity);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
 
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+        headerPrevious = (ImageView) findViewById(R.id.header_previous);
+        headerTitle = (TextView) findViewById(R.id.header_title);
+        tailText = (TextView) findViewById(R.id.tail_text);
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+        headerPrevious.setOnClickListener(this);
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                blurBlackground.setClickable(false);
-                blurBlackground.setVisibility(View.GONE);
-                reviewForeground.setVisibility(View.VISIBLE);
-            }
-        }));
+        reviewButton = (RelativeLayout) this.findViewById(R.id.tail);
+        reviewButton.setOnClickListener(this);
+
+        headerTitle.setText(R.string.review_title);
+
+        // saveDesign = (Button) findViewById(R.id.btn_save_design);
+        shareDesign = (Button) findViewById(R.id.btn_share_design);
+        // saveDesign.setOnClickListener(this);
+        shareDesign.setOnClickListener(this);
+
+        mCache = BitmapCache.getCache();
+        mReviewer = (ImageView) findViewById(R.id.reviewer);
+        mReviewer.setImageBitmap(mCache.get());
+        // mUploadToParse = new UploadToParse(mCache.get());
+        // mUploadToParse.uploadImage();
+
+        waitProgressBar = (WaitProgressBar) findViewById(R.id.progress_bar);
+
+        blurBlackground = (ImageView) findViewById(R.id.blur_background);
+        reviewForeground = findViewById(R.id.review_root);
+        blurProcess = new BlurBackground(blurBlackground);
     }
 
-    private void startBlurWindow() {
-        reviewForeground.setVisibility(View.GONE);
-        blurBlackground.setVisibility(View.VISIBLE);
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, new AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                blurBlackground.setClickable(true);
-            }
-        }));
-    }
-
-    private class BlurBackground extends AsyncTask<View, Void, Bitmap> {
-        ImageView blur;
-
-        BlurBackground(ImageView blur) {
-            this.blur = blur;
-        }
-
-        @Override
-        protected Bitmap doInBackground(View... views) {
-            // TODO Auto-generated method stub
-            views[0].buildDrawingCache();
-            Bitmap source = views[0].getDrawingCache();
-            return ImageUtils.fastBlur(source, 100);
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            blur.setImageBitmap(result);
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private File saveBitmapToPic(Bitmap src) {
-        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .getAbsolutePath() + "/stamp20");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
         String name = "stamp20_" + sdf.format(new Date(System.currentTimeMillis())) + ".jpeg";
         Log.d(TAG, "path: " + path + ", name: " + name);
@@ -264,6 +247,27 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
         }
 
         return file;
+    }
+
+    private void startBlurWindow() {
+        reviewForeground.setVisibility(View.GONE);
+        blurBlackground.setVisibility(View.VISIBLE);
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration,
+                new AnimationListener() {
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        blurBlackground.setClickable(true);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+                }));
     }
 
 }

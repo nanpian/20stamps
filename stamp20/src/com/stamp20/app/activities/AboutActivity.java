@@ -19,11 +19,11 @@ import com.stamp20.app.adapter.AboutAdapter;
 import com.stamp20.app.util.FontManager;
 
 public class AboutActivity extends Activity implements OnItemClickListener {
-    ListView aboutListview;
-    AboutAdapter mAboutAdapter;
-    private TextView headerTitle;
-    private ImageView header_previous;
     private static String titleName = "About";
+    ListView aboutListview;
+    private ImageView header_previous;
+    private TextView headerTitle;
+    AboutAdapter mAboutAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +46,6 @@ public class AboutActivity extends Activity implements OnItemClickListener {
         mAboutAdapter = new AboutAdapter(this);
         aboutListview.setAdapter(mAboutAdapter);
         aboutListview.setOnItemClickListener(this);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
-            startActivity(new Intent(AboutActivity.this, HomeActivity.class));
-            finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -107,6 +97,16 @@ public class AboutActivity extends Activity implements OnItemClickListener {
             break;
         }
         startActivity(detailIntent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
+            startActivity(new Intent(AboutActivity.this, HomeActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

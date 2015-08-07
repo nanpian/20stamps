@@ -16,10 +16,10 @@ package com.stamp20.app.anim;
  * limitations under the License. 
  */
 
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.graphics.Camera;
 import android.graphics.Matrix;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 
 /**
  * An animation that rotates the view on the Y axis between two specified
@@ -27,13 +27,13 @@ import android.graphics.Matrix;
  * improve the effect.
  */
 public class Rotate3dAnimation extends Animation {
-    private final float mFromDegrees;
-    private final float mToDegrees;
+    private Camera mCamera;
     private final float mCenterX;
     private final float mCenterY;
     private final float mDepthZ;
+    private final float mFromDegrees;
     private final boolean mReverse;
-    private Camera mCamera;
+    private final float mToDegrees;
 
     /**
      * Creates a new 3D rotation on the Y axis. The rotation is defined by its
@@ -55,19 +55,14 @@ public class Rotate3dAnimation extends Animation {
      * @param reverse
      *            true if the translation should be reversed, false otherwise
      */
-    public Rotate3dAnimation(float fromDegrees, float toDegrees, float centerX, float centerY, float depthZ, boolean reverse) {
+    public Rotate3dAnimation(float fromDegrees, float toDegrees, float centerX, float centerY, float depthZ,
+            boolean reverse) {
         mFromDegrees = fromDegrees;
         mToDegrees = toDegrees;
         mCenterX = centerX;
         mCenterY = centerY;
         mDepthZ = depthZ;
         mReverse = reverse;
-    }
-
-    @Override
-    public void initialize(int width, int height, int parentWidth, int parentHeight) {
-        super.initialize(width, height, parentWidth, parentHeight);
-        mCamera = new Camera();
     }
 
     @Override
@@ -102,5 +97,11 @@ public class Rotate3dAnimation extends Animation {
         // 以View的中心点为旋转中心,如果不加这两句，就是以（0,0）点为旋转中心
         matrix.preTranslate(-centerX, -centerY);
         matrix.postTranslate(centerX, centerY);
+    }
+
+    @Override
+    public void initialize(int width, int height, int parentWidth, int parentHeight) {
+        super.initialize(width, height, parentWidth, parentHeight);
+        mCamera = new Camera();
     }
 }

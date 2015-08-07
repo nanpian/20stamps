@@ -16,16 +16,15 @@ public class GameSystem {
         return instance_;
     }
 
+    private int height = 0;
+
     // activity
     private Activity mainActivity;
 
-    public void setMainActivity(Activity act) {
-        mainActivity = act;
-    }
+    // 场景
+    private GlObject runningScene_ = null;
 
-    public Activity getMainActivity() {
-        return mainActivity;
-    }
+    private int width = 0; // opengl的场景尺寸
 
     // util
     Bitmap getBitmapFromAssets(String file) {
@@ -40,23 +39,25 @@ public class GameSystem {
         }
         return image;
     }
-
-    // 场景
-    private GlObject runningScene_ = null;
-    private int width = 0; // opengl的场景尺寸
-    private int height = 0;
-
-    public void setWindowSize(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public Activity getMainActivity() {
+        return mainActivity;
+    }
+    public int getWindowHeight() {
+        return this.height;
     }
 
     public int getWindowWidth() {
         return this.width;
     }
 
-    public int getWindowHeight() {
-        return this.height;
+    //
+    public void glVisit(GL10 gl) {
+        if (runningScene_ != null)
+            runningScene_.glVisit(gl);
+    }
+
+    public void setMainActivity(Activity act) {
+        mainActivity = act;
     }
 
     // 设定场景
@@ -64,9 +65,8 @@ public class GameSystem {
         runningScene_ = scene;
     }
 
-    //
-    public void glVisit(GL10 gl) {
-        if (runningScene_ != null)
-            runningScene_.glVisit(gl);
+    public void setWindowSize(int width, int height) {
+        this.width = width;
+        this.height = height;
     }
 }

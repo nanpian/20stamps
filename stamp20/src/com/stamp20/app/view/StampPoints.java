@@ -17,12 +17,12 @@ public class StampPoints {
         return x;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
     public float getY() {
         return y;
+    }
+
+    public void setX(float x) {
+        this.x = x;
     }
 
     public void setY(float y) {

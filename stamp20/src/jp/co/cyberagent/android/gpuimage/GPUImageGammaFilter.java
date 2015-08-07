@@ -22,13 +22,13 @@ import android.opengl.GLES20;
  * gamma value ranges from 0.0 to 3.0, with 1.0 as the normal level
  */
 public class GPUImageGammaFilter extends GPUImageFilter {
-    public static final String GAMMA_FRAGMENT_SHADER = "" + "varying highp vec2 textureCoordinate;\n" + " \n" + " uniform sampler2D inputImageTexture;\n"
-            + " uniform lowp float gamma;\n" + " \n" + " void main()\n" + " {\n"
-            + "     lowp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" + "     \n"
+    public static final String GAMMA_FRAGMENT_SHADER = "" + "varying highp vec2 textureCoordinate;\n" + " \n"
+            + " uniform sampler2D inputImageTexture;\n" + " uniform lowp float gamma;\n" + " \n" + " void main()\n"
+            + " {\n" + "     lowp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" + "     \n"
             + "     gl_FragColor = vec4(pow(textureColor.rgb, vec3(gamma)), textureColor.w);\n" + " }";
 
-    private int mGammaLocation;
     private float mGamma;
+    private int mGammaLocation;
 
     public GPUImageGammaFilter() {
         this(1.2f);

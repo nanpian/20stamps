@@ -16,32 +16,54 @@
 
 package jp.co.cyberagent.android.gpuimage;
 
+import java.io.InputStream;
+import java.nio.FloatBuffer;
+import java.util.LinkedList;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.PointF;
 import android.opengl.GLES20;
 
-import java.io.InputStream;
-import java.nio.FloatBuffer;
-import java.util.LinkedList;
-
 public class GPUImageFilter {
-    public static final String NO_FILTER_VERTEX_SHADER = "" + "attribute vec4 position;\n" + "attribute vec4 inputTextureCoordinate;\n" + " \n"
-            + "varying vec2 textureCoordinate;\n" + " \n" + "void main()\n" + "{\n" + "    gl_Position = position;\n"
+    public static final String NO_FILTER_FRAGMENT_SHADER = "" + "varying highp vec2 textureCoordinate;\n" + " \n"
+            + "uniform sampler2D inputImageTexture;\n" + " \n" + "void main()\n" + "{\n"
+            + "     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n" + "}";
+    public static final String NO_FILTER_VERTEX_SHADER = "" + "attribute vec4 position;\n"
+            + "attribute vec4 inputTextureCoordinate;\n" + " \n" + "varying vec2 textureCoordinate;\n" + " \n"
+            + "void main()\n" + "{\n" + "    gl_Position = position;\n"
             + "    textureCoordinate = inputTextureCoordinate.xy;\n" + "}";
-    public static final String NO_FILTER_FRAGMENT_SHADER = "" + "varying highp vec2 textureCoordinate;\n" + " \n" + "uniform sampler2D inputImageTexture;\n"
-            + " \n" + "void main()\n" + "{\n" + "     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n" + "}";
+
+    public static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+    public static String loadShader(String file, Context context) {
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream ims = assetManager.open(file);
+
+            String re = convertStreamToString(ims);
+            ims.close();
+            return re;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+    private final String mFragmentShader;
+    protected int mGLAttribPosition;
+    protected int mGLAttribTextureCoordinate;
+    protected int mGLProgId;
+    protected int mGLUniformTexture;
+    private boolean mIsInitialized;
+    protected int mOutputHeight;
+    protected int mOutputWidth;
 
     private final LinkedList<Runnable> mRunOnDraw;
+
     private final String mVertexShader;
-    private final String mFragmentShader;
-    protected int mGLProgId;
-    protected int mGLAttribPosition;
-    protected int mGLUniformTexture;
-    protected int mGLAttribTextureCoordinate;
-    protected int mOutputWidth;
-    protected int mOutputHeight;
-    private boolean mIsInitialized;
 
     public GPUImageFilter() {
         this(NO_FILTER_VERTEX_SHADER, NO_FILTER_FRAGMENT_SHADER);
@@ -53,35 +75,47 @@ public class GPUImageFilter {
         mFragmentShader = fragmentShader;
     }
 
-    public final void init() {
-        onInit();
-        mIsInitialized = true;
-        onInitialized();
-    }
-
-    public void onInit() {
-        mGLProgId = OpenGlUtils.loadProgram(mVertexShader, mFragmentShader);
-        mGLAttribPosition = GLES20.glGetAttribLocation(mGLProgId, "position");
-        mGLUniformTexture = GLES20.glGetUniformLocation(mGLProgId, "inputImageTexture");
-        mGLAttribTextureCoordinate = GLES20.glGetAttribLocation(mGLProgId, "inputTextureCoordinate");
-        mIsInitialized = true;
-    }
-
-    public void onInitialized() {
-    }
-
     public final void destroy() {
         mIsInitialized = false;
         GLES20.glDeleteProgram(mGLProgId);
         onDestroy();
     }
 
-    public void onDestroy() {
+    public int getAttribPosition() {
+        return mGLAttribPosition;
     }
 
-    public void onOutputSizeChanged(final int width, final int height) {
-        mOutputWidth = width;
-        mOutputHeight = height;
+    public int getAttribTextureCoordinate() {
+        return mGLAttribTextureCoordinate;
+    }
+
+    public int getOutputHeight() {
+        return mOutputHeight;
+    }
+
+    public int getOutputWidth() {
+        return mOutputWidth;
+    }
+
+    public int getProgram() {
+        return mGLProgId;
+    }
+
+    public int getUniformTexture() {
+        return mGLUniformTexture;
+    }
+
+    public final void init() {
+        onInit();
+        mIsInitialized = true;
+        onInitialized();
+    }
+
+    public boolean isInitialized() {
+        return mIsInitialized;
+    }
+
+    public void onDestroy() {
     }
 
     public void onDraw(final int textureId, final FloatBuffer cubeBuffer, final FloatBuffer textureBuffer) {
@@ -112,47 +146,32 @@ public class GPUImageFilter {
     protected void onDrawArraysPre() {
     }
 
+    public void onInit() {
+        mGLProgId = OpenGlUtils.loadProgram(mVertexShader, mFragmentShader);
+        mGLAttribPosition = GLES20.glGetAttribLocation(mGLProgId, "position");
+        mGLUniformTexture = GLES20.glGetUniformLocation(mGLProgId, "inputImageTexture");
+        mGLAttribTextureCoordinate = GLES20.glGetAttribLocation(mGLProgId, "inputTextureCoordinate");
+        mIsInitialized = true;
+    }
+
+    public void onInitialized() {
+    }
+
+    public void onOutputSizeChanged(final int width, final int height) {
+        mOutputWidth = width;
+        mOutputHeight = height;
+    }
+
+    protected void runOnDraw(final Runnable runnable) {
+        synchronized (mRunOnDraw) {
+            mRunOnDraw.addLast(runnable);
+        }
+    }
+
     protected void runPendingOnDrawTasks() {
         while (!mRunOnDraw.isEmpty()) {
             mRunOnDraw.removeFirst().run();
         }
-    }
-
-    public boolean isInitialized() {
-        return mIsInitialized;
-    }
-
-    public int getOutputWidth() {
-        return mOutputWidth;
-    }
-
-    public int getOutputHeight() {
-        return mOutputHeight;
-    }
-
-    public int getProgram() {
-        return mGLProgId;
-    }
-
-    public int getAttribPosition() {
-        return mGLAttribPosition;
-    }
-
-    public int getAttribTextureCoordinate() {
-        return mGLAttribTextureCoordinate;
-    }
-
-    public int getUniformTexture() {
-        return mGLUniformTexture;
-    }
-
-    protected void setInteger(final int location, final int intValue) {
-        runOnDraw(new Runnable() {
-            @Override
-            public void run() {
-                GLES20.glUniform1i(location, intValue);
-            }
-        });
     }
 
     protected void setFloat(final int location, final float floatValue) {
@@ -160,6 +179,15 @@ public class GPUImageFilter {
             @Override
             public void run() {
                 GLES20.glUniform1f(location, floatValue);
+            }
+        });
+    }
+
+    protected void setFloatArray(final int location, final float[] arrayValue) {
+        runOnDraw(new Runnable() {
+            @Override
+            public void run() {
+                GLES20.glUniform1fv(location, arrayValue.length, FloatBuffer.wrap(arrayValue));
             }
         });
     }
@@ -191,11 +219,11 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setFloatArray(final int location, final float[] arrayValue) {
+    protected void setInteger(final int location, final int intValue) {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
-                GLES20.glUniform1fv(location, arrayValue.length, FloatBuffer.wrap(arrayValue));
+                GLES20.glUniform1i(location, intValue);
             }
         });
     }
@@ -231,31 +259,5 @@ public class GPUImageFilter {
                 GLES20.glUniformMatrix4fv(location, 1, false, matrix, 0);
             }
         });
-    }
-
-    protected void runOnDraw(final Runnable runnable) {
-        synchronized (mRunOnDraw) {
-            mRunOnDraw.addLast(runnable);
-        }
-    }
-
-    public static String loadShader(String file, Context context) {
-        try {
-            AssetManager assetManager = context.getAssets();
-            InputStream ims = assetManager.open(file);
-
-            String re = convertStreamToString(ims);
-            ims.close();
-            return re;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
-    public static String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
     }
 }

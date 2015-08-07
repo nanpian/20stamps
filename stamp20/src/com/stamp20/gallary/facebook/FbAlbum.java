@@ -3,12 +3,17 @@ package com.stamp20.gallary.facebook;
 import android.os.Bundle;
 
 public class FbAlbum {
-    private String id;
-    private String title;
+    public static FbAlbum fromBundle(Bundle b) {
+        return new FbAlbum(b.getString("id"), b.getString("title"), b.getInt("count"), b.getString("coverId"),
+                b.getString("coverThumbnailUrl"), b.getString("coverSourceUrl"));
+    }
     private int count;
     private String coverId;
-    private String coverThumbnailUrl;
     private String coverSourceUrl;
+    private String coverThumbnailUrl;
+    private String id;
+
+    private String title;
 
     public FbAlbum(String id, String title, int count, String coverId, String coverThumbnailUrl, String coverSourceUrl) {
         this.id = id;
@@ -19,52 +24,52 @@ public class FbAlbum {
         this.coverSourceUrl = coverSourceUrl;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getCount() {
         return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public String getCoverId() {
         return coverId;
     }
 
-    public void setCoverId(String coverId) {
-        this.coverId = coverId;
+    public String getCoverSourceUrl() {
+        return coverSourceUrl;
     }
 
     public String getCoverThumbnailUrl() {
         return coverThumbnailUrl;
     }
 
-    public void setCoverThumbnailUrl(String coverThumbnailUrl) {
-        this.coverThumbnailUrl = coverThumbnailUrl;
+    public String getId() {
+        return id;
     }
 
-    public String getCoverSourceUrl() {
-        return coverSourceUrl;
+    public String getTitle() {
+        return title;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setCoverId(String coverId) {
+        this.coverId = coverId;
     }
 
     public void setCoverSourceUrl(String coverSourceUrl) {
         this.coverSourceUrl = coverSourceUrl;
+    }
+
+    public void setCoverThumbnailUrl(String coverThumbnailUrl) {
+        this.coverThumbnailUrl = coverThumbnailUrl;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Bundle toBundle() {
@@ -76,11 +81,6 @@ public class FbAlbum {
         b.putString("coverThumbnailUrl", coverThumbnailUrl);
         b.putString("coverSourceUrl", coverSourceUrl);
         return b;
-    }
-
-    public static FbAlbum fromBundle(Bundle b) {
-        return new FbAlbum(b.getString("id"), b.getString("title"), b.getInt("count"), b.getString("coverId"), b.getString("coverThumbnailUrl"),
-                b.getString("coverSourceUrl"));
     }
 
 }

@@ -2,13 +2,6 @@ package com.stamp20.app.activities;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import com.stamp20.app.R;
-import com.stamp20.app.opengl.gamesystem.GameSystem;
-import com.stamp20.app.opengl.gamesystem.GlObject;
-import com.stamp20.app.opengl.gamesystem.MyRenderer;
-import com.stamp20.app.opengl.gamesystem.Texture2D;
-import com.stamp20.app.opengl.toucheventhelper.TouchEventHelper;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,9 +14,92 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.stamp20.app.R;
+import com.stamp20.app.opengl.gamesystem.GameSystem;
+import com.stamp20.app.opengl.gamesystem.GlObject;
+import com.stamp20.app.opengl.gamesystem.MyRenderer;
+import com.stamp20.app.opengl.gamesystem.Texture2D;
+import com.stamp20.app.opengl.toucheventhelper.TouchEventHelper;
+
 //import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener;
 
 public class OpenGL10ZoomMoveDemo extends Activity {
+
+    class MyGLSurfaceView extends GLSurfaceView {
+        MyScene mMyScene;
+        TouchEventHelper mTouchEventHelper;
+
+        public MyGLSurfaceView(Context context, MyScene m) {
+            super(context);
+            mMyScene = m;
+            mTouchEventHelper = new TouchEventHelper(5.0f, 0.5f, mMyScene.getCanvasWidth(), mMyScene.getCanvasHeight(),
+                    mMyScene.getBitmapWidth(), mMyScene.getBitmapHeight(), mMyScene);
+        }
+
+        @Override
+        public boolean onTouchEvent(final MotionEvent event) {
+            queueEvent(new Runnable() {
+                @Override
+                public void run() {
+                    mTouchEventHelper.onTouchEvent(event);
+                }
+            });
+            return true;
+        }
+    }
+
+    class MyScene extends GlObject implements TouchEventHelper.InvalidateCallback {
+
+        float ratio = 1.0f;
+        Texture2D texture;
+        float translateX = 0f;
+        float translateY = 0f;
+
+        public MyScene() {
+            super();
+
+            Bitmap androidBitmap /*
+                                  * =
+                                  * GameSystem.getInstance().getBitmapFromAssets
+                                  * ("androida.jpg");
+                                  */
+            = BitmapFactory.decodeResource(getResources(), R.drawable.background_home_birthday);
+            texture = new Texture2D(androidBitmap);
+        }
+
+        @Override
+        public void draw(GL10 gl) {
+            gl.glPushMatrix();
+            gl.glTranslatef(translateX, translateY, 0.0f);
+            gl.glScalef(ratio, ratio, 1.0f);
+            texture.draw(gl, 0, 0);
+            gl.glPopMatrix();
+        }
+
+        public int getBitmapHeight() {
+            return texture.getHeight();
+        }
+
+        public int getBitmapWidth() {
+            return texture.getWidth();
+        }
+
+        public int getCanvasHeight() {
+            return GameSystem.getInstance().getWindowHeight();
+        }
+
+        public int getCanvasWidth() {
+            return GameSystem.getInstance().getWindowWidth();
+        }
+
+        @Override
+        public void invalidate(float ratio, float translateX, float translateY) {
+            // TODO Auto-generated method stub
+            this.ratio = ratio;
+            this.translateX = translateX;
+            this.translateY = translateY;
+        }
+    }
 
     MyScene mMyScene;
 
@@ -54,78 +130,5 @@ public class OpenGL10ZoomMoveDemo extends Activity {
         MyGLSurfaceView glView = new MyGLSurfaceView(this, mMyScene);
         glView.setRenderer(render);
         setContentView(glView);
-    }
-
-    class MyGLSurfaceView extends GLSurfaceView {
-        TouchEventHelper mTouchEventHelper;
-        MyScene mMyScene;
-
-        public MyGLSurfaceView(Context context, MyScene m) {
-            super(context);
-            mMyScene = m;
-            mTouchEventHelper = new TouchEventHelper(5.0f, 0.5f, mMyScene.getCanvasWidth(), mMyScene.getCanvasHeight(), mMyScene.getBitmapWidth(),
-                    mMyScene.getBitmapHeight(), mMyScene);
-        }
-
-        public boolean onTouchEvent(final MotionEvent event) {
-            queueEvent(new Runnable() {
-                public void run() {
-                    mTouchEventHelper.onTouchEvent(event);
-                }
-            });
-            return true;
-        }
-    }
-
-    class MyScene extends GlObject implements TouchEventHelper.InvalidateCallback {
-
-        Texture2D texture;
-        float ratio = 1.0f;
-        float translateY = 0f;
-        float translateX = 0f;
-
-        public int getCanvasWidth() {
-            return GameSystem.getInstance().getWindowWidth();
-        }
-
-        public int getCanvasHeight() {
-            return GameSystem.getInstance().getWindowHeight();
-        }
-
-        public int getBitmapWidth() {
-            return texture.getWidth();
-        }
-
-        public int getBitmapHeight() {
-            return texture.getHeight();
-        }
-
-        public MyScene() {
-            super();
-
-            Bitmap androidBitmap /*
-                                  * =
-                                  * GameSystem.getInstance().getBitmapFromAssets
-                                  * ("androida.jpg");
-                                  */
-            = BitmapFactory.decodeResource(getResources(), R.drawable.background_home_birthday);
-            texture = new Texture2D(androidBitmap);
-        }
-
-        public void draw(GL10 gl) {
-            gl.glPushMatrix();
-            gl.glTranslatef(translateX, translateY, 0.0f);
-            gl.glScalef(ratio, ratio, 1.0f);
-            texture.draw(gl, 0, 0);
-            gl.glPopMatrix();
-        }
-
-        @Override
-        public void invalidate(float ratio, float translateX, float translateY) {
-            // TODO Auto-generated method stub
-            this.ratio = ratio;
-            this.translateX = translateX;
-            this.translateY = translateY;
-        }
     }
 }

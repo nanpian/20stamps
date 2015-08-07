@@ -1,41 +1,6 @@
 package com.stamp20.app.activities;
 
-import java.util.Arrays;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.model.GraphUser;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseFacebookUtils.Permissions;
-import com.parse.ParseQuery;
-import com.parse.ParseQuery.CachePolicy;
-import com.parse.ParseTwitterUtils;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
-import com.stamp20.app.R;
-import com.stamp20.app.Setting;
 
 public class LoginView extends FragmentActivity {/*
                                                   * 

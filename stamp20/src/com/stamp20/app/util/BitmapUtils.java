@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -24,42 +23,26 @@ import android.view.Display;
 
 public class BitmapUtils {
 
-    public static boolean saveUriInFile(Uri selectedImage, ContentResolver cr, String path) {
-        boolean result = false;
-        InputStream inputStream = null;
-        File f = new File(path);
-        FileOutputStream outStream = null;
+    public static byte[] Bitmap2Bytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
 
-        try {
-            inputStream = cr.openInputStream(selectedImage);
-            outStream = new FileOutputStream(f);
-            byte[] buffer = new byte[65536];// 64kb
-            int length = -1;
-            while ((length = inputStream.read(buffer)) != -1) {
-                outStream.write(buffer, 0, length);
-            }
-            result = true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                }
-                inputStream = null;
-            }
-            if (outStream != null) {
-                try {
-                    outStream.close();
-                } catch (IOException e) {
-                }
-                outStream = null;
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            if (width > height) {
+                inSampleSize = Math.round((float) height / (float) reqHeight);
+            } else {
+                inSampleSize = Math.round((float) width / (float) reqWidth);
             }
         }
-        return result;
+        return inSampleSize;
     }
 
     public static Bitmap decodeUri(Uri selectedImage, ContentResolver cr, final int requiredSize) {
@@ -101,6 +84,20 @@ public class BitmapUtils {
         return result;
     }
 
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+                Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
     /**
      * Return the instrinic image size from an Uri
      * 
@@ -133,35 +130,6 @@ public class BitmapUtils {
         return result;
     }
 
-    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            if (width > height) {
-                inSampleSize = Math.round((float) height / (float) reqHeight);
-            } else {
-                inSampleSize = Math.round((float) width / (float) reqWidth);
-            }
-        }
-        return inSampleSize;
-    }
-
-    public static Bitmap drawableToBitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
-
     public static float[] getScalarArray(float[] inArray, float scalar) {
         float[] result = new float[inArray.length];
         for (int i = 0; i < inArray.length; i++) {
@@ -177,9 +145,41 @@ public class BitmapUtils {
         return metrics.density;
     }
 
-    public static byte[] Bitmap2Bytes(Bitmap bm) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
+    public static boolean saveUriInFile(Uri selectedImage, ContentResolver cr, String path) {
+        boolean result = false;
+        InputStream inputStream = null;
+        File f = new File(path);
+        FileOutputStream outStream = null;
+
+        try {
+            inputStream = cr.openInputStream(selectedImage);
+            outStream = new FileOutputStream(f);
+            byte[] buffer = new byte[65536];// 64kb
+            int length = -1;
+            while ((length = inputStream.read(buffer)) != -1) {
+                outStream.write(buffer, 0, length);
+            }
+            result = true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                }
+                inputStream = null;
+            }
+            if (outStream != null) {
+                try {
+                    outStream.close();
+                } catch (IOException e) {
+                }
+                outStream = null;
+            }
+        }
+        return result;
     }
 }

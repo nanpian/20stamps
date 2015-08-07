@@ -4,16 +4,20 @@ import android.graphics.Bitmap;
 
 public class BitmapCache {
 
+    private static BitmapCache cache = new BitmapCache();
+
+    public static BitmapCache getCache() {
+        return cache;
+    }
+
     private Bitmap date;
 
     private BitmapCache() {
         date = null;
     }
 
-    private static BitmapCache cache = new BitmapCache();
-
-    public static BitmapCache getCache() {
-        return cache;
+    public Bitmap get() {
+        return date;
     }
 
     public void put(Bitmap src) {
@@ -24,9 +28,5 @@ public class BitmapCache {
             }
             date = Bitmap.createBitmap(src);
         }
-    }
-
-    public Bitmap get() {
-        return date;
     }
 }

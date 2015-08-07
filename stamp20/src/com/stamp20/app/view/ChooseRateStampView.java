@@ -1,13 +1,8 @@
 package com.stamp20.app.view;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
-import lenovo.jni.ImageUtils;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
@@ -23,80 +18,38 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 
 import com.stamp20.app.R;
-import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Constant;
-import com.stamp20.app.util.Log;
 
 /**
  * 只准上下移动
  */
 public class ChooseRateStampView extends ZoomImageView {
+    private static final float sDampFactor = 0.25f;
+    private static float sMin = -Float.MAX_VALUE + 1;
     /**
      * 图片拖动状态常量
      */
     public static final int STATUS_ANIM_DOWN_OR_UP = 8001;
-    private static final float sDampFactor = 0.25f;
     private static float yEdgeRate = 0.7f;
     private static float yStartUpAnimEdgeRate = 1.1f;
-    private static float sMin = -Float.MAX_VALUE + 1;
     private float mAnimDistance = sMin;
     private float mAnimStart = sMin;
     private ValueAnimator mDropDownAnimation = null;// mDropDownAnimation
     private ValueAnimator mFirstUpAnimation = null;// mDropDownAnimation
 
-    private int mRateBitmapId = -1;
+    private List<Bitmap> mHorizontalRateBitmap;
     private Bitmap mRateBitmap = null;
 
-    public Bitmap getRateBitmap() {
-        return mRateBitmap;
-    }
+    private int mRateBitmapId = -1;
 
-    /* 1025 650 */
-    /* 790 500 */
-    public void setRateBitmapId(final int position, final boolean isH) {
-        if (mRateBitmapId != position) {
-            final int sizeOfRateBitmap = isH ? mHorizontalRateBitmap.size() : mVerticalRateBitmap.size();
-            ValueAnimator va = ValueAnimator.ofInt(0, sizeOfRateBitmap);
-            va.setDuration(500);
-            va.addUpdateListener(new AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int id = (Integer) animation.getAnimatedValue();
-                    if (id != sizeOfRateBitmap) {
-                        mRateBitmap = isH ? mHorizontalRateBitmap.get(id) : mVerticalRateBitmap.get(id);
-                    }
-                    invalidate();
-                }
-            });
-            va.addListener(new AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
+    private List<Bitmap> mVerticalRateBitmap;
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
+    private int rateXMove = -1;
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
-                }
-            });
-            va.start();
-        }
-        invalidate();
-    }
+    private int rateYMove = -1;
 
     public ChooseRateStampView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -107,68 +60,103 @@ public class ChooseRateStampView extends ZoomImageView {
         setupDropDownAnim();
     }
 
-    @Override
-    protected void onTouchEventDoubleFingerMove(MotionEvent event) {
-        // 空实现，不响应双指移动的事件
-    }
+    private Bitmap buildRateBitmap(int id) {
+        final float scale = 790f / 1025f;
+        Bitmap rt = BitmapFactory.decodeResource(getResources(), id);
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
+        rt = Bitmap.createBitmap(rt, 0, 0, rt.getWidth(), rt.getHeight(), matrix, true);
 
-    @Override
-    protected void onTouchEventSingleFingerMove(MotionEvent event) {
-        // 屏蔽X方向的移动处理
-        // 只有单指按在屏幕上移动时，为拖动状态
-        /* float xMove = event.getX(); */
-        float yMove = event.getY();
-        if (/* lastXMove == -1 && */lastYMove == -1) {
-            /* lastXMove = xMove; */
-            lastYMove = yMove;
+        // scaleRateCanvas.drawBitmap(rt, 0.5f * (scaleRateBitmap.getWidth() -
+        // rt.getWidth()), 0.5f * (scaleRateBitmap.getHeight() -
+        // rt.getHeight()), null);
+        // rt.recycle();
+        if (rateXMove == -1 && rateYMove == -1) {
+            rateXMove = (int) (0.5f * (BitmapCache.getCache().get().getWidth() - rt.getWidth()));
+            rateYMove = (int) (0.5f * (BitmapCache.getCache().get().getHeight() - rt.getHeight()));
         }
-        currentStatus = STATUS_MOVE;
-        /* movedDistanceX = xMove - lastXMove; */
-        movedDistanceY = (yMove - lastYMove) * sDampFactor;
-        // 进行边界检查，不允许将图片拖出边界
-        /*
-         * if (totalTranslateX + movedDistanceX > 0) { movedDistanceX = 0; }
-         * else if (width - (totalTranslateX + movedDistanceX) >
-         * currentBitmapWidth) { movedDistanceX = 0; }
-         */
-        if (totalTranslateY + movedDistanceY > 0 + height * yEdgeRate) {
-            movedDistanceY = 0;
-        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight + height * yEdgeRate) {
-            movedDistanceY = 0;
+        return rt;
+    }
+
+    private void drawRate(Canvas canvas) {
+        if (mRateBitmap == null) {
+            return;
         }
-        // 调用onDraw()方法绘制图片
-        invalidate();
-        /* lastXMove = xMove; */
-        lastYMove = yMove;
+        Matrix m = new Matrix();
+        // 直接根据最新计算的totalTranslateY进行位移，实现DropDown动画
+        float translateX = totalTranslateX /* + movedDistanceX */;
+        float translateY = totalTranslateY /* + movedDistanceY */;
+        // 先按照已有的缩放比例对图片进行缩放
+        m.postScale(totalRatio, totalRatio);
+        // 再根据移动距离进行偏移
+        m.postTranslate(translateX + rateXMove * totalRatio, translateY + rateYMove * totalRatio);
+        totalTranslateX = translateX;
+        totalTranslateY = translateY;
+        canvas.save();
+        canvas.drawBitmap(mRateBitmap, m, null);
+        canvas.restore();
     }
 
-    @Override
-    protected void onTouchEventSingleFingerUp(MotionEvent event) {
-        super.onTouchEventSingleFingerUp(event);
-        startDropDownAnim();
+    public Bitmap getRateBitmap() {
+        return mRateBitmap;
     }
 
-    @Override
-    protected void onTouchEventCancel(MotionEvent event) {
-        // TODO Auto-generated method stub
-        super.onTouchEventCancel(event);
-        startDropDownAnim();
+    public int getRateXMove() {
+        return rateXMove;
     }
 
-    @Override
-    protected void onFinishInit() {
-        // TODO Auto-generated method stub
-        super.onFinishInit();
-        if (mFirstUpAnimation == null) {
-            mFirstUpAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 800);
-        }
-        new Handler().postDelayed(new Runnable() {
+    public int getRateYMove() {
+        return rateYMove;
+    }
+
+    private ValueAnimator getTranslationValueAnimator(final float start, final float end, long duration) {
+        ValueAnimator va = ValueAnimator.ofFloat(0f, 1f);
+        va.setDuration(duration);
+        va.addUpdateListener(new AnimatorUpdateListener() {
             @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                mFirstUpAnimation.start();
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (mAnimDistance == sMin) {
+                    mAnimDistance = end - start;
+                    mAnimStart = start;
+                }
+                totalTranslateY = mAnimStart + mAnimDistance/*
+                                                             * ((height *
+                                                             * yEdgeRate) -
+                                                             * totalTranslateY)
+                                                             */
+                        * (Float) animation.getAnimatedValue();
+                invalidate();
             }
-        }, 200);
+        });
+        va.addListener(new AnimatorListener() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                totalTranslateY = end;
+                currentStatus = -1;
+                invalidate();
+                mAnimDistance = sMin;
+                mAnimStart = sMin;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                totalTranslateY = end;
+                currentStatus = -1;
+                invalidate();
+                mAnimDistance = sMin;
+                mAnimStart = sMin;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                currentStatus = STATUS_ANIM_DOWN_OR_UP;
+            }
+        });
+        return va;
     }
 
     @Override
@@ -215,23 +203,20 @@ public class ChooseRateStampView extends ZoomImageView {
         drawRate(canvas);
     }
 
-    private void drawRate(Canvas canvas) {
-        if (mRateBitmap == null) {
-            return;
+    @Override
+    protected void onFinishInit() {
+        // TODO Auto-generated method stub
+        super.onFinishInit();
+        if (mFirstUpAnimation == null) {
+            mFirstUpAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 800);
         }
-        Matrix m = new Matrix();
-        // 直接根据最新计算的totalTranslateY进行位移，实现DropDown动画
-        float translateX = totalTranslateX /* + movedDistanceX */;
-        float translateY = totalTranslateY /* + movedDistanceY */;
-        // 先按照已有的缩放比例对图片进行缩放
-        m.postScale(totalRatio, totalRatio);
-        // 再根据移动距离进行偏移
-        m.postTranslate(translateX + rateXMove * totalRatio, translateY + rateYMove * totalRatio);
-        totalTranslateX = translateX;
-        totalTranslateY = translateY;
-        canvas.save();
-        canvas.drawBitmap(mRateBitmap, m, null);
-        canvas.restore();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                mFirstUpAnimation.start();
+            }
+        }, 200);
     }
 
     @Override
@@ -241,63 +226,101 @@ public class ChooseRateStampView extends ZoomImageView {
         stopDropDownAnim();
     }
 
-    private ValueAnimator getTranslationValueAnimator(final float start, final float end, long duration) {
-        ValueAnimator va = ValueAnimator.ofFloat(0f, 1f);
-        va.setDuration(duration);
-        va.addUpdateListener(new AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (mAnimDistance == sMin) {
-                    mAnimDistance = end - start;
-                    mAnimStart = start;
-                }
-                totalTranslateY = mAnimStart + mAnimDistance/*
-                                                             * ((height *
-                                                             * yEdgeRate) -
-                                                             * totalTranslateY)
-                                                             */
-                        * (Float) animation.getAnimatedValue();
-                invalidate();
-            }
-        });
-        va.addListener(new AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                currentStatus = STATUS_ANIM_DOWN_OR_UP;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                totalTranslateY = end;
-                currentStatus = -1;
-                invalidate();
-                mAnimDistance = sMin;
-                mAnimStart = sMin;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                totalTranslateY = end;
-                currentStatus = -1;
-                invalidate();
-                mAnimDistance = sMin;
-                mAnimStart = sMin;
-            }
-        });
-        return va;
+    @Override
+    protected void onTouchEventCancel(MotionEvent event) {
+        // TODO Auto-generated method stub
+        super.onTouchEventCancel(event);
+        startDropDownAnim();
     }
 
+    @Override
+    protected void onTouchEventDoubleFingerMove(MotionEvent event) {
+        // 空实现，不响应双指移动的事件
+    }
+    @Override
+    protected void onTouchEventSingleFingerMove(MotionEvent event) {
+        // 屏蔽X方向的移动处理
+        // 只有单指按在屏幕上移动时，为拖动状态
+        /* float xMove = event.getX(); */
+        float yMove = event.getY();
+        if (/* lastXMove == -1 && */lastYMove == -1) {
+            /* lastXMove = xMove; */
+            lastYMove = yMove;
+        }
+        currentStatus = STATUS_MOVE;
+        /* movedDistanceX = xMove - lastXMove; */
+        movedDistanceY = (yMove - lastYMove) * sDampFactor;
+        // 进行边界检查，不允许将图片拖出边界
+        /*
+         * if (totalTranslateX + movedDistanceX > 0) { movedDistanceX = 0; }
+         * else if (width - (totalTranslateX + movedDistanceX) >
+         * currentBitmapWidth) { movedDistanceX = 0; }
+         */
+        if (totalTranslateY + movedDistanceY > 0 + height * yEdgeRate) {
+            movedDistanceY = 0;
+        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight + height * yEdgeRate) {
+            movedDistanceY = 0;
+        }
+        // 调用onDraw()方法绘制图片
+        invalidate();
+        /* lastXMove = xMove; */
+        lastYMove = yMove;
+    }
+
+    @Override
+    protected void onTouchEventSingleFingerUp(MotionEvent event) {
+        super.onTouchEventSingleFingerUp(event);
+        startDropDownAnim();
+    }
+
+    /* 1025 650 */
+    /* 790 500 */
+    public void setRateBitmapId(final int position, final boolean isH) {
+        if (mRateBitmapId != position) {
+            final int sizeOfRateBitmap = isH ? mHorizontalRateBitmap.size() : mVerticalRateBitmap.size();
+            ValueAnimator va = ValueAnimator.ofInt(0, sizeOfRateBitmap);
+            va.setDuration(500);
+            va.addUpdateListener(new AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int id = (Integer) animation.getAnimatedValue();
+                    if (id != sizeOfRateBitmap) {
+                        mRateBitmap = isH ? mHorizontalRateBitmap.get(id) : mVerticalRateBitmap.get(id);
+                    }
+                    invalidate();
+                }
+            });
+            va.addListener(new AnimatorListener() {
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+            });
+            va.start();
+        }
+        invalidate();
+    }
     private void setupDropDownAnim() {
         mDropDownAnimation = ValueAnimator.ofFloat(0f, 1f);
         mDropDownAnimation.setDuration(1500);
         mDropDownAnimation.addUpdateListener(new AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                totalTranslateY = totalTranslateY + ((height * yEdgeRate) - totalTranslateY) * (Float) animation.getAnimatedValue();
+                totalTranslateY = totalTranslateY + ((height * yEdgeRate) - totalTranslateY)
+                        * (Float) animation.getAnimatedValue();
                 // android.util.Log.i("xixia", "(height * yEdgeRate):"+(height *
                 // yEdgeRate)+",totalTranslateY:"+totalTranslateY);
                 if (totalTranslateY > (height * yEdgeRate)) {
@@ -308,8 +331,17 @@ public class ChooseRateStampView extends ZoomImageView {
         });
         mDropDownAnimation.addListener(new AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-                currentStatus = STATUS_ANIM_DOWN_OR_UP;
+            public void onAnimationCancel(Animator animation) {
+                totalTranslateY = height * yEdgeRate;
+                currentStatus = -1;
+                invalidate();
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                totalTranslateY = height * yEdgeRate;
+                currentStatus = -1;
+                invalidate();
             }
 
             @Override
@@ -317,39 +349,11 @@ public class ChooseRateStampView extends ZoomImageView {
             }
 
             @Override
-            public void onAnimationEnd(Animator animation) {
-                totalTranslateY = (float) (height * yEdgeRate);
-                currentStatus = -1;
-                invalidate();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                totalTranslateY = (float) (height * yEdgeRate);
-                currentStatus = -1;
-                invalidate();
+            public void onAnimationStart(Animator animation) {
+                currentStatus = STATUS_ANIM_DOWN_OR_UP;
             }
         });
     }
-
-    private void startDropDownAnim() {
-        if (mDropDownAnimation == null) {
-            mDropDownAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 500);
-        }
-        mDropDownAnimation.start();
-    }
-
-    private void stopDropDownAnim() {
-        if (null == mDropDownAnimation) {
-            return;
-        }
-        if (mDropDownAnimation.isRunning()) {
-            mDropDownAnimation.cancel();
-        }
-    }
-
-    private List<Bitmap> mHorizontalRateBitmap;
-    private List<Bitmap> mVerticalRateBitmap;
 
     public void startBuilRateBitmapTask(final boolean isStampViewIsHorizontal) {
         if (null == BitmapCache.getCache().get()) {
@@ -358,10 +362,6 @@ public class ChooseRateStampView extends ZoomImageView {
         }
         final Resources res = this.getContext().getResources();
         new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onPreExecute() {
-            }
-
             /*
              * 第一个参数是doInBackground的输入参数 第二个参数是用于输出中间计算进度的参数
              * 第三个参数是说明doInBackground的返回参数和onPostExecute的输入参数
@@ -393,36 +393,27 @@ public class ChooseRateStampView extends ZoomImageView {
             @Override
             protected void onPostExecute(Void result) {
             }
+
+            @Override
+            protected void onPreExecute() {
+            }
         }.execute();
     }
 
-    private int rateXMove = -1;
-    private int rateYMove = -1;
-
-    public int getRateXMove() {
-        return rateXMove;
-    }
-
-    public int getRateYMove() {
-        return rateYMove;
-    }
-
-    private Bitmap buildRateBitmap(int id) {
-        final float scale = 790f / 1025f;
-        Bitmap rt = BitmapFactory.decodeResource(getResources(), id);
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-        rt = Bitmap.createBitmap(rt, 0, 0, rt.getWidth(), rt.getHeight(), matrix, true);
-
-        // scaleRateCanvas.drawBitmap(rt, 0.5f * (scaleRateBitmap.getWidth() -
-        // rt.getWidth()), 0.5f * (scaleRateBitmap.getHeight() -
-        // rt.getHeight()), null);
-        // rt.recycle();
-        if (rateXMove == -1 && rateYMove == -1) {
-            rateXMove = (int) (0.5f * (BitmapCache.getCache().get().getWidth() - rt.getWidth()));
-            rateYMove = (int) (0.5f * (BitmapCache.getCache().get().getHeight() - rt.getHeight()));
+    private void startDropDownAnim() {
+        if (mDropDownAnimation == null) {
+            mDropDownAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 500);
         }
-        return rt;
+        mDropDownAnimation.start();
+    }
+
+    private void stopDropDownAnim() {
+        if (null == mDropDownAnimation) {
+            return;
+        }
+        if (mDropDownAnimation.isRunning()) {
+            mDropDownAnimation.cancel();
+        }
     }
 
 }

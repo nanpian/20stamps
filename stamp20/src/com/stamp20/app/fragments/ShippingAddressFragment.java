@@ -7,7 +7,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -28,44 +27,231 @@ import com.stamp20.app.wheel.adapter.CityAdapter;
 import com.stamp20.app.wheel.widget.OnWheelChangedListener;
 import com.stamp20.app.wheel.widget.WheelView;
 
-public class ShippingAddressFragment extends Fragment implements OnClickListener, OnWheelChangedListener, View.OnFocusChangeListener {
+public class ShippingAddressFragment extends Fragment implements OnClickListener, OnWheelChangedListener,
+        View.OnFocusChangeListener {
 
-    private TextView firstNameHint;
-    private EditText firstNameEditText;
-    private TextView secondNameHint;
-    private EditText secondNameEditText;
-    private TextView addressLine1Hint;
     private EditText addressLine1EditText;
-    private TextView addressLine2Hint;
-    private EditText addressLine2EditText;
-    private TextView cityHint;
-    private EditText cityEditText;
-    private TextView stateHint;
-    private TextView stateEditText;
-    private TextView zipHint;
-    private EditText zipEditText;
+    TextWatcher addressLine1EditTextTextWatcher = new TextWatcher() {
 
-    private SoundPool sp;
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                setHintText(addressLine1Hint, "");
+            } else {
+                setHintText(addressLine1Hint, R.string.address_line_1);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+
+        }
+    };
+    private TextView addressLine1Hint;
+    private EditText addressLine2EditText;
+    TextWatcher addressLine2EditTextTextWatcher = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                setHintText(addressLine2Hint, "");
+            } else {
+                setHintText(addressLine2Hint, R.string.address_line_2);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+
+        }
+    };
+    private TextView addressLine2Hint;
+    String chooseCities[];
+    private EditText cityEditText;
+    TextWatcher cityEditTextTextWatcher = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                setHintText(cityHint, "");
+            } else {
+                setHintText(cityHint, R.string.address_city);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+
+        }
+    };
+    private TextView cityHint;
+    private EditText firstNameEditText;
+    TextWatcher firstNameEditTextTextWatcher = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                setHintText(firstNameHint, "");
+            } else {
+                setHintText(firstNameHint, R.string.first_name);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+
+        }
+    };
+    private TextView firstNameHint;
+    private PopupWindow mChooseCityPopupWindow;
+
+    private TextView mDoneTextView;
+    private EditText secondNameEditText;
+
+    private TextView secondNameHint;
+    TextWatcher secondtNameEditTextTextWatcher = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                setHintText(secondNameHint, "");
+            } else {
+                setHintText(secondNameHint, R.string.second_name);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+
+        }
+    };
+    private int selectedCityIndex = 0;
     private int sound;
 
-    private PopupWindow mChooseCityPopupWindow;
-    private TextView mDoneTextView;
-    private int selectedCityIndex = 0;
-    String chooseCities[];
+    private SoundPool sp;
+
+    private TextView stateEditText;
+
+    TextWatcher stateEditTextTextWatcher = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                setHintText(stateHint, "");
+            } else {
+                setHintText(stateHint, R.string.address_state);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+
+        }
+    };
+
+    private TextView stateHint;
 
     UserProfile userParseObject;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        Log.d(this, "onCreate");
+    private EditText zipEditText;
+
+    TextWatcher zipEditTextTextWatcher = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                setHintText(zipHint, "");
+            } else {
+                setHintText(zipHint, R.string.address_zip);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+
+        }
+    };
+
+    private TextView zipHint;
+
+    private void getData(String userProfile, TextView hint, int resId, TextView editText) {
+        String value = getUserProfile(userProfile);
+        if (value != null && !value.isEmpty()) {
+            hint.setText(resId);
+            editText.setText(value);
+        } else {
+            hint.setText("");
+        }
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onViewCreated(view, savedInstanceState);
+    private void getPopupWindowInstance() {
+        if (null != mChooseCityPopupWindow) {
+            mChooseCityPopupWindow.dismiss();
+            return;
+        } else {
+            initPopuptWindow();
+        }
+    }
+
+    public String getUserProfile(String key) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return sp.getString(key, "");
     }
 
     @Override
@@ -74,11 +260,75 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
         return super.getView();
     }
 
+    private void initPopuptWindow() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity().getApplicationContext());
+        View popupWindow = layoutInflater.inflate(R.layout.choose_city_popup_window, null);
+        final WheelView cities = (WheelView) popupWindow.findViewById(R.id.city_picker_wheel_view);
+        mDoneTextView = (TextView) popupWindow.findViewById(R.id.choose_city_done);
+        mDoneTextView.setOnClickListener(this);
+        FontManager.changeFontsBlod(getActivity().getApplicationContext(), (LinearLayout) popupWindow);
+        cities.setViewAdapter(new CityAdapter(getActivity().getApplicationContext(), chooseCities));
+        cities.setVisibleItems(5);
+        cities.addChangingListener(this);
+        int mWindowWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        int mWindowHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
+
+        mChooseCityPopupWindow = new PopupWindow(popupWindow, mWindowWidth, mWindowHeight * 2 / 5);
+    }
+
+    private void loadUserProfile() {
+        getData(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameHint, R.string.first_name, firstNameEditText);
+        getData(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameHint, R.string.second_name, secondNameEditText);
+        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1Hint, R.string.address_line_1,
+                addressLine1EditText);
+        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2Hint, R.string.address_line_2,
+                addressLine2EditText);
+        getData(com.stamp20.app.util.UserProfile.COUNTRY, cityHint, R.string.address_city, cityEditText);
+        getData(com.stamp20.app.util.UserProfile.STATE, stateHint, R.string.address_state, stateEditText);
+        getData(com.stamp20.app.util.UserProfile.ZIP, zipHint, R.string.address_zip, zipEditText);
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
 
+    }
+
+    @Override
+    public void onChanged(WheelView wheel, int oldValue, int newValue) {
+        // TODO Auto-generated method stub
+        // 播放声音
+        Log.d(this, "onChanged, oldValue: " + oldValue + ", newValue: " + newValue);
+        selectedCityIndex = newValue;
+        sp.play(sound, 1, 1, 0, 0, 1);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.shipping_address_state_hint:
+        case R.id.shipping_address_state:
+            getPopupWindowInstance();
+            mChooseCityPopupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+            break;
+        case R.id.choose_city_done:
+            Log.d(this, "choose_city_done");
+            if (mChooseCityPopupWindow != null) {
+                mChooseCityPopupWindow.dismiss();
+            }
+            String city = chooseCities[selectedCityIndex];
+            stateEditText.setText(city);
+            // saveUserProfile(UserProfile.USER_STATE, city);
+            break;
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        Log.d(this, "onCreate");
     }
 
     @Override
@@ -131,103 +381,6 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
         return parent;
     }
 
-    private void loadUserProfile() {
-        getData(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameHint, R.string.first_name, firstNameEditText);
-        getData(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameHint, R.string.second_name, secondNameEditText);
-        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1Hint, R.string.address_line_1, addressLine1EditText);
-        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2Hint, R.string.address_line_2, addressLine2EditText);
-        getData(com.stamp20.app.util.UserProfile.COUNTRY, cityHint, R.string.address_city, cityEditText);
-        getData(com.stamp20.app.util.UserProfile.STATE, stateHint, R.string.address_state, stateEditText);
-        getData(com.stamp20.app.util.UserProfile.ZIP, zipHint, R.string.address_zip, zipEditText);
-    }
-
-    private void getData(String userProfile, TextView hint, int resId, TextView editText) {
-        String value = getUserProfile(userProfile);
-        if (value != null && !value.isEmpty()) {
-            hint.setText(resId);
-            editText.setText(value);
-        } else {
-            hint.setText("");
-        }
-    }
-
-    public String getUserProfile(String key) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return sp.getString(key, "");
-    }
-
-    public void saveUserProfile() {
-        Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-        editor.putString(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameEditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameEditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1EditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2EditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.COUNTRY, cityEditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.STATE, stateEditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.ZIP, zipEditText.getText().toString());
-        editor.commit();
-    }
-
-    public void setVisible(boolean show) {
-        if (getView() == null)
-            return;
-        getView().setVisibility(show ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.shipping_address_state_hint:
-        case R.id.shipping_address_state:
-            getPopupWindowInstance();
-            mChooseCityPopupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
-            break;
-        case R.id.choose_city_done:
-            Log.d(this, "choose_city_done");
-            if (mChooseCityPopupWindow != null) {
-                mChooseCityPopupWindow.dismiss();
-            }
-            String city = chooseCities[selectedCityIndex];
-            stateEditText.setText(city);
-            // saveUserProfile(UserProfile.USER_STATE, city);
-            break;
-        }
-    }
-
-    private void getPopupWindowInstance() {
-        if (null != mChooseCityPopupWindow) {
-            mChooseCityPopupWindow.dismiss();
-            return;
-        } else {
-            initPopuptWindow();
-        }
-    }
-
-    private void initPopuptWindow() {
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity().getApplicationContext());
-        View popupWindow = layoutInflater.inflate(R.layout.choose_city_popup_window, null);
-        final WheelView cities = (WheelView) popupWindow.findViewById(R.id.city_picker_wheel_view);
-        mDoneTextView = (TextView) popupWindow.findViewById(R.id.choose_city_done);
-        mDoneTextView.setOnClickListener(this);
-        FontManager.changeFontsBlod(getActivity().getApplicationContext(), (LinearLayout) popupWindow);
-        cities.setViewAdapter(new CityAdapter(getActivity().getApplicationContext(), chooseCities));
-        cities.setVisibleItems(5);
-        cities.addChangingListener(this);
-        int mWindowWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        int mWindowHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
-
-        mChooseCityPopupWindow = new PopupWindow(popupWindow, mWindowWidth, mWindowHeight * 2 / 5);
-    }
-
-    @Override
-    public void onChanged(WheelView wheel, int oldValue, int newValue) {
-        // TODO Auto-generated method stub
-        // 播放声音
-        Log.d(this, "onChanged, oldValue: " + oldValue + ", newValue: " + newValue);
-        selectedCityIndex = newValue;
-        sp.play(sound, 1, 1, 0, 0, 1);
-    }
-
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         // TODO Auto-generated method stub
@@ -256,180 +409,23 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
         }
     }
 
-    TextWatcher firstNameEditTextTextWatcher = new TextWatcher() {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onViewCreated(view, savedInstanceState);
+    }
 
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() == 0) {
-                setHintText(firstNameHint, "");
-            } else {
-                setHintText(firstNameHint, R.string.first_name);
-            }
-        }
-    };
-
-    TextWatcher secondtNameEditTextTextWatcher = new TextWatcher() {
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() == 0) {
-                setHintText(secondNameHint, "");
-            } else {
-                setHintText(secondNameHint, R.string.second_name);
-            }
-        }
-    };
-
-    TextWatcher addressLine1EditTextTextWatcher = new TextWatcher() {
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() == 0) {
-                setHintText(addressLine1Hint, "");
-            } else {
-                setHintText(addressLine1Hint, R.string.address_line_1);
-            }
-        }
-    };
-
-    TextWatcher cityEditTextTextWatcher = new TextWatcher() {
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() == 0) {
-                setHintText(cityHint, "");
-            } else {
-                setHintText(cityHint, R.string.address_city);
-            }
-        }
-    };
-
-    TextWatcher stateEditTextTextWatcher = new TextWatcher() {
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() == 0) {
-                setHintText(stateHint, "");
-            } else {
-                setHintText(stateHint, R.string.address_state);
-            }
-        }
-    };
-
-    TextWatcher zipEditTextTextWatcher = new TextWatcher() {
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() == 0) {
-                setHintText(zipHint, "");
-            } else {
-                setHintText(zipHint, R.string.address_zip);
-            }
-        }
-    };
-
-    TextWatcher addressLine2EditTextTextWatcher = new TextWatcher() {
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() == 0) {
-                setHintText(addressLine2Hint, "");
-            } else {
-                setHintText(addressLine2Hint, R.string.address_line_2);
-            }
-        }
-    };
+    public void saveUserProfile() {
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+        editor.putString(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1EditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2EditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.COUNTRY, cityEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.STATE, stateEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ZIP, zipEditText.getText().toString());
+        editor.commit();
+    }
 
     private void setHintText(TextView textView, int resId) {
         textView.setText(resId);
@@ -440,7 +436,13 @@ public class ShippingAddressFragment extends Fragment implements OnClickListener
     }
 
     private void setHintTextColor(TextView hintTextView, boolean hasFocus) {
-        hintTextView.setTextColor(hasFocus ? getResources().getColor(R.color.paypal_text_hint_color_blue_focus) : getResources().getColor(
-                R.color.paypal_text_hint_color));
+        hintTextView.setTextColor(hasFocus ? getResources().getColor(R.color.paypal_text_hint_color_blue_focus)
+                : getResources().getColor(R.color.paypal_text_hint_color));
+    }
+
+    public void setVisible(boolean show) {
+        if (getView() == null)
+            return;
+        getView().setVisibility(show ? View.VISIBLE : View.GONE);
     }
 }
