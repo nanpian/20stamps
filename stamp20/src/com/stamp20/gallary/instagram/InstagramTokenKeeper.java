@@ -28,8 +28,7 @@ public class InstagramTokenKeeper {
             return;
         }
 
-        SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME,
-                Context.MODE_APPEND);
+        SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_APPEND);
         Editor editor = pref.edit();
         editor.putString(KEY_TOKEN, token);
         editor.commit();
@@ -49,8 +48,7 @@ public class InstagramTokenKeeper {
         }
 
         String token = new String();
-        SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME,
-                Context.MODE_APPEND);
+        SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_APPEND);
         token = pref.getString(KEY_TOKEN, "");
         return token;
     }
@@ -66,8 +64,7 @@ public class InstagramTokenKeeper {
             return;
         }
 
-        SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME,
-                Context.MODE_APPEND);
+        SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_APPEND);
         Editor editor = pref.edit();
         editor.clear();
         editor.commit();

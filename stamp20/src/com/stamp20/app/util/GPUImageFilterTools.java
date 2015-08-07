@@ -29,8 +29,7 @@ import java.util.List;
 import com.stamp20.app.R;
 
 public class GPUImageFilterTools {
-    public static void showDialog(final Context context,
-            final OnGpuImageFilterChosenListener listener) {
+    public static void showDialog(final Context context, final OnGpuImageFilterChosenListener listener) {
         final FilterList filters = new FilterList();
         filters.addFilter("Contrast", FilterType.CONTRAST);
         filters.addFilter("Invert", FilterType.INVERT);
@@ -41,10 +40,8 @@ public class GPUImageFilterTools {
         filters.addFilter("Sepia", FilterType.SEPIA);
         filters.addFilter("Grayscale", FilterType.GRAYSCALE);
         filters.addFilter("Sharpness", FilterType.SHARPEN);
-        filters.addFilter("Sobel Edge Detection",
-                FilterType.SOBEL_EDGE_DETECTION);
-        filters.addFilter("3x3 Convolution",
-                FilterType.THREE_X_THREE_CONVOLUTION);
+        filters.addFilter("Sobel Edge Detection", FilterType.SOBEL_EDGE_DETECTION);
+        filters.addFilter("3x3 Convolution", FilterType.THREE_X_THREE_CONVOLUTION);
         filters.addFilter("Emboss", FilterType.EMBOSS);
         filters.addFilter("Posterize", FilterType.POSTERIZE);
         filters.addFilter("Grouped filters", FilterType.FILTER_GROUP);
@@ -100,36 +97,28 @@ public class GPUImageFilterTools {
         filters.addFilter("Glass Sphere", FilterType.GLASS_SPHERE);
         filters.addFilter("Haze", FilterType.HAZE);
         filters.addFilter("Laplacian", FilterType.LAPLACIAN);
-        filters.addFilter("Non Maximum Suppression",
-                FilterType.NON_MAXIMUM_SUPPRESSION);
+        filters.addFilter("Non Maximum Suppression", FilterType.NON_MAXIMUM_SUPPRESSION);
         filters.addFilter("Sphere Refraction", FilterType.SPHERE_REFRACTION);
         filters.addFilter("Swirl", FilterType.SWIRL);
-        filters.addFilter("Weak Pixel Inclusion",
-                FilterType.WEAK_PIXEL_INCLUSION);
+        filters.addFilter("Weak Pixel Inclusion", FilterType.WEAK_PIXEL_INCLUSION);
         filters.addFilter("False Color", FilterType.FALSE_COLOR);
 
         filters.addFilter("Color Balance", FilterType.COLOR_BALANCE);
 
-        filters.addFilter("Levels Min (Mid Adjust)",
-                FilterType.LEVELS_FILTER_MIN);
+        filters.addFilter("Levels Min (Mid Adjust)", FilterType.LEVELS_FILTER_MIN);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Choose a filter");
-        builder.setItems(
-                filters.names.toArray(new String[filters.names.size()]),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                            final int item) {
-                        listener.onGpuImageFilterChosenListener(createFilterForType(
-                                context, filters.filters.get(item)));
-                    }
-                });
+        builder.setItems(filters.names.toArray(new String[filters.names.size()]), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, final int item) {
+                listener.onGpuImageFilterChosenListener(createFilterForType(context, filters.filters.get(item)));
+            }
+        });
         builder.create().show();
     }
 
-    private static GPUImageFilter createFilterForType(final Context context,
-            final FilterType type) {
+    private static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
         switch (type) {
         case CONTRAST:
             return new GPUImageContrastFilter(2.0f);
@@ -155,8 +144,7 @@ public class GPUImageFilterTools {
             return new GPUImageSobelEdgeDetection();
         case THREE_X_THREE_CONVOLUTION:
             GPUImage3x3ConvolutionFilter convolution = new GPUImage3x3ConvolutionFilter();
-            convolution.setConvolutionKernel(new float[] { -1.0f, 0.0f, 1.0f,
-                    -2.0f, 0.0f, 2.0f, -1.0f, 0.0f, 1.0f });
+            convolution.setConvolutionKernel(new float[] { -1.0f, 0.0f, 1.0f, -2.0f, 0.0f, 2.0f, -1.0f, 0.0f, 1.0f });
             return convolution;
         case EMBOSS:
             return new GPUImageEmbossFilter();
@@ -175,8 +163,7 @@ public class GPUImageFilterTools {
         case HIGHLIGHT_SHADOW:
             return new GPUImageHighlightShadowFilter(0.0f, 1.0f);
         case MONOCHROME:
-            return new GPUImageMonochromeFilter(1.0f, new float[] { 0.6f,
-                    0.45f, 0.3f, 1.0f });
+            return new GPUImageMonochromeFilter(1.0f, new float[] { 0.6f, 0.45f, 0.3f, 1.0f });
         case OPACITY:
             return new GPUImageOpacityFilter(1.0f);
         case RGB:
@@ -187,8 +174,7 @@ public class GPUImageFilterTools {
             PointF centerPoint = new PointF();
             centerPoint.x = 0.5f;
             centerPoint.y = 0.5f;
-            return new GPUImageVignetteFilter(centerPoint, new float[] { 0.0f,
-                    0.0f, 0.0f }, 0.3f, 0.75f);
+            return new GPUImageVignetteFilter(centerPoint, new float[] { 0.0f, 0.0f, 0.0f }, 0.3f, 0.75f);
         case TONE_CURVE:
             GPUImageToneCurveFilter toneCurveFilter = new GPUImageToneCurveFilter();
             /*
@@ -197,28 +183,22 @@ public class GPUImageFilterTools {
              */
             return toneCurveFilter;
         case BLEND_DIFFERENCE:
-            return createBlendFilter(context,
-                    GPUImageDifferenceBlendFilter.class);
+            return createBlendFilter(context, GPUImageDifferenceBlendFilter.class);
         case BLEND_SOURCE_OVER:
-            return createBlendFilter(context,
-                    GPUImageSourceOverBlendFilter.class);
+            return createBlendFilter(context, GPUImageSourceOverBlendFilter.class);
         case BLEND_COLOR_BURN:
-            return createBlendFilter(context,
-                    GPUImageColorBurnBlendFilter.class);
+            return createBlendFilter(context, GPUImageColorBurnBlendFilter.class);
         case BLEND_COLOR_DODGE:
-            return createBlendFilter(context,
-                    GPUImageColorDodgeBlendFilter.class);
+            return createBlendFilter(context, GPUImageColorDodgeBlendFilter.class);
         case BLEND_DARKEN:
             return createBlendFilter(context, GPUImageDarkenBlendFilter.class);
         case BLEND_DISSOLVE:
             return createBlendFilter(context, GPUImageDissolveBlendFilter.class);
         case BLEND_EXCLUSION:
-            return createBlendFilter(context,
-                    GPUImageExclusionBlendFilter.class);
+            return createBlendFilter(context, GPUImageExclusionBlendFilter.class);
 
         case BLEND_HARD_LIGHT:
-            return createBlendFilter(context,
-                    GPUImageHardLightBlendFilter.class);
+            return createBlendFilter(context, GPUImageHardLightBlendFilter.class);
         case BLEND_LIGHTEN:
             return createBlendFilter(context, GPUImageLightenBlendFilter.class);
         case BLEND_ADD:
@@ -238,22 +218,17 @@ public class GPUImageFilterTools {
         case BLEND_HUE:
             return createBlendFilter(context, GPUImageHueBlendFilter.class);
         case BLEND_SATURATION:
-            return createBlendFilter(context,
-                    GPUImageSaturationBlendFilter.class);
+            return createBlendFilter(context, GPUImageSaturationBlendFilter.class);
         case BLEND_LUMINOSITY:
-            return createBlendFilter(context,
-                    GPUImageLuminosityBlendFilter.class);
+            return createBlendFilter(context, GPUImageLuminosityBlendFilter.class);
         case BLEND_LINEAR_BURN:
-            return createBlendFilter(context,
-                    GPUImageLinearBurnBlendFilter.class);
+            return createBlendFilter(context, GPUImageLinearBurnBlendFilter.class);
         case BLEND_SOFT_LIGHT:
-            return createBlendFilter(context,
-                    GPUImageSoftLightBlendFilter.class);
+            return createBlendFilter(context, GPUImageSoftLightBlendFilter.class);
         case BLEND_SUBTRACT:
             return createBlendFilter(context, GPUImageSubtractBlendFilter.class);
         case BLEND_CHROMA_KEY:
-            return createBlendFilter(context,
-                    GPUImageChromaKeyBlendFilter.class);
+            return createBlendFilter(context, GPUImageChromaKeyBlendFilter.class);
         case BLEND_NORMAL:
             return createBlendFilter(context, GPUImageNormalBlendFilter.class);
 
@@ -317,12 +292,10 @@ public class GPUImageFilterTools {
 
     }
 
-    private static GPUImageFilter createBlendFilter(Context context,
-            Class<? extends GPUImageTwoInputFilter> filterClass) {
+    private static GPUImageFilter createBlendFilter(Context context, Class<? extends GPUImageTwoInputFilter> filterClass) {
         try {
             GPUImageTwoInputFilter filter = filterClass.newInstance();
-            filter.setBitmap(BitmapFactory.decodeResource(
-                    context.getResources(), R.drawable.ic_launcher));
+            filter.setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
             return filter;
         } catch (Exception e) {
             e.printStackTrace();
@@ -440,13 +413,11 @@ public class GPUImageFilterTools {
 
             public abstract void adjust(int percentage);
 
-            protected float range(final int percentage, final float start,
-                    final float end) {
+            protected float range(final int percentage, final float start, final float end) {
                 return (end - start) * percentage / 100.0f + start;
             }
 
-            protected int range(final int percentage, final int start,
-                    final int end) {
+            protected int range(final int percentage, final int start, final int end) {
                 return (end - start) * percentage / 100 + start;
             }
         }
@@ -458,8 +429,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class PixelationAdjuster extends
-                Adjuster<GPUImagePixelationFilter> {
+        private class PixelationAdjuster extends Adjuster<GPUImagePixelationFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setPixel(range(percentage, 1.0f, 100.0f));
@@ -487,8 +457,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class BrightnessAdjuster extends
-                Adjuster<GPUImageBrightnessFilter> {
+        private class BrightnessAdjuster extends Adjuster<GPUImageBrightnessFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setBrightness(range(percentage, -1.0f, 1.0f));
@@ -502,8 +471,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class SobelAdjuster extends
-                Adjuster<GPUImageSobelEdgeDetection> {
+        private class SobelAdjuster extends Adjuster<GPUImageSobelEdgeDetection> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setLineSize(range(percentage, 0.0f, 5.0f));
@@ -517,8 +485,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class PosterizeAdjuster extends
-                Adjuster<GPUImagePosterizeFilter> {
+        private class PosterizeAdjuster extends Adjuster<GPUImagePosterizeFilter> {
             @Override
             public void adjust(final int percentage) {
                 // In theorie to 256, but only first 50 are interesting
@@ -526,16 +493,14 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class GPU3x3TextureAdjuster extends
-                Adjuster<GPUImage3x3TextureSamplingFilter> {
+        private class GPU3x3TextureAdjuster extends Adjuster<GPUImage3x3TextureSamplingFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setLineSize(range(percentage, 0.0f, 5.0f));
             }
         }
 
-        private class SaturationAdjuster extends
-                Adjuster<GPUImageSaturationFilter> {
+        private class SaturationAdjuster extends Adjuster<GPUImageSaturationFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setSaturation(range(percentage, 0.0f, 2.0f));
@@ -549,8 +514,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class HighlightShadowAdjuster extends
-                Adjuster<GPUImageHighlightShadowFilter> {
+        private class HighlightShadowAdjuster extends Adjuster<GPUImageHighlightShadowFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setShadows(range(percentage, 0.0f, 1.0f));
@@ -558,8 +522,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class MonochromeAdjuster extends
-                Adjuster<GPUImageMonochromeFilter> {
+        private class MonochromeAdjuster extends Adjuster<GPUImageMonochromeFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setIntensity(range(percentage, 0.0f, 1.0f));
@@ -583,8 +546,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class WhiteBalanceAdjuster extends
-                Adjuster<GPUImageWhiteBalanceFilter> {
+        private class WhiteBalanceAdjuster extends Adjuster<GPUImageWhiteBalanceFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setTemperature(range(percentage, 2000.0f, 8000.0f));
@@ -599,34 +561,29 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class DissolveBlendAdjuster extends
-                Adjuster<GPUImageDissolveBlendFilter> {
+        private class DissolveBlendAdjuster extends Adjuster<GPUImageDissolveBlendFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setMix(range(percentage, 0.0f, 1.0f));
             }
         }
 
-        private class GaussianBlurAdjuster extends
-                Adjuster<GPUImageGaussianBlurFilter> {
+        private class GaussianBlurAdjuster extends Adjuster<GPUImageGaussianBlurFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setBlurSize(range(percentage, 0.0f, 1.0f));
             }
         }
 
-        private class CrosshatchBlurAdjuster extends
-                Adjuster<GPUImageCrosshatchFilter> {
+        private class CrosshatchBlurAdjuster extends Adjuster<GPUImageCrosshatchFilter> {
             @Override
             public void adjust(final int percentage) {
-                getFilter()
-                        .setCrossHatchSpacing(range(percentage, 0.0f, 0.06f));
+                getFilter().setCrossHatchSpacing(range(percentage, 0.0f, 0.06f));
                 getFilter().setLineWidth(range(percentage, 0.0f, 0.006f));
             }
         }
 
-        private class BulgeDistortionAdjuster extends
-                Adjuster<GPUImageBulgeDistortionFilter> {
+        private class BulgeDistortionAdjuster extends Adjuster<GPUImageBulgeDistortionFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));
@@ -634,8 +591,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class GlassSphereAdjuster extends
-                Adjuster<GPUImageGlassSphereFilter> {
+        private class GlassSphereAdjuster extends Adjuster<GPUImageGlassSphereFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));
@@ -650,8 +606,7 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class SphereRefractionAdjuster extends
-                Adjuster<GPUImageSphereRefractionFilter> {
+        private class SphereRefractionAdjuster extends Adjuster<GPUImageSphereRefractionFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));
@@ -665,20 +620,15 @@ public class GPUImageFilterTools {
             }
         }
 
-        private class ColorBalanceAdjuster extends
-                Adjuster<GPUImageColorBalanceFilter> {
+        private class ColorBalanceAdjuster extends Adjuster<GPUImageColorBalanceFilter> {
 
             @Override
             public void adjust(int percentage) {
-                getFilter().setMidtones(
-                        new float[] { range(percentage, 0.0f, 1.0f),
-                                range(percentage / 2, 0.0f, 1.0f),
-                                range(percentage / 3, 0.0f, 1.0f) });
+                getFilter().setMidtones(new float[] { range(percentage, 0.0f, 1.0f), range(percentage / 2, 0.0f, 1.0f), range(percentage / 3, 0.0f, 1.0f) });
             }
         }
 
-        private class LevelsMinMidAdjuster extends
-                Adjuster<GPUImageLevelsFilter> {
+        private class LevelsMinMidAdjuster extends Adjuster<GPUImageLevelsFilter> {
             @Override
             public void adjust(int percentage) {
                 getFilter().setMin(0.0f, range(percentage, 0.0f, 1.0f), 1.0f);

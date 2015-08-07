@@ -51,8 +51,7 @@ public class PhotoAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.grid_child_item, null);
-            viewHolder.mImageView = (MyImageView) convertView
-                    .findViewById(R.id.child_image);
+            viewHolder.mImageView = (MyImageView) convertView.findViewById(R.id.child_image);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -60,9 +59,7 @@ public class PhotoAdapter extends BaseAdapter {
 
         String uri = photo.getUri();
         // "file://" or "http://"
-        Picasso.with(mContext).load(uri).resize(200, 200).centerCrop()
-                .placeholder(R.drawable.friends_sends_pictures_no)
-                .into(viewHolder.mImageView);
+        Picasso.with(mContext).load(uri).resize(200, 200).centerCrop().placeholder(R.drawable.friends_sends_pictures_no).into(viewHolder.mImageView);
 
         return convertView;
     }

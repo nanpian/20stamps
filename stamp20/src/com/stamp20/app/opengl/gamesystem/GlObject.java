@@ -79,8 +79,7 @@ public class GlObject {
     // //////////////////////////////////////////////////////////////////////////////////////
     // // 一些常用的图元绘制
     // 绘制正方形
-    public static void drawQuater(GL10 gl, float left, float top, float right,
-            float bottom) {
+    public static void drawQuater(GL10 gl, float left, float top, float right, float bottom) {
         FloatBuffer buffer = FloatBuffer.wrap(new float[] { left, top, // 左上角
                 right, top, // 右上角
                 left, bottom, // 左下角
@@ -94,10 +93,8 @@ public class GlObject {
     }
 
     // 绘制三角形
-    public static void drawTriangle(GL10 gl, float oneX, float oneY,
-            float twoX, float twoY, float threeX, float threeY) {
-        FloatBuffer buffer = FloatBuffer.wrap(new float[] { oneX, oneY, twoX,
-                twoY, threeX, threeY, });
+    public static void drawTriangle(GL10 gl, float oneX, float oneY, float twoX, float twoY, float threeX, float threeY) {
+        FloatBuffer buffer = FloatBuffer.wrap(new float[] { oneX, oneY, twoX, twoY, threeX, threeY, });
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glVertexPointer(2, GL10.GL_FLOAT, 0, buffer);
@@ -106,8 +103,7 @@ public class GlObject {
     }
 
     // 绘制扇形
-    public static void drawArc(GL10 gl, float length, float startAngle,
-            float sweepAngle) {
+    public static void drawArc(GL10 gl, float length, float startAngle, float sweepAngle) {
         int lineCount = (int) (sweepAngle);
 
         FloatBuffer buffer = FloatBuffer.wrap(new float[] { 0, 0, length, 0, });
@@ -126,10 +122,8 @@ public class GlObject {
     }
 
     // 绘制直线
-    public static void drawLine(GL10 gl, float oneX, float oneY, float twoX,
-            float twoY) {
-        FloatBuffer buffer = FloatBuffer.wrap(new float[] { oneX, oneY, twoX,
-                twoY, });
+    public static void drawLine(GL10 gl, float oneX, float oneY, float twoX, float twoY) {
+        FloatBuffer buffer = FloatBuffer.wrap(new float[] { oneX, oneY, twoX, twoY, });
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glVertexPointer(2, GL10.GL_FLOAT, 0, buffer);

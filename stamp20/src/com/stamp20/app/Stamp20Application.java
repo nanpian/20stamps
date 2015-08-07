@@ -23,8 +23,7 @@ public class Stamp20Application extends Application {
         ParseObject.registerSubclass(Design.class);
         ParseObject.registerSubclass(FeaturePhoto.class);
 
-        Parse.initialize(this, "lrvQWDyUVWC2iNG7ZvK1PfSAKSgIQ0MWtVu6jIhf",
-                "0V96uKLLzg2DYcCT7ndlI0HULdOh297tIP8RUk4d");
+        Parse.initialize(this, "lrvQWDyUVWC2iNG7ZvK1PfSAKSgIQ0MWtVu6jIhf", "0V96uKLLzg2DYcCT7ndlI0HULdOh297tIP8RUk4d");
         Parse.enableLocalDatastore(this);
 
         ParseFacebookUtils.initialize("713170092123951");

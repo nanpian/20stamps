@@ -16,8 +16,7 @@
 
 package jp.co.cyberagent.android.gpuimage;
 
-public class GPUImageDirectionalSobelEdgeDetectionFilter extends
-        GPUImage3x3TextureSamplingFilter {
+public class GPUImageDirectionalSobelEdgeDetectionFilter extends GPUImage3x3TextureSamplingFilter {
     public static final String DIRECTIONAL_SOBEL_EDGE_DETECTION_FRAGMENT_SHADER = ""
             + "precision mediump float;\n"
             + "\n"
@@ -53,10 +52,8 @@ public class GPUImageDirectionalSobelEdgeDetectionFilter extends
             + "    float gradientMagnitude = length(gradientDirection);\n"
             + "    vec2 normalizedDirection = normalize(gradientDirection);\n"
             + "    normalizedDirection = sign(normalizedDirection) * floor(abs(normalizedDirection) + 0.617316); // Offset by 1-sin(pi/8) to set to 0 if near axis, 1 if away\n"
-            + "    normalizedDirection = (normalizedDirection + 1.0) * 0.5; // Place -1.0 - 1.0 within 0 - 1.0\n"
-            + "\n"
-            + "    gl_FragColor = vec4(gradientMagnitude, normalizedDirection.x, normalizedDirection.y, 1.0);\n"
-            + "}";
+            + "    normalizedDirection = (normalizedDirection + 1.0) * 0.5; // Place -1.0 - 1.0 within 0 - 1.0\n" + "\n"
+            + "    gl_FragColor = vec4(gradientMagnitude, normalizedDirection.x, normalizedDirection.y, 1.0);\n" + "}";
 
     public GPUImageDirectionalSobelEdgeDetectionFilter() {
         super(DIRECTIONAL_SOBEL_EDGE_DETECTION_FRAGMENT_SHADER);

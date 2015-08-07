@@ -30,8 +30,7 @@ public class DesignProvider {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e("LogTag",
-                            "Error addDesign to local store " + e.getMessage());
+                    Log.e("LogTag", "Error addDesign to local store " + e.getMessage());
                 }
             }
         });
@@ -45,9 +44,7 @@ public class DesignProvider {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e("LogTag",
-                            "Error remove design from local store "
-                                    + e.getMessage());
+                    Log.e("LogTag", "Error remove design from local store " + e.getMessage());
                 }
             }
         });
@@ -61,8 +58,7 @@ public class DesignProvider {
         try {
             result = query.getFirst();
         } catch (ParseException e) {
-            Log.e("LogTag", "Error query design " + designLocalId
-                    + " from local store");
+            Log.e("LogTag", "Error query design " + designLocalId + " from local store");
             e.printStackTrace();
         }
         return result;

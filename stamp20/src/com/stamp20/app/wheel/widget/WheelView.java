@@ -46,8 +46,7 @@ import com.stamp20.app.wheel.adapter.WheelViewAdapter;
 public class WheelView extends View {
 
     /** Top and bottom shadows colors */
-    private int[] SHADOWS_COLORS = new int[] { 0x00D0D6DB, 0x00D0D6DB,
-            0x00D0D6DB };
+    private int[] SHADOWS_COLORS = new int[] { 0x00D0D6DB, 0x00D0D6DB, 0x00D0D6DB };
 
     /** Top and bottom items offset (to hide that) */
     private static final int ITEM_OFFSET_PERCENT = 0;
@@ -391,8 +390,7 @@ public class WheelView extends View {
             if (animated) {
                 int itemsToScroll = index - currentItem;
                 if (isCyclic) {
-                    int scroll = itemCount + Math.min(index, currentItem)
-                            - Math.max(index, currentItem);
+                    int scroll = itemCount + Math.min(index, currentItem) - Math.max(index, currentItem);
                     if (scroll < Math.abs(itemsToScroll)) {
                         itemsToScroll = itemsToScroll < 0 ? scroll : -scroll;
                     }
@@ -489,8 +487,7 @@ public class WheelView extends View {
      */
     public void setWheelForeground(int resource) {
         wheelForeground = resource;
-        centerDrawable = getContext().getResources().getDrawable(
-                wheelForeground);
+        centerDrawable = getContext().getResources().getDrawable(wheelForeground);
     }
 
     /**
@@ -519,18 +516,15 @@ public class WheelView extends View {
      */
     private void initResourcesIfNecessary() {
         if (centerDrawable == null) {
-            centerDrawable = getContext().getResources().getDrawable(
-                    wheelForeground);
+            centerDrawable = getContext().getResources().getDrawable(wheelForeground);
         }
 
         if (topShadow == null) {
-            topShadow = new GradientDrawable(Orientation.TOP_BOTTOM,
-                    SHADOWS_COLORS);
+            topShadow = new GradientDrawable(Orientation.TOP_BOTTOM, SHADOWS_COLORS);
         }
 
         if (bottomShadow == null) {
-            bottomShadow = new GradientDrawable(Orientation.BOTTOM_TOP,
-                    SHADOWS_COLORS);
+            bottomShadow = new GradientDrawable(Orientation.BOTTOM_TOP, SHADOWS_COLORS);
         }
 
         setBackgroundResource(wheelBackground);
@@ -548,8 +542,7 @@ public class WheelView extends View {
             itemHeight = layout.getChildAt(0).getMeasuredHeight();
         }
 
-        int desired = itemHeight * visibleItems - itemHeight
-                * ITEM_OFFSET_PERCENT / 50;
+        int desired = itemHeight * visibleItems - itemHeight * ITEM_OFFSET_PERCENT / 50;
 
         return Math.max(desired, getSuggestedMinimumHeight());
     }
@@ -585,12 +578,8 @@ public class WheelView extends View {
         initResourcesIfNecessary();
 
         // TODO: make it static
-        itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
-        itemsLayout
-                .measure(MeasureSpec.makeMeasureSpec(widthSize,
-                        MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(
-                        0, MeasureSpec.UNSPECIFIED));
+        itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        itemsLayout.measure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         int width = itemsLayout.getMeasuredWidth();
 
         if (mode == MeasureSpec.EXACTLY) {
@@ -606,9 +595,7 @@ public class WheelView extends View {
             }
         }
 
-        itemsLayout.measure(MeasureSpec.makeMeasureSpec(width - 2 * PADDING,
-                MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0,
-                MeasureSpec.UNSPECIFIED));
+        itemsLayout.measure(MeasureSpec.makeMeasureSpec(width - 2 * PADDING, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 
         return width;
     }
@@ -683,8 +670,7 @@ public class WheelView extends View {
         topShadow.setBounds(0, 0, getWidth(), height);
         topShadow.draw(canvas);
 
-        bottomShadow
-                .setBounds(0, getHeight() - height, getWidth(), getHeight());
+        bottomShadow.setBounds(0, getHeight() - height, getWidth(), getHeight());
         bottomShadow.draw(canvas);
     }
 
@@ -697,8 +683,7 @@ public class WheelView extends View {
     private void drawItems(Canvas canvas) {
         canvas.save();
 
-        int top = (currentItem - firstItem) * getItemHeight()
-                + (getItemHeight() - getHeight()) / 2;
+        int top = (currentItem - firstItem) * getItemHeight() + (getItemHeight() - getHeight()) / 2;
         canvas.translate(PADDING, -top + scrollingOffset);
 
         itemsLayout.draw(canvas);
@@ -715,8 +700,7 @@ public class WheelView extends View {
     private void drawCenterRect(Canvas canvas) {
         int center = getHeight() / 2;
         int offset = (int) (getItemHeight() / 2 * 1.2);
-        centerDrawable.setBounds(0, center - offset, getWidth(), center
-                + offset);
+        centerDrawable.setBounds(0, center - offset, getWidth(), center + offset);
         centerDrawable.draw(canvas);
     }
 
@@ -878,8 +862,7 @@ public class WheelView extends View {
         }
 
         if (!updated) {
-            updated = firstItem != range.getFirst()
-                    || itemsLayout.getChildCount() != range.getCount();
+            updated = firstItem != range.getFirst() || itemsLayout.getChildCount() != range.getCount();
         }
 
         if (firstItem > range.getFirst() && firstItem <= range.getLast()) {
@@ -895,8 +878,7 @@ public class WheelView extends View {
 
         int first = firstItem;
         for (int i = itemsLayout.getChildCount(); i < range.getCount(); i++) {
-            if (!addViewItem(firstItem + i, false)
-                    && itemsLayout.getChildCount() == 0) {
+            if (!addViewItem(firstItem + i, false) && itemsLayout.getChildCount() == 0) {
                 first++;
             }
         }
@@ -978,10 +960,7 @@ public class WheelView extends View {
      * @return true if item index is not out of bounds or the wheel is cyclic
      */
     private boolean isValidItemIndex(int index) {
-        return viewAdapter != null
-                && viewAdapter.getItemsCount() > 0
-                && (isCyclic || index >= 0
-                        && index < viewAdapter.getItemsCount());
+        return viewAdapter != null && viewAdapter.getItemsCount() > 0 && (isCyclic || index >= 0 && index < viewAdapter.getItemsCount());
     }
 
     /**
@@ -997,8 +976,7 @@ public class WheelView extends View {
         }
         int count = viewAdapter.getItemsCount();
         if (!isValidItemIndex(index)) {
-            return viewAdapter
-                    .getEmptyItem(recycle.getEmptyItem(), itemsLayout);
+            return viewAdapter.getEmptyItem(recycle.getEmptyItem(), itemsLayout);
         } else {
             while (index < 0) {
                 index = count + index;

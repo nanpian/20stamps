@@ -148,8 +148,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
                 Intent send = new Intent();
                 send.setAction(Intent.ACTION_SEND);
                 send.setType("image/*");
-                final Uri uri = FileProvider.getUriForFile(this,
-                        "com.stamp20.fileprovider", tmp);
+                final Uri uri = FileProvider.getUriForFile(this, "com.stamp20.fileprovider", tmp);
                 send.putExtra(Intent.EXTRA_STREAM, uri);
                 startActivity(Intent.createChooser(send, "Share"));
             }
@@ -165,47 +164,43 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     private long mDuration = 1000;
 
     private void closeBlurWindow() {
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(
-                mEndAlpha, mStartAlpha, false, mDuration,
-                new AnimationListener() {
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration, new AnimationListener() {
 
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        blurBlackground.setClickable(false);
-                        blurBlackground.setVisibility(View.GONE);
-                        reviewForeground.setVisibility(View.VISIBLE);
-                    }
-                }));
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                blurBlackground.setClickable(false);
+                blurBlackground.setVisibility(View.GONE);
+                reviewForeground.setVisibility(View.VISIBLE);
+            }
+        }));
     }
 
     private void startBlurWindow() {
         reviewForeground.setVisibility(View.GONE);
         blurBlackground.setVisibility(View.VISIBLE);
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(
-                mStartAlpha, mEndAlpha, false, mDuration,
-                new AnimationListener() {
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, new AnimationListener() {
 
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        blurBlackground.setClickable(true);
-                    }
-                }));
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                blurBlackground.setClickable(true);
+            }
+        }));
     }
 
     private class BlurBackground extends AsyncTask<View, Void, Bitmap> {
@@ -230,12 +225,9 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     }
 
     private File saveBitmapToPic(Bitmap src) {
-        File path = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/stamp20");
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-        String name = "stamp20_"
-                + sdf.format(new Date(System.currentTimeMillis())) + ".jpeg";
+        String name = "stamp20_" + sdf.format(new Date(System.currentTimeMillis())) + ".jpeg";
         Log.d(TAG, "path: " + path + ", name: " + name);
         File file = new File(path, name);
         try {
@@ -252,8 +244,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
          * file.getAbsolutePath(), name, null); }catch(FileNotFoundException e){
          * Log.e(TAG, "insert image error"); }
          */
-        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                Uri.fromFile(file)));
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         return file;
     }
 

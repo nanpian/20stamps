@@ -22,21 +22,15 @@ public class TextureRenderer {
     private int mTexWidth;
     private int mTexHeight;
 
-    private static final String VERTEX_SHADER = "attribute vec4 a_position;\n"
-            + "attribute vec2 a_texcoord;\n" + "varying vec2 v_texcoord;\n"
-            + "void main() {\n" + "  gl_Position = a_position;\n"
-            + "  v_texcoord = a_texcoord;\n" + "}\n";
+    private static final String VERTEX_SHADER = "attribute vec4 a_position;\n" + "attribute vec2 a_texcoord;\n" + "varying vec2 v_texcoord;\n"
+            + "void main() {\n" + "  gl_Position = a_position;\n" + "  v_texcoord = a_texcoord;\n" + "}\n";
 
-    private static final String FRAGMENT_SHADER = "precision mediump float;\n"
-            + "uniform sampler2D tex_sampler;\n" + "varying vec2 v_texcoord;\n"
-            + "void main() {\n"
-            + "  gl_FragColor = texture2D(tex_sampler, v_texcoord);\n" + "}\n";
+    private static final String FRAGMENT_SHADER = "precision mediump float;\n" + "uniform sampler2D tex_sampler;\n" + "varying vec2 v_texcoord;\n"
+            + "void main() {\n" + "  gl_FragColor = texture2D(tex_sampler, v_texcoord);\n" + "}\n";
 
-    private static final float[] TEX_VERTICES = { 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f };
+    private static final float[] TEX_VERTICES = { 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
 
-    private static final float[] POS_VERTICES = { -1.0f, -1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f, 1.0f };
+    private static final float[] POS_VERTICES = { -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f };
 
     private static final int FLOAT_SIZE_BYTES = 4;
 
@@ -45,19 +39,14 @@ public class TextureRenderer {
         mProgram = GLToolbox.createProgram(VERTEX_SHADER, FRAGMENT_SHADER);
 
         // Bind attributes and uniforms
-        mTexSamplerHandle = GLES20
-                .glGetUniformLocation(mProgram, "tex_sampler");
+        mTexSamplerHandle = GLES20.glGetUniformLocation(mProgram, "tex_sampler");
         mTexCoordHandle = GLES20.glGetAttribLocation(mProgram, "a_texcoord");
         mPosCoordHandle = GLES20.glGetAttribLocation(mProgram, "a_position");
 
         // Setup coordinate buffers
-        mTexVertices = ByteBuffer
-                .allocateDirect(TEX_VERTICES.length * FLOAT_SIZE_BYTES)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mTexVertices = ByteBuffer.allocateDirect(TEX_VERTICES.length * FLOAT_SIZE_BYTES).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mTexVertices.put(TEX_VERTICES).position(0);
-        mPosVertices = ByteBuffer
-                .allocateDirect(POS_VERTICES.length * FLOAT_SIZE_BYTES)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mPosVertices = ByteBuffer.allocateDirect(POS_VERTICES.length * FLOAT_SIZE_BYTES).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mPosVertices.put(POS_VERTICES).position(0);
     }
 
@@ -93,11 +82,9 @@ public class TextureRenderer {
         GLES20.glDisable(GLES20.GL_BLEND);
 
         // Set the vertex attributes
-        GLES20.glVertexAttribPointer(mTexCoordHandle, 2, GLES20.GL_FLOAT,
-                false, 0, mTexVertices);
+        GLES20.glVertexAttribPointer(mTexCoordHandle, 2, GLES20.GL_FLOAT, false, 0, mTexVertices);
         GLES20.glEnableVertexAttribArray(mTexCoordHandle);
-        GLES20.glVertexAttribPointer(mPosCoordHandle, 2, GLES20.GL_FLOAT,
-                false, 0, mPosVertices);
+        GLES20.glVertexAttribPointer(mPosCoordHandle, 2, GLES20.GL_FLOAT, false, 0, mPosVertices);
         GLES20.glEnableVertexAttribArray(mPosCoordHandle);
         GLToolbox.checkGlError("vertex attribute setup");
 

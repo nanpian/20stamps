@@ -13,8 +13,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.GridView;
 import android.widget.ListView;
 
-public class ListView2GridViewLayoutAnimationController extends
-        LayoutAnimationController {
+public class ListView2GridViewLayoutAnimationController extends LayoutAnimationController {
 
     private ListView mListView;
     private GridView mGridView;
@@ -33,8 +32,7 @@ public class ListView2GridViewLayoutAnimationController extends
         return a;
     }
 
-    public ListView2GridViewLayoutAnimationController(float delay, ListView lv,
-            GridView gv, boolean isLV) {
+    public ListView2GridViewLayoutAnimationController(float delay, ListView lv, GridView gv, boolean isLV) {
         super(getEmptyAnimation(), delay);
         mListView = lv;
         mGridView = gv;
@@ -58,8 +56,7 @@ public class ListView2GridViewLayoutAnimationController extends
 
     @Override
     protected int getTransformedIndex(AnimationParameters params) {
-        Log.i("xixia", "getTransformedIndex, count:" + params.count
-                + ", index:" + params.index);
+        Log.i("xixia", "getTransformedIndex, count:" + params.count + ", index:" + params.index);
         if (isListView) {
             setAnimation(getList2Grid(params.index));
         } else {
@@ -87,10 +84,8 @@ public class ListView2GridViewLayoutAnimationController extends
         return animation;
     }
 
-    Animation getScaleAnimation(float fromX, float toX, float fromY, float toY,
-            float pivotX, float pivotY) {
-        Animation animation = new ScaleAnimation(fromX, toX, fromY, toY,
-                pivotX, pivotY);
+    Animation getScaleAnimation(float fromX, float toX, float fromY, float toY, float pivotX, float pivotY) {
+        Animation animation = new ScaleAnimation(fromX, toX, fromY, toY, pivotX, pivotY);
         animation.setDuration(sAnimationDuration);
         return animation;
     }
@@ -121,26 +116,21 @@ public class ListView2GridViewLayoutAnimationController extends
         float gridViewHeight = mGridView.getHeight();
         float gridViewWidth = mGridView.getWidth();
 
-        Log.i("xixia", "index:" + index + ",fX:" + fromXDelta + ",fY:"
-                + fromYDelta + ",tX:" + toXDelta + ",tY:" + toYDelta
-                + ",fromWidth:" + fromWidth + ",toWidth:" + toWidth
-                + ",formHeight:" + formHeight + ",toHeight:" + toHeight);
-        Log.i("xixia", "---listViewHeight:" + listViewHeight
-                + ",listViewWidth:" + listViewWidth + ",gridViewHeight:"
-                + gridViewHeight + ",gridViewWidth:" + gridViewWidth);
+        Log.i("xixia", "index:" + index + ",fX:" + fromXDelta + ",fY:" + fromYDelta + ",tX:" + toXDelta + ",tY:" + toYDelta + ",fromWidth:" + fromWidth
+                + ",toWidth:" + toWidth + ",formHeight:" + formHeight + ",toHeight:" + toHeight);
+        Log.i("xixia", "---listViewHeight:" + listViewHeight + ",listViewWidth:" + listViewWidth + ",gridViewHeight:" + gridViewHeight + ",gridViewWidth:"
+                + gridViewWidth);
 
         AnimationSet animationSet = new AnimationSet(true);
         /*
          * 将当前动画View（from）进行移动操作到终结View（to），移动的距离就是(toXDelta - fromXDelta,
          * toYDelta - fromYDelta) 这也是动画View（from）的左上角的移动距离
          */
-        animationSet.addAnimation(getTranslateAnimation(toXDelta - fromXDelta,
-                toYDelta - fromYDelta));
+        animationSet.addAnimation(getTranslateAnimation(toXDelta - fromXDelta, toYDelta - fromYDelta));
         /*
          * 不理解pivotX和pivotY参数，为什么要这么传递？？？？？？ 但是目前的效果是对了
          */
-        animationSet.addAnimation(getScaleAnimation(1.0f, scaleX, 1.0f, scaleY,
-                toXDelta - fromXDelta, toYDelta - fromYDelta));
+        animationSet.addAnimation(getScaleAnimation(1.0f, scaleX, 1.0f, scaleY, toXDelta - fromXDelta, toYDelta - fromYDelta));
 
         /* 结束以后将当前View定住 */
         animationSet.setFillAfter(true);
@@ -156,12 +146,8 @@ public class ListView2GridViewLayoutAnimationController extends
 
     Animation getGrid2List(int index) {
         /* 获取的是ListView和GridView中的Item中包含的那个ImageView */
-        Log.i("xixia",
-                "mListView.getFirstVisiblePosition() is : "
-                        + mListView.getFirstVisiblePosition());
-        Log.i("xixia",
-                "mListView.getLastVisiblePosition() is : "
-                        + mListView.getLastVisiblePosition());
+        Log.i("xixia", "mListView.getFirstVisiblePosition() is : " + mListView.getFirstVisiblePosition());
+        Log.i("xixia", "mListView.getLastVisiblePosition() is : " + mListView.getLastVisiblePosition());
         if (index >= mListView.getChildCount()) {
             index = mListView.getChildCount() - 1;
         }

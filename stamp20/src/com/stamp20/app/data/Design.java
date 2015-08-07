@@ -29,8 +29,7 @@ public class Design extends ParseObject {
         Random rand = new Random();
         int randomNum = rand.nextInt(268435455);
         int randomNum2 = rand.nextInt(268435455);
-        mInstance.setDesignIdLocal("D" + Integer.toHexString(randomNum)
-                + Integer.toHexString(randomNum2));
+        mInstance.setDesignIdLocal("D" + Integer.toHexString(randomNum) + Integer.toHexString(randomNum2));
         mInstance.setCount(1);
         return mInstance;
     }

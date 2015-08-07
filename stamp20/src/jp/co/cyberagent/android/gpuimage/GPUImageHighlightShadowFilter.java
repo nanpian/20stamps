@@ -52,8 +52,7 @@ public class GPUImageHighlightShadowFilter extends GPUImageFilter {
         this(0.0f, 1.0f);
     }
 
-    public GPUImageHighlightShadowFilter(final float shadows,
-            final float highlights) {
+    public GPUImageHighlightShadowFilter(final float shadows, final float highlights) {
         super(NO_FILTER_VERTEX_SHADER, HIGHLIGHT_SHADOW_FRAGMENT_SHADER);
         mHighlights = highlights;
         mShadows = shadows;
@@ -62,8 +61,7 @@ public class GPUImageHighlightShadowFilter extends GPUImageFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mHighlightsLocation = GLES20.glGetUniformLocation(getProgram(),
-                "highlights");
+        mHighlightsLocation = GLES20.glGetUniformLocation(getProgram(), "highlights");
         mShadowsLocation = GLES20.glGetUniformLocation(getProgram(), "shadows");
     }
 

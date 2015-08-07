@@ -80,12 +80,9 @@ public class GPUImageChromaKeyBlendFilter extends GPUImageTwoInputFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mThresholdSensitivityLocation = GLES20.glGetUniformLocation(
-                getProgram(), "thresholdSensitivity");
-        mSmoothingLocation = GLES20.glGetUniformLocation(getProgram(),
-                "smoothing");
-        mColorToReplaceLocation = GLES20.glGetUniformLocation(getProgram(),
-                "colorToReplace");
+        mThresholdSensitivityLocation = GLES20.glGetUniformLocation(getProgram(), "thresholdSensitivity");
+        mSmoothingLocation = GLES20.glGetUniformLocation(getProgram(), "smoothing");
+        mColorToReplaceLocation = GLES20.glGetUniformLocation(getProgram(), "colorToReplace");
     }
 
     @Override
@@ -93,8 +90,7 @@ public class GPUImageChromaKeyBlendFilter extends GPUImageTwoInputFilter {
         super.onInitialized();
         setSmoothing(mSmoothing);
         setThresholdSensitivity(mThresholdSensitivity);
-        setColorToReplace(mColorToReplace[0], mColorToReplace[1],
-                mColorToReplace[2]);
+        setColorToReplace(mColorToReplace[0], mColorToReplace[1], mColorToReplace[2]);
     }
 
     /**
@@ -127,10 +123,8 @@ public class GPUImageChromaKeyBlendFilter extends GPUImageTwoInputFilter {
      * @param blueComponent
      *            Blue component of color to be replaced
      */
-    public void setColorToReplace(float redComponent, float greenComponent,
-            float blueComponent) {
-        mColorToReplace = new float[] { redComponent, greenComponent,
-                blueComponent };
+    public void setColorToReplace(float redComponent, float greenComponent, float blueComponent) {
+        mColorToReplace = new float[] { redComponent, greenComponent, blueComponent };
         setFloatVec3(mColorToReplaceLocation, mColorToReplace);
     }
 }

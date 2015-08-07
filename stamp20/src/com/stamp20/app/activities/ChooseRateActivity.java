@@ -28,8 +28,7 @@ import com.stamp20.app.util.Log;
 import com.stamp20.app.view.ChooseRatePopupWindow;
 import com.stamp20.app.view.ChooseRateStampView;
 
-public class ChooseRateActivity extends Activity implements
-        View.OnClickListener, ChooseRatePopupWindow.OnRateSelecedListener {
+public class ChooseRateActivity extends Activity implements View.OnClickListener, ChooseRatePopupWindow.OnRateSelecedListener {
 
     private static final String titleName = "Choose a Rate";
     Bitmap stampBitmap;
@@ -61,8 +60,7 @@ public class ChooseRateActivity extends Activity implements
          */
         stampBitmap = BitmapCache.getCache().get();
         if (stampBitmap != null) {
-            Log.i("bitmapcache", "onDrawFrame, stampbitmap get is "
-                    + stampBitmap.getWidth());
+            Log.i("bitmapcache", "onDrawFrame, stampbitmap get is " + stampBitmap.getWidth());
         } else {
             Log.i("bitmapchache", "onDrawFrame, stampbitmap is " + stampBitmap);
         }
@@ -71,8 +69,7 @@ public class ChooseRateActivity extends Activity implements
         findViewById(R.id.tail_icon).setVisibility(View.GONE);
         ((TextView) findViewById(R.id.tail_text)).setText(R.string.next_review);
         ;
-        mStampViewIsHorizontal = getIntent().getBooleanExtra(
-                Constant.STAMP_IS_HORIZONTAL, true);
+        mStampViewIsHorizontal = getIntent().getBooleanExtra(Constant.STAMP_IS_HORIZONTAL, true);
         chooseRateStampView.startBuilRateBitmapTask(mStampViewIsHorizontal);
 
         popupWindowInit();
@@ -120,9 +117,7 @@ public class ChooseRateActivity extends Activity implements
             return;
         }
         Canvas c = new Canvas(BitmapCache.getCache().get());
-        c.drawBitmap(chooseRateStampView.getRateBitmap(),
-                chooseRateStampView.getRateXMove(),
-                chooseRateStampView.getRateYMove(), null);
+        c.drawBitmap(chooseRateStampView.getRateBitmap(), chooseRateStampView.getRateXMove(), chooseRateStampView.getRateYMove(), null);
         c.setBitmap(null);
     }
 
@@ -146,13 +141,10 @@ public class ChooseRateActivity extends Activity implements
     private ChooseRatePopupWindow mCRP;
 
     private void popupWindowInit() {
-        mChooseRateRoot = (LinearLayout) this
-                .findViewById(R.id.choose_rate_root);
+        mChooseRateRoot = (LinearLayout) this.findViewById(R.id.choose_rate_root);
         mBlurImageView = (ImageView) this.findViewById(R.id.blur_background);
         if (mCRP == null) {
-            mCRP = new ChooseRatePopupWindow(getApplicationContext(),
-                    ChooseRateActivity.this.findViewById(R.id.root),
-                    mStampViewIsHorizontal);
+            mCRP = new ChooseRatePopupWindow(getApplicationContext(), ChooseRateActivity.this.findViewById(R.id.root), mStampViewIsHorizontal);
             mCRP.setOnRateSelecedListener(this);
             mCRP.setOnDismissListener(new OnDismissListener() {
                 @Override
@@ -164,24 +156,22 @@ public class ChooseRateActivity extends Activity implements
     }
 
     private void hidePopupWindow() {
-        mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(
-                mEndAlpha, mStartAlpha, false, mDuration,
-                new AnimationListener() {
+        mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration, new AnimationListener() {
 
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        mBlurImageView.setClickable(false);
-                        mBlurImageView.setVisibility(View.GONE);
-                    }
-                }));
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mBlurImageView.setClickable(false);
+                mBlurImageView.setVisibility(View.GONE);
+            }
+        }));
     }
 
     private void showPopupWindow() {
@@ -213,23 +203,21 @@ public class ChooseRateActivity extends Activity implements
                 if (null != result) {
                     mBlurImageView.setImageBitmap(result);
                 }
-                mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(
-                        mStartAlpha, mEndAlpha, false, mDuration,
-                        new AnimationListener() {
+                mBlurImageView.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, new AnimationListener() {
 
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                            }
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-                            }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
 
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                mBlurImageView.setClickable(true);
-                            }
-                        }));
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mBlurImageView.setClickable(true);
+                    }
+                }));
             }
         }.execute();
 
@@ -237,8 +225,7 @@ public class ChooseRateActivity extends Activity implements
 
     @Override
     public void onRateSelecedListener(int id, boolean isH) {
-        String[] rateArray = this.getResources().getStringArray(
-                R.array.stamp_rate_title);
+        String[] rateArray = this.getResources().getStringArray(R.array.stamp_rate_title);
         mTextSelectRate.setText(rateArray[id]);
         chooseRateStampView.setRateBitmapId(id, isH);
         /* 暂时移除这个逻辑，因为这里返回的是String */

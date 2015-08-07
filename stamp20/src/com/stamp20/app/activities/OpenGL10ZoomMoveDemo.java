@@ -33,8 +33,7 @@ public class OpenGL10ZoomMoveDemo extends Activity {
 
         // 游戏全屏幕
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // 初始化游戏系统:
         GameSystem.getInstance().setMainActivity(this);
@@ -42,8 +41,7 @@ public class OpenGL10ZoomMoveDemo extends Activity {
         {
             DisplayMetrics dm = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(dm);
-            GameSystem.getInstance().setWindowSize(dm.widthPixels,
-                    dm.heightPixels);
+            GameSystem.getInstance().setWindowSize(dm.widthPixels, dm.heightPixels);
         }
 
         mMyScene = new MyScene();
@@ -65,10 +63,8 @@ public class OpenGL10ZoomMoveDemo extends Activity {
         public MyGLSurfaceView(Context context, MyScene m) {
             super(context);
             mMyScene = m;
-            mTouchEventHelper = new TouchEventHelper(5.0f, 0.5f,
-                    mMyScene.getCanvasWidth(), mMyScene.getCanvasHeight(),
-                    mMyScene.getBitmapWidth(), mMyScene.getBitmapHeight(),
-                    mMyScene);
+            mTouchEventHelper = new TouchEventHelper(5.0f, 0.5f, mMyScene.getCanvasWidth(), mMyScene.getCanvasHeight(), mMyScene.getBitmapWidth(),
+                    mMyScene.getBitmapHeight(), mMyScene);
         }
 
         public boolean onTouchEvent(final MotionEvent event) {
@@ -81,8 +77,7 @@ public class OpenGL10ZoomMoveDemo extends Activity {
         }
     }
 
-    class MyScene extends GlObject implements
-            TouchEventHelper.InvalidateCallback {
+    class MyScene extends GlObject implements TouchEventHelper.InvalidateCallback {
 
         Texture2D texture;
         float ratio = 1.0f;
@@ -113,8 +108,7 @@ public class OpenGL10ZoomMoveDemo extends Activity {
                                   * GameSystem.getInstance().getBitmapFromAssets
                                   * ("androida.jpg");
                                   */
-            = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.background_home_birthday);
+            = BitmapFactory.decodeResource(getResources(), R.drawable.background_home_birthday);
             texture = new Texture2D(androidBitmap);
         }
 

@@ -53,17 +53,14 @@ public class GPUImageLaplacianFilter extends GPUImage3x3TextureSamplingFilter {
             + "mediump vec3 resultColor = topLeftColor * convolutionMatrix[0][0] + topColor * convolutionMatrix[0][1] + topRightColor * convolutionMatrix[0][2];\n"
             + "resultColor += leftColor * convolutionMatrix[1][0] + centerColor.rgb * convolutionMatrix[1][1] + rightColor * convolutionMatrix[1][2];\n"
             + "resultColor += bottomLeftColor * convolutionMatrix[2][0] + bottomColor * convolutionMatrix[2][1] + bottomRightColor * convolutionMatrix[2][2];\n"
-            + "\n"
-            + "// Normalize the results to allow for negative gradients in the 0.0-1.0 colorspace\n"
-            + "resultColor = resultColor + 0.5;\n" + "\n"
+            + "\n" + "// Normalize the results to allow for negative gradients in the 0.0-1.0 colorspace\n" + "resultColor = resultColor + 0.5;\n" + "\n"
             + "gl_FragColor = vec4(resultColor, centerColor.a);\n" + "}\n";
 
     private float[] mConvolutionKernel;
     private int mUniformConvolutionMatrix;
 
     public GPUImageLaplacianFilter() {
-        this(new float[] { 0.5f, 1.0f, 0.5f, 1.0f, -6.0f, 1.0f, 0.5f, 1.0f,
-                0.5f });
+        this(new float[] { 0.5f, 1.0f, 0.5f, 1.0f, -6.0f, 1.0f, 0.5f, 1.0f, 0.5f });
     }
 
     private GPUImageLaplacianFilter(final float[] convolutionKernel) {
@@ -74,8 +71,7 @@ public class GPUImageLaplacianFilter extends GPUImage3x3TextureSamplingFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mUniformConvolutionMatrix = GLES20.glGetUniformLocation(getProgram(),
-                "convolutionMatrix");
+        mUniformConvolutionMatrix = GLES20.glGetUniformLocation(getProgram(), "convolutionMatrix");
         setConvolutionKernel(mConvolutionKernel);
     }
 

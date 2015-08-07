@@ -64,8 +64,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
         Intent intent = getIntent();
         if (intent != null) {
-            if (intent.getStringExtra("from") != null
-                    && intent.getStringExtra("from").equals("home")) {
+            if (intent.getStringExtra("from") != null && intent.getStringExtra("from").equals("home")) {
                 fromHome = true;
             }
         }
@@ -99,16 +98,13 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         btnCheckout.setOnClickListener(this);
         // textHeaderTile.setText(R.string.shop_cartitems_title);
         listCartItems = (ListView) findViewById(R.id.listview_cartitems);
-        layoutListFooter = (LinearLayout) layoutInflater.inflate(
-                R.layout.shop_cartitems_listview_footer, null);
+        layoutListFooter = (LinearLayout) layoutInflater.inflate(R.layout.shop_cartitems_listview_footer, null);
         FontManager.changeFonts(layoutListFooter, this);
-        layoutAddMore = (LinearLayout) layoutListFooter
-                .findViewById(R.id.shop_add_more);
+        layoutAddMore = (LinearLayout) layoutListFooter.findViewById(R.id.shop_add_more);
         layoutAddMore.setOnClickListener(this);
         // listCartItems.addHeaderView(layoutTest);
         listCartItems.addFooterView(layoutListFooter);
-        shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this,
-                mDesigns);
+        shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this, mDesigns);
         listCartItems.setAdapter(shopItemsAdapter);
     }
 
@@ -146,8 +142,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
             if (fromHome) {
-                startActivity(new Intent(ShopCartItemsActivity.this,
-                        HomeActivity.class));
+                startActivity(new Intent(ShopCartItemsActivity.this, HomeActivity.class));
                 finish();
                 return true;
             }

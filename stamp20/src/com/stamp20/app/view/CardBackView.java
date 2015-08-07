@@ -30,8 +30,7 @@ public class CardBackView extends View {
     // 整个view的宽度和高度
     private int cardBackWidth, cardBackHeight, logoWidth, logoHeight;
     // 这是背景形状图片
-    private Bitmap cardBackShape, cardBackBitmap, cardBackLineBitmap,
-            cardBackBottomLogo;
+    private Bitmap cardBackShape, cardBackBitmap, cardBackLineBitmap, cardBackBottomLogo;
     // 第一次初始化
     private boolean mInitialized = true;
     private boolean isHasLine = false;
@@ -46,8 +45,7 @@ public class CardBackView extends View {
 
     public onGeneratedCardBackBmpListener listener2 = null;
 
-    public void setonGeneratedCardBackBmpListener(
-            onGeneratedCardBackBmpListener l) {
+    public void setonGeneratedCardBackBmpListener(onGeneratedCardBackBmpListener l) {
         this.listener2 = l;
     }
 
@@ -76,18 +74,14 @@ public class CardBackView extends View {
 
     private void initView() {
         Log.i(Tag, "init View ");
-        this.cardBackBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.activity_card_back_shape);
-        this.cardBackShape = BitmapFactory.decodeResource(getResources(),
-                R.drawable.activity_card_back_shape);
+        this.cardBackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape);
+        this.cardBackShape = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape);
         if (listener != null) {
             // listener.onMeasuredListener(cardBackShape.getWidth(),
             // cardBackShape.getHeight());
         }
-        this.cardBackBottomLogo = BitmapFactory.decodeResource(getResources(),
-                R.drawable.activity_card_back_bottom_logo);
-        this.cardBackLineBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.lines_back_small);
+        this.cardBackBottomLogo = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_bottom_logo);
+        this.cardBackLineBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lines_back_small);
         logoWidth = cardBackBottomLogo.getWidth();
         logoHeight = cardBackBottomLogo.getHeight();
         if (cardBackBitmap != null) {
@@ -103,18 +97,15 @@ public class CardBackView extends View {
     }
 
     public Bitmap getAlphaSrcBitmap() {
-        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(),
-                mSourceBitmap.getHeight(), mSourceBitmap.getConfig());
-        Bitmap cover = BitmapFactory.decodeResource(getResources(),
-                R.drawable.card_back_view_overlay);
+        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(), mSourceBitmap.getHeight(), mSourceBitmap.getConfig());
+        Bitmap cover = BitmapFactory.decodeResource(getResources(), R.drawable.card_back_view_overlay);
 
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
         paint.setAlpha(200);
         canvas.drawBitmap(mSourceBitmap, 0, 0, null);
         Matrix matrix = new Matrix();
-        matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(),
-                bitmap.getHeight() * 1.0f / cover.getHeight());
+        matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(), bitmap.getHeight() * 1.0f / cover.getHeight());
         canvas.concat(matrix);
         canvas.drawBitmap(cover, 0, 0, paint);
 
@@ -122,8 +113,7 @@ public class CardBackView extends View {
     }
 
     public void setImageUri(Uri imageUri) {
-        mSourceBitmap = ImageUtil.loadDownsampledBitmap(getContext(), imageUri,
-                2);
+        mSourceBitmap = ImageUtil.loadDownsampledBitmap(getContext(), imageUri, 2);
         this.cardBackBitmap = getAlphaSrcBitmap();
     }
 
@@ -152,10 +142,8 @@ public class CardBackView extends View {
                 count++;
             }
         }
-        Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight,
-                Config.ARGB_4444);
-        newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth,
-                mBitmapHeight);
+        Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight, Config.ARGB_4444);
+        newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth, mBitmapHeight);
 
         cardBackBitmap = newBmp;
         return newBmp;
@@ -164,8 +152,7 @@ public class CardBackView extends View {
     public Bitmap colorBitmap(Bitmap bitmapSource, int color) {
         int width = bitmapSource.getWidth();
         int height = bitmapSource.getHeight();
-        Bitmap bmp = Bitmap
-                .createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
         Paint paint = new Paint();
         ColorMatrix colorMatrix = new ColorMatrix();
@@ -174,10 +161,8 @@ public class CardBackView extends View {
         int b = Color.blue(color);
         int a = Color.alpha(color);
         Log.i("jiangtao", "r is : " + r + "b is : " + b + "g is : " + g);
-        colorMatrix.setScale(r * 1.0f / 255, g * 1.0f / 255, b * 1.0f / 255,
-                1.0f);
-        ColorMatrixColorFilter colorMatrixFilter = new ColorMatrixColorFilter(
-                colorMatrix);
+        colorMatrix.setScale(r * 1.0f / 255, g * 1.0f / 255, b * 1.0f / 255, 1.0f);
+        ColorMatrixColorFilter colorMatrixFilter = new ColorMatrixColorFilter(colorMatrix);
         paint.setColorFilter(colorMatrixFilter);
         canvas.drawBitmap(bitmapSource, 0, 0, paint);
         paint.reset();
@@ -227,10 +212,8 @@ public class CardBackView extends View {
             }
         }
 
-        Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight,
-                Config.ARGB_4444);
-        newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth,
-                mBitmapHeight);
+        Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight, Config.ARGB_4444);
+        newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth, mBitmapHeight);
         mInitialized = true;
         return newBmp;
     }
@@ -255,14 +238,12 @@ public class CardBackView extends View {
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right,
-            int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         Log.d(this, "onLayout...");
         cardBackWidth = getMeasuredWidth();
         cardBackHeight = getMeasuredHeight();
-        Log.i("jiangtao4", "cardBackWidth is : " + cardBackWidth
-                + "cardBackHeight is : " + cardBackHeight);
+        Log.i("jiangtao4", "cardBackWidth is : " + cardBackWidth + "cardBackHeight is : " + cardBackHeight);
     }
 
     @Override
@@ -283,15 +264,13 @@ public class CardBackView extends View {
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize;
         } else {
-            width = Math.min(widthSize, imWidth + getPaddingLeft()
-                    + getPaddingRight());
+            width = Math.min(widthSize, imWidth + getPaddingLeft() + getPaddingRight());
         }
 
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
         } else {
-            height = Math.min(heightSize, imHeight + getPaddingTop()
-                    + getPaddingBottom());
+            height = Math.min(heightSize, imHeight + getPaddingTop() + getPaddingBottom());
         }
         setMeasuredDimension(width, height);
     }
@@ -309,23 +288,18 @@ public class CardBackView extends View {
             } else {
                 left = 0;
             }
-            int top = (cardBackHeight - cardBackBitmap.getHeight()) / 2
-                    + cardBackBitmap.getHeight() - logoHeight;
+            int top = (cardBackHeight - cardBackBitmap.getHeight()) / 2 + cardBackBitmap.getHeight() - logoHeight;
 
             // draw the shape background
-            canvas.drawBitmap(cardBackBitmap, null, new Rect(getPaddingLeft(),
-                    (cardBackHeight - cardBackBitmap.getHeight()) / 2,
-                    cardBackWidth - getPaddingRight(), cardBackHeight),
-                    paintShape);
+            canvas.drawBitmap(cardBackBitmap, null, new Rect(getPaddingLeft(), (cardBackHeight - cardBackBitmap.getHeight()) / 2, cardBackWidth
+                    - getPaddingRight(), cardBackHeight), paintShape);
 
             // draw the bottom 20stamp logo ,first we get the location the logo
             // canvas.drawBitmap(cardBackBottomLogo, left, top, null);
 
             // draw the line if it exists
             if (isHasLine) {
-                canvas.drawBitmap(cardBackLineBitmap,
-                        (cardBackWidth - cardBackLineBitmap.getWidth()) / 2,
-                        20, null);
+                canvas.drawBitmap(cardBackLineBitmap, (cardBackWidth - cardBackLineBitmap.getWidth()) / 2, 20, null);
             }
 
             // mInitialized = false;

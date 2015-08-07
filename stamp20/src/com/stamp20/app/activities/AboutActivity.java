@@ -59,21 +59,18 @@ public class AboutActivity extends Activity implements OnItemClickListener {
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent detailIntent = new Intent();
         switch (position) {
         case 0:
             detailIntent = new Intent(this, AboutDetailsActivity.class);
             detailIntent.putExtra("url", "http://www.20stamps.com/faq");
-            detailIntent.putExtra("title",
-                    getResources().getString(R.string.about_1));
+            detailIntent.putExtra("title", getResources().getString(R.string.about_1));
             break;
         case 1:
             detailIntent = new Intent(this, AboutDetailsActivity.class);
             detailIntent.putExtra("url", "http://www.20stamps.com/faq");
-            detailIntent.putExtra("title",
-                    getResources().getString(R.string.about_2));
+            detailIntent.putExtra("title", getResources().getString(R.string.about_2));
             break;
         case 2:
             // 发送邮件
@@ -82,29 +79,25 @@ public class AboutActivity extends Activity implements OnItemClickListener {
             break;
         case 3:
             // 访问网站
-            detailIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://www.20stamps.com"));
+            detailIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.20stamps.com"));
             break;
         case 4:
             // terms of service
             detailIntent = new Intent(this, AboutDetailsActivity.class);
             detailIntent.putExtra("url", "http://www.20stamps.com/terms");
-            detailIntent.putExtra("title",
-                    getResources().getString(R.string.about_5));
+            detailIntent.putExtra("title", getResources().getString(R.string.about_5));
             break;
         case 5:
             // privacy policy
             detailIntent = new Intent(this, AboutDetailsActivity.class);
             detailIntent.putExtra("url", "http://www.20stamps.com/privacy");
-            detailIntent.putExtra("title",
-                    getResources().getString(R.string.about_6));
+            detailIntent.putExtra("title", getResources().getString(R.string.about_6));
             break;
         case 6:
             // shipping & return policy
             detailIntent = new Intent(this, AboutDetailsActivity.class);
             detailIntent.putExtra("url", "http://www.20stamps.com/shipping");
-            detailIntent.putExtra("title",
-                    getResources().getString(R.string.about_7));
+            detailIntent.putExtra("title", getResources().getString(R.string.about_7));
             break;
         case 7:
             break;

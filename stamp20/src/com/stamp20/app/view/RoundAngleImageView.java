@@ -49,12 +49,9 @@ public class RoundAngleImageView extends ImageView {
     private void init(Context context, AttributeSet attrs) {
 
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs,
-                    R.styleable.RoundAngleImageView);
-            roundWidth = a.getDimensionPixelSize(
-                    R.styleable.RoundAngleImageView_roundWidth, roundWidth);
-            roundHeight = a.getDimensionPixelSize(
-                    R.styleable.RoundAngleImageView_roundHeight, roundHeight);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RoundAngleImageView);
+            roundWidth = a.getDimensionPixelSize(R.styleable.RoundAngleImageView_roundWidth, roundWidth);
+            roundHeight = a.getDimensionPixelSize(R.styleable.RoundAngleImageView_roundHeight, roundHeight);
         } else {
             float density = context.getResources().getDisplayMetrics().density;
             roundWidth = (int) (roundWidth * density);
@@ -72,8 +69,7 @@ public class RoundAngleImageView extends ImageView {
 
     @Override
     public void draw(Canvas canvas) {
-        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(),
-                Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Config.ARGB_8888);
         Canvas canvas2 = new Canvas(bitmap);
         super.draw(canvas2);
         drawLiftUp(canvas2);
@@ -99,8 +95,7 @@ public class RoundAngleImageView extends ImageView {
         path.moveTo(0, getHeight() - roundHeight);
         path.lineTo(0, getHeight());
         path.lineTo(roundWidth, getHeight());
-        path.arcTo(new RectF(0, getHeight() - roundHeight * 2,
-                0 + roundWidth * 2, getHeight()), 90, 90);
+        path.arcTo(new RectF(0, getHeight() - roundHeight * 2, 0 + roundWidth * 2, getHeight()), 90, 90);
         path.close();
         canvas.drawPath(path, paint);
     }
@@ -110,8 +105,7 @@ public class RoundAngleImageView extends ImageView {
         path.moveTo(getWidth() - roundWidth, getHeight());
         path.lineTo(getWidth(), getHeight());
         path.lineTo(getWidth(), getHeight() - roundHeight);
-        path.arcTo(new RectF(getWidth() - roundWidth * 2, getHeight()
-                - roundHeight * 2, getWidth(), getHeight()), 0, 90);
+        path.arcTo(new RectF(getWidth() - roundWidth * 2, getHeight() - roundHeight * 2, getWidth(), getHeight()), 0, 90);
         path.close();
         canvas.drawPath(path, paint);
     }
@@ -121,8 +115,7 @@ public class RoundAngleImageView extends ImageView {
         path.moveTo(getWidth(), roundHeight);
         path.lineTo(getWidth(), 0);
         path.lineTo(getWidth() - roundWidth, 0);
-        path.arcTo(new RectF(getWidth() - roundWidth * 2, 0, getWidth(),
-                0 + roundHeight * 2), -90, 90);
+        path.arcTo(new RectF(getWidth() - roundWidth * 2, 0, getWidth(), 0 + roundHeight * 2), -90, 90);
         path.close();
         canvas.drawPath(path, paint);
     }

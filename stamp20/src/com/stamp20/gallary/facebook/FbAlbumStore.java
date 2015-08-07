@@ -24,16 +24,13 @@ public class FbAlbumStore {
         JSONObject response = null;
         FbPhoto result = null;
         try {
-            response = new JSONObject(ParseFacebookUtils.getFacebook().request(
-                    photoId));
+            response = new JSONObject(ParseFacebookUtils.getFacebook().request(photoId));
             if (response != null) {
                 if (response.has("error")) {
                     Log.e("cases", "getFbPhoto error " + response.toString());
                 } else {
-                    result = new FbPhoto(response.getString("id"),
-                            response.getString("source"),
-                            response.getString("picture"),
-                            response.getInt("width"), response.getInt("height"));
+                    result = new FbPhoto(response.getString("id"), response.getString("source"), response.getString("picture"), response.getInt("width"),
+                            response.getInt("height"));
                 }
             }
         } catch (JSONException e) {
@@ -52,8 +49,7 @@ public class FbAlbumStore {
         FbAlbumResult result = new FbAlbumResult(100);
         String para = p == null ? "me/albums" : p;
         try {
-            response = new JSONObject(ParseFacebookUtils.getFacebook().request(
-                    para));
+            response = new JSONObject(ParseFacebookUtils.getFacebook().request(para));
             if (response != null) {
                 if (response.has("error")) {
                     Log.e("cases", "getAlbums error " + response.toString());
@@ -62,12 +58,8 @@ public class FbAlbumStore {
                         JSONArray albums = response.getJSONArray("data");
                         for (int i = 0; i < albums.length(); i++) {
                             JSONObject saObj = albums.getJSONObject(i);
-                            if (saObj.has("count") && saObj.has("cover_photo")
-                                    && saObj.has("name")) {
-                                result.add(new FbAlbum(saObj.getString("id"),
-                                        saObj.getString("name"), saObj
-                                                .getInt("count"), saObj
-                                                .getString("cover_photo"),
+                            if (saObj.has("count") && saObj.has("cover_photo") && saObj.has("name")) {
+                                result.add(new FbAlbum(saObj.getString("id"), saObj.getString("name"), saObj.getInt("count"), saObj.getString("cover_photo"),
                                         null, null));
                             }
                         }
@@ -75,19 +67,16 @@ public class FbAlbumStore {
 
                     // adding next page if existing
                     if (response.has("paging")) {
-                        JSONObject pagingObject = response
-                                .getJSONObject("paging");
+                        JSONObject pagingObject = response.getJSONObject("paging");
                         if (pagingObject.has("next")) {
-                            result.setNextAlbumsUrl(pagingObject.getString(
-                                    "next").substring(27));
+                            result.setNextAlbumsUrl(pagingObject.getString("next").substring(27));
                         }
                     }
                     // retrieving thumbnail cover url
                     for (FbAlbum fa : result) {
                         FbPhoto coverPhoto = getFbPhoto(fa.getCoverId());
                         if (coverPhoto != null) {
-                            fa.setCoverThumbnailUrl(coverPhoto
-                                    .getThumbnailUrl());
+                            fa.setCoverThumbnailUrl(coverPhoto.getThumbnailUrl());
                             fa.setCoverSourceUrl(coverPhoto.getSourceImageUrl());
                         }
                     }
@@ -118,12 +107,8 @@ public class FbAlbumStore {
                         JSONArray albums = response.getJSONArray("data");
                         for (int i = 0; i < albums.length(); i++) {
                             JSONObject saObj = albums.getJSONObject(i);
-                            if (saObj.has("count") && saObj.has("cover_photo")
-                                    && saObj.has("name")) {
-                                result.add(new FbAlbum(saObj.getString("id"),
-                                        saObj.getString("name"), saObj
-                                                .getInt("count"), saObj
-                                                .getString("cover_photo"),
+                            if (saObj.has("count") && saObj.has("cover_photo") && saObj.has("name")) {
+                                result.add(new FbAlbum(saObj.getString("id"), saObj.getString("name"), saObj.getInt("count"), saObj.getString("cover_photo"),
                                         null, null));
                             }
                         }
@@ -131,11 +116,9 @@ public class FbAlbumStore {
 
                     // adding next page if existing
                     if (response.has("paging")) {
-                        JSONObject pagingObject = response
-                                .getJSONObject("paging");
+                        JSONObject pagingObject = response.getJSONObject("paging");
                         if (pagingObject.has("next")) {
-                            result.setNextAlbumsUrl(pagingObject.getString(
-                                    "next").substring(27));
+                            result.setNextAlbumsUrl(pagingObject.getString("next").substring(27));
                         }
                     }
                     // retrieving thumbnail cover url
@@ -161,8 +144,7 @@ public class FbAlbumStore {
         JSONObject response = null;
         FbPhotoResult result = new FbPhotoResult(100);
         try {
-            response = new JSONObject(ParseFacebookUtils.getFacebook().request(
-                    para));
+            response = new JSONObject(ParseFacebookUtils.getFacebook().request(para));
             if (response != null) {
                 if (response.has("error")) {
                     Log.e("cases", "getPhotos error " + response.toString());
@@ -171,19 +153,15 @@ public class FbAlbumStore {
                         JSONArray photos = response.getJSONArray("data");
                         for (int i = 0; i < photos.length(); i++) {
                             JSONObject spObj = photos.getJSONObject(i);
-                            result.add(new FbPhoto(spObj.getString("id"), spObj
-                                    .getString("source"), spObj
-                                    .getString("picture"), spObj
-                                    .getInt("width"), spObj.getInt("height")));
+                            result.add(new FbPhoto(spObj.getString("id"), spObj.getString("source"), spObj.getString("picture"), spObj.getInt("width"), spObj
+                                    .getInt("height")));
                         }
                     }
                     // adding next page if existing
                     if (response.has("paging")) {
-                        JSONObject pagingObject = response
-                                .getJSONObject("paging");
+                        JSONObject pagingObject = response.getJSONObject("paging");
                         if (pagingObject.has("next")) {
-                            result.setNextPhotosUrl(pagingObject.getString(
-                                    "next").substring(27));
+                            result.setNextPhotosUrl(pagingObject.getString("next").substring(27));
                         }
                     }
                 }

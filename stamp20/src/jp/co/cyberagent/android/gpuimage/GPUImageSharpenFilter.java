@@ -24,36 +24,16 @@ import android.opengl.GLES20;
  * sharpness: from -4.0 to 4.0, with 0.0 as the normal level
  */
 public class GPUImageSharpenFilter extends GPUImageFilter {
-    public static final String SHARPEN_VERTEX_SHADER = ""
-            + "attribute vec4 position;\n"
-            + "attribute vec4 inputTextureCoordinate;\n"
-            + "\n"
-            + "uniform float imageWidthFactor; \n"
-            + "uniform float imageHeightFactor; \n"
-            + "uniform float sharpness;\n"
-            + "\n"
-            + "varying vec2 textureCoordinate;\n"
-            + "varying vec2 leftTextureCoordinate;\n"
-            + "varying vec2 rightTextureCoordinate; \n"
-            + "varying vec2 topTextureCoordinate;\n"
-            + "varying vec2 bottomTextureCoordinate;\n"
-            + "\n"
-            + "varying float centerMultiplier;\n"
-            + "varying float edgeMultiplier;\n"
-            + "\n"
-            + "void main()\n"
-            + "{\n"
-            + "    gl_Position = position;\n"
-            + "    \n"
-            + "    mediump vec2 widthStep = vec2(imageWidthFactor, 0.0);\n"
-            + "    mediump vec2 heightStep = vec2(0.0, imageHeightFactor);\n"
-            + "    \n"
-            + "    textureCoordinate = inputTextureCoordinate.xy;\n"
-            + "    leftTextureCoordinate = inputTextureCoordinate.xy - widthStep;\n"
+    public static final String SHARPEN_VERTEX_SHADER = "" + "attribute vec4 position;\n" + "attribute vec4 inputTextureCoordinate;\n" + "\n"
+            + "uniform float imageWidthFactor; \n" + "uniform float imageHeightFactor; \n" + "uniform float sharpness;\n" + "\n"
+            + "varying vec2 textureCoordinate;\n" + "varying vec2 leftTextureCoordinate;\n" + "varying vec2 rightTextureCoordinate; \n"
+            + "varying vec2 topTextureCoordinate;\n" + "varying vec2 bottomTextureCoordinate;\n" + "\n" + "varying float centerMultiplier;\n"
+            + "varying float edgeMultiplier;\n" + "\n" + "void main()\n" + "{\n" + "    gl_Position = position;\n" + "    \n"
+            + "    mediump vec2 widthStep = vec2(imageWidthFactor, 0.0);\n" + "    mediump vec2 heightStep = vec2(0.0, imageHeightFactor);\n" + "    \n"
+            + "    textureCoordinate = inputTextureCoordinate.xy;\n" + "    leftTextureCoordinate = inputTextureCoordinate.xy - widthStep;\n"
             + "    rightTextureCoordinate = inputTextureCoordinate.xy + widthStep;\n"
             + "    topTextureCoordinate = inputTextureCoordinate.xy + heightStep;     \n"
-            + "    bottomTextureCoordinate = inputTextureCoordinate.xy - heightStep;\n"
-            + "    \n" + "    centerMultiplier = 1.0 + 4.0 * sharpness;\n"
+            + "    bottomTextureCoordinate = inputTextureCoordinate.xy - heightStep;\n" + "    \n" + "    centerMultiplier = 1.0 + 4.0 * sharpness;\n"
             + "    edgeMultiplier = sharpness;\n" + "}";
 
     public static final String SHARPEN_FRAGMENT_SHADER = ""
@@ -98,12 +78,9 @@ public class GPUImageSharpenFilter extends GPUImageFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mSharpnessLocation = GLES20.glGetUniformLocation(getProgram(),
-                "sharpness");
-        mImageWidthFactorLocation = GLES20.glGetUniformLocation(getProgram(),
-                "imageWidthFactor");
-        mImageHeightFactorLocation = GLES20.glGetUniformLocation(getProgram(),
-                "imageHeightFactor");
+        mSharpnessLocation = GLES20.glGetUniformLocation(getProgram(), "sharpness");
+        mImageWidthFactorLocation = GLES20.glGetUniformLocation(getProgram(), "imageWidthFactor");
+        mImageHeightFactorLocation = GLES20.glGetUniformLocation(getProgram(), "imageHeightFactor");
         setSharpness(mSharpness);
     }
 

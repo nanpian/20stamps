@@ -30,8 +30,7 @@ import com.stamp20.app.util.Image;
 import com.stamp20.app.util.Log;
 import com.stamp20.gallary.ChildAdapter;
 
-public class ShowFBImageActivity extends Activity implements
-        OnItemClickListener {
+public class ShowFBImageActivity extends Activity implements OnItemClickListener {
     private static final String TAG = "Show_Facebook_ImageActivity";
     private final static int LOAD_OK = 1;
     private final static int FILE_TMP_OK = 2;
@@ -53,8 +52,7 @@ public class ShowFBImageActivity extends Activity implements
             switch (msg.what) {
             case LOAD_OK:
                 Log.d(TAG, "Receive Msg LOAD_OK");
-                adapter = new ChildAdapter(ShowFBImageActivity.this,
-                        mAlbumPhotos, mGridView);
+                adapter = new ChildAdapter(ShowFBImageActivity.this, mAlbumPhotos, mGridView);
                 mGridView.setAdapter(adapter);
                 mGridView.setOnItemClickListener(ShowFBImageActivity.this);
                 break;
@@ -97,8 +95,7 @@ public class ShowFBImageActivity extends Activity implements
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         String url = mAlbumPhotos.get(position).getSourceImageUrl();
 
@@ -132,8 +129,7 @@ public class ShowFBImageActivity extends Activity implements
             }
 
             Uri uri = Uri.fromFile(file);
-            Intent intent = new Intent(ShowFBImageActivity.this,
-                    MainEffect.class);
+            Intent intent = new Intent(ShowFBImageActivity.this, MainEffect.class);
             intent.putExtra("imageUri", uri);
 
             return intent;

@@ -27,8 +27,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
-public class BuyWithPaypalReviewActivity extends Activity implements
-        View.OnClickListener {
+public class BuyWithPaypalReviewActivity extends Activity implements View.OnClickListener {
 
     private ImageView headerPrevious;
     private TextView headerTitle;
@@ -57,15 +56,10 @@ public class BuyWithPaypalReviewActivity extends Activity implements
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final int REQUEST_CODE_PROFILE_SHARING = 3;
 
-    private static PayPalConfiguration config = new PayPalConfiguration()
-            .environment(CONFIG_ENVIRONMENT)
-            .clientId(CONFIG_CLIENT_ID)
+    private static PayPalConfiguration config = new PayPalConfiguration().environment(CONFIG_ENVIRONMENT).clientId(CONFIG_CLIENT_ID)
             // The following are only used in PayPalFuturePaymentActivity.
-            .merchantName("Hipster Store")
-            .merchantPrivacyPolicyUri(
-                    Uri.parse("https://www.example.com/privacy"))
-            .merchantUserAgreementUri(
-                    Uri.parse("https://www.example.com/legal"));
+            .merchantName("Hipster Store").merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
+            .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,21 +134,18 @@ public class BuyWithPaypalReviewActivity extends Activity implements
     }
 
     private PayPalPayment getThingToBuy(String paymentIntent) {
-        return new PayPalPayment(new BigDecimal("1.75"), "USD",
-                "Order#1003352", paymentIntent);
+        return new PayPalPayment(new BigDecimal("1.75"), "USD", "Order#1003352", paymentIntent);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
-                PaymentConfirmation confirm = data
-                        .getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if (confirm != null) {
                     try {
                         Log.d(this, confirm.toJSONObject().toString(4));
-                        Log.i(this, confirm.getPayment().toJSONObject()
-                                .toString(4));
+                        Log.i(this, confirm.getPayment().toJSONObject().toString(4));
                         /**
                          * TODO: send 'confirm' (and possibly
                          * confirm.getPayment() to your server for verification
@@ -168,42 +159,32 @@ public class BuyWithPaypalReviewActivity extends Activity implements
                          * .com/paypal/rest-api-sdk-python/tree/master
                          * /samples/mobile_backend
                          */
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "PaymentConfirmation info received from PayPal",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "PaymentConfirmation info received from PayPal", Toast.LENGTH_LONG).show();
 
                     } catch (JSONException e) {
-                        Log.e(this, "an extremely unlikely failure occurred: ",
-                                e);
+                        Log.e(this, "an extremely unlikely failure occurred: ", e);
                     }
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.i(this, "The user canceled.");
             } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-                Log.i(this,
-                        "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+                Log.i(this, "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
             }
         } else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
-                PayPalAuthorization auth = data
-                        .getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
+                PayPalAuthorization auth = data.getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
                 if (auth != null) {
                     try {
-                        Log.i("FuturePaymentExample", auth.toJSONObject()
-                                .toString(4));
+                        Log.i("FuturePaymentExample", auth.toJSONObject().toString(4));
 
                         String authorization_code = auth.getAuthorizationCode();
                         Log.i("FuturePaymentExample", authorization_code);
 
                         sendAuthorizationToServer(auth);
-                        Toast.makeText(getApplicationContext(),
-                                "Future Payment code received from PayPal",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Future Payment code received from PayPal", Toast.LENGTH_LONG).show();
 
                     } catch (JSONException e) {
-                        Log.e("FuturePaymentExample",
-                                "an extremely unlikely failure occurred: ", e);
+                        Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
                     }
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -214,24 +195,19 @@ public class BuyWithPaypalReviewActivity extends Activity implements
             }
         } else if (requestCode == REQUEST_CODE_PROFILE_SHARING) {
             if (resultCode == Activity.RESULT_OK) {
-                PayPalAuthorization auth = data
-                        .getParcelableExtra(PayPalProfileSharingActivity.EXTRA_RESULT_AUTHORIZATION);
+                PayPalAuthorization auth = data.getParcelableExtra(PayPalProfileSharingActivity.EXTRA_RESULT_AUTHORIZATION);
                 if (auth != null) {
                     try {
-                        Log.i("ProfileSharingExample", auth.toJSONObject()
-                                .toString(4));
+                        Log.i("ProfileSharingExample", auth.toJSONObject().toString(4));
 
                         String authorization_code = auth.getAuthorizationCode();
                         Log.i("ProfileSharingExample", authorization_code);
 
                         sendAuthorizationToServer(auth);
-                        Toast.makeText(getApplicationContext(),
-                                "Profile Sharing code received from PayPal",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Profile Sharing code received from PayPal", Toast.LENGTH_LONG).show();
 
                     } catch (JSONException e) {
-                        Log.e("ProfileSharingExample",
-                                "an extremely unlikely failure occurred: ", e);
+                        Log.e("ProfileSharingExample", "an extremely unlikely failure occurred: ", e);
                     }
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {

@@ -102,8 +102,7 @@ public class ImageEffectAdapter extends BaseAdapter {
         // imageBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
         // for the preview blur imageview, just using 200*200 size to reduce the
         // memorry
-        imageBitmap = BitmapUtils.decodeUri(imageUri,
-                mContext.getContentResolver(), 200);
+        imageBitmap = BitmapUtils.decodeUri(imageUri, mContext.getContentResolver(), 200);
         mImageBlurRender.setBlurBitmapSrc(imageBitmap);
     }
 
@@ -121,8 +120,7 @@ public class ImageEffectAdapter extends BaseAdapter {
         }
     }
 
-    public Effect createEffect(int currentfilterID,
-            EffectContext mEffectContext2) {
+    public Effect createEffect(int currentfilterID, EffectContext mEffectContext2) {
         // TODO Auto-generated method stub
         mEffectContext = mEffectContext2;
         return mEffect = createEffect(currentfilterID);
@@ -161,15 +159,13 @@ public class ImageEffectAdapter extends BaseAdapter {
             break;
 
         case 2:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_BLACKWHITE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BLACKWHITE);
             mEffect.setParameter("black", .1f);
             mEffect.setParameter("white", .7f);
             break;
 
         case 3:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_BRIGHTNESS);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BRIGHTNESS);
             mEffect.setParameter("brightness", 2.0f);
             break;
 
@@ -179,13 +175,11 @@ public class ImageEffectAdapter extends BaseAdapter {
             break;
 
         case 5:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_CROSSPROCESS);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_CROSSPROCESS);
             break;
 
         case 6:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_DOCUMENTARY);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_DOCUMENTARY);
             break;
 
         case 7:
@@ -195,8 +189,7 @@ public class ImageEffectAdapter extends BaseAdapter {
             break;
 
         case 8:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_FILLLIGHT);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FILLLIGHT);
             mEffect.setParameter("strength", .8f);
             break;
 
@@ -221,8 +214,7 @@ public class ImageEffectAdapter extends BaseAdapter {
             break;
 
         case 13:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_GRAYSCALE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_GRAYSCALE);
             break;
 
         case 14:
@@ -234,8 +226,7 @@ public class ImageEffectAdapter extends BaseAdapter {
             break;
 
         case 16:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_POSTERIZE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_POSTERIZE);
             break;
 
         case 17:
@@ -257,8 +248,7 @@ public class ImageEffectAdapter extends BaseAdapter {
             break;
 
         case 21:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_TEMPERATURE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_TEMPERATURE);
             mEffect.setParameter("scale", .9f);
             break;
 
@@ -303,20 +293,17 @@ public class ImageEffectAdapter extends BaseAdapter {
 
     public String getFilterName(int position) {
         // TODO Auto-generated method stub
-        return position < filterArray.size() ? filterArray.get(position).filterName
-                : null;
+        return position < filterArray.size() ? filterArray.get(position).filterName : null;
     }
 
     public int getFilterID(int position) {
-        return position < filterArray.size() ? filterArray.get(position).filterID
-                : 0;
+        return position < filterArray.size() ? filterArray.get(position).filterID : 0;
     }
 
     @Override
     public Object getItem(int position) {
         // TODO Auto-generated method stub
-        return position < filterArray.size() ? filterArray.get(position).mEffect
-                : null;
+        return position < filterArray.size() ? filterArray.get(position).mEffect : null;
     }
 
     @Override
@@ -331,37 +318,30 @@ public class ImageEffectAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.gallery_item_layout, null);
-            viewHolder.mImageView = (RoundedImageView) convertView
-                    .findViewById(R.id.image_item);
-            viewHolder.mTextView = (TextView) convertView
-                    .findViewById(R.id.text_item);
+            viewHolder.mImageView = (RoundedImageView) convertView.findViewById(R.id.image_item);
+            viewHolder.mTextView = (TextView) convertView.findViewById(R.id.text_item);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        FontManager.changeFonts(mContext,
-                (LinearLayout) convertView.findViewById(R.id.root));
+        FontManager.changeFonts(mContext, (LinearLayout) convertView.findViewById(R.id.root));
         Bitmap bitmap = mBlutImageMap.get(filterArray.get(position).filterName);
         String effectName = filterArray.get(position).filterName;
         if (bitmap == null) {
             if (position == 0) {
                 viewHolder.mImageView.setImageBitmap(imageBitmap);
             } else {
-                viewHolder.mImageView.setBackground(mContext.getResources()
-                        .getDrawable(R.drawable.blur_image_null));
+                viewHolder.mImageView.setBackground(mContext.getResources().getDrawable(R.drawable.blur_image_null));
                 viewHolder.mImageView.setTag(effectName);
                 // 注意，生成预览图，这里会有egl_bad_match的错误，原因不明，耗费了很多时间在处理这个bug上
                 if (canPreview) {
                     try {
-                        new BlurAsyncTask(position, effectName,
-                                viewHolder.mImageView).execute(imageBitmap);
+                        new BlurAsyncTask(position, effectName, viewHolder.mImageView).execute(imageBitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
                         canPreview = false;
                         viewHolder.mImageView.setImageBitmap(imageBitmap);
-                        Toast.makeText(mContext,
-                                "Cannot Preview, just use source image",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Cannot Preview, just use source image", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     viewHolder.mImageView.setImageBitmap(imageBitmap);
@@ -378,10 +358,8 @@ public class ImageEffectAdapter extends BaseAdapter {
             // imageView.setBorderWidth(R.dimen.gallery_imageview_border_width);
             viewHolder.mImageView.setBorderColor(Color.parseColor("#f1c40f"));
             viewHolder.mTextView.setTextColor(Color.parseColor("#f1c40f"));
-            ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(
-                    viewHolder.mImageView, "scaleX", 1.1f);
-            ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(
-                    viewHolder.mImageView, "scaleY", 1.1f);
+            ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(viewHolder.mImageView, "scaleX", 1.1f);
+            ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(viewHolder.mImageView, "scaleY", 1.1f);
             scaleDownX.setDuration(500);
             scaleDownY.setDuration(500);
             AnimatorSet scaleDown = new AnimatorSet();
@@ -389,8 +367,7 @@ public class ImageEffectAdapter extends BaseAdapter {
             scaleDown.start();
         } else {
             viewHolder.mTextView.setTextColor(Color.parseColor("#ffffff"));
-            viewHolder.mImageView
-                    .setBackgroundResource(R.drawable.bg_filter_item_selected_no);
+            viewHolder.mImageView.setBackgroundResource(R.drawable.bg_filter_item_selected_no);
         }
         return convertView;
     }

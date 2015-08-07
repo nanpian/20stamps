@@ -32,8 +32,7 @@ public class TouchEventHelper {
         maxRatioMultiple = 4.0f;
     }
 
-    public TouchEventHelper(float max, float min, int cw, int ch, int bw,
-            int bh, InvalidateCallback c) {
+    public TouchEventHelper(float max, float min, int cw, int ch, int bw, int bh, InvalidateCallback c) {
         this();
         totalRatio = initRatio = 1.0f;
         maxRatioMultiple = max;
@@ -237,14 +236,12 @@ public class TouchEventHelper {
         // 进行边界检查，不允许将图片拖出边界
         if (totalTranslateX + movedDistanceX > canvasWidth * 0.5f) {
             movedDistanceX = 0;
-        } else if (canvasWidth - (totalTranslateX + movedDistanceX) > currentBitmapWidth
-                + canvasWidth * 0.5f) {
+        } else if (canvasWidth - (totalTranslateX + movedDistanceX) > currentBitmapWidth + canvasWidth * 0.5f) {
             movedDistanceX = 0;
         }
         if (totalTranslateY + movedDistanceY > canvasHeight * 0.5f) {
             movedDistanceY = 0;
-        } else if (canvasHeight - (totalTranslateY + movedDistanceY) > currentBitmapHeight
-                + canvasHeight * 0.5f) {
+        } else if (canvasHeight - (totalTranslateY + movedDistanceY) > currentBitmapHeight + canvasHeight * 0.5f) {
             movedDistanceY = 0;
         }
         // 调用onDraw()方法绘制图片
@@ -269,8 +266,7 @@ public class TouchEventHelper {
         // 有两个手指按在屏幕上移动时，为缩放状态
         centerPointBetweenFingers(event);
 
-        DEBUG_LOG(DEBUG_DOUBLE_MOVE, "centerPointX:" + centerPointX
-                + ",centerPointY:" + centerPointY);
+        DEBUG_LOG(DEBUG_DOUBLE_MOVE, "centerPointX:" + centerPointX + ",centerPointY:" + centerPointY);
 
         double fingerDis = distanceBetweenFingers(event);
         if (fingerDis > lastFingerDis) {
@@ -279,14 +275,11 @@ public class TouchEventHelper {
             currentStatus = STATUS_ZOOM_IN;
         }
 
-        DEBUG_LOG(DEBUG_DOUBLE_MOVE, "fingerDis:" + fingerDis
-                + ",lastFingerDis:" + lastFingerDis);
+        DEBUG_LOG(DEBUG_DOUBLE_MOVE, "fingerDis:" + fingerDis + ",lastFingerDis:" + lastFingerDis);
 
         // 进行缩放倍数检查，最大只允许将图片放大maxRatioMultiple倍，最小可以缩小到初始化比例
-        if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < maxRatioMultiple
-                * initRatio)
-                || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio
-                        * minRatioMultiple)) {
+        if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < maxRatioMultiple * initRatio)
+                || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio * minRatioMultiple)) {
             scaledRatio = (float) (fingerDis / lastFingerDis);
             totalRatio = totalRatio * scaledRatio;
             if (totalRatio > maxRatioMultiple * initRatio) {
@@ -307,8 +300,7 @@ public class TouchEventHelper {
         float translateX = 0f;
         float translateY = 0f;
 
-        translateX = totalTranslateX * scaledRatio + centerPointX
-                * (1 - scaledRatio);
+        translateX = totalTranslateX * scaledRatio + centerPointX * (1 - scaledRatio);
         if (translateX > 0 + canvasWidth * 0.5f) {
             // 移动超过一半了
             translateX = 0 + canvasWidth * 0.5f;
@@ -316,8 +308,7 @@ public class TouchEventHelper {
             translateX = canvasWidth * 0.5f - scaledWidth;
         }
 
-        translateY = totalTranslateY * scaledRatio + centerPointY
-                * (1 - scaledRatio);
+        translateY = totalTranslateY * scaledRatio + centerPointY * (1 - scaledRatio);
         if (translateY > 0 + canvasHeight * 0.5f) {
             translateY = 0 + canvasHeight * 0.5f;
         } else if (canvasHeight * 0.5f - translateY > scaledHeight) {
@@ -363,8 +354,7 @@ public class TouchEventHelper {
             if (event.getPointerCount() == 2) {
                 // 当有两个手指按在屏幕上时，计算两指之间的距离
                 lastFingerDis = distanceBetweenFingers(event);
-                DEBUG_LOG(DEBUG_ACTION_POINTER_DOWN, "lastFingerDis:"
-                        + lastFingerDis);
+                DEBUG_LOG(DEBUG_ACTION_POINTER_DOWN, "lastFingerDis:" + lastFingerDis);
             }
             break;
         case MotionEvent.ACTION_MOVE:
@@ -396,14 +386,11 @@ public class TouchEventHelper {
 
     private void invalidate() {
 
-        DEBUG_LOG(DEBUG_MAIN, "totalRatio:" + totalRatio + ",movedDistanceX:"
-                + movedDistanceX + ",movedDistanceY:" + movedDistanceY
-                + ",centerPointX:" + centerPointX + ",centerPointY:"
-                + centerPointY);
+        DEBUG_LOG(DEBUG_MAIN, "totalRatio:" + totalRatio + ",movedDistanceX:" + movedDistanceX + ",movedDistanceY:" + movedDistanceY + ",centerPointX:"
+                + centerPointX + ",centerPointY:" + centerPointY);
 
         if (mInvalidateCallback != null) {
-            mInvalidateCallback.invalidate(totalRatio, totalTranslateX,
-                    totalTranslateY);
+            mInvalidateCallback.invalidate(totalRatio, totalTranslateX, totalTranslateY);
         }
     }
 

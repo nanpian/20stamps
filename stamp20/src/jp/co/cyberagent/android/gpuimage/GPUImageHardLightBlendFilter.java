@@ -49,9 +49,7 @@ public class GPUImageHardLightBlendFilter extends GPUImageTwoInputFilter {
             + "         ba = 2.0 * overlay.b * base.b + overlay.b * (1.0 - base.a) + base.b * (1.0 - overlay.a);\n"
             + "     } else {\n"
             + "         ba = overlay.a * base.a - 2.0 * (base.a - base.b) * (overlay.a - overlay.b) + overlay.b * (1.0 - base.a) + base.b * (1.0 - overlay.a);\n"
-            + "     }\n"
-            + "     \n"
-            + "     gl_FragColor = vec4(ra, ga, ba, 1.0);\n" + " }";
+            + "     }\n" + "     \n" + "     gl_FragColor = vec4(ra, ga, ba, 1.0);\n" + " }";
 
     public GPUImageHardLightBlendFilter() {
         super(HARD_LIGHT_BLEND_FRAGMENT_SHADER);

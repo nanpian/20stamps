@@ -53,8 +53,7 @@ public class ChildAdapter extends BaseAdapter {
         mContext = context;
     }
 
-    public ChildAdapter(Context context, FbPhotoResult fbPhotos,
-            GridView mGridView) {
+    public ChildAdapter(Context context, FbPhotoResult fbPhotos, GridView mGridView) {
         this.list = null;
         this.mFbPhotos = fbPhotos;
 
@@ -93,8 +92,7 @@ public class ChildAdapter extends BaseAdapter {
             // FontManager.changeFonts(mContext,
             // (FrameLayout)convertView.findViewById(R.id.framelayout));
             viewHolder = new ViewHolder();
-            viewHolder.mImageView = (MyImageView) convertView
-                    .findViewById(R.id.child_image);
+            viewHolder.mImageView = (MyImageView) convertView.findViewById(R.id.child_image);
             // 用来监听ImageView的宽和高
             viewHolder.mImageView.setOnMeasureListener(new OnMeasureListener() {
                 @Override
@@ -112,9 +110,7 @@ public class ChildAdapter extends BaseAdapter {
 
         if (list != null && mFbPhotos == null) {
             Uri uri = list.get(position);
-            Picasso.with(mContext).load(uri).resize(200, 200).centerCrop()
-                    .placeholder(R.drawable.friends_sends_pictures_no)
-                    .into(viewHolder.mImageView);
+            Picasso.with(mContext).load(uri).resize(200, 200).centerCrop().placeholder(R.drawable.friends_sends_pictures_no).into(viewHolder.mImageView);
             /*
              * String path =
              * ImageUtil.getLocalPathFromUri(mContext.getContentResolver(),
@@ -132,9 +128,7 @@ public class ChildAdapter extends BaseAdapter {
             // Facebook
             String url = mFbPhotos.get(position).getSourceImageUrl();
             Log.i("wangpeng14", "childadapter net url: " + url);
-            Picasso.with(mContext).load(url).resize(200, 200).centerCrop()
-                    .placeholder(R.drawable.friends_sends_pictures_no)
-                    .into(viewHolder.mImageView);
+            Picasso.with(mContext).load(url).resize(200, 200).centerCrop().placeholder(R.drawable.friends_sends_pictures_no).into(viewHolder.mImageView);
             /*
              * // 给ImageView设置路径Tag,这是异步加载图片的小技巧
              * viewHolder.mImageView.setTag(url);
@@ -163,11 +157,9 @@ public class ChildAdapter extends BaseAdapter {
      * @param view
      */
     private void addAnimation(View view) {
-        float[] vaules = new float[] { 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f,
-                1.1f, 1.2f, 1.3f, 1.25f, 1.2f, 1.15f, 1.1f, 1.0f };
+        float[] vaules = new float[] { 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.25f, 1.2f, 1.15f, 1.1f, 1.0f };
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(ObjectAnimator.ofFloat(view, "scaleX", vaules),
-                ObjectAnimator.ofFloat(view, "scaleY", vaules));
+        set.playTogether(ObjectAnimator.ofFloat(view, "scaleX", vaules), ObjectAnimator.ofFloat(view, "scaleY", vaules));
         set.setDuration(150);
         set.start();
     }
@@ -179,8 +171,7 @@ public class ChildAdapter extends BaseAdapter {
      */
     public List<Integer> getSelectItems() {
         List<Integer> list = new ArrayList<Integer>();
-        for (Iterator<Map.Entry<Integer, Boolean>> it = mSelectMap.entrySet()
-                .iterator(); it.hasNext();) {
+        for (Iterator<Map.Entry<Integer, Boolean>> it = mSelectMap.entrySet().iterator(); it.hasNext();) {
             Map.Entry<Integer, Boolean> entry = it.next();
             if (entry.getValue()) {
                 list.add(entry.getKey());

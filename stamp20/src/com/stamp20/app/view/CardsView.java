@@ -34,12 +34,9 @@ public class CardsView extends ZoomImageView {
             return;
         }
         if (mMaskBitmap == null) {
-            mMaskBitmap = BitmapFactory.decodeResource(getResources(),
-                    mMaskBitmapId);
-            mMaskBitmap = ImageUtil.zoomBitmap(mMaskBitmap, getWidth(),
-                    getHeight());
-            Bitmap dstB = Bitmap.createBitmap(getWidth(), getHeight(),
-                    Config.ARGB_8888);
+            mMaskBitmap = BitmapFactory.decodeResource(getResources(), mMaskBitmapId);
+            mMaskBitmap = ImageUtil.zoomBitmap(mMaskBitmap, getWidth(), getHeight());
+            Bitmap dstB = Bitmap.createBitmap(getWidth(), getHeight(), Config.ARGB_8888);
             Canvas tempC = new Canvas(dstB);
             // 将此bitmap的颜色设为纯色
             tempC.drawColor(getResources().getColor(mMaskColorId));
@@ -69,8 +66,7 @@ public class CardsView extends ZoomImageView {
         float translateX = 0f;
         float translateY = 0f;
 
-        translateX = totalTranslateX * scaledRatio + centerPointX
-                * (1 - scaledRatio);
+        translateX = totalTranslateX * scaledRatio + centerPointX * (1 - scaledRatio);
         if (translateX > 0 + width * 0.5f) {
             // 移动超过一半了
             translateX = 0 + width * 0.5f;
@@ -78,8 +74,7 @@ public class CardsView extends ZoomImageView {
             translateX = width * 0.5f - scaledWidth;
         }
 
-        translateY = totalTranslateY * scaledRatio + centerPointY
-                * (1 - scaledRatio);
+        translateY = totalTranslateY * scaledRatio + centerPointY * (1 - scaledRatio);
         if (translateY > 0 + height * 0.5f) {
             translateY = 0 + height * 0.5f;
         } else if (height * 0.5f - translateY > scaledHeight) {
@@ -110,14 +105,12 @@ public class CardsView extends ZoomImageView {
         // 进行边界检查，不允许将图片拖出边界
         if (totalTranslateX + movedDistanceX > width * 0.5f) {
             movedDistanceX = 0;
-        } else if (width - (totalTranslateX + movedDistanceX) > currentBitmapWidth
-                + width * 0.5f) {
+        } else if (width - (totalTranslateX + movedDistanceX) > currentBitmapWidth + width * 0.5f) {
             movedDistanceX = 0;
         }
         if (totalTranslateY + movedDistanceY > height * 0.5f) {
             movedDistanceY = 0;
-        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight
-                + height * 0.5f) {
+        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight + height * 0.5f) {
             movedDistanceY = 0;
         }
         // 调用onDraw()方法绘制图片

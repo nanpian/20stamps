@@ -35,8 +35,7 @@ public class GPUImageMixBlendFilter extends GPUImageTwoInputFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mMixLocation = GLES20.glGetUniformLocation(getProgram(),
-                "mixturePercent");
+        mMixLocation = GLES20.glGetUniformLocation(getProgram(), "mixturePercent");
     }
 
     @Override

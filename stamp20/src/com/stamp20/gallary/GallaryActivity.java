@@ -33,8 +33,7 @@ import com.stamp20.app.activities.HomeActivity;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
-public class GallaryActivity extends FragmentActivity implements
-        OnClickListener, OnPageChangeListener {
+public class GallaryActivity extends FragmentActivity implements OnClickListener, OnPageChangeListener {
 
     public static long OUT_OF_TIME = 10000;
 
@@ -66,13 +65,11 @@ public class GallaryActivity extends FragmentActivity implements
             public void onClick(View arg0) {
                 if (mViewPager != null && mDatas != null) {
                     if (!mDatas.get(mCurrentPageIndex).onBackClick()) {
-                        startActivity(new Intent(GallaryActivity.this,
-                                HomeActivity.class));
+                        startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
                         finish();
                     }
                 } else {
-                    startActivity(new Intent(GallaryActivity.this,
-                            HomeActivity.class));
+                    startActivity(new Intent(GallaryActivity.this, HomeActivity.class));
                     finish();
                 }
             }
@@ -110,15 +107,13 @@ public class GallaryActivity extends FragmentActivity implements
         if (requestCode == InstagramAlbumFragment.REQUEST_CODE_SELECT_INSTAGRAM_AUTH) {
             mDatas.get(3).onActivityResult(requestCode, resultCode, data);
         } else
-            ParseFacebookUtils.finishAuthentication(requestCode, resultCode,
-                    data);
+            ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
 
     // 将indicator宽度设置为和icon_featured_album.png相等
     private void initSelectedImage() {
 
-        Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.icon_featured_album);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon_featured_album);
         int icon_width = icon.getWidth();
 
         mImageSelectedIndicator = (View) findViewById(R.id.image_source_selected);
@@ -134,8 +129,7 @@ public class GallaryActivity extends FragmentActivity implements
         margin_left = (outMetrics.widthPixels - icon_width * 4) / 8;
 
         // 动态设置indicator的宽高,宽度和icon宽度一致
-        LayoutParams lp = (LayoutParams) mImageSelectedIndicator
-                .getLayoutParams();
+        LayoutParams lp = (LayoutParams) mImageSelectedIndicator.getLayoutParams();
         lp.width = icon_width;
         lp.leftMargin = mCurrentPageIndex * mScreen1_4 + margin_left;
         mImageSelectedIndicator.setLayoutParams(lp);
@@ -194,35 +188,22 @@ public class GallaryActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset,
-            int positionOffsetPx) {
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPx) {
         // Log.d(this, "currenindex:" + mCurrentPageIndex + ", position:" +
         // position);
-        LayoutParams lp = (LayoutParams) mImageSelectedIndicator
-                .getLayoutParams();
+        LayoutParams lp = (LayoutParams) mImageSelectedIndicator.getLayoutParams();
         if (mCurrentPageIndex == 0 && position == 0) {// 0->1
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4
-                    + positionOffset + margin_left * mScreen1_4);
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset + margin_left * mScreen1_4);
         } else if (mCurrentPageIndex == 1 && position == 0) {// 1->0
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1)
-                    * mScreen1_4)
-                    + margin_left;
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1) * mScreen1_4) + margin_left;
         } else if (mCurrentPageIndex == 1 && position == 1) {// 1->2
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset
-                    * mScreen1_4)
-                    + margin_left;
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset * mScreen1_4) + margin_left;
         } else if (mCurrentPageIndex == 2 && position == 1) {// 2->1
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1)
-                    * mScreen1_4)
-                    + margin_left;
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1) * mScreen1_4) + margin_left;
         } else if (mCurrentPageIndex == 2 && position == 2) {// 2->3
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset
-                    * mScreen1_4)
-                    + margin_left;
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset * mScreen1_4) + margin_left;
         } else if (mCurrentPageIndex == 3 && position == 2) {// 3->2
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1)
-                    * mScreen1_4)
-                    + margin_left;
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1) * mScreen1_4) + margin_left;
         }
 
         mImageSelectedIndicator.setLayoutParams(lp);

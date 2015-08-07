@@ -23,8 +23,7 @@ public class DPIUtil {
 
     public static Display getDefaultDisplay() {
         if (null == defaultDisplay) {
-            WindowManager systemService = (WindowManager) Stamp20Application
-                    .getInstance().getSystemService(Context.WINDOW_SERVICE);
+            WindowManager systemService = (WindowManager) Stamp20Application.getInstance().getSystemService(Context.WINDOW_SERVICE);
             defaultDisplay = systemService.getDefaultDisplay();
         }
         return defaultDisplay;
@@ -64,8 +63,7 @@ public class DPIUtil {
         return (int) ((spValue - 0.5f) * fontScale);
     }
 
-    public static int getWidthByDesignValue(int nDesignValue,
-            int nDesignScreenWidth) {
+    public static int getWidthByDesignValue(int nDesignValue, int nDesignScreenWidth) {
         return getWidth() * nDesignValue / nDesignScreenWidth;
     }
 

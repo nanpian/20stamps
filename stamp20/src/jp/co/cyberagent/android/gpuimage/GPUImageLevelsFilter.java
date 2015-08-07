@@ -8,8 +8,7 @@ import android.util.Log;
  */
 public class GPUImageLevelsFilter extends GPUImageFilter {
 
-    private static final String LOGTAG = GPUImageLevelsFilter.class
-            .getSimpleName();
+    private static final String LOGTAG = GPUImageLevelsFilter.class.getSimpleName();
 
     public static final String LEVELS_FRAGMET_SHADER =
 
@@ -41,14 +40,11 @@ public class GPUImageLevelsFilter extends GPUImageFilter {
     private float[] mMaxOutput;
 
     public GPUImageLevelsFilter() {
-        this(new float[] { 0.0f, 0.0f, 0.0f },
-                new float[] { 1.0f, 1.0f, 1.0f }, new float[] { 1.0f, 1.0f,
-                        1.0f }, new float[] { 0.0f, 0.0f, 0.0f }, new float[] {
-                        1.0f, 1.0f, 1.0f });
+        this(new float[] { 0.0f, 0.0f, 0.0f }, new float[] { 1.0f, 1.0f, 1.0f }, new float[] { 1.0f, 1.0f, 1.0f }, new float[] { 0.0f, 0.0f, 0.0f },
+                new float[] { 1.0f, 1.0f, 1.0f });
     }
 
-    private GPUImageLevelsFilter(final float[] min, final float[] mid,
-            final float[] max, final float[] minOUt, final float[] maxOut) {
+    private GPUImageLevelsFilter(final float[] min, final float[] mid, final float[] max, final float[] minOUt, final float[] maxOut) {
         super(NO_FILTER_VERTEX_SHADER, LEVELS_FRAGMET_SHADER);
 
         mMin = min;
@@ -62,15 +58,11 @@ public class GPUImageLevelsFilter extends GPUImageFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mMinLocation = GLES20
-                .glGetUniformLocation(getProgram(), "levelMinimum");
+        mMinLocation = GLES20.glGetUniformLocation(getProgram(), "levelMinimum");
         mMidLocation = GLES20.glGetUniformLocation(getProgram(), "levelMiddle");
-        mMaxLocation = GLES20
-                .glGetUniformLocation(getProgram(), "levelMaximum");
-        mMinOutputLocation = GLES20.glGetUniformLocation(getProgram(),
-                "minOutput");
-        mMaxOutputLocation = GLES20.glGetUniformLocation(getProgram(),
-                "maxOutput");
+        mMaxLocation = GLES20.glGetUniformLocation(getProgram(), "levelMaximum");
+        mMinOutputLocation = GLES20.glGetUniformLocation(getProgram(), "minOutput");
+        mMaxOutputLocation = GLES20.glGetUniformLocation(getProgram(), "maxOutput");
     }
 
     @Override
@@ -87,8 +79,7 @@ public class GPUImageLevelsFilter extends GPUImageFilter {
         setFloatVec3(mMaxOutputLocation, mMaxOutput);
     }
 
-    public void setMin(float min, float mid, float max, float minOut,
-            float maxOut) {
+    public void setMin(float min, float mid, float max, float minOut, float maxOut) {
         setRedMin(min, mid, max, minOut, maxOut);
         setGreenMin(min, mid, max, minOut, maxOut);
         setBlueMin(min, mid, max, minOut, maxOut);
@@ -98,8 +89,7 @@ public class GPUImageLevelsFilter extends GPUImageFilter {
         setMin(min, mid, max, 0.0f, 1.0f);
     }
 
-    public void setRedMin(float min, float mid, float max, float minOut,
-            float maxOut) {
+    public void setRedMin(float min, float mid, float max, float minOut, float maxOut) {
         mMin[0] = min;
         mMid[0] = mid;
         mMax[0] = max;
@@ -112,8 +102,7 @@ public class GPUImageLevelsFilter extends GPUImageFilter {
         setRedMin(min, mid, max, 0, 1);
     }
 
-    public void setGreenMin(float min, float mid, float max, float minOut,
-            float maxOut) {
+    public void setGreenMin(float min, float mid, float max, float minOut, float maxOut) {
         mMin[1] = min;
         mMid[1] = mid;
         mMax[1] = max;
@@ -126,8 +115,7 @@ public class GPUImageLevelsFilter extends GPUImageFilter {
         setGreenMin(min, mid, max, 0, 1);
     }
 
-    public void setBlueMin(float min, float mid, float max, float minOut,
-            float maxOut) {
+    public void setBlueMin(float min, float mid, float max, float minOut, float maxOut) {
         mMin[2] = min;
         mMid[2] = mid;
         mMax[2] = max;

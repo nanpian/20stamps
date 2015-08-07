@@ -88,8 +88,7 @@ public class ShopInfoDao {
      */
     public void deleteById(String shop_id) {
         try {
-            DeleteBuilder<ShopInfoData, Integer> deleteBuilder = dao
-                    .deleteBuilder();
+            DeleteBuilder<ShopInfoData, Integer> deleteBuilder = dao.deleteBuilder();
             deleteBuilder.where().eq("shop_uid", shop_id);
             int count = deleteBuilder.delete();
             Log.e("delete count", "count == " + count);
@@ -104,8 +103,7 @@ public class ShopInfoDao {
      */
     public void deleteAll() {
         try {
-            TableUtils.clearTable(helper.getConnectionSource(),
-                    ShopInfoData.class);
+            TableUtils.clearTable(helper.getConnectionSource(), ShopInfoData.class);
         } catch (SQLException e) {
             // TODO: handle exception
         }

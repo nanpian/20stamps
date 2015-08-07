@@ -51,8 +51,7 @@ public class GallaryUtil {
         new DownloadImageTask(context).execute(url);
     }
 
-    private static class DownloadImageTask extends
-            AsyncTask<String, Void, String> {
+    private static class DownloadImageTask extends AsyncTask<String, Void, String> {
         private Context mContext;
         Dialog progress;
 
@@ -62,22 +61,19 @@ public class GallaryUtil {
 
         @Override
         protected void onPreExecute() {
-            progress = GallaryProgressDialog.show(mContext, true,
-                    GallaryActivity.OUT_OF_TIME, false,
-                    new GallaryProgressDialog.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            // TODO Auto-generated method stub
+            progress = GallaryProgressDialog.show(mContext, true, GallaryActivity.OUT_OF_TIME, false, new GallaryProgressDialog.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    // TODO Auto-generated method stub
 
-                        }
+                }
 
-                        @Override
-                        public void onTimeCancel(DialogInterface dialog) {
-                            // TODO Auto-generated method stub
-                            Log.e("wangpeng",
-                                    "download out time, need add response");
-                        }
-                    });
+                @Override
+                public void onTimeCancel(DialogInterface dialog) {
+                    // TODO Auto-generated method stub
+                    Log.e("wangpeng", "download out time, need add response");
+                }
+            });
         }
 
         @Override

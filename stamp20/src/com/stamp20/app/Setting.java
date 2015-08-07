@@ -84,28 +84,24 @@ public class Setting {
     }
 
     public long sinceLastUpdate(Context context) {
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(context);
         return System.currentTimeMillis() - _s.getLong("updateTime", 0);
     }
 
     public void setUpdateTime(Context context) {
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(context);
         Editor e = _s.edit();
         e.putLong("updateTime", System.currentTimeMillis());
         e.commit();
     }
 
     public boolean isInOrderProcessing(Context context) {
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(context);
         return _s.getBoolean("orderprocessing", false);
     }
 
     public void setInOrderProcessing(Context context, boolean isProcessing) {
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(context);
         Editor e = _s.edit();
         e.putBoolean("orderprocessing", isProcessing);
         e.commit();
@@ -113,8 +109,7 @@ public class Setting {
 
     public static boolean isShowTutorial(Context context) {
         if (ENABLE_TUTORIAL) {
-            SharedPreferences _s = PreferenceManager
-                    .getDefaultSharedPreferences(context);
+            SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(context);
             boolean result = _s.getBoolean("showTutorial", true);
             if (!ENABLE_TUTORIAL_FOREVER) {
                 Editor e = _s.edit();
@@ -130,16 +125,14 @@ public class Setting {
     }
 
     public static boolean isTutorialAlreadyShowed(Context context) {
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(context);
         boolean result = _s.getBoolean("showTutorial", true);
         return !result;
     }
 
     public static boolean isShowGestureHelp(Context context) {
         if (ENABLE_TUTORIAL) {
-            SharedPreferences _s = PreferenceManager
-                    .getDefaultSharedPreferences(context);
+            SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(context);
             boolean result = _s.getBoolean("isShowGestureHelp", true);
             if (!ENABLE_TUTORIAL_FOREVER) {
                 Editor e = _s.edit();
@@ -157,8 +150,7 @@ public class Setting {
 
     public static boolean isDebuggable(Context mContext) {
         try {
-            return (0 != (mContext.getPackageManager().getApplicationInfo(
-                    "com.pic2press.android.app", 0).flags & ApplicationInfo.FLAG_DEBUGGABLE));
+            return (0 != (mContext.getPackageManager().getApplicationInfo("com.pic2press.android.app", 0).flags & ApplicationInfo.FLAG_DEBUGGABLE));
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -167,8 +159,7 @@ public class Setting {
 
     public static int getCurrentAppVersion(Context mContext) {
         try {
-            PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(
-                    mContext.getPackageName(), 0);
+            PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
             return pInfo.versionCode;
         } catch (Exception e) {
             // Crashlytics.logException(e);
@@ -177,14 +168,12 @@ public class Setting {
     }
 
     public static int getMinAppVersion(Context mContext) {
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
         return _s.getInt("MinAppVersion", getCurrentAppVersion(mContext));
     }
 
     public static void setMinAppVersion(Context mContext, int latestVersion) {
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
         Editor e = _s.edit();
         e.putInt("MinAppVersion", latestVersion);
         e.commit();
@@ -218,15 +207,13 @@ public class Setting {
      */
 
     // store product price info in sharedPreferences. Add update time
-    public static void saveProductPriceJsonString(Context mContext,
-            String productPriceInfoInJsonString) {
+    public static void saveProductPriceJsonString(Context mContext, String productPriceInfoInJsonString) {
         JSONObject result = new JSONObject();
         ;
         try {
             result = new JSONObject(productPriceInfoInJsonString);
             result.put("updatedTime", System.currentTimeMillis());
-            SharedPreferences _s = PreferenceManager
-                    .getDefaultSharedPreferences(mContext);
+            SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
             Editor e = _s.edit();
             e.putString("ProductPriceJsonString", result.toString());
             e.commit();
@@ -240,16 +227,12 @@ public class Setting {
     public static JSONObject getProductPriceJsonObject(Context mContext) {
         JSONObject result = new JSONObject();
         ;
-        SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
-        String productPriceJsonString = _s.getString("ProductPriceJsonString",
-                "");
-        if (productPriceJsonString != null
-                && !StringUtils.isBlank(productPriceJsonString)) {
+        SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String productPriceJsonString = _s.getString("ProductPriceJsonString", "");
+        if (productPriceJsonString != null && !StringUtils.isBlank(productPriceJsonString)) {
             try {
                 result = new JSONObject(productPriceJsonString);
-                if (result.optLong("updatedTime", 0) < (System
-                        .currentTimeMillis() - ONE_DAY_MILLI_SECONDS)) {
+                if (result.optLong("updatedTime", 0) < (System.currentTimeMillis() - ONE_DAY_MILLI_SECONDS)) {
                     result = new JSONObject();
                 }
             } catch (JSONException e) {
@@ -268,8 +251,7 @@ public class Setting {
             savePercent = 0.25f; // for heavy product, package is only one
                                  // quarter
         }
-        return (int) Math
-                .round(singleFee * (count - savePercent * (count - 1)));
+        return (int) Math.round(singleFee * (count - savePercent * (count - 1)));
     }
 
     public static boolean supportAnimation() {
@@ -334,8 +316,7 @@ public class Setting {
     // }
 
     public static void syncCurrentAppVersion(Context mContext) {
-        final SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        final SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
         int appVersion = getCurrentAppVersion(mContext);
         SharedPreferences.Editor editor = _s.edit();
         editor.putInt("CurrentAppVersion", appVersion);
@@ -345,14 +326,12 @@ public class Setting {
     public static final int APP_VERSION_UNKNOWN = -1;
 
     public static int getRememberedAppVersion(Context mContext) {
-        final SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        final SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
         return _s.getInt("CurrentAppVersion", APP_VERSION_UNKNOWN);
     }
 
     public static void saveCouponCode(Context mContext, String code) {
-        final SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        final SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
         Editor e = _s.edit();
         e.putString("savedCouponCode", code);
         e.putLong("savedCouponDate", System.currentTimeMillis());
@@ -361,10 +340,8 @@ public class Setting {
 
     // return the saved coupon code that is saved after earliestDate (in milli
     // seconds)
-    public static String getSavedCouponCodeIfAvailable(Context mContext,
-            long earliestDate) {
-        final SharedPreferences _s = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+    public static String getSavedCouponCodeIfAvailable(Context mContext, long earliestDate) {
+        final SharedPreferences _s = PreferenceManager.getDefaultSharedPreferences(mContext);
         String code = _s.getString("savedCouponCode", null);
         long time = _s.getLong("savedCouponDate", 0);
         if (code != null && time >= earliestDate) {

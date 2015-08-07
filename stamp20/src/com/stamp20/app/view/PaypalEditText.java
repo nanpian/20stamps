@@ -27,19 +27,14 @@ public class PaypalEditText extends LinearLayout {
 
     public PaypalEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray ta = context.obtainStyledAttributes(attrs,
-                R.styleable.PaypalEditText);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PaypalEditText);
 
-        hintTextColor = ta
-                .getColor(R.styleable.PaypalEditText_hintTextColor, 0);
-        hintTextSize = ta.getDimensionPixelSize(
-                R.styleable.PaypalEditText_hintTextSize, 0);
+        hintTextColor = ta.getColor(R.styleable.PaypalEditText_hintTextColor, 0);
+        hintTextSize = ta.getDimensionPixelSize(R.styleable.PaypalEditText_hintTextSize, 0);
         hintText = ta.getString(R.styleable.PaypalEditText_hintText);
 
-        editTextColor = ta
-                .getColor(R.styleable.PaypalEditText_editTextColor, 0);
-        editTextSize = ta.getDimensionPixelSize(
-                R.styleable.PaypalEditText_editTextSize, 0);
+        editTextColor = ta.getColor(R.styleable.PaypalEditText_editTextColor, 0);
+        editTextSize = ta.getDimensionPixelSize(R.styleable.PaypalEditText_editTextSize, 0);
         editTextText = ta.getString(R.styleable.PaypalEditText_editText);
 
         ta.recycle();
@@ -57,10 +52,8 @@ public class PaypalEditText extends LinearLayout {
 
         setBackgroundColor(0xffffffff);
 
-        hintParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT);
-        editParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT);
+        hintParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        editParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         addView(hint, hintParams);
         addView(editText, editParams);
     }

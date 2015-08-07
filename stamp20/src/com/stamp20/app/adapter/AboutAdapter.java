@@ -19,10 +19,8 @@ public class AboutAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private List<String> aboutArray = new ArrayList<String>();
-    private int[] aboutstring = { R.string.about_1, R.string.about_2,
-            R.string.about_3, R.string.about_4, R.string.about_5,
-            R.string.about_6, R.string.about_7, R.string.about_8,
-            R.string.about_9, R.string.about_10 };
+    private int[] aboutstring = { R.string.about_1, R.string.about_2, R.string.about_3, R.string.about_4, R.string.about_5, R.string.about_6, R.string.about_7,
+            R.string.about_8, R.string.about_9, R.string.about_10 };
 
     public AboutAdapter(Context context) {
         mContext = context;

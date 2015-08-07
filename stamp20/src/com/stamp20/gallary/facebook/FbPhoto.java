@@ -9,8 +9,7 @@ public class FbPhoto {
     private int width;
     private int height;
 
-    public FbPhoto(String id, String sourceImageUrl, String thumbnailUrl,
-            int width, int height) {
+    public FbPhoto(String id, String sourceImageUrl, String thumbnailUrl, int width, int height) {
         this.id = id;
         this.thumbnailUrl = thumbnailUrl;
         this.sourceImageUrl = sourceImageUrl;
@@ -69,8 +68,6 @@ public class FbPhoto {
     }
 
     public static FbPhoto fromBundle(Bundle b) {
-        return new FbPhoto(b.getString("id"), b.getString("sourceImageUrl"),
-                b.getString("thumbnailUrl"), b.getInt("width"),
-                b.getInt("height"));
+        return new FbPhoto(b.getString("id"), b.getString("sourceImageUrl"), b.getString("thumbnailUrl"), b.getInt("width"), b.getInt("height"));
     }
 }

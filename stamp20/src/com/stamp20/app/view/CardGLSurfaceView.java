@@ -39,8 +39,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-public class CardGLSurfaceView extends GLSurfaceView implements
-        GLSurfaceView.Renderer {
+public class CardGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     private static final String Tag = "CardGLSurfaceView";
     private static final int STATUS_NONE = 0;
@@ -194,8 +193,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         totalRatio = initRatio = 1;
 
         // 获取贺卡实际宽度，作为GLSurfaceView绘制的宽度
-        ImageView cardBitmapView = (ImageView) ((Activity) mContext)
-                .findViewById(R.id.background_envelop);
+        ImageView cardBitmapView = (ImageView) ((Activity) mContext).findViewById(R.id.background_envelop);
         cardTemplateWidth = cardBitmapView.getWidth();
         cardTemplateHeight = cardBitmapView.getHeight();
 
@@ -205,8 +203,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     public CardGLSurfaceView(Context context) {
         super(context);
         if (!GLBaseUtil.supportsOpenGLES2(context)) {
-            throw new IllegalStateException(
-                    "OpenGL ES 2.0 is not supported on this phone.");
+            throw new IllegalStateException("OpenGL ES 2.0 is not supported on this phone.");
         }
         Log.i(Tag, "CardGLSurface view init1 ");
         mContext = context;
@@ -218,8 +215,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     public CardGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!GLBaseUtil.supportsOpenGLES2(context)) {
-            throw new IllegalStateException(
-                    "OpenGL ES 2.0 is not supported on this phone.");
+            throw new IllegalStateException("OpenGL ES 2.0 is not supported on this phone.");
         }
         Log.i(Tag, "CardGLSurface view init2");
         mContext = context;
@@ -245,15 +241,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
             Log.i(Tag, "onDrawFrame inited ");
         }
 
-        if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE
-                || currentStatus == STATUS_CAPTURE) {
+        if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE || currentStatus == STATUS_CAPTURE) {
             // if an effect is chosen initialize it and apply it to the texture
             if (currentfilterID != 0) {
-                Log.i(Tag, "onDrawFrame the filter name is "
-                        + currentfiltername);
+                Log.i(Tag, "onDrawFrame the filter name is " + currentfiltername);
                 try {
-                    mCurrentEffect = effectAdapter.createEffect(
-                            currentfilterID, mEffectContext);
+                    mCurrentEffect = effectAdapter.createEffect(currentfilterID, mEffectContext);
                     applyEffect();
                 } catch (Exception e) {
                     mCurrentEffect = null;
@@ -310,19 +303,15 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     public void generateCard(GL10 mGL) {
         // 得到GLSurfaceView图片后，要进行叠加运算
         Bitmap cardBitmap = null;
-        cardBitmap = BitmapFactory.decodeResource(mContext.getResources(),
-                templatedid);
-        ImageView cardBitmapView = (ImageView) ((Activity) mContext)
-                .findViewById(R.id.background_envelop);
+        cardBitmap = BitmapFactory.decodeResource(mContext.getResources(), templatedid);
+        ImageView cardBitmapView = (ImageView) ((Activity) mContext).findViewById(R.id.background_envelop);
         // deltaW为白色边框的条宽度
 
         int mWidth = cardBitmapView.getWidth();
         int mHeight = cardBitmapView.getHeight();
 
-        Bitmap glBitmap = SavePixels((surfaceWidth - mWidth) / 2,
-                (surfaceHeight - mHeight) / 2, mWidth, mHeight, mGL);
-        Bitmap cardScaledBitmap = Bitmap.createScaledBitmap(cardBitmap, mWidth,
-                mHeight, true);
+        Bitmap glBitmap = SavePixels((surfaceWidth - mWidth) / 2, (surfaceHeight - mHeight) / 2, mWidth, mHeight, mGL);
+        Bitmap cardScaledBitmap = Bitmap.createScaledBitmap(cardBitmap, mWidth, mHeight, true);
 
         if (resultBitmap != null) {
             resultBitmap.recycle();
@@ -359,10 +348,8 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     }
 
     public Bitmap toRoundCorner2(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Config.ARGB_8888);
-        Bitmap cover = BitmapFactory.decodeResource(getResources(),
-                R.drawable.activity_card_back_shape_white);
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+        Bitmap cover = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape_white);
         Rect rectSrc = new Rect(0, 0, cover.getWidth(), cover.getHeight());
         Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         Canvas canvas = new Canvas(output);
@@ -377,16 +364,13 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     }
 
     public Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
-        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(),
-                templatedid);
-        Bitmap output = Bitmap.createBitmap(cover.getWidth(),
-                cover.getHeight(), Config.ARGB_8888);
+        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(), templatedid);
+        Bitmap output = Bitmap.createBitmap(cover.getWidth(), cover.getHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         final int color = 0xff424242;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, cover.getWidth(), cover.getHeight());
-        final Rect rectSrc = new Rect(0, 0, bitmap.getWidth(),
-                bitmap.getHeight());
+        final Rect rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         final RectF rectF = new RectF(rect);
         final float roundPx = pixels;
         paint.setAntiAlias(true);
@@ -412,8 +396,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
             return;
         mImageWidth = sourceBitmap.getWidth();
         mImageHeight = sourceBitmap.getHeight();
-        mTexRenderer.updateTextureSize(mImageWidth, mImageHeight,
-                cardTemplateWidth, cardTemplateHeight);
+        mTexRenderer.updateTextureSize(mImageWidth, mImageHeight, cardTemplateWidth, cardTemplateHeight);
         mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
 
         /*
@@ -438,8 +421,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         }
         surfaceWidth = width;
         surfaceHeight = height;
-        Log.i(Tag, "onSurfaceChanged, the view width is " + width
-                + "the view height is " + height);
+        Log.i(Tag, "onSurfaceChanged, the view width is " + width + "the view height is " + height);
     }
 
     @SuppressWarnings("deprecation")
@@ -475,8 +457,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                 movedDistanceY = yMove - lastYMove;
                 lastXMove = xMove;
                 lastYMove = yMove;
-                background_envelop
-                        .setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+                background_envelop.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
                 moveGLSurfaceView();
             } else if (event.getPointerCount() == 2) {
                 // 有两个手指按在屏幕上移动时，为缩放状态
@@ -489,8 +470,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                 }
                 initRatio = 1.0f;
                 // 进行缩放倍数检查，最大只允许将图片放大4倍，最小可以缩小到初始化比例的1/2
-                if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 2 * initRatio)
-                        || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio / 2)) {
+                if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 2 * initRatio) || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio / 2)) {
                     scaledRatio = (float) (fingerDis / lastFingerDis);
                     totalRatio = totalRatio * scaledRatio;
                     if (totalRatio > 2 * initRatio) {
@@ -498,8 +478,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                     } else if (totalRatio < initRatio / 2) {
                         totalRatio = initRatio / 2;
                     }
-                    background_envelop
-                            .setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+                    background_envelop.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
                     zoomGLSurfaceView(totalRatio);
                     lastFingerDis = fingerDis;
                 }
@@ -570,8 +549,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     private void moveGLSurfaceView() {
         // TODO Auto-generated method stub
         float translateX = totalTranslateX + movedDistanceX;
-        Log.d(this, "move,totalX:" + totalTranslateX + ", movedX:"
-                + movedDistanceX + ", X:" + translateX);
+        Log.d(this, "move,totalX:" + totalTranslateX + ", movedX:" + movedDistanceX + ", X:" + translateX);
         float translateY = totalTranslateY + movedDistanceY;
 
         totalTranslateX = translateX;
@@ -600,12 +578,10 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         if (mCurrentEffect != null) {
             // if no effect is chosen, just render the original bitmap
             Log.i(Tag, "the render result is not null");
-            mTexRenderer.renderTexture(mTextures[1], totalRatio,
-                    (int) totalTranslateX, (int) totalTranslateY);
+            mTexRenderer.renderTexture(mTextures[1], totalRatio, (int) totalTranslateX, (int) totalTranslateY);
         } else {
             // render the result of applyEffect()
-            mTexRenderer.renderTexture(mTextures[0], totalRatio,
-                    (int) totalTranslateX, (int) totalTranslateY);
+            mTexRenderer.renderTexture(mTextures[0], totalRatio, (int) totalTranslateX, (int) totalTranslateY);
             Log.i(Tag, "the render result is null");
         }
     }
@@ -644,8 +620,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     }
 
     private void applyEffect() {
-        mCurrentEffect.apply(mTextures[0], mImageWidth, mImageHeight,
-                mTextures[1]);
+        mCurrentEffect.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1]);
     }
 
     public ImageView background_envelop;

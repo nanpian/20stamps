@@ -70,8 +70,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         review_button.setOnClickListener(this);
         display_front = (Button) findViewById(R.id.display_front);
         display_front.setOnClickListener(this);
-        setBtnSelectState(display_front, Color.parseColor("#f1c40f"),
-                R.drawable.activity_card_review_click);
+        setBtnSelectState(display_front, Color.parseColor("#f1c40f"), R.drawable.activity_card_review_click);
         display_back = (Button) findViewById(R.id.display_back);
         display_back.setOnClickListener(this);
 
@@ -81,8 +80,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         activity_envelope_img = (ImageView) findViewById(R.id.activity_envelope_img2);
         // setupImageLocSize();
 
-        waitProgressBar = (WaitProgressBar) this
-                .findViewById(R.id.progress_bar);
+        waitProgressBar = (WaitProgressBar) this.findViewById(R.id.progress_bar);
 
         CardBmpCache mCache = CardBmpCache.getCacheInstance();
         cardBmpFront = mCache.getFront();
@@ -95,8 +93,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 
     private void setupBackLocAndSize() {
         int W = getWindowManager().getDefaultDisplay().getWidth();// 获取屏幕高度
-        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
-                R.drawable.cards_christmas);
+        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.cards_christmas);
         int w = cardTemplate.getWidth();
         int h = cardTemplate.getHeight();
         LayoutParams params = new LayoutParams(2 * W / 3, (h * 2 * W) / (3 * w));
@@ -116,8 +113,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
 
     private void setupImageLocSize() {
         int W = getWindowManager().getDefaultDisplay().getWidth();// 获取屏幕高度
-        Bitmap cardBackBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.activity_card_back_shape);
+        Bitmap cardBackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_card_back_shape);
         int w = cardBackBitmap.getWidth();
         int h = cardBackBitmap.getHeight();
         LayoutParams params = new LayoutParams(w, h);
@@ -134,19 +130,15 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             break;
         case R.id.display_front:
             if (!isFrontNow) {
-                setBtnSelectState(display_front, Color.parseColor("#f1c40f"),
-                        R.drawable.activity_card_review_click);
-                setBtnSelectState(display_back, Color.WHITE,
-                        R.drawable.activity_card_back_blank_null);
+                setBtnSelectState(display_front, Color.parseColor("#f1c40f"), R.drawable.activity_card_review_click);
+                setBtnSelectState(display_back, Color.WHITE, R.drawable.activity_card_back_blank_null);
                 applyRotation(0, 90, 0);
             }
             break;
         case R.id.display_back:
             if (isFrontNow) {
-                setBtnSelectState(display_back, Color.parseColor("#f1c40f"),
-                        R.drawable.activity_card_back_blank_click);
-                setBtnSelectState(display_front, Color.WHITE,
-                        R.drawable.activity_card_review_null);
+                setBtnSelectState(display_back, Color.parseColor("#f1c40f"), R.drawable.activity_card_back_blank_click);
+                setBtnSelectState(display_front, Color.WHITE, R.drawable.activity_card_review_null);
                 applyRotation(0, 90, 0);
             }
             break;
@@ -173,8 +165,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             finish();
             break;
         case R.id.card_back_share:
-            File file = saveFontBitmap(CardBmpCache.getCacheInstance()
-                    .getFront());
+            File file = saveFontBitmap(CardBmpCache.getCacheInstance().getFront());
             Intent intentShare = new Intent();
             intentShare.setAction(Intent.ACTION_SEND);
             intentShare.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
@@ -191,11 +182,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
      * @return
      */
     public File saveFontBitmap(Bitmap bitmap) {
-        File path = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/stamp20");
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd-HH-mm-ss");
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String name = "stamp20_" + dateFormat.format(new Date()) + ".png";
         File file = new File(path, name);
         if (!path.exists()) {
@@ -216,16 +204,14 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             e.printStackTrace();
         }
         // 更新系统图库
-        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                Uri.fromFile(file)));
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         return file;
     }
 
     private void applyRotation(float start, float end, final int viewId) {
         final float centerX = activity_envelope_img.getWidth() / 2.0f;
         final float centerY = activity_envelope_img.getHeight() / 2.0f;
-        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX,
-                centerY, 300.0f, true);
+        Rotate3dAnimation rotation = new Rotate3dAnimation(start, end, centerX, centerY, 300.0f, true);
         rotation.setDuration(500);
         rotation.setInterpolator(new AccelerateInterpolator());
         rotation.setAnimationListener(new AnimationListener() {
@@ -246,11 +232,9 @@ public class CardReviewActivity extends Activity implements OnClickListener {
                             // setupImageLocSize();
                             activity_envelope_img.setImageBitmap(cardBmpFront);
                         }
-                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(
-                                -90, 0, centerX, centerY, 300.0f, false);
+                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f, false);
                         rotatiomAnimation.setDuration(500);
-                        rotatiomAnimation
-                                .setInterpolator(new DecelerateInterpolator());
+                        rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
                         activity_envelope_img.startAnimation(rotatiomAnimation);
                     }
                 });
@@ -272,8 +256,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
     public void setBtnSelectState(Button button, int color, int drawableId) {
         button.setTextColor(color);
         Drawable drawable = this.getResources().getDrawable(drawableId);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(),
-                drawable.getMinimumHeight());
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         button.setCompoundDrawables(drawable, null, null, null);
         button.setCompoundDrawablePadding(5);
     }

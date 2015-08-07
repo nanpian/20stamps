@@ -33,8 +33,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
-public class FaceBookAlbumFragment extends GallaryFragment implements
-        OnClickListener, GallaryLoader {
+public class FaceBookAlbumFragment extends GallaryFragment implements OnClickListener, GallaryLoader {
     public static final String TAG = "FacebookAlbumFragment";
 
     private Context mContext;
@@ -66,8 +65,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(this, "onCreateView");
 
         mFBView = inflater.inflate(R.layout.tab_fb_album, container, false);
@@ -80,13 +78,10 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
         mAlbumsView = (ListView) mFBView.findViewById(R.id.main_list);
         mAlbumsView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String parseCMD = mAlbums.get(position).getContent()
-                        + "/photos";
-                Log.d(TAG, "position = " + position + "; parseCMD = "
-                        + parseCMD);
+                String parseCMD = mAlbums.get(position).getContent() + "/photos";
+                Log.d(TAG, "position = " + position + "; parseCMD = " + parseCMD);
 
                 new FbPhotosLoad().execute(parseCMD);
 
@@ -96,11 +91,9 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
         mPhotosView = (GridView) mFBView.findViewById(R.id.main_child_grid);
         mPhotosView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String url = mPhotos.get(position).getUri();
-                Log.d("wangpeng", "facebook position: " + position + " url: "
-                        + url);
+                Log.d("wangpeng", "facebook position: " + position + " url: " + url);
                 GallaryUtil.goToEffectAfterDownLoad(mContext, url);
             }
         });
@@ -117,8 +110,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                if (event.getAction() == KeyEvent.ACTION_UP
-                        && keyCode == KeyEvent.KEYCODE_BACK) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     return onBackClick();
                 }
 
@@ -161,26 +153,22 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.facebook_login_button:
-            progressDialog = GallaryProgressDialog.show(mContext, true,
-                    GallaryActivity.OUT_OF_TIME, false, null);
+            progressDialog = GallaryProgressDialog.show(mContext, true, GallaryActivity.OUT_OF_TIME, false, null);
 
-            List<String> permissions = Arrays.asList("public_profile", "email",
-                    "user_photos");
-            ParseFacebookUtils.logIn(permissions, getActivity(),
-                    new LogInCallback() {
-                        @Override
-                        public void done(ParseUser user, ParseException err) {
-                            progressDialog.dismiss();
-                            if (user == null) {
-                                Log.d(TAG,
-                                        "Uh oh. The user cancelled the Facebook login.");
-                            } else {
-                                Log.d(TAG, "is new user? " + user.isNew());
-                                isLinked = true;
-                                fresh();
-                            }
-                        }
-                    });
+            List<String> permissions = Arrays.asList("public_profile", "email", "user_photos");
+            ParseFacebookUtils.logIn(permissions, getActivity(), new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException err) {
+                    progressDialog.dismiss();
+                    if (user == null) {
+                        Log.d(TAG, "Uh oh. The user cancelled the Facebook login.");
+                    } else {
+                        Log.d(TAG, "is new user? " + user.isNew());
+                        isLinked = true;
+                        fresh();
+                    }
+                }
+            });
             break;
         case R.id.facebook_logout_button:
             logout();
@@ -195,8 +183,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
             mFbLogin.setVisibility(View.GONE);
             mFbNoLogin.setVisibility(View.GONE);
             mAlbumsView.setVisibility(View.VISIBLE);
-            mFBView.findViewById(R.id.facebook_logout_button).setVisibility(
-                    View.VISIBLE);
+            mFBView.findViewById(R.id.facebook_logout_button).setVisibility(View.VISIBLE);
 
             // just for now
             mPhotosView.setVisibility(View.GONE);
@@ -205,8 +192,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
             mFbNoLogin.setVisibility(View.VISIBLE);
             mAlbumsView.setVisibility(View.GONE);
             mPhotosView.setVisibility(View.GONE);
-            mFBView.findViewById(R.id.facebook_logout_button).setVisibility(
-                    View.GONE);
+            mFBView.findViewById(R.id.facebook_logout_button).setVisibility(View.GONE);
         }
     }
 
@@ -229,22 +215,19 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
 
         @Override
         protected void onPreExecute() {
-            progress = GallaryProgressDialog.show(mContext, true,
-                    GallaryActivity.OUT_OF_TIME, false,
-                    new GallaryProgressDialog.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            // TODO Auto-generated method stub
+            progress = GallaryProgressDialog.show(mContext, true, GallaryActivity.OUT_OF_TIME, false, new GallaryProgressDialog.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    // TODO Auto-generated method stub
 
-                        }
+                }
 
-                        @Override
-                        public void onTimeCancel(DialogInterface dialog) {
-                            // TODO Auto-generated method stub
-                            Log.e("wangpeng",
-                                    "get Facebook albums out time, need add response");
-                        }
-                    });
+                @Override
+                public void onTimeCancel(DialogInterface dialog) {
+                    // TODO Auto-generated method stub
+                    Log.e("wangpeng", "get Facebook albums out time, need add response");
+                }
+            });
         }
 
         @Override
@@ -262,8 +245,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
                 uri = album.getCoverSourceUrl();
                 photoCount = album.getCount();
                 id = album.getId();
-                Log.i("wangpeng", "FBAlbum name=" + name + ", count="
-                        + photoCount + ", content=" + id + ", uri=" + uri);
+                Log.i("wangpeng", "FBAlbum name=" + name + ", count=" + photoCount + ", content=" + id + ", uri=" + uri);
                 as.add(new Album(name, uri, photoCount, id));
             }
 
@@ -283,22 +265,19 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
 
         @Override
         protected void onPreExecute() {
-            progress = GallaryProgressDialog.show(mContext, true,
-                    GallaryActivity.OUT_OF_TIME, false,
-                    new GallaryProgressDialog.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            // TODO Auto-generated method stub
+            progress = GallaryProgressDialog.show(mContext, true, GallaryActivity.OUT_OF_TIME, false, new GallaryProgressDialog.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    // TODO Auto-generated method stub
 
-                        }
+                }
 
-                        @Override
-                        public void onTimeCancel(DialogInterface dialog) {
-                            // TODO Auto-generated method stub
-                            Log.e("wangpeng",
-                                    "get Facebook photos out time, need add response");
-                        }
-                    });
+                @Override
+                public void onTimeCancel(DialogInterface dialog) {
+                    // TODO Auto-generated method stub
+                    Log.e("wangpeng", "get Facebook photos out time, need add response");
+                }
+            });
         }
 
         @Override
@@ -314,8 +293,7 @@ public class FaceBookAlbumFragment extends GallaryFragment implements
                 name = p.getId();
                 uri = p.getSourceImageUrl();
                 thumb = p.getThumbnailUrl();
-                Log.i("wangpeng", "FBPhoto name=" + name + ", source=" + uri
-                        + ", thumbnail=" + thumb);
+                Log.i("wangpeng", "FBPhoto name=" + name + ", source=" + uri + ", thumbnail=" + thumb);
                 ps.add(new Photo(name, uri, thumb, Photo.PHOTO_NET_TYPE));
             }
 

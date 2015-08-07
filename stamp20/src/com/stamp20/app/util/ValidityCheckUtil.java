@@ -12,8 +12,7 @@ public class ValidityCheckUtil {
      * @return
      */
     public static boolean isValidityEmailAddress(String address) {
-        Pattern p = Pattern
-                .compile("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\\.([a-zA-Z0-9_-])+)+$");
+        Pattern p = Pattern.compile("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\\.([a-zA-Z0-9_-])+)+$");
         Matcher m = p.matcher(address);
         return m.matches();
     }

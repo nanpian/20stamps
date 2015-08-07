@@ -16,8 +16,7 @@
 
 package jp.co.cyberagent.android.gpuimage;
 
-public class GPUImageWeakPixelInclusionFilter extends
-        GPUImage3x3TextureSamplingFilter {
+public class GPUImageWeakPixelInclusionFilter extends GPUImage3x3TextureSamplingFilter {
     public static final String WEAKPIXEL_FRAGMENT_SHADER = ""
             + "precision lowp float;\n"
             + "\n"
@@ -48,8 +47,7 @@ public class GPUImageWeakPixelInclusionFilter extends
             + "float centerIntensity = texture2D(inputImageTexture, textureCoordinate).r;\n"
             + "\n"
             + "float pixelIntensitySum = bottomLeftIntensity + topRightIntensity + topLeftIntensity + bottomRightIntensity + leftIntensity + rightIntensity + bottomIntensity + topIntensity + centerIntensity;\n"
-            + "float sumTest = step(1.5, pixelIntensitySum);\n"
-            + "float pixelTest = step(0.01, centerIntensity);\n" + "\n"
+            + "float sumTest = step(1.5, pixelIntensitySum);\n" + "float pixelTest = step(0.01, centerIntensity);\n" + "\n"
             + "gl_FragColor = vec4(vec3(sumTest * pixelTest), 1.0);\n" + "}\n";
 
     public GPUImageWeakPixelInclusionFilter() {

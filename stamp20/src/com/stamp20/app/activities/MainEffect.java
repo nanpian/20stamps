@@ -30,8 +30,7 @@ import com.stamp20.app.view.StampGLSurfaceView;
 import com.stamp20.app.view.StampGLSurfaceView.OnStampBitmapGeneratedListener;
 import com.stamp20.app.view.StampGLSurfaceView.ChangeUIInterface;
 
-public class MainEffect extends Activity implements OnTouchListener,
-        OnStampBitmapGeneratedListener,ChangeUIInterface, OnClickListener {
+public class MainEffect extends Activity implements OnTouchListener, OnStampBitmapGeneratedListener, ChangeUIInterface, OnClickListener {
 
     private Context mContext;
     private Bitmap bitmap;
@@ -102,8 +101,7 @@ public class MainEffect extends Activity implements OnTouchListener,
         gallery.setSelection(0);
         // gallery.setAnimationDuration(3000);
         gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> arg0, View arg1,
-                    int position, long id) {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
                 effectAdapter.setSelectItem(position);
                 // mCurrentEffect = (Effect) effectAdapter.getItem(position);
                 currentfiltername = effectAdapter.getFilterName(position);
@@ -175,11 +173,9 @@ public class MainEffect extends Activity implements OnTouchListener,
     @Override
     public void OnStampBitmapGeneratedListener() {
         // TODO Auto-generated method stubs
-        Log.d(Tag,"MainEffect before start ChooseRateActivity, mGPUImageView.isHorizontal:"
-                + mGPUImageView.isHorizontal);
+        Log.d(Tag, "MainEffect before start ChooseRateActivity, mGPUImageView.isHorizontal:" + mGPUImageView.isHorizontal);
         Intent intent = new Intent(this, ChooseRateActivity.class);
-        intent.putExtra(Constant.STAMP_IS_HORIZONTAL,
-                mGPUImageView.isHorizontal);
+        intent.putExtra(Constant.STAMP_IS_HORIZONTAL, mGPUImageView.isHorizontal);
         startActivity(intent);
         finish();
         mGPUImageView.setOnStampBitmapGeneratedListener(null);

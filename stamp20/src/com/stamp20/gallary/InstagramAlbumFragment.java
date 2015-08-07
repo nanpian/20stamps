@@ -62,8 +62,7 @@ import com.stamp20.gallary.instagram.InstagramAuthView;
 import com.stamp20.gallary.instagram.InstagramTokenKeeper;
 import com.stamp20.gallary.instagram.InstagramUtils;
 
-public class InstagramAlbumFragment extends GallaryFragment implements
-        OnClickListener {
+public class InstagramAlbumFragment extends GallaryFragment implements OnClickListener {
     private static String TAG = "InstagramAlbum";
 
     private View mInstagramView;
@@ -106,18 +105,14 @@ public class InstagramAlbumFragment extends GallaryFragment implements
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(this, "onCreateView");
 
-        mInstagramView = inflater.inflate(R.layout.tab_instagram_album,
-                container, false);
-        mLogin = (Button) mInstagramView
-                .findViewById(R.id.instagram_login_button);
+        mInstagramView = inflater.inflate(R.layout.tab_instagram_album, container, false);
+        mLogin = (Button) mInstagramView.findViewById(R.id.instagram_login_button);
         mLogin.setOnClickListener(this);
 
-        mLogout = (Button) mInstagramView
-                .findViewById(R.id.instagram_logout_button);
+        mLogout = (Button) mInstagramView.findViewById(R.id.instagram_logout_button);
         mLogout.setOnClickListener(this);
 
         mNoLoginIcon = (View) mInstagramView.findViewById(R.id.ins_no_login_id);
@@ -125,28 +120,22 @@ public class InstagramAlbumFragment extends GallaryFragment implements
         mGroupGridView = (GridView) mInstagramView.findViewById(R.id.main_grid);
         mGroupGridView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == mediaFeedDataList.size() && !isLoading) {
                     loadMore();
                 } else {
-                    MediaFeedData mdf = (MediaFeedData) parent.getAdapter()
-                            .getItem(position);
+                    MediaFeedData mdf = (MediaFeedData) parent.getAdapter().getItem(position);
                     String url = null;
                     try {
-                        url = mdf.getImages().getStandardResolution()
-                                .getImageUrl();
+                        url = mdf.getImages().getStandardResolution().getImageUrl();
                     } catch (Exception e) {
                     }
                     if (url != null) {
-                        Log.d(TAG, "photo position: " + position + " url: "
-                                + url);
-                        progressDialog = ProgressDialog.show(mContext, "",
-                                "Download...", true);
+                        Log.d(TAG, "photo position: " + position + " url: " + url);
+                        progressDialog = ProgressDialog.show(mContext, "", "Download...", true);
                         new DownloadImageTask().execute(url);
                     } else {
-                        Toast.makeText(mContext, "Error loading this photo",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "Error loading this photo", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -177,8 +166,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
 
     private void getInsAlbums() {
         // TODO Auto-generated method stub
-        instagramClient.setAccessToken(new Token(InstagramTokenKeeper
-                .readAccessToken(mContext), null));
+        instagramClient.setAccessToken(new Token(InstagramTokenKeeper.readAccessToken(mContext), null));
 
     }
 
@@ -187,8 +175,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
         super.onResume();
         updateView(InstagramUtils.isUserInstagramLinked(mContext));
         if (instagramUserId == null) {
-            instagramClient.setAccessToken(new Token(InstagramTokenKeeper
-                    .readAccessToken(mContext), null));
+            instagramClient.setAccessToken(new Token(InstagramTokenKeeper.readAccessToken(mContext), null));
             tokenValidationTask = new TokenValidationTask();
             tokenValidationTask.execute();
         } else
@@ -202,15 +189,11 @@ public class InstagramAlbumFragment extends GallaryFragment implements
 
     @Override
     public void onPause() {
-        if (tokenValidationTask != null
-                && !tokenValidationTask.getStatus().equals(
-                        AsyncTask.Status.FINISHED)) {
+        if (tokenValidationTask != null && !tokenValidationTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
             tokenValidationTask.cancel(false);
         }
 
-        if (loadRecentMediaTask != null
-                && !loadRecentMediaTask.getStatus().equals(
-                        AsyncTask.Status.FINISHED)) {
+        if (loadRecentMediaTask != null && !loadRecentMediaTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
             loadRecentMediaTask.cancel(false);
         }
         isLoading = false;
@@ -218,17 +201,14 @@ public class InstagramAlbumFragment extends GallaryFragment implements
     }
 
     private void loadMore() {
-        if (loadRecentMediaTask != null
-                && loadRecentMediaTask.getStatus().equals(
-                        AsyncTask.Status.RUNNING)) {
+        if (loadRecentMediaTask != null && loadRecentMediaTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
             return;
         }
         if (isLoading) {
             return;
         }
         if (pagination != null && !pagination.hasNextPage()) {
-            Toast.makeText(mContext, "You have reached the end.",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "You have reached the end.", Toast.LENGTH_LONG).show();
             return;
         }
         loadRecentMediaTask = new LoadRecentMediaTask();
@@ -258,8 +238,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
         case R.id.instagram_login_button:
             // doSelectInstagramClick();
             InstagramAuthRequestDialog dialogFrag = new InstagramAuthRequestDialog();
-            dialogFrag.show(getFragmentManager(),
-                    "instagram_auth_request_dialog");
+            dialogFrag.show(getFragmentManager(), "instagram_auth_request_dialog");
             break;
         case R.id.instagram_logout_button:
             InstagramTokenKeeper.clear(mContext);
@@ -273,8 +252,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
 
     private void doInstagramAuth() {
         Intent i = new Intent(getActivity(), InstagramAuthView.class);
-        getActivity().startActivityForResult(i,
-                REQUEST_CODE_SELECT_INSTAGRAM_AUTH);
+        getActivity().startActivityForResult(i, REQUEST_CODE_SELECT_INSTAGRAM_AUTH);
     }
 
     // Dialog for request user to setup an account
@@ -288,45 +266,40 @@ public class InstagramAlbumFragment extends GallaryFragment implements
             Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Account Required");
             builder.setMessage("Please register a stampdesign account before we can connect to your Instagram.");
-            builder.setNegativeButton("Cancel",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            builder.setPositiveButton("Register",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Intent loginIntent = new Intent(getActivity(),
-                            // LoginView.class);
-                            // startActivityForResult(loginIntent,REQUEST_CODE_SELECT_INSTAGRAM_REGISTER);
-                            dialog.dismiss();
-                        }
-                    });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Intent loginIntent = new Intent(getActivity(),
+                    // LoginView.class);
+                    // startActivityForResult(loginIntent,REQUEST_CODE_SELECT_INSTAGRAM_REGISTER);
+                    dialog.dismiss();
+                }
+            });
             return builder.create();
         }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode,
-            Intent dataIntent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
         if (requestCode == REQUEST_CODE_SELECT_INSTAGRAM_AUTH) {
             if (resultCode == Activity.RESULT_OK) {
                 // doSelectInstagramClick();
                 updateView(true);
                 // getInsAlbums();
-                instagramClient.setAccessToken(new Token(InstagramTokenKeeper
-                        .readAccessToken(mContext), null));
+                instagramClient.setAccessToken(new Token(InstagramTokenKeeper.readAccessToken(mContext), null));
                 if (instagramUserId == null) {
                     tokenValidationTask = new TokenValidationTask();
                     tokenValidationTask.execute();
                 } else
                     loadMore();
             } else {
-                Toast.makeText(mContext, "Instagram authorization canceled",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Instagram authorization canceled", Toast.LENGTH_SHORT).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, dataIntent);
@@ -358,21 +331,19 @@ public class InstagramAlbumFragment extends GallaryFragment implements
             Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Connect Instagram");
             builder.setMessage("Connect your Instagram account to choose photos from your Instagram.");
-            builder.setNegativeButton("Cancel",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            builder.setPositiveButton("Connect Now",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            doInstagramAuth();
-                            dialog.dismiss();
-                        }
-                    });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setPositiveButton("Connect Now", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    doInstagramAuth();
+                    dialog.dismiss();
+                }
+            });
             return builder.create();
         }
     }
@@ -383,8 +354,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
 
         public InstagramImageGridAdapter() {
             mInflater = LayoutInflater.from(mContext);
-            anim = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
-                    0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             anim.setInterpolator(new LinearInterpolator());
             anim.setRepeatCount(Animation.INFINITE);
             anim.setDuration(1000);
@@ -434,8 +404,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
                 // FontManager.changeFonts(mContext,
                 // (FrameLayout)convertView.findViewById(R.id.framelayout));
                 viewHolder = new ViewHolder();
-                viewHolder.mImageView = (MyImageView) convertView
-                        .findViewById(R.id.child_image);
+                viewHolder.mImageView = (MyImageView) convertView.findViewById(R.id.child_image);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -445,12 +414,8 @@ public class InstagramAlbumFragment extends GallaryFragment implements
             if (getItemViewType(position) == 0) {
                 // imageLoader.displayImageFromUrlLater(mediaFeedDataList.get(position).getImages().getThumbnail().getImageUrl(),
                 // activity, imageView,150);
-                Picasso.with(mContext)
-                        .load(mediaFeedDataList.get(position).getImages()
-                                .getThumbnail().getImageUrl()).resize(200, 200)
-                        .centerCrop()
-                        .placeholder(R.drawable.friends_sends_pictures_no)
-                        .into(viewHolder.mImageView);
+                Picasso.with(mContext).load(mediaFeedDataList.get(position).getImages().getThumbnail().getImageUrl()).resize(200, 200).centerCrop()
+                        .placeholder(R.drawable.friends_sends_pictures_no).into(viewHolder.mImageView);
             } else {
                 ImageView imageView = viewHolder.mImageView;
                 imageView.setAnimation(null);
@@ -468,8 +433,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
         }
     }
 
-    private class TokenValidationTask extends
-            AsyncTask<Void, Void, UserInfoData> {
+    private class TokenValidationTask extends AsyncTask<Void, Void, UserInfoData> {
 
         @Override
         protected void onPreExecute() {
@@ -480,8 +444,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
         @Override
         protected void onPostExecute(UserInfoData result) {
             if (result == null) {
-                Toast.makeText(mContext, "Instagram Authorization required",
-                        Toast.LENGTH_LONG);
+                Toast.makeText(mContext, "Instagram Authorization required", Toast.LENGTH_LONG);
                 // InstagramTokenKeeper.clear(mContext);
                 updateView(false);
             } else {
@@ -513,8 +476,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
         protected void onPreExecute() {
             isLoading = true;
             // imageAdapter.notifyDataSetChanged();
-            instagramClient.setAccessToken(new Token(InstagramTokenKeeper
-                    .readAccessToken(mContext), null));
+            instagramClient.setAccessToken(new Token(InstagramTokenKeeper.readAccessToken(mContext), null));
         }
 
         @Override
@@ -525,8 +487,7 @@ public class InstagramAlbumFragment extends GallaryFragment implements
                 } else if (pagination.hasNextPage()) {
                     return instagramClient.getRecentMediaNextPage(pagination);
                 } else {
-                    Log.e("case",
-                            "InstagramPhotosView-doInBackground no next page?!");
+                    Log.e("case", "InstagramPhotosView-doInBackground no next page?!");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -538,14 +499,10 @@ public class InstagramAlbumFragment extends GallaryFragment implements
         protected void onPostExecute(MediaFeed result) {
             isLoading = false;
             if (result == null) {
-                Toast.makeText(
-                        mContext,
-                        "Oops, error while loading...Please check internet connection",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Oops, error while loading...Please check internet connection", Toast.LENGTH_SHORT).show();
             } else {
                 for (MediaFeedData mdf : result.getData()) {
-                    if (mdf.getType().equals(MediaFeedData.TYPE_IMAGE)
-                            && mdf.getImages() != null) {
+                    if (mdf.getType().equals(MediaFeedData.TYPE_IMAGE) && mdf.getImages() != null) {
                         mediaFeedDataList.add(mdf);
                     }
                 }

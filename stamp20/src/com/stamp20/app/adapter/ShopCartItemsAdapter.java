@@ -68,24 +68,15 @@ public class ShopCartItemsAdapter extends BaseAdapter {
             Log.d(this, "view == null");
             view = layoutInflater.inflate(R.layout.shop_listview_item, null);
             viewHolder = new ViewHolder();
-            viewHolder.addView = (ImageView) view
-                    .findViewById(R.id.shop_listview_num_add);
-            viewHolder.reduceView = (ImageView) view
-                    .findViewById(R.id.shop_listview_num_reduce);
-            viewHolder.textItemSize = (TextView) view
-                    .findViewById(R.id.shop_listview_num);
-            viewHolder.stampItemView = (ImageView) view
-                    .findViewById(R.id.shop_list_itemview);
-            viewHolder.itemDeleteView = (ImageView) view
-                    .findViewById(R.id.shop_listview_num_delete);
-            viewHolder.itemName = (TextView) view
-                    .findViewById(R.id.shop_listview_itemname);
-            viewHolder.itemPrice = (TextView) view
-                    .findViewById(R.id.shop_listview_itemprice);
-            viewHolder.itemPersheet = (TextView) view
-                    .findViewById(R.id.shop_listview_persheet);
-            viewHolder.itemUnitPrice = (TextView) view
-                    .findViewById(R.id.shop_listview_unitprice);
+            viewHolder.addView = (ImageView) view.findViewById(R.id.shop_listview_num_add);
+            viewHolder.reduceView = (ImageView) view.findViewById(R.id.shop_listview_num_reduce);
+            viewHolder.textItemSize = (TextView) view.findViewById(R.id.shop_listview_num);
+            viewHolder.stampItemView = (ImageView) view.findViewById(R.id.shop_list_itemview);
+            viewHolder.itemDeleteView = (ImageView) view.findViewById(R.id.shop_listview_num_delete);
+            viewHolder.itemName = (TextView) view.findViewById(R.id.shop_listview_itemname);
+            viewHolder.itemPrice = (TextView) view.findViewById(R.id.shop_listview_itemprice);
+            viewHolder.itemPersheet = (TextView) view.findViewById(R.id.shop_listview_persheet);
+            viewHolder.itemUnitPrice = (TextView) view.findViewById(R.id.shop_listview_unitprice);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -101,8 +92,7 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         if (src != null)
             viewHolder.stampItemView.setImageBitmap(src);
         else {
-            viewHolder.stampItemView
-                    .setImageResource(R.drawable.activity_card_review_click);
+            viewHolder.stampItemView.setImageResource(R.drawable.activity_card_review_click);
         }
 
         viewHolder.addView.setOnClickListener(new OnClickListener() {
@@ -113,8 +103,7 @@ public class ShopCartItemsAdapter extends BaseAdapter {
                 int stampSize = mDesigns.get(pos).getCount();
                 stampSize += 1;
                 mDesigns.get(pos).setCount(stampSize);
-                Cart.getInstance().updateDesignCount(mDesigns.get(pos),
-                        stampSize);
+                Cart.getInstance().updateDesignCount(mDesigns.get(pos), stampSize);
                 // 更新方式？？
                 notifyDataSetChanged();
             }
@@ -130,33 +119,28 @@ public class ShopCartItemsAdapter extends BaseAdapter {
                     stampSize = 1;
                 }
                 mDesigns.get(pos).setCount(stampSize);
-                Cart.getInstance().updateDesignCount(mDesigns.get(pos),
-                        stampSize);
+                Cart.getInstance().updateDesignCount(mDesigns.get(pos), stampSize);
                 // 更新方式？？
                 notifyDataSetChanged();
             }
         });
-        viewHolder.textItemSize.setText(Integer.toString(mDesigns.get(pos)
-                .getCount()));
+        viewHolder.textItemSize.setText(Integer.toString(mDesigns.get(pos).getCount()));
         viewHolder.itemDeleteView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Builder dialog = new AlertDialog.Builder(mContext,
-                        AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+                Builder dialog = new AlertDialog.Builder(mContext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
                 dialog.setTitle("Delete design");
                 dialog.setMessage("Are you sure to delete this design?");
-                dialog.setPositiveButton("Delete",
-                        new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                    int which) {
-                                // TODO Auto-generated method stub
-                                deleteItems(pos);
-                            }
-                        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+                        deleteItems(pos);
+                    }
+                });
                 dialog.setNegativeButton("Cancel", null);
                 dialog.show();
             }

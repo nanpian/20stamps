@@ -285,8 +285,7 @@ public class Image {
 
     // ;R.drawable.image
     public static Image LoadImage(Activity activity, int resourceId) {
-        Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(),
-                resourceId);
+        Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(), resourceId);
         return new Image(bitmap);
     }
 
@@ -300,8 +299,7 @@ public class Image {
             e.printStackTrace();
         }
         try {
-            HttpURLConnection conn = (HttpURLConnection) myFileUrl
-                    .openConnection();
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
             conn.setDoInput(true);
             conn.connect();
             InputStream is = conn.getInputStream();

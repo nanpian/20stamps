@@ -10,8 +10,7 @@ public class FbAlbum {
     private String coverThumbnailUrl;
     private String coverSourceUrl;
 
-    public FbAlbum(String id, String title, int count, String coverId,
-            String coverThumbnailUrl, String coverSourceUrl) {
+    public FbAlbum(String id, String title, int count, String coverId, String coverThumbnailUrl, String coverSourceUrl) {
         this.id = id;
         this.title = title;
         this.count = count;
@@ -80,9 +79,8 @@ public class FbAlbum {
     }
 
     public static FbAlbum fromBundle(Bundle b) {
-        return new FbAlbum(b.getString("id"), b.getString("title"),
-                b.getInt("count"), b.getString("coverId"),
-                b.getString("coverThumbnailUrl"), b.getString("coverSourceUrl"));
+        return new FbAlbum(b.getString("id"), b.getString("title"), b.getInt("count"), b.getString("coverId"), b.getString("coverThumbnailUrl"),
+                b.getString("coverSourceUrl"));
     }
 
 }

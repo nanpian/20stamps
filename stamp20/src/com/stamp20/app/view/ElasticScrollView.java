@@ -76,12 +76,10 @@ public class ElasticScrollView extends ScrollView {
                 if (isNeedMove()) {
                     if (normal.isEmpty()) {
                         // 保存正常的布局位置
-                        normal.set(inner.getLeft(), inner.getTop(),
-                                inner.getRight(), inner.getBottom());
+                        normal.set(inner.getLeft(), inner.getTop(), inner.getRight(), inner.getBottom());
                     }
                     // 移动布局
-                    inner.layout(inner.getLeft(), inner.getTop() - deltaY / 2,
-                            inner.getRight(), inner.getBottom() - deltaY / 2);
+                    inner.layout(inner.getLeft(), inner.getTop() - deltaY / 2, inner.getRight(), inner.getBottom() - deltaY / 2);
                 } else {
                     super.onTouchEvent(ev);
                 }
@@ -96,8 +94,7 @@ public class ElasticScrollView extends ScrollView {
 
     public void animation() {
         // 开启移动动画
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, normal.top
-                - inner.getTop());
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, normal.top - inner.getTop());
         ta.setDuration(200);
         ta.setAnimationListener(new AnimationListener() {
             @Override
@@ -115,8 +112,7 @@ public class ElasticScrollView extends ScrollView {
             public void onAnimationEnd(Animation animation) {
                 inner.clearAnimation();
                 // 设置回到正常的布局位置
-                inner.layout(normal.left, normal.top, normal.right,
-                        normal.bottom);
+                inner.layout(normal.left, normal.top, normal.right, normal.bottom);
                 normal.setEmpty();
                 animationFinish = true;
             }

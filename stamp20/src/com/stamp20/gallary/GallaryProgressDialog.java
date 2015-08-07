@@ -40,8 +40,7 @@ public class GallaryProgressDialog extends ProgressDialog {
                 @Override
                 public void run() {
                     if (mBuilder.mTimeOverListener != null) {
-                        mBuilder.mTimeOverListener
-                                .onTimeCancel(GallaryProgressDialog.this);
+                        mBuilder.mTimeOverListener.onTimeCancel(GallaryProgressDialog.this);
                     }
                     dismiss();
                 }
@@ -65,12 +64,9 @@ public class GallaryProgressDialog extends ProgressDialog {
         super.dismiss();
     }
 
-    public static GallaryProgressDialog show(Context context,
-            boolean indeterminate, long overtime, boolean cancelable,
+    public static GallaryProgressDialog show(Context context, boolean indeterminate, long overtime, boolean cancelable,
             DialogInterface.OnCancelListener cancelListener) {
-        GallaryProgressDialog dialog = new Builder(context)
-                .setCancelTime(overtime).setCancelable(cancelable)
-                .setCancelListener(cancelListener).build();
+        GallaryProgressDialog dialog = new Builder(context).setCancelTime(overtime).setCancelable(cancelable).setCancelListener(cancelListener).build();
 
         if (indeterminate) {
             dialog.show();
@@ -112,8 +108,7 @@ public class GallaryProgressDialog extends ProgressDialog {
             return this;
         }
 
-        public Builder setCancelListener(
-                DialogInterface.OnCancelListener listener) {
+        public Builder setCancelListener(DialogInterface.OnCancelListener listener) {
             if (listener instanceof GallaryProgressDialog.OnCancelListener)
                 this.mTimeOverListener = (GallaryProgressDialog.OnCancelListener) listener;
             this.mOnCancelListener = listener;

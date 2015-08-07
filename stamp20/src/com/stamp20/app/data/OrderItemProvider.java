@@ -28,8 +28,7 @@ public class OrderItemProvider {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e("LogTag", "Error addOrderItemToCart to local store "
-                            + e.getMessage());
+                    Log.e("LogTag", "Error addOrderItemToCart to local store " + e.getMessage());
                 }
             }
         });
@@ -43,9 +42,7 @@ public class OrderItemProvider {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e("LogTag",
-                            "Error removeOrderItemFromCart local store "
-                                    + e.getMessage());
+                    Log.e("LogTag", "Error removeOrderItemFromCart local store " + e.getMessage());
                 }
             }
         });
@@ -59,8 +56,7 @@ public class OrderItemProvider {
         try {
             result = query.getFirst();
         } catch (ParseException e) {
-            Log.e("LogTag", "Error query orderItem " + designLocalId
-                    + " from local store");
+            Log.e("LogTag", "Error query orderItem " + designLocalId + " from local store");
             e.printStackTrace();
         }
         return result;

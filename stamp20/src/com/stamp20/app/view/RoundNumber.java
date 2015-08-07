@@ -36,18 +36,15 @@ public class RoundNumber extends View {
 
     public RoundNumber(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-                R.styleable.RoundNumber, defStyleAttr, 0);
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.RoundNumber, defStyleAttr, 0);
         backgroundColor = a.getColor(R.styleable.RoundNumber_background, 0);
-        mRadius = a.getDimension(R.styleable.RoundNumber_radius, TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100,
-                        getResources().getDisplayMetrics()));
+        mRadius = a.getDimension(R.styleable.RoundNumber_radius,
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
         roundColor = a.getColor(R.styleable.RoundNumber_cycleColor, 0);
         numberColor = a.getColor(R.styleable.RoundNumber_textColor, 0);
         number = a.getString(R.styleable.RoundNumber_text);
         numberSize = a.getDimension(R.styleable.RoundNumber_textSize,
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100,
-                        getResources().getDisplayMetrics()));
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
 
         if (a != null) {
             a.recycle();
@@ -65,8 +62,7 @@ public class RoundNumber extends View {
         numberPaint.setAntiAlias(true);
         numberPaint.setColor(numberColor);
         numberPaint.setTextSize(numberSize);
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(),
-                "fonts/OpenSans.ttf");
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans.ttf");
         numberPaint.setTypeface(typeface);
         numberPaint.setTextAlign(Paint.Align.CENTER);
         fontMetrics = numberPaint.getFontMetrics();
@@ -80,8 +76,7 @@ public class RoundNumber extends View {
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right,
-            int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         width = getWidth();
         height = getHeight();
         Log.d(this, "onLayout, width : " + width + ", height: " + height);

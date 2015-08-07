@@ -39,8 +39,7 @@ import com.stamp20.app.view.ScollerRelativeView;
 import com.stamp20.app.view.StampViewConstants;
 import com.stamp20.gallary.GallaryActivity;
 
-public class CardEffect extends Activity implements OnClickListener,
-        OnTouchListener {
+public class CardEffect extends Activity implements OnClickListener, OnTouchListener {
 
     protected static final int REQUEST_CODE = 1001;
     private static final String Tag = "CardEffect";
@@ -88,8 +87,7 @@ public class CardEffect extends Activity implements OnClickListener,
                 Log.d(Tag, "handleMessage--MSG_SELECT_PICTURE");
                 templateId = (Integer) msg.obj;
                 if (templateId != -1) {
-                    background_envelop
-                            .setImageBitmap(getAlphaBackView(templateId));
+                    background_envelop.setImageBitmap(getAlphaBackView(templateId));
                     // background_envelop.setImageResource(templateId);
                 }
                 break;
@@ -110,11 +108,9 @@ public class CardEffect extends Activity implements OnClickListener,
         mIsChangingPhoto = false;
         Intent getFromChooseTemp = getIntent();
         if (getFromChooseTemp != null) {
-            int tempPos = getFromChooseTemp.getIntExtra(
-                    ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            int tempPos = getFromChooseTemp.getIntExtra(ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
             mTemplatePos = tempPos;
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN,
-                    CardsTemplateUtils.getTemplateId(tempPos)));
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN, CardsTemplateUtils.getTemplateId(tempPos)));
         }
 
     }
@@ -146,16 +142,15 @@ public class CardEffect extends Activity implements OnClickListener,
         setupEvelopHeight();
 
         select_photo_button = (ImageView) findViewById(R.id.activity_main_effects_use_myown_photo);
-        select_photo_button
-                .setOnFocusChangeListener(new OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View arg0, boolean hasfocus) {
-                        if (hasfocus) {
-                            select_photo_button.setAlpha(.3f);
-                        }
-                    }
+        select_photo_button.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View arg0, boolean hasfocus) {
+                if (hasfocus) {
+                    select_photo_button.setAlpha(.3f);
+                }
+            }
 
-                });
+        });
 
         select_photo_button.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -181,37 +176,31 @@ public class CardEffect extends Activity implements OnClickListener,
         effectAdapter.setSelectItem(0);
         galleryFilter.setAdapter(effectAdapter);
         galleryFilter.setSelection(5);
-        galleryFilter
-                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    private String currentfiltername;
+        galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            private String currentfiltername;
 
-                    public void onItemClick(AdapterView<?> arg0, View arg1,
-                            int position, long id) {
-                        effectAdapter.setSelectItem(position);
-                        currentfiltername = effectAdapter
-                                .getFilterName(position);
-                        currentfilterID = effectAdapter.getFilterID(position);
-                        mGPUImageView.setCurrentfilterID(currentfilterID);
-                        mGPUImageView.setCurrentfiltername(currentfiltername);
-                        Log.i(Tag, "zhudewei the filter is "
-                                + currentfiltername);
-                        mGPUImageView.requestRender();
-                    }
-                });
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                effectAdapter.setSelectItem(position);
+                currentfiltername = effectAdapter.getFilterName(position);
+                currentfilterID = effectAdapter.getFilterID(position);
+                mGPUImageView.setCurrentfilterID(currentfilterID);
+                mGPUImageView.setCurrentfiltername(currentfiltername);
+                Log.i(Tag, "zhudewei the filter is " + currentfiltername);
+                mGPUImageView.requestRender();
+            }
+        });
         // galleryFilter.setVisibility(View.GONE);
         customback = (Button) findViewById(R.id.customback);
         customback.setOnClickListener(this);
 
         // 首先需要设置背景色为深色
-        customback.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.dra_home_green_button_pressed_true));
+        customback.setBackgroundDrawable(getResources().getDrawable(R.drawable.dra_home_green_button_pressed_true));
         scrollPicArea = (ScollerRelativeView) findViewById(R.id.pic_area);
     }
 
     public Bitmap getAlphaBackView(int viewId) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), viewId);
-        Bitmap back = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), bitmap.getConfig());
+        Bitmap back = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
         Canvas canvas = new Canvas(back);
         Paint paint = new Paint();
         paint.setAlpha(150);
@@ -223,13 +212,11 @@ public class CardEffect extends Activity implements OnClickListener,
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int screenWidth = metrics.widthPixels;
-        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(),
-                R.drawable.cards_christmas);
+        Bitmap cardTemplate = BitmapFactory.decodeResource(getResources(), R.drawable.cards_christmas);
         int w = cardTemplate.getWidth();
         int h = cardTemplate.getHeight();
 
-        LayoutParams params = new LayoutParams(5 * screenWidth / 6,
-                (h * 5 * screenWidth) / (6 * w));
+        LayoutParams params = new LayoutParams(5 * screenWidth / 6, (h * 5 * screenWidth) / (6 * w));
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         background_envelop.setLayoutParams(params);
         background_envelop.setVisibility(View.VISIBLE);
@@ -238,16 +225,12 @@ public class CardEffect extends Activity implements OnClickListener,
     }
 
     public void resetChoseLayout(int distance) {
-        LayoutParams layout = new LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
+        LayoutParams layout = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         if (distance == 0) {
             layout.addRule(RelativeLayout.CENTER_IN_PARENT);
         } else {
             layout.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            layout.topMargin = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, distance, getResources()
-                            .getDisplayMetrics());
+            layout.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, distance, getResources().getDisplayMetrics());
         }
         background_layout.setLayoutParams(layout);
     }
@@ -269,14 +252,12 @@ public class CardEffect extends Activity implements OnClickListener,
             imageUri = (Uri) intent.getParcelableExtra("imageUri");
             Log.d(Tag, "uri=" + imageUri);
             if (imageUri != null) {
-                templateId = CardsTemplateUtils
-                        .getTransTemplateId(mTemplatePos);
+                templateId = CardsTemplateUtils.getTransTemplateId(mTemplatePos);
                 if (templateId != -1) {
                     background_envelop.setImageResource(templateId);
                     mGPUImageView.changetemplate(templateId);// change backguard
                 }
-                loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri,
-                        4);
+                loadedBitmap = ImageUtil.loadDownsampledBitmap(this, imageUri, 4);
                 refreshView();
 
                 effectAdapter.setImageResource(imageUri);
@@ -285,8 +266,7 @@ public class CardEffect extends Activity implements OnClickListener,
                     effectAdapter.clearPreviewHashMap();
                     String filtername = effectAdapter.getFilterName(0);
                     currentfilterID = effectAdapter.getFilterID(0);
-                    Log.i(Tag, "change photo id is : " + currentfilterID
-                            + "filtername is : " + filtername);
+                    Log.i(Tag, "change photo id is : " + currentfilterID + "filtername is : " + filtername);
                     mGPUImageView.setCurrentfilterID(currentfilterID);
                     mGPUImageView.setCurrentfiltername(filtername);
                 }
@@ -317,26 +297,21 @@ public class CardEffect extends Activity implements OnClickListener,
         galleryFilter.setAdapter(effectAdapter);
 
         galleryFilter.setSelection(0);
-        galleryFilter
-                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    private String currentfiltername;
+        galleryFilter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            private String currentfiltername;
 
-                    public void onItemClick(AdapterView<?> arg0, View arg1,
-                            int position, long id) {
-                        effectAdapter.setSelectItem(position);
-                        currentfiltername = effectAdapter
-                                .getFilterName(position);
-                        currentfilterID = effectAdapter.getFilterID(position);
-                        mGPUImageView.setCurrentfilterID(currentfilterID);
-                        mGPUImageView.setCurrentfiltername(currentfiltername);
-                        Log.i(Tag, "zhudewei the filter is "
-                                + currentfiltername);
-                        mGPUImageView.requestRender();
-                    }
-                });
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                effectAdapter.setSelectItem(position);
+                currentfiltername = effectAdapter.getFilterName(position);
+                currentfilterID = effectAdapter.getFilterID(position);
+                mGPUImageView.setCurrentfilterID(currentfilterID);
+                mGPUImageView.setCurrentfiltername(currentfiltername);
+                Log.i(Tag, "zhudewei the filter is " + currentfiltername);
+                mGPUImageView.requestRender();
+            }
+        });
         // 恢复浅色调
-        customback.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.sel_home_green_button));
+        customback.setBackgroundDrawable(getResources().getDrawable(R.drawable.sel_home_green_button));
         customback.setTextColor(0xffffffff);
         scrollPicArea.scrollBy(0, -800);
         scrollPicArea.smoothScollToY(800, 3000);
@@ -371,19 +346,16 @@ public class CardEffect extends Activity implements OnClickListener,
              */
             mGPUImageView.setCaptureFront();
             mGPUImageView.requestRender();
-            mGPUImageView
-                    .setOnCardBitmapGeneratedListener(new OnCardBitmapGeneratedListener() {
-                        @Override
-                        public void OnCardBitmapGeneratedListener() {
-                            Intent intent = new Intent();
-                            intent.setClass(getApplicationContext(),
-                                    CardBackActivity.class);
-                            intent.putExtra("imageUri", imageUri);
-                            startActivity(intent);
-                            mGPUImageView
-                                    .setOnCardBitmapGeneratedListener(null);
-                        }
-                    });
+            mGPUImageView.setOnCardBitmapGeneratedListener(new OnCardBitmapGeneratedListener() {
+                @Override
+                public void OnCardBitmapGeneratedListener() {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), CardBackActivity.class);
+                    intent.putExtra("imageUri", imageUri);
+                    startActivity(intent);
+                    mGPUImageView.setOnCardBitmapGeneratedListener(null);
+                }
+            });
 
             break;
         default:
@@ -395,8 +367,7 @@ public class CardEffect extends Activity implements OnClickListener,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(Tag, "in result activity!!");
         if (requestCode == REQUEST_CODE_FOR_TEMPLATE && resultCode == RESULT_OK) {
-            int temPos = data.getIntExtra(
-                    ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            int temPos = data.getIntExtra(ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
             mTemplatePos = temPos;
             templateId = CardsTemplateUtils.getTransTemplateId(temPos);
             background_envelop.setImageResource(templateId);

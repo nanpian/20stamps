@@ -82,19 +82,14 @@ public class ScollerRelativeView extends RelativeLayout {
                     continue;
                 }
 
-                RelativeLayout.LayoutParams params = (LayoutParams) getChildAt(
-                        i).getLayoutParams();
+                RelativeLayout.LayoutParams params = (LayoutParams) getChildAt(i).getLayoutParams();
                 int leftMargin = params.leftMargin;
                 int rightMargin = params.rightMargin;
                 int topMargin = params.topMargin;
                 int bottomMargin = params.bottomMargin;
                 Log.i(TAG, "Top is : " + getChildAt(i - 1).getBottom());
-                getChildAt(i).layout(
-                        leftMargin,
-                        getChildAt(i - 1).getBottom() + topMargin,
-                        getChildAt(i - 1).getWidth() - rightMargin,
-                        getChildAt(i - 1).getBottom() + topMargin
-                                + getChildAt(i).getMeasuredHeight());
+                getChildAt(i).layout(leftMargin, getChildAt(i - 1).getBottom() + topMargin, getChildAt(i - 1).getWidth() - rightMargin,
+                        getChildAt(i - 1).getBottom() + topMargin + getChildAt(i).getMeasuredHeight());
             }
         }
     }
@@ -144,8 +139,7 @@ public class ScollerRelativeView extends RelativeLayout {
         if (mScroller != null) {
             Log.i(TAG, "yDis is : " + yDis + "; duration is : " + duration);
 
-            mScroller.startScroll(getScrollX(), getScrollY(), getScrollX(),
-                    yDis, duration);
+            mScroller.startScroll(getScrollX(), getScrollY(), getScrollX(), yDis, duration);
             isViewBeMoved = true;
             invalidate();
         }

@@ -71,10 +71,7 @@ public class Texture2D {
         maxU = mWidth / (float) mPow2Width;
         maxV = mHeight / (float) mPow2Height;
 
-        Bitmap bitmap = Bitmap
-                .createBitmap(mPow2Width, mPow2Height,
-                        bmp.hasAlpha() ? Bitmap.Config.ARGB_8888
-                                : Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(mPow2Width, mPow2Height, bmp.hasAlpha() ? Bitmap.Config.ARGB_8888 : Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawBitmap(bmp, 0, 0, null);
         mBitmap = bitmap;
@@ -89,10 +86,8 @@ public class Texture2D {
 
             gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
 
-            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-                    GL10.GL_LINEAR);
-            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-                    GL10.GL_LINEAR);
+            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap, 0);
 
@@ -113,10 +108,8 @@ public class Texture2D {
         this.bind(gl);
 
         // 映射
-        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y,
-                x + mWidth, 0, x, y + mHeight, x + mWidth, y + mHeight, });
-        FloatBuffer coordBuffer = floatBufferUtil(new float[] { 0, 0, maxU, 0,
-                0, maxV, maxU, maxV, });
+        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y, x + mWidth, 0, x, y + mHeight, x + mWidth, y + mHeight, });
+        FloatBuffer coordBuffer = floatBufferUtil(new float[] { 0, 0, maxU, 0, 0, maxV, maxU, maxV, });
 
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, coordBuffer);
         gl.glVertexPointer(2, GL10.GL_FLOAT, 0, verticleBuffer);
@@ -137,10 +130,8 @@ public class Texture2D {
 
         // 映射
         // 映射
-        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y,
-                x + width, 0, x, y + height, x + width, y + height, });
-        FloatBuffer coordBuffer = floatBufferUtil(new float[] { 0, 0, maxU, 0,
-                0, maxV, maxU, maxV, });
+        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y, x + width, 0, x, y + height, x + width, y + height, });
+        FloatBuffer coordBuffer = floatBufferUtil(new float[] { 0, 0, maxU, 0, 0, maxV, maxU, maxV, });
 
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, coordBuffer);
         gl.glVertexPointer(2, GL10.GL_FLOAT, 0, verticleBuffer);

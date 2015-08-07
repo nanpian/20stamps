@@ -36,8 +36,7 @@ import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.GLBaseUtil;
 import com.stamp20.app.util.Log;
 
-public class StampGLSurfaceView extends GLSurfaceView implements
-        GLSurfaceView.Renderer {
+public class StampGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     private static final String Tag = "StampGLSurfaceView";
 
@@ -200,7 +199,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
             if (msg.what == UPDATE_FRAME) {
-                //MainEffect.instance.mStampFrame.setImageBitmap(bitmap);
+                // MainEffect.instance.mStampFrame.setImageBitmap(bitmap);
                 changeUiInterface.changeStampFrame(bitmap);
             } else if (msg.what == INIT_FRAME) {
                 if (isHorizontal) {
@@ -229,17 +228,14 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
-        stampFrameBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.background_stamp_h_transparent_pierced);
+        stampFrameBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_stamp_h_transparent_pierced);
         stampFrameWidth = stampFrameBitmap.getWidth();
         stampFrameHeight = stampFrameBitmap.getHeight();
         // recycle stamp frame memory.
         stampFrameBitmap.recycle();
         stampFrameBitmap = null;
-        Log.i(Tag, "the bitmap width is " + bitmapWidth
-                + " the bitmap height is " + bitmapHeight);
-        Log.i(Tag, "the stamp framewidth is " + stampFrameWidth
-                + " the stamp frame height is " + stampFrameHeight);
+        Log.i(Tag, "the bitmap width is " + bitmapWidth + " the bitmap height is " + bitmapHeight);
+        Log.i(Tag, "the stamp framewidth is " + stampFrameWidth + " the stamp frame height is " + stampFrameHeight);
         totalTranslateX = 0;
         totalTranslateY = 0;
 
@@ -287,8 +283,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
     public StampGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!GLBaseUtil.supportsOpenGLES2(context)) {
-            throw new IllegalStateException(
-                    "OpenGL ES 2.0 is not supported on this phone.");
+            throw new IllegalStateException("OpenGL ES 2.0 is not supported on this phone.");
         }
         mContext = context;
         this.setEGLContextClientVersion(2);
@@ -307,12 +302,10 @@ public class StampGLSurfaceView extends GLSurfaceView implements
         if (mCurrentEffect != null) {
             // if no effect is chosen, just render the original bitmap
             Log.i(Tag, "the render result is not null");
-            mTexRenderer.renderTexture(mTextures[1], totalRatio,
-                    (int) totalTranslateX, (int) totalTranslateY);
+            mTexRenderer.renderTexture(mTextures[1], totalRatio, (int) totalTranslateX, (int) totalTranslateY);
         } else {
             // render the result of applyEffect()
-            mTexRenderer.renderTexture(mTextures[0], totalRatio,
-                    (int) totalTranslateX, (int) totalTranslateY);
+            mTexRenderer.renderTexture(mTextures[0], totalRatio, (int) totalTranslateX, (int) totalTranslateY);
             Log.i(Tag, "the render result is null");
         }
     }
@@ -330,16 +323,12 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
         }
 
-        if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE
-                || currentStatus == STATUS_CAPTURE) {
+        if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE || currentStatus == STATUS_CAPTURE) {
             // if an effect is chosen initialize it and apply it to the texture
             if (currentfilterID != 0) {
-                Log.i(Tag, "onDrawFrame the filter name is "
-                        + currentfiltername + "the currentfilterID is : "
-                        + currentfilterID);
+                Log.i(Tag, "onDrawFrame the filter name is " + currentfiltername + "the currentfilterID is : " + currentfilterID);
                 try {
-                    mCurrentEffect = effectAdapter.createEffect(
-                            currentfilterID, mEffectContext);
+                    mCurrentEffect = effectAdapter.createEffect(currentfilterID, mEffectContext);
                     applyEffect();
                 } catch (Exception e) {
                     Log.i(Tag, "Exception is : " + e);
@@ -393,22 +382,18 @@ public class StampGLSurfaceView extends GLSurfaceView implements
         // 得到GLSurfaceView图片后，要进行叠加运算
         Bitmap frameBitmap = null;
         if (isHorizontal) {
-            frameBitmap = BitmapFactory.decodeResource(mContext.getResources(),
-                    R.drawable.background_stamp_h_transparent_pierced);
+            frameBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.background_stamp_h_transparent_pierced);
         } else {
-            frameBitmap = BitmapFactory.decodeResource(mContext.getResources(),
-                    R.drawable.background_stamp_v_transparent_pierced);
+            frameBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.background_stamp_v_transparent_pierced);
         }
         // deltaW为白色边框的条宽度
         mWidth = frameBitmap.getWidth();
         mHeight = frameBitmap.getHeight();
 
         int[] iat = new int[(mWidth - 2 * deltaW) * (mHeight - 2 * deltaH)];
-        IntBuffer ib = IntBuffer.allocate((mWidth - 2 * deltaW)
-                * (mHeight - 2 * deltaH));
-        mGL.glReadPixels((surfaceWidth - mWidth) / 2 + deltaW,
-                (surfaceHeight - mHeight) / 2 + deltaH, mWidth - 2 * deltaW,
-                mHeight - 2 * deltaH, GL_RGBA, GL_UNSIGNED_BYTE, ib);
+        IntBuffer ib = IntBuffer.allocate((mWidth - 2 * deltaW) * (mHeight - 2 * deltaH));
+        mGL.glReadPixels((surfaceWidth - mWidth) / 2 + deltaW, (surfaceHeight - mHeight) / 2 + deltaH, mWidth - 2 * deltaW, mHeight - 2 * deltaH, GL_RGBA,
+                GL_UNSIGNED_BYTE, ib);
         int[] ia = ib.array();
 
         // Convert upside down mirror-reversed image to right-side up normal
@@ -417,13 +402,11 @@ public class StampGLSurfaceView extends GLSurfaceView implements
         int tempWidth = mWidth - 2 * deltaW;
         for (int i = 0; i < tempHeight; i++) {
             for (int j = 0; j < tempWidth; j++) {
-                iat[(tempHeight - i - 1) * tempWidth + j] = ia[i * tempWidth
-                        + j];
+                iat[(tempHeight - i - 1) * tempWidth + j] = ia[i * tempWidth + j];
             }
         }
 
-        glBitmap = Bitmap.createBitmap((mWidth - 2 * deltaW),
-                (mHeight - 2 * deltaH), Bitmap.Config.ARGB_8888);
+        glBitmap = Bitmap.createBitmap((mWidth - 2 * deltaW), (mHeight - 2 * deltaH), Bitmap.Config.ARGB_8888);
         glBitmap.copyPixelsFromBuffer(IntBuffer.wrap(iat));
         if (glBitmap != null) {
             Log.i(Tag, "onDrawFrame,glBitmap width is " + glBitmap.getWidth());
@@ -431,8 +414,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
             Log.i(Tag, "onDrawFrame,glBitmap is null");
         }
 
-        bitmap = Bitmap.createBitmap(frameBitmap.getWidth(),
-                frameBitmap.getHeight(), Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(frameBitmap.getWidth(), frameBitmap.getHeight(), Config.ARGB_8888);
         try {
             Canvas cv = new Canvas(bitmap);
             // Notice!!! the delta w and delta h -5 is set manually!!!
@@ -456,8 +438,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
     }
 
     private void applyEffect() {
-        mCurrentEffect.apply(mTextures[0], mImageWidth, mImageHeight,
-                mTextures[1]);
+        mCurrentEffect.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1]);
     }
 
     @Override
@@ -468,8 +449,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
         }
         surfaceWidth = width;
         surfaceHeight = height;
-        Log.i(Tag, "onSurfaceChanged, the view width is " + width
-                + "the view height is " + height);
+        Log.i(Tag, "onSurfaceChanged, the view width is " + width + "the view height is " + height);
     }
 
     private void loadTextures() {
@@ -483,8 +463,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
             return;
         mImageWidth = sourceBitmap.getWidth();
         mImageHeight = sourceBitmap.getHeight();
-        mTexRenderer.updateTextureSize(mImageWidth, mImageHeight,
-                stampFrameWidth, stampFrameHeight);
+        mTexRenderer.updateTextureSize(mImageWidth, mImageHeight, stampFrameWidth, stampFrameHeight);
         mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
 
         /*
@@ -594,8 +573,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
                 }
                 initRatio = 1.0f;
                 // 进行缩放倍数检查，最大只允许将图片放大4倍，最小可以缩小到初始化比例的1/2
-                if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 2 * initRatio)
-                        || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio / 2)) {
+                if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 2 * initRatio) || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio / 2)) {
                     scaledRatio = (float) (fingerDis / lastFingerDis);
                     totalRatio = totalRatio * scaledRatio;
                     if (totalRatio > 2 * initRatio) {
@@ -637,8 +615,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
     private void moveGLSurfaceView() {
         // TODO Auto-generated method stub
         float translateX = totalTranslateX + movedDistanceX;
-        Log.d(this, "move,totalX:" + totalTranslateX + ", movedX:"
-                + movedDistanceX + ", X:" + translateX);
+        Log.d(this, "move,totalX:" + totalTranslateX + ", movedX:" + movedDistanceX + ", X:" + translateX);
         float translateY = totalTranslateY + movedDistanceY;
 
         totalTranslateX = translateX;
@@ -668,8 +645,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
 
     OnStampBitmapGeneratedListener stamplistener = null;
 
-    public void setOnStampBitmapGeneratedListener(
-            OnStampBitmapGeneratedListener stamplistener2) {
+    public void setOnStampBitmapGeneratedListener(OnStampBitmapGeneratedListener stamplistener2) {
         stamplistener = stamplistener2;
     }
 
@@ -678,23 +654,24 @@ public class StampGLSurfaceView extends GLSurfaceView implements
     public void setOnMoveOrZoomListener(OnMoveOrZoomListener l) {
         listener = l;
     }
-    
+
     ChangeUIInterface changeUiInterface = null;
+
     public void setChangeUIInterface(ChangeUIInterface uiInterface) {
         this.changeUiInterface = uiInterface;
     }
 
     public interface OnMoveOrZoomListener {
-        public void onMoveOrZoomListener(boolean flag, float ratio,
-                float currentRatio);
+        public void onMoveOrZoomListener(boolean flag, float ratio, float currentRatio);
     }
 
     public interface OnStampBitmapGeneratedListener {
         public void OnStampBitmapGeneratedListener();
     }
-    
+
     public interface ChangeUIInterface {
         public void changeStampFrame(Bitmap bitmap);
+
         public void changeStampFrame(int resId);
     }
 
@@ -715,7 +692,7 @@ public class StampGLSurfaceView extends GLSurfaceView implements
     public void showAnimation(RelativeLayout mView, boolean isHorizontal) {
         if (isHorizontal) {
             changeUiInterface.changeStampFrame(R.drawable.background_stamp_v_transparent_pierced);
-            if (changeUiInterface!=null) {
+            if (changeUiInterface != null) {
                 changeUiInterface.changeStampFrame(bitmap);
             }
             isHorizontal = false;

@@ -23,8 +23,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Log;
 
-public class PhotoAlbumFragment extends GallaryFragment implements
-        OnItemClickListener, GallaryLoader {
+public class PhotoAlbumFragment extends GallaryFragment implements OnItemClickListener, GallaryLoader {
 
     private Context mContext;
     private ContentResolver mContentResolver;
@@ -47,11 +46,9 @@ public class PhotoAlbumFragment extends GallaryFragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(this, "onCreateView");
-        final View parent = inflater.inflate(R.layout.tab_photo_album,
-                container, false);
+        final View parent = inflater.inflate(R.layout.tab_photo_album, container, false);
         parentView = parent;
         mAlbumsView = (ListView) parent.findViewById(R.id.main_list);
         mPhotosView = (GridView) parent.findViewById(R.id.main_child_grid);
@@ -70,24 +67,20 @@ public class PhotoAlbumFragment extends GallaryFragment implements
     public void updateLayout(int position) {
         if (isGridChildView) {
             if (mPhotosView == null) {
-                mPhotosView = (GridView) parentView
-                        .findViewById(R.id.main_child_grid);
+                mPhotosView = (GridView) parentView.findViewById(R.id.main_child_grid);
             }
             mPhotosView.setVisibility(View.VISIBLE);
             mAlbumsView.setVisibility(View.GONE);
             mCurrentAlbum = mAlbums.get(position);
-            mPhotosView.setAdapter(new PhotoAdapter(mContext,
-                    mPhotos = getPhotos(mCurrentAlbum)));
+            mPhotosView.setAdapter(new PhotoAdapter(mContext, mPhotos = getPhotos(mCurrentAlbum)));
             mPhotosView.setOnItemClickListener(this);
         } else {
             if (mAlbumsView == null) {
-                mAlbumsView = (ListView) parentView
-                        .findViewById(R.id.main_list);
+                mAlbumsView = (ListView) parentView.findViewById(R.id.main_list);
             }
             mPhotosView.setVisibility(View.GONE);
             mAlbumsView.setVisibility(View.VISIBLE);
-            mAlbumsView.setAdapter(new AlbumAdapter(mContext,
-                    mAlbums = getAlbums()));
+            mAlbumsView.setAdapter(new AlbumAdapter(mContext, mAlbums = getAlbums()));
             mAlbumsView.setOnItemClickListener(this);
         }
     }
@@ -102,8 +95,7 @@ public class PhotoAlbumFragment extends GallaryFragment implements
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                if (event.getAction() == KeyEvent.ACTION_UP
-                        && keyCode == KeyEvent.KEYCODE_BACK) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     return onBackClick();
                 }
 
@@ -117,11 +109,9 @@ public class PhotoAlbumFragment extends GallaryFragment implements
         super.onResume();
 
         if (!isGridChildView) {
-            mAlbumsView.setAdapter(new AlbumAdapter(mContext,
-                    mAlbums = getAlbums()));
+            mAlbumsView.setAdapter(new AlbumAdapter(mContext, mAlbums = getAlbums()));
         } else {
-            mPhotosView.setAdapter(new PhotoAdapter(mContext,
-                    mPhotos = getPhotos(mCurrentAlbum)));
+            mPhotosView.setAdapter(new PhotoAdapter(mContext, mPhotos = getPhotos(mCurrentAlbum)));
         }
 
     }
@@ -151,8 +141,7 @@ public class PhotoAlbumFragment extends GallaryFragment implements
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Design.clearInstance();
         if (!isGridChildView) {
             isGridChildView = true;
@@ -166,9 +155,7 @@ public class PhotoAlbumFragment extends GallaryFragment implements
     @Override
     public List<Album> getAlbums() {
 
-        Cursor cursor = mContentResolver.query(
-                Images.Media.EXTERNAL_CONTENT_URI, new String[] { "DISTINCT "
-                        + ImageColumns.BUCKET_DISPLAY_NAME }, null, null,
+        Cursor cursor = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, new String[] { "DISTINCT " + ImageColumns.BUCKET_DISPLAY_NAME }, null, null,
                 ImageColumns.BUCKET_DISPLAY_NAME + " ASC");
         if (cursor == null)
             return null;
@@ -186,15 +173,11 @@ public class PhotoAlbumFragment extends GallaryFragment implements
 
     private String getBucketCoverPhoto(String bucket) {
         Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
-        Uri query = baseUri.buildUpon().appendQueryParameter("limit", "1")
-                .build();
-        Cursor c = mContentResolver.query(query,
-                new String[] { ImageColumns._ID },
-                ImageColumns.BUCKET_DISPLAY_NAME + "='" + bucket + "'", null,
+        Uri query = baseUri.buildUpon().appendQueryParameter("limit", "1").build();
+        Cursor c = mContentResolver.query(query, new String[] { ImageColumns._ID }, ImageColumns.BUCKET_DISPLAY_NAME + "='" + bucket + "'", null,
                 ImageColumns.DATE_TAKEN + " DESC");
         if (c != null && c.moveToFirst()) {
-            String uri = "content://media/external/images/media/"
-                    + c.getLong(0);
+            String uri = "content://media/external/images/media/" + c.getLong(0);
             c.close();
             return uri;
         }
@@ -202,9 +185,7 @@ public class PhotoAlbumFragment extends GallaryFragment implements
     }
 
     private int getBucketPhotoCount(String bucket) {
-        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI,
-                null, ImageColumns.BUCKET_DISPLAY_NAME + "='" + bucket + "'",
-                null, null);
+        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, null, ImageColumns.BUCKET_DISPLAY_NAME + "='" + bucket + "'", null, null);
         if (c != null) {
             int count = c.getCount();
             c.close();
@@ -216,18 +197,14 @@ public class PhotoAlbumFragment extends GallaryFragment implements
     @Override
     public List<Photo> getPhotos(Album a) {
 
-        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI,
-                new String[] { ImageColumns._ID, ImageColumns.DISPLAY_NAME },
-                ImageColumns.BUCKET_DISPLAY_NAME + "='" + a.getContent() + "'",
-                null, ImageColumns.DATE_TAKEN + " DESC");
+        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, new String[] { ImageColumns._ID, ImageColumns.DISPLAY_NAME },
+                ImageColumns.BUCKET_DISPLAY_NAME + "='" + a.getContent() + "'", null, ImageColumns.DATE_TAKEN + " DESC");
         if (c == null)
             return null;
 
         List<Photo> photos = new ArrayList<Photo>(200);
         while (c.moveToNext()) {
-            photos.add(new Photo(c.getString(1),
-                    "content://media/external/images/media/" + c.getLong(0),
-                    Photo.PHOTO_LOC_TYPE));
+            photos.add(new Photo(c.getString(1), "content://media/external/images/media/" + c.getLong(0), Photo.PHOTO_LOC_TYPE));
         }
         c.close();
         return photos;

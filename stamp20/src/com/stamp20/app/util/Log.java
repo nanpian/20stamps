@@ -69,8 +69,7 @@ public class Log {
     }
 
     private static String getPrefix(Object obj) {
-        return (obj == null ? ""
-                : (obj.getClass().getSimpleName() + TAG_DELIMETER));
+        return (obj == null ? "" : (obj.getClass().getSimpleName() + TAG_DELIMETER));
     }
 
     private static String delimit(String tag) {

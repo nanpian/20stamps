@@ -27,12 +27,10 @@ public class WaitProgressBar extends ProgressBar {
     }
 
     private void init() {
-        final LayoutParams layoutParams = new LayoutParams(DPIUtil.dip2px(34),
-                DPIUtil.dip2px(34));
+        final LayoutParams layoutParams = new LayoutParams(DPIUtil.dip2px(34), DPIUtil.dip2px(34));
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         this.setLayoutParams(layoutParams);
-        this.setIndeterminateDrawable(this.getResources().getDrawable(
-                R.drawable.wait_progress));
+        this.setIndeterminateDrawable(this.getResources().getDrawable(R.drawable.wait_progress));
         this.setIndeterminate(true);
 
     }

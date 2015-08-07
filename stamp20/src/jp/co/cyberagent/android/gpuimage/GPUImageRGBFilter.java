@@ -24,20 +24,10 @@ import android.opengl.GLES20;
  * the default. green: blue:
  */
 public class GPUImageRGBFilter extends GPUImageFilter {
-    public static final String RGB_FRAGMENT_SHADER = ""
-            + "  varying highp vec2 textureCoordinate;\n"
-            + "  \n"
-            + "  uniform sampler2D inputImageTexture;\n"
-            + "  uniform highp float red;\n"
-            + "  uniform highp float green;\n"
-            + "  uniform highp float blue;\n"
-            + "  \n"
-            + "  void main()\n"
-            + "  {\n"
-            + "      highp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n"
-            + "      \n"
-            + "      gl_FragColor = vec4(textureColor.r * red, textureColor.g * green, textureColor.b * blue, 1.0);\n"
-            + "  }\n";
+    public static final String RGB_FRAGMENT_SHADER = "" + "  varying highp vec2 textureCoordinate;\n" + "  \n" + "  uniform sampler2D inputImageTexture;\n"
+            + "  uniform highp float red;\n" + "  uniform highp float green;\n" + "  uniform highp float blue;\n" + "  \n" + "  void main()\n" + "  {\n"
+            + "      highp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" + "      \n"
+            + "      gl_FragColor = vec4(textureColor.r * red, textureColor.g * green, textureColor.b * blue, 1.0);\n" + "  }\n";
 
     private int mRedLocation;
     private float mRed;
@@ -51,8 +41,7 @@ public class GPUImageRGBFilter extends GPUImageFilter {
         this(1.0f, 1.0f, 1.0f);
     }
 
-    public GPUImageRGBFilter(final float red, final float green,
-            final float blue) {
+    public GPUImageRGBFilter(final float red, final float green, final float blue) {
         super(NO_FILTER_VERTEX_SHADER, RGB_FRAGMENT_SHADER);
         mRed = red;
         mGreen = green;

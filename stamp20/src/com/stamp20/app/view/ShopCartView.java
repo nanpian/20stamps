@@ -51,8 +51,7 @@ public class ShopCartView extends View {
     }
 
     public void initView() {
-        TypedArray typeArray = getResources().obtainTypedArray(
-                R.array.shop_cart_background);
+        TypedArray typeArray = getResources().obtainTypedArray(R.array.shop_cart_background);
         int random = (int) (Math.random() * 2);
         setBackgroundResource(typeArray.getResourceId(random, 0));
     }
@@ -83,14 +82,12 @@ public class ShopCartView extends View {
         }
         canvas.restore();
         if (bmpStampBackground != null && backgroundMatrix != null) {
-            canvas.drawBitmap(bmpStampBackground, backgroundMatrix,
-                    backgroundPaint);
+            canvas.drawBitmap(bmpStampBackground, backgroundMatrix, backgroundPaint);
         }
     }
 
     public void setBackgroundResource(int resId) {
-        bmpStampBackground = BitmapFactory
-                .decodeResource(getResources(), resId);
+        bmpStampBackground = BitmapFactory.decodeResource(getResources(), resId);
         stampBackgroundWidth = bmpStampBackground.getWidth();
         stampBackgroundHeight = bmpStampBackground.getHeight();
     }
@@ -111,8 +108,7 @@ public class ShopCartView extends View {
         backgroundPaint.setAntiAlias(true);
         // 缩放和移动
         backgroundMatrix.postScale(xRate, yRate);
-        backgroundMatrix.postTranslate(stampBackgroundTranslateX,
-                stampBackgroundTranslateY);
+        backgroundMatrix.postTranslate(stampBackgroundTranslateX, stampBackgroundTranslateY);
         matrix.reset();
         xRate = (newBackgroundWidth / (sourceWidth * 1.0f));
         yRate = (newBackgroundHeight / (sourceHeight * 1.0f));

@@ -56,8 +56,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
         customEnvelope.setOnClickListener(this);
         add_blank = (Button) findViewById(R.id.add_blank);
         add_blank.setOnClickListener(this);
-        setBtnSelectState(add_blank, Color.parseColor("#f1c40f"),
-                R.drawable.activity_card_back_blank_click);
+        setBtnSelectState(add_blank, Color.parseColor("#f1c40f"), R.drawable.activity_card_back_blank_click);
         add_line = (Button) findViewById(R.id.add_line);
         add_line.setOnClickListener(this);
         header_previous = (ImageView) findViewById(R.id.header_previous);
@@ -72,25 +71,22 @@ public class CardBackActivity extends Activity implements OnClickListener {
          * width; cardBackView.setLayoutParams(params);
          * cardBackView.postInvalidate(); } });
          */
-        chooseBackColorAdapter = new ChooseBackColorAdapter(
-                CardBackActivity.this);
+        chooseBackColorAdapter = new ChooseBackColorAdapter(CardBackActivity.this);
         chooseBackColorAdapter.setImageUri(mImageUri);
         gallery_choose_back = (HorizontalListView) findViewById(R.id.activity_card_back_select_back);
         gallery_choose_back.setSelection(0);
         // gallery_choose_back.setAnimationDuration(3000);
         gallery_choose_back.setAdapter(chooseBackColorAdapter);
-        gallery_choose_back
-                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    private String currentfiltername;
+        gallery_choose_back.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            private String currentfiltername;
 
-                    public void onItemClick(AdapterView<?> arg0, View arg1,
-                            int position, long id) {
-                        chooseBackColorAdapter.setSelectItem(position);
-                        int color = chooseBackColorAdapter.getColor(position);
-                        cardBackView.setCardBackColor(color, position);
-                        cardBackView.invalidate();
-                    }
-                });
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                chooseBackColorAdapter.setSelectItem(position);
+                int color = chooseBackColorAdapter.getColor(position);
+                cardBackView.setCardBackColor(color, position);
+                cardBackView.invalidate();
+            }
+        });
     }
 
     @Override
@@ -113,8 +109,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
     public void setBtnSelectState(Button button, int color, int drawableId) {
         button.setTextColor(color);
         Drawable drawable = this.getResources().getDrawable(drawableId);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(),
-                drawable.getMinimumHeight());
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         button.setCompoundDrawables(drawable, null, null, null);
         button.setCompoundDrawablePadding(5);
     }
@@ -124,18 +119,14 @@ public class CardBackActivity extends Activity implements OnClickListener {
         switch (v.getId()) {
         case R.id.add_blank:
             cardBackView.setHasLine(false);
-            setBtnSelectState(add_blank, Color.parseColor("#f1c40f"),
-                    R.drawable.activity_card_back_blank_click);
-            setBtnSelectState(add_line, Color.WHITE,
-                    R.drawable.activity_card_back_blank_icon);
+            setBtnSelectState(add_blank, Color.parseColor("#f1c40f"), R.drawable.activity_card_back_blank_click);
+            setBtnSelectState(add_line, Color.WHITE, R.drawable.activity_card_back_blank_icon);
             cardBackView.invalidate();
             break;
         case R.id.add_line:
             cardBackView.setHasLine(true);
-            setBtnSelectState(add_blank, Color.WHITE,
-                    R.drawable.activity_card_back_blank_null);
-            setBtnSelectState(add_line, Color.parseColor("#f1c40f"),
-                    R.drawable.activity_card_back_blank_icon_selected);
+            setBtnSelectState(add_blank, Color.WHITE, R.drawable.activity_card_back_blank_null);
+            setBtnSelectState(add_line, Color.parseColor("#f1c40f"), R.drawable.activity_card_back_blank_icon_selected);
             cardBackView.invalidate();
             break;
         case R.id.customenvelope:

@@ -10,8 +10,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-public class PreviewGLSurfaceView extends GLSurfaceView implements
-        GLSurfaceView.Renderer {
+public class PreviewGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     private int bmpWidth;
     private int bmpHeight;
@@ -21,8 +20,7 @@ public class PreviewGLSurfaceView extends GLSurfaceView implements
         super(context, attrs);
         // TODO Auto-generated constructor stub
         if (!GLBaseUtil.supportsOpenGLES2(context)) {
-            throw new IllegalStateException(
-                    "OpenGL ES 2.0 is not supported on this phone.");
+            throw new IllegalStateException("OpenGL ES 2.0 is not supported on this phone.");
         }
         mContext = context;
         this.setEGLContextClientVersion(2);

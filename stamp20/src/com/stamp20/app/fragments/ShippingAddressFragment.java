@@ -28,8 +28,7 @@ import com.stamp20.app.wheel.adapter.CityAdapter;
 import com.stamp20.app.wheel.widget.OnWheelChangedListener;
 import com.stamp20.app.wheel.widget.WheelView;
 
-public class ShippingAddressFragment extends Fragment implements
-        OnClickListener, OnWheelChangedListener, View.OnFocusChangeListener {
+public class ShippingAddressFragment extends Fragment implements OnClickListener, OnWheelChangedListener, View.OnFocusChangeListener {
 
     private TextView firstNameHint;
     private EditText firstNameEditText;
@@ -83,61 +82,43 @@ public class ShippingAddressFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         Log.d(this, "onCreateView");
-        final View parent = inflater.inflate(R.layout.layout_shipping_address,
-                container, false);
+        final View parent = inflater.inflate(R.layout.layout_shipping_address, container, false);
 
-        firstNameHint = (TextView) parent
-                .findViewById(R.id.shipping_address_first_name_hint);
-        firstNameEditText = (EditText) parent
-                .findViewById(R.id.shipping_address_first_name);
+        firstNameHint = (TextView) parent.findViewById(R.id.shipping_address_first_name_hint);
+        firstNameEditText = (EditText) parent.findViewById(R.id.shipping_address_first_name);
         firstNameEditText.setOnFocusChangeListener(this);
         firstNameEditText.addTextChangedListener(firstNameEditTextTextWatcher);
 
-        secondNameHint = (TextView) parent
-                .findViewById(R.id.shipping_address_second_name_hint);
-        secondNameEditText = (EditText) parent
-                .findViewById(R.id.shipping_address_second_name);
+        secondNameHint = (TextView) parent.findViewById(R.id.shipping_address_second_name_hint);
+        secondNameEditText = (EditText) parent.findViewById(R.id.shipping_address_second_name);
         secondNameEditText.setOnFocusChangeListener(this);
-        secondNameEditText
-                .addTextChangedListener(secondtNameEditTextTextWatcher);
+        secondNameEditText.addTextChangedListener(secondtNameEditTextTextWatcher);
 
-        addressLine1Hint = (TextView) parent
-                .findViewById(R.id.shipping_address_line1_hint);
-        addressLine1EditText = (EditText) parent
-                .findViewById(R.id.shipping_address_line1);
+        addressLine1Hint = (TextView) parent.findViewById(R.id.shipping_address_line1_hint);
+        addressLine1EditText = (EditText) parent.findViewById(R.id.shipping_address_line1);
         addressLine1EditText.setOnFocusChangeListener(this);
-        addressLine1EditText
-                .addTextChangedListener(addressLine1EditTextTextWatcher);
+        addressLine1EditText.addTextChangedListener(addressLine1EditTextTextWatcher);
 
-        addressLine2Hint = (TextView) parent
-                .findViewById(R.id.shipping_address_line2_hint);
-        addressLine2EditText = (EditText) parent
-                .findViewById(R.id.shipping_address_line2);
+        addressLine2Hint = (TextView) parent.findViewById(R.id.shipping_address_line2_hint);
+        addressLine2EditText = (EditText) parent.findViewById(R.id.shipping_address_line2);
         addressLine2EditText.setOnFocusChangeListener(this);
-        addressLine2EditText
-                .addTextChangedListener(addressLine2EditTextTextWatcher);
+        addressLine2EditText.addTextChangedListener(addressLine2EditTextTextWatcher);
 
-        cityHint = (TextView) parent
-                .findViewById(R.id.shipping_address_city_hint);
-        cityEditText = (EditText) parent
-                .findViewById(R.id.shipping_address_city);
+        cityHint = (TextView) parent.findViewById(R.id.shipping_address_city_hint);
+        cityEditText = (EditText) parent.findViewById(R.id.shipping_address_city);
         cityEditText.setOnFocusChangeListener(this);
         cityEditText.addTextChangedListener(cityEditTextTextWatcher);
 
-        stateHint = (TextView) parent
-                .findViewById(R.id.shipping_address_state_hint);
-        stateEditText = (TextView) parent
-                .findViewById(R.id.shipping_address_state);
+        stateHint = (TextView) parent.findViewById(R.id.shipping_address_state_hint);
+        stateEditText = (TextView) parent.findViewById(R.id.shipping_address_state);
         stateEditText.setOnFocusChangeListener(this);
         stateEditText.setOnClickListener(this);
         stateEditText.addTextChangedListener(stateEditTextTextWatcher);
 
-        zipHint = (TextView) parent
-                .findViewById(R.id.shipping_address_zip_hint);
+        zipHint = (TextView) parent.findViewById(R.id.shipping_address_zip_hint);
         zipEditText = (EditText) parent.findViewById(R.id.shipping_address_zip);
         zipEditText.setOnFocusChangeListener(this);
         zipEditText.addTextChangedListener(zipEditTextTextWatcher);
@@ -151,24 +132,16 @@ public class ShippingAddressFragment extends Fragment implements
     }
 
     private void loadUserProfile() {
-        getData(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameHint,
-                R.string.first_name, firstNameEditText);
-        getData(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameHint,
-                R.string.second_name, secondNameEditText);
-        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1,
-                addressLine1Hint, R.string.address_line_1, addressLine1EditText);
-        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2,
-                addressLine2Hint, R.string.address_line_2, addressLine2EditText);
-        getData(com.stamp20.app.util.UserProfile.COUNTRY, cityHint,
-                R.string.address_city, cityEditText);
-        getData(com.stamp20.app.util.UserProfile.STATE, stateHint,
-                R.string.address_state, stateEditText);
-        getData(com.stamp20.app.util.UserProfile.ZIP, zipHint,
-                R.string.address_zip, zipEditText);
+        getData(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameHint, R.string.first_name, firstNameEditText);
+        getData(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameHint, R.string.second_name, secondNameEditText);
+        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1Hint, R.string.address_line_1, addressLine1EditText);
+        getData(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2Hint, R.string.address_line_2, addressLine2EditText);
+        getData(com.stamp20.app.util.UserProfile.COUNTRY, cityHint, R.string.address_city, cityEditText);
+        getData(com.stamp20.app.util.UserProfile.STATE, stateHint, R.string.address_state, stateEditText);
+        getData(com.stamp20.app.util.UserProfile.ZIP, zipHint, R.string.address_zip, zipEditText);
     }
 
-    private void getData(String userProfile, TextView hint, int resId,
-            TextView editText) {
+    private void getData(String userProfile, TextView hint, int resId, TextView editText) {
         String value = getUserProfile(userProfile);
         if (value != null && !value.isEmpty()) {
             hint.setText(resId);
@@ -179,28 +152,19 @@ public class ShippingAddressFragment extends Fragment implements
     }
 
     public String getUserProfile(String key) {
-        SharedPreferences sp = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return sp.getString(key, "");
     }
 
     public void saveUserProfile() {
-        Editor editor = PreferenceManager.getDefaultSharedPreferences(
-                getActivity()).edit();
-        editor.putString(com.stamp20.app.util.UserProfile.FIRST_NAME,
-                firstNameEditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.SECOND_NAME,
-                secondNameEditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1,
-                addressLine1EditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2,
-                addressLine2EditText.getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.COUNTRY, cityEditText
-                .getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.STATE, stateEditText
-                .getText().toString());
-        editor.putString(com.stamp20.app.util.UserProfile.ZIP, zipEditText
-                .getText().toString());
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+        editor.putString(com.stamp20.app.util.UserProfile.FIRST_NAME, firstNameEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.SECOND_NAME, secondNameEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_1, addressLine1EditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ADDRESS_LINE_2, addressLine2EditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.COUNTRY, cityEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.STATE, stateEditText.getText().toString());
+        editor.putString(com.stamp20.app.util.UserProfile.ZIP, zipEditText.getText().toString());
         editor.commit();
     }
 
@@ -240,36 +204,26 @@ public class ShippingAddressFragment extends Fragment implements
     }
 
     private void initPopuptWindow() {
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity()
-                .getApplicationContext());
-        View popupWindow = layoutInflater.inflate(
-                R.layout.choose_city_popup_window, null);
-        final WheelView cities = (WheelView) popupWindow
-                .findViewById(R.id.city_picker_wheel_view);
-        mDoneTextView = (TextView) popupWindow
-                .findViewById(R.id.choose_city_done);
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity().getApplicationContext());
+        View popupWindow = layoutInflater.inflate(R.layout.choose_city_popup_window, null);
+        final WheelView cities = (WheelView) popupWindow.findViewById(R.id.city_picker_wheel_view);
+        mDoneTextView = (TextView) popupWindow.findViewById(R.id.choose_city_done);
         mDoneTextView.setOnClickListener(this);
-        FontManager.changeFontsBlod(getActivity().getApplicationContext(),
-                (LinearLayout) popupWindow);
-        cities.setViewAdapter(new CityAdapter(getActivity()
-                .getApplicationContext(), chooseCities));
+        FontManager.changeFontsBlod(getActivity().getApplicationContext(), (LinearLayout) popupWindow);
+        cities.setViewAdapter(new CityAdapter(getActivity().getApplicationContext(), chooseCities));
         cities.setVisibleItems(5);
         cities.addChangingListener(this);
-        int mWindowWidth = getActivity().getWindowManager().getDefaultDisplay()
-                .getWidth();
-        int mWindowHeight = getActivity().getWindowManager()
-                .getDefaultDisplay().getHeight();
+        int mWindowWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        int mWindowHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
 
-        mChooseCityPopupWindow = new PopupWindow(popupWindow, mWindowWidth,
-                mWindowHeight * 2 / 5);
+        mChooseCityPopupWindow = new PopupWindow(popupWindow, mWindowWidth, mWindowHeight * 2 / 5);
     }
 
     @Override
     public void onChanged(WheelView wheel, int oldValue, int newValue) {
         // TODO Auto-generated method stub
         // 播放声音
-        Log.d(this, "onChanged, oldValue: " + oldValue + ", newValue: "
-                + newValue);
+        Log.d(this, "onChanged, oldValue: " + oldValue + ", newValue: " + newValue);
         selectedCityIndex = newValue;
         sp.play(sound, 1, 1, 0, 0, 1);
     }
@@ -305,15 +259,13 @@ public class ShippingAddressFragment extends Fragment implements
     TextWatcher firstNameEditTextTextWatcher = new TextWatcher() {
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             // TODO Auto-generated method stub
 
         }
@@ -332,15 +284,13 @@ public class ShippingAddressFragment extends Fragment implements
     TextWatcher secondtNameEditTextTextWatcher = new TextWatcher() {
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             // TODO Auto-generated method stub
 
         }
@@ -359,15 +309,13 @@ public class ShippingAddressFragment extends Fragment implements
     TextWatcher addressLine1EditTextTextWatcher = new TextWatcher() {
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             // TODO Auto-generated method stub
 
         }
@@ -386,15 +334,13 @@ public class ShippingAddressFragment extends Fragment implements
     TextWatcher cityEditTextTextWatcher = new TextWatcher() {
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             // TODO Auto-generated method stub
 
         }
@@ -413,15 +359,13 @@ public class ShippingAddressFragment extends Fragment implements
     TextWatcher stateEditTextTextWatcher = new TextWatcher() {
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             // TODO Auto-generated method stub
 
         }
@@ -440,15 +384,13 @@ public class ShippingAddressFragment extends Fragment implements
     TextWatcher zipEditTextTextWatcher = new TextWatcher() {
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             // TODO Auto-generated method stub
 
         }
@@ -467,15 +409,13 @@ public class ShippingAddressFragment extends Fragment implements
     TextWatcher addressLine2EditTextTextWatcher = new TextWatcher() {
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             // TODO Auto-generated method stub
 
         }
@@ -500,8 +440,7 @@ public class ShippingAddressFragment extends Fragment implements
     }
 
     private void setHintTextColor(TextView hintTextView, boolean hasFocus) {
-        hintTextView.setTextColor(hasFocus ? getResources().getColor(
-                R.color.paypal_text_hint_color_blue_focus) : getResources()
-                .getColor(R.color.paypal_text_hint_color));
+        hintTextView.setTextColor(hasFocus ? getResources().getColor(R.color.paypal_text_hint_color_blue_focus) : getResources().getColor(
+                R.color.paypal_text_hint_color));
     }
 }

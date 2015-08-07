@@ -108,15 +108,13 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
             break;
 
         case 2:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_BLACKWHITE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BLACKWHITE);
             mEffect.setParameter("black", .1f);
             mEffect.setParameter("white", .7f);
             break;
 
         case 3:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_BRIGHTNESS);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BRIGHTNESS);
             mEffect.setParameter("brightness", 2.0f);
             break;
 
@@ -126,13 +124,11 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
             break;
 
         case 5:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_CROSSPROCESS);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_CROSSPROCESS);
             break;
 
         case 6:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_DOCUMENTARY);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_DOCUMENTARY);
             break;
 
         case 7:
@@ -142,8 +138,7 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
             break;
 
         case 8:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_FILLLIGHT);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FILLLIGHT);
             mEffect.setParameter("strength", .8f);
             break;
 
@@ -168,8 +163,7 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
             break;
 
         case 13:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_GRAYSCALE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_GRAYSCALE);
             break;
 
         case 14:
@@ -181,8 +175,7 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
             break;
 
         case 16:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_POSTERIZE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_POSTERIZE);
             break;
 
         case 17:
@@ -204,8 +197,7 @@ public class ImageBlurRender implements GLSurfaceView.Renderer {
             break;
 
         case 21:
-            mEffect = effectFactory
-                    .createEffect(EffectFactory.EFFECT_TEMPERATURE);
+            mEffect = effectFactory.createEffect(EffectFactory.EFFECT_TEMPERATURE);
             mEffect.setParameter("scale", .9f);
             break;
 

@@ -12,8 +12,7 @@ import com.stamp20.app.R;
 import com.stamp20.app.fragments.ShippingAddressFragment;
 import com.stamp20.app.util.FontManager;
 
-public class PaymentInfoActivity extends Activity implements
-        OnCheckedChangeListener {
+public class PaymentInfoActivity extends Activity implements OnCheckedChangeListener {
 
     private ShippingAddressFragment mShippingAddressFragment;
     private CheckBox sameAsCheckBox;
@@ -33,8 +32,7 @@ public class PaymentInfoActivity extends Activity implements
         sameAsCheckBox = (CheckBox) findViewById(R.id.checkbox_same_as_shipping_address);
         sameAsCheckBox.setOnCheckedChangeListener(this);
         if (mShippingAddressFragment == null) {
-            mShippingAddressFragment = (ShippingAddressFragment) getFragmentManager()
-                    .findFragmentById(R.id.shipping_address_fragment);
+            mShippingAddressFragment = (ShippingAddressFragment) getFragmentManager().findFragmentById(R.id.shipping_address_fragment);
             mShippingAddressFragment.setVisible(!sameAsCheckBox.isChecked());
         }
     }

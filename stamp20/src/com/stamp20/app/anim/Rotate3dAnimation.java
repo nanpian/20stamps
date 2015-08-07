@@ -55,8 +55,7 @@ public class Rotate3dAnimation extends Animation {
      * @param reverse
      *            true if the translation should be reversed, false otherwise
      */
-    public Rotate3dAnimation(float fromDegrees, float toDegrees, float centerX,
-            float centerY, float depthZ, boolean reverse) {
+    public Rotate3dAnimation(float fromDegrees, float toDegrees, float centerX, float centerY, float depthZ, boolean reverse) {
         mFromDegrees = fromDegrees;
         mToDegrees = toDegrees;
         mCenterX = centerX;
@@ -66,8 +65,7 @@ public class Rotate3dAnimation extends Animation {
     }
 
     @Override
-    public void initialize(int width, int height, int parentWidth,
-            int parentHeight) {
+    public void initialize(int width, int height, int parentWidth, int parentHeight) {
         super.initialize(width, height, parentWidth, parentHeight);
         mCamera = new Camera();
     }
@@ -75,8 +73,7 @@ public class Rotate3dAnimation extends Animation {
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         final float fromDegrees = mFromDegrees;
-        float degrees = fromDegrees
-                + ((mToDegrees - fromDegrees) * interpolatedTime);
+        float degrees = fromDegrees + ((mToDegrees - fromDegrees) * interpolatedTime);
         final float centerX = mCenterX;
         final float centerY = mCenterY;
         final Camera camera = mCamera;

@@ -61,9 +61,7 @@ public class GPUImageVignetteFilter extends GPUImageFilter {
         this(new PointF(), new float[] { 0.0f, 0.0f, 0.0f }, 0.3f, 0.75f);
     }
 
-    public GPUImageVignetteFilter(final PointF vignetteCenter,
-            final float[] vignetteColor, final float vignetteStart,
-            final float vignetteEnd) {
+    public GPUImageVignetteFilter(final PointF vignetteCenter, final float[] vignetteColor, final float vignetteStart, final float vignetteEnd) {
         super(NO_FILTER_VERTEX_SHADER, VIGNETTING_FRAGMENT_SHADER);
         mVignetteCenter = vignetteCenter;
         mVignetteColor = vignetteColor;
@@ -75,14 +73,10 @@ public class GPUImageVignetteFilter extends GPUImageFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mVignetteCenterLocation = GLES20.glGetUniformLocation(getProgram(),
-                "vignetteCenter");
-        mVignetteColorLocation = GLES20.glGetUniformLocation(getProgram(),
-                "vignetteColor");
-        mVignetteStartLocation = GLES20.glGetUniformLocation(getProgram(),
-                "vignetteStart");
-        mVignetteEndLocation = GLES20.glGetUniformLocation(getProgram(),
-                "vignetteEnd");
+        mVignetteCenterLocation = GLES20.glGetUniformLocation(getProgram(), "vignetteCenter");
+        mVignetteColorLocation = GLES20.glGetUniformLocation(getProgram(), "vignetteColor");
+        mVignetteStartLocation = GLES20.glGetUniformLocation(getProgram(), "vignetteStart");
+        mVignetteEndLocation = GLES20.glGetUniformLocation(getProgram(), "vignetteEnd");
 
         setVignetteCenter(mVignetteCenter);
         setVignetteColor(mVignetteColor);

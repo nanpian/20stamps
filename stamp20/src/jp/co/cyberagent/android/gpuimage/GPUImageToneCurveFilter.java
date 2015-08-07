@@ -27,20 +27,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class GPUImageToneCurveFilter extends GPUImageFilter {
-    public static final String TONE_CURVE_FRAGMENT_SHADER = ""
-            + " varying highp vec2 textureCoordinate;\n"
-            + " uniform sampler2D inputImageTexture;\n"
-            + " uniform sampler2D toneCurveTexture;\n"
-            + "\n"
-            + " void main()\n"
-            + " {\n"
+    public static final String TONE_CURVE_FRAGMENT_SHADER = "" + " varying highp vec2 textureCoordinate;\n" + " uniform sampler2D inputImageTexture;\n"
+            + " uniform sampler2D toneCurveTexture;\n" + "\n" + " void main()\n" + " {\n"
             + "     lowp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n"
             + "     lowp float redCurveValue = texture2D(toneCurveTexture, vec2(textureColor.r, 0.0)).r;\n"
             + "     lowp float greenCurveValue = texture2D(toneCurveTexture, vec2(textureColor.g, 0.0)).g;\n"
-            + "     lowp float blueCurveValue = texture2D(toneCurveTexture, vec2(textureColor.b, 0.0)).b;\n"
-            + "\n"
-            + "     gl_FragColor = vec4(redCurveValue, greenCurveValue, blueCurveValue, textureColor.a);\n"
-            + " }";
+            + "     lowp float blueCurveValue = texture2D(toneCurveTexture, vec2(textureColor.b, 0.0)).b;\n" + "\n"
+            + "     gl_FragColor = vec4(redCurveValue, greenCurveValue, blueCurveValue, textureColor.a);\n" + " }";
 
     private int[] mToneCurveTexture = new int[] { OpenGlUtils.NO_TEXTURE };
     private int mToneCurveTextureUniformLocation;
@@ -58,8 +51,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
     public GPUImageToneCurveFilter() {
         super(NO_FILTER_VERTEX_SHADER, TONE_CURVE_FRAGMENT_SHADER);
 
-        PointF[] defaultCurvePoints = new PointF[] { new PointF(0.0f, 0.0f),
-                new PointF(0.5f, 0.5f), new PointF(1.0f, 1.0f) };
+        PointF[] defaultCurvePoints = new PointF[] { new PointF(0.0f, 0.0f), new PointF(0.5f, 0.5f), new PointF(1.0f, 1.0f) };
         mRgbCompositeControlPoints = defaultCurvePoints;
         mRedControlPoints = defaultCurvePoints;
         mGreenControlPoints = defaultCurvePoints;
@@ -69,19 +61,14 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mToneCurveTextureUniformLocation = GLES20.glGetUniformLocation(
-                getProgram(), "toneCurveTexture");
+        mToneCurveTextureUniformLocation = GLES20.glGetUniformLocation(getProgram(), "toneCurveTexture");
         GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
         GLES20.glGenTextures(1, mToneCurveTexture, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mToneCurveTexture[0]);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
-                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
-                GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
-                GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
-                GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
     }
 
     @Override
@@ -179,42 +166,20 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mToneCurveTexture[0]);
 
-                if ((mRedCurve.size() >= 256) && (mGreenCurve.size() >= 256)
-                        && (mBlueCurve.size() >= 256)
-                        && (mRgbCompositeCurve.size() >= 256)) {
+                if ((mRedCurve.size() >= 256) && (mGreenCurve.size() >= 256) && (mBlueCurve.size() >= 256) && (mRgbCompositeCurve.size() >= 256)) {
                     byte[] toneCurveByteArray = new byte[256 * 4];
                     for (int currentCurveIndex = 0; currentCurveIndex < 256; currentCurveIndex++) {
                         // BGRA for upload to texture
-                        toneCurveByteArray[currentCurveIndex * 4 + 2] = (byte) ((int) Math
-                                .min(Math.max(
-                                        currentCurveIndex
-                                                + mBlueCurve
-                                                        .get(currentCurveIndex)
-                                                + mRgbCompositeCurve
-                                                        .get(currentCurveIndex),
-                                        0), 255) & 0xff);
-                        toneCurveByteArray[currentCurveIndex * 4 + 1] = (byte) ((int) Math
-                                .min(Math.max(
-                                        currentCurveIndex
-                                                + mGreenCurve
-                                                        .get(currentCurveIndex)
-                                                + mRgbCompositeCurve
-                                                        .get(currentCurveIndex),
-                                        0), 255) & 0xff);
-                        toneCurveByteArray[currentCurveIndex * 4] = (byte) ((int) Math
-                                .min(Math.max(
-                                        currentCurveIndex
-                                                + mRedCurve
-                                                        .get(currentCurveIndex)
-                                                + mRgbCompositeCurve
-                                                        .get(currentCurveIndex),
-                                        0), 255) & 0xff);
+                        toneCurveByteArray[currentCurveIndex * 4 + 2] = (byte) ((int) Math.min(
+                                Math.max(currentCurveIndex + mBlueCurve.get(currentCurveIndex) + mRgbCompositeCurve.get(currentCurveIndex), 0), 255) & 0xff);
+                        toneCurveByteArray[currentCurveIndex * 4 + 1] = (byte) ((int) Math.min(
+                                Math.max(currentCurveIndex + mGreenCurve.get(currentCurveIndex) + mRgbCompositeCurve.get(currentCurveIndex), 0), 255) & 0xff);
+                        toneCurveByteArray[currentCurveIndex * 4] = (byte) ((int) Math.min(
+                                Math.max(currentCurveIndex + mRedCurve.get(currentCurveIndex) + mRgbCompositeCurve.get(currentCurveIndex), 0), 255) & 0xff);
                         toneCurveByteArray[currentCurveIndex * 4 + 3] = (byte) (255 & 0xff);
                     }
 
-                    GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0,
-                            GLES20.GL_RGBA, 256 /* width */, 1 /* height */, 0,
-                            GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
+                    GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, 256 /* width */, 1 /* height */, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
                             ByteBuffer.wrap(toneCurveByteArray));
                 }
                 // Buffer pixels!
@@ -255,8 +220,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
         Point[] convertedPoints = new Point[pointsSorted.length];
         for (int i = 0; i < points.length; i++) {
             PointF point = pointsSorted[i];
-            convertedPoints[i] = new Point((int) (point.x * 255),
-                    (int) (point.y * 255));
+            convertedPoints[i] = new Point((int) (point.x * 255), (int) (point.y * 255));
         }
 
         ArrayList<Point> splinePoints = createSplineCurve2(convertedPoints);
@@ -280,14 +244,11 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
         }
 
         // Prepare the spline points.
-        ArrayList<Float> preparedSplinePoints = new ArrayList<Float>(
-                splinePoints.size());
+        ArrayList<Float> preparedSplinePoints = new ArrayList<Float>(splinePoints.size());
         for (Point newPoint : splinePoints) {
             Point origPoint = new Point(newPoint.x, newPoint.x);
 
-            float distance = (float) Math.sqrt(Math.pow(
-                    (origPoint.x - newPoint.x), 2.0)
-                    + Math.pow((origPoint.y - newPoint.y), 2.0));
+            float distance = (float) Math.sqrt(Math.pow((origPoint.x - newPoint.x), 2.0) + Math.pow((origPoint.y - newPoint.y), 2.0));
 
             if (origPoint.y > newPoint.y) {
                 distance = -distance;
@@ -328,13 +289,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
                 double b = t;
                 double h = next.x - cur.x;
 
-                double y = a
-                        * cur.y
-                        + b
-                        * next.y
-                        + (h * h / 6)
-                        * ((a * a * a - a) * sd[i] + (b * b * b - b)
-                                * sd[i + 1]);
+                double y = a * cur.y + b * next.y + (h * h / 6) * ((a * a * a - a) * sd[i] + (b * b * b - b) * sd[i + 1]);
 
                 if (y > 255.0) {
                     y = 255.0;
@@ -375,8 +330,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
             matrix[i][0] = (double) (P2.x - P1.x) / 6;
             matrix[i][1] = (double) (P3.x - P1.x) / 3;
             matrix[i][2] = (double) (P3.x - P2.x) / 6;
-            result[i] = (double) (P3.y - P2.y) / (P3.x - P2.x)
-                    - (double) (P2.y - P1.y) / (P2.x - P1.x);
+            result[i] = (double) (P3.y - P2.y) / (P3.x - P2.x) - (double) (P2.y - P1.y) / (P2.x - P1.x);
         }
 
         // What about result[0] and result[n-1]? Assuming 0 for now (Brad L.)

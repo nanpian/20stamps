@@ -27,8 +27,7 @@ import com.stamp20.app.util.CardsTemplateUtils;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.view.ImageUtil;
 
-public class CardsTemplateChooseActivity extends Activity implements
-        View.OnClickListener, AdapterView.OnItemClickListener {
+public class CardsTemplateChooseActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static float sSwitchViewAlphaHide = 0.0001f;
     private static float sSwitchViewAlphaShow = 1.0f;
@@ -52,28 +51,21 @@ public class CardsTemplateChooseActivity extends Activity implements
         FontManager.changeFonts(root, this);
         // add for template change
         Intent intent = getIntent();
-        if (intent != null
-                && intent.getBooleanExtra(
-                        CardsTemplateUtils.ACTIVITY_CHANGE_TEMPLATE, false)) {
+        if (intent != null && intent.getBooleanExtra(CardsTemplateUtils.ACTIVITY_CHANGE_TEMPLATE, false)) {
             isFromMain = false;
-            mSrcImageUri = (Uri) intent
-                    .getParcelableExtra(CardEffect.SRC_IMAGE_URI);
+            mSrcImageUri = (Uri) intent.getParcelableExtra(CardEffect.SRC_IMAGE_URI);
             if (mSrcImageUri != null) {
-                mSrcImage = ImageUtil.loadDownsampledBitmap(this, mSrcImageUri,
-                        2);
+                mSrcImage = ImageUtil.loadDownsampledBitmap(this, mSrcImageUri, 2);
             }
 
         } else {
             isFromMain = true;
         }
 
-        mListChange = com.stamp20.app.util.ViewHolder.findChildView(root,
-                R.id.list_change);
+        mListChange = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.list_change);
         mListChange.setOnClickListener(this);
-        mGridView = com.stamp20.app.util.ViewHolder.findChildView(root,
-                R.id.gridview);
-        mListView = com.stamp20.app.util.ViewHolder.findChildView(root,
-                R.id.listview);
+        mGridView = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.gridview);
+        mListView = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.listview);
         if (isListView) {
             mListView.setAlpha(sSwitchViewAlphaShow);
             mGridView.setAlpha(sSwitchViewAlphaHide);
@@ -86,8 +78,7 @@ public class CardsTemplateChooseActivity extends Activity implements
         mListView.setAdapter(new TemplateAdapter(this));
         mListView.setOnItemClickListener(this);
 
-        mCancel = com.stamp20.app.util.ViewHolder.findChildView(root,
-                R.id.cancel);
+        mCancel = com.stamp20.app.util.ViewHolder.findChildView(root, R.id.cancel);
         mCancel.setOnClickListener(this);
         // mCancel.setTextColor(getResources().getColorStateList(R.color.sel_cards_choose_button));
     }
@@ -103,26 +94,19 @@ public class CardsTemplateChooseActivity extends Activity implements
             isListView = !isListView;
             if (!isListView) {
                 mListView.setLayoutAnimation(getListViewAnimOut());
-                mListView
-                        .setLayoutAnimationListener(new TemplateAnimationListener(
-                                mListView, mGridView));
+                mListView.setLayoutAnimationListener(new TemplateAnimationListener(mListView, mGridView));
                 mListView.startLayoutAnimation();
 
-                mListChange
-                        .setImageResource(R.drawable.sel_cards_templat_change_enlarge_button);
+                mListChange.setImageResource(R.drawable.sel_cards_templat_change_enlarge_button);
             } else {
                 mGridView.setLayoutAnimation(getGridlayoutAnimOut());
-                mGridView
-                        .setLayoutAnimationListener(new TemplateAnimationListener(
-                                mGridView, mListView));
+                mGridView.setLayoutAnimationListener(new TemplateAnimationListener(mGridView, mListView));
                 mGridView.startLayoutAnimation();
 
-                mListChange
-                        .setImageResource(R.drawable.sel_cards_templat_change_shrink_button);
+                mListChange.setImageResource(R.drawable.sel_cards_templat_change_shrink_button);
             }
         } else if (v.getId() == mCancel.getId()) {
-            startActivity(new Intent(CardsTemplateChooseActivity.this,
-                    HomeActivity.class));
+            startActivity(new Intent(CardsTemplateChooseActivity.this, HomeActivity.class));
             CardsTemplateChooseActivity.this.setResult(RESULT_CANCELED);
             CardsTemplateChooseActivity.this.finish();
         }
@@ -143,8 +127,7 @@ public class CardsTemplateChooseActivity extends Activity implements
         private ViewGroup mCurrentView;
         private ViewGroup mNextView;
 
-        public TemplateAnimationListener(ViewGroup currentView,
-                ViewGroup nextView) {
+        public TemplateAnimationListener(ViewGroup currentView, ViewGroup nextView) {
             mCurrentView = currentView;
             mNextView = nextView;
         }
@@ -178,16 +161,14 @@ public class CardsTemplateChooseActivity extends Activity implements
 
     private LayoutAnimationController getListViewAnimOut() {
         ListView2GridViewLayoutAnimationController controller;
-        controller = new ListView2GridViewLayoutAnimationController(0.5f,
-                mListView, mGridView, true);
+        controller = new ListView2GridViewLayoutAnimationController(0.5f, mListView, mGridView, true);
         controller.setOrder(LayoutAnimationController.ORDER_NORMAL);
         return controller;
     }
 
     public LayoutAnimationController getGridlayoutAnimOut() {
         ListView2GridViewLayoutAnimationController controller;
-        controller = new ListView2GridViewLayoutAnimationController(0.5f,
-                mListView, mGridView, false);
+        controller = new ListView2GridViewLayoutAnimationController(0.5f, mListView, mGridView, false);
         controller.setOrder(LayoutAnimationController.ORDER_REVERSE);
         return controller;
     }
@@ -221,20 +202,17 @@ public class CardsTemplateChooseActivity extends Activity implements
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(mContext).inflate(
-                        R.layout.cards_choose_template_adapter_item, null);
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.cards_choose_template_adapter_item, null);
             }
 
-            ImageView iv = com.stamp20.app.util.ViewHolder.get(convertView,
-                    R.id.image);
+            ImageView iv = com.stamp20.app.util.ViewHolder.get(convertView, R.id.image);
             if (mSrcImage != null) {
                 iv.setBackground(new BitmapDrawable(mSrcImage));
             }
             if (isFromMain) {
                 iv.setImageResource(CardsTemplateUtils.getTemplateId(position));
             } else {
-                iv.setImageResource(CardsTemplateUtils
-                        .getTransTemplateId(position));
+                iv.setImageResource(CardsTemplateUtils.getTransTemplateId(position));
             }
             return convertView;
         }
@@ -255,8 +233,7 @@ public class CardsTemplateChooseActivity extends Activity implements
      * 你可以自己加个log把position和id都弄出来在logcat里瞅瞅，看了之后心里才踏实。
      */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String strParent = "";
         if (parent == mListView) {
             strParent = "mListView";
@@ -267,13 +244,9 @@ public class CardsTemplateChooseActivity extends Activity implements
 
         data.setClass(this, CardEffect.class);
         if (isFromMain) {
-            data.putExtra(
-                    CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID,
-                    position);
+            data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, position);
         } else {
-            data.putExtra(
-                    CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID,
-                    position);
+            data.putExtra(CardsActivity.ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, position);
         }
 
         if (mSrcImageUri != null) {

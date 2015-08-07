@@ -11,8 +11,7 @@ public class AndroidScene extends GlObject {
     public AndroidScene() {
         super();
 
-        Bitmap androidBitmap = GameSystem.getInstance().getBitmapFromAssets(
-                "androida.jpg");
+        Bitmap androidBitmap = GameSystem.getInstance().getBitmapFromAssets("androida.jpg");
         texture = new Texture2D(androidBitmap);
     }
 

@@ -59,9 +59,7 @@ public enum Rotation {
         case 360:
             return NORMAL;
         default:
-            throw new IllegalStateException(
-                    rotation
-                            + " is an unknown rotation. Needs to be either 0, 90, 180 or 270!");
+            throw new IllegalStateException(rotation + " is an unknown rotation. Needs to be either 0, 90, 180 or 270!");
         }
     }
 }

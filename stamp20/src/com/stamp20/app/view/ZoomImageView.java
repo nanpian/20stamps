@@ -146,10 +146,8 @@ public class ZoomImageView extends View {
         super(context, attrs);
         currentStatus = STATUS_INIT;
 
-        TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.ZoomImageView);
-        mMaskBitmapId = a.getResourceId(R.styleable.ZoomImageView_maskDrawable,
-                -1);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ZoomImageView);
+        mMaskBitmapId = a.getResourceId(R.styleable.ZoomImageView_maskDrawable, -1);
         mMaskColorId = a.getResourceId(R.styleable.ZoomImageView_maskColor, -1);
         a.recycle();
     }
@@ -166,8 +164,7 @@ public class ZoomImageView extends View {
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right,
-            int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
             // 分别获取到ZoomImageView的宽度和高度
@@ -214,8 +211,7 @@ public class ZoomImageView extends View {
             currentStatus = STATUS_ZOOM_IN;
         }
         // 进行缩放倍数检查，最大只允许将图片放大4倍，最小可以缩小到初始化比例
-        if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 4 * initRatio)
-                || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio)) {
+        if ((currentStatus == STATUS_ZOOM_OUT && totalRatio < 4 * initRatio) || (currentStatus == STATUS_ZOOM_IN && totalRatio > initRatio)) {
             scaledRatio = (float) (fingerDis / lastFingerDis);
             totalRatio = totalRatio * scaledRatio;
             if (totalRatio > 4 * initRatio) {
@@ -346,8 +342,7 @@ public class ZoomImageView extends View {
         if (currentBitmapWidth < width) {
             translateX = (width - scaledWidth) / 2f;
         } else {
-            translateX = totalTranslateX * scaledRatio + centerPointX
-                    * (1 - scaledRatio);
+            translateX = totalTranslateX * scaledRatio + centerPointX * (1 - scaledRatio);
             // 进行边界检查，保证图片缩放后在水平方向上不会偏移出屏幕
             if (translateX > 0) {
                 translateX = 0;
@@ -359,8 +354,7 @@ public class ZoomImageView extends View {
         if (currentBitmapHeight < height) {
             translateY = (height - scaledHeight) / 2f;
         } else {
-            translateY = totalTranslateY * scaledRatio + centerPointY
-                    * (1 - scaledRatio);
+            translateY = totalTranslateY * scaledRatio + centerPointY * (1 - scaledRatio);
             // 进行边界检查，保证图片缩放后在垂直方向上不会偏移出屏幕
             if (translateY > 0) {
                 translateY = 0;
@@ -410,15 +404,12 @@ public class ZoomImageView extends View {
             return;
         }
         if (mMaskBitmap == null) {
-            mMaskBitmap = BitmapFactory.decodeResource(getResources(),
-                    mMaskBitmapId);
-            mMaskBitmap = ImageUtil.zoomBitmap(mMaskBitmap, getWidth(),
-                    getHeight());
+            mMaskBitmap = BitmapFactory.decodeResource(getResources(), mMaskBitmapId);
+            mMaskBitmap = ImageUtil.zoomBitmap(mMaskBitmap, getWidth(), getHeight());
         }
         Paint paint = new Paint();
         // 仅仅绘制DST图片中，不和SRC图片相交的部分(完全不绘制SRC)
-        paint.setXfermode(new PorterDuffXfermode(
-                android.graphics.PorterDuff.Mode.DST_IN));
+        paint.setXfermode(new PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_IN));
         // 这幅图片是SRC图片
         canvas.drawBitmap(mMaskBitmap, 0, 0, paint);
         paint.setXfermode(null);
@@ -504,7 +495,6 @@ public class ZoomImageView extends View {
     }
 
     public interface OnMoveOrZoomListener {
-        public void onMoveOrZoomListener(boolean flag, float ratio,
-                float currentRatio);
+        public void onMoveOrZoomListener(boolean flag, float ratio, float currentRatio);
     }
 }

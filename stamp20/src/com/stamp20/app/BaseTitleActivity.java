@@ -40,8 +40,7 @@ public class BaseTitleActivity extends Activity {
         contentLayout = new LinearLayout(this);
         contentLayout.setOrientation(LinearLayout.VERTICAL);
         content.addView(contentLayout);
-        LayoutInflater.from(this).inflate(R.layout.common_title_bar,
-                contentLayout, true);
+        LayoutInflater.from(this).inflate(R.layout.common_title_bar, contentLayout, true);
     }
 
     public void initTitleBar() {

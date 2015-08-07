@@ -26,8 +26,7 @@ import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
-public class GuideActivity extends Activity implements OnClickListener,
-        OnPageChangeListener {
+public class GuideActivity extends Activity implements OnClickListener, OnPageChangeListener {
 
     private final static String TAG = "WelcomeActivity";
 
@@ -38,8 +37,7 @@ public class GuideActivity extends Activity implements OnClickListener,
     private Button mButton;
 
     // 引导图片资源
-    private static final int[] mPics = { R.drawable.guide1, R.drawable.guide2,
-            R.drawable.guide3, R.drawable.guide4 };
+    private static final int[] mPics = { R.drawable.guide1, R.drawable.guide2, R.drawable.guide3, R.drawable.guide4 };
 
     private int mCurrentViewPagerState = 0;
     private int mCurrentPage = 0;
@@ -56,17 +54,14 @@ public class GuideActivity extends Activity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
         // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_guide);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         mButton = (Button) findViewById(R.id.button);
         mViews = new ArrayList<View>();
 
-        LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         // 初始化引导图片列
         for (int i = 0; i < mPics.length; i++) {
@@ -89,16 +84,9 @@ public class GuideActivity extends Activity implements OnClickListener,
                 Intent intent = new Intent();
                 intent.setClass(GuideActivity.this, HomeActivity.class);
                 GuideActivity.this.startActivity(intent);
-                com.stamp20.app.util.Log
-                        .i(TAG,
-                                "First start WelcomeActivity, set the flag of SharedPreferences_Guide_FirstStart to true");
-                GuideActivity.this
-                        .getSharedPreferences(Constant.SHAREDPREFERENCES_GUIDE,
-                                Context.MODE_PRIVATE)
-                        .edit()
-                        .putBoolean(
-                                Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART,
-                                false).commit();
+                com.stamp20.app.util.Log.i(TAG, "First start WelcomeActivity, set the flag of SharedPreferences_Guide_FirstStart to true");
+                GuideActivity.this.getSharedPreferences(Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE).edit()
+                        .putBoolean(Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART, false).commit();
                 finish();
             }
         });
@@ -147,8 +135,7 @@ public class GuideActivity extends Activity implements OnClickListener,
      * 这只当前引导小点的状态
      */
     private void setCurDot(int positon) {
-        if (positon < 0 || positon > mPics.length - 1
-                || currentIndex == positon) {
+        if (positon < 0 || positon > mPics.length - 1 || currentIndex == positon) {
             return;
         }
         mDots[positon].setEnabled(false);

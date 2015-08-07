@@ -37,16 +37,13 @@ public class InstagramAuthView extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final InstagramService service = new InstagramAuthService()
-                .apiKey(CLIENTID).apiSecret(CLIENTSECRET)
-                .callback(REDIRECT_URI).build();
+        final InstagramService service = new InstagramAuthService().apiKey(CLIENTID).apiSecret(CLIENTSECRET).callback(REDIRECT_URI).build();
 
         String url = service.getAuthorizationUrl(null);
 
         mWebview = new WebView(this);
         mChromeClient = new WebChromeClient() {
-            public boolean onConsoleMessage(
-                    android.webkit.ConsoleMessage consoleMessage) {
+            public boolean onConsoleMessage(android.webkit.ConsoleMessage consoleMessage) {
                 if (DEBUGLOG)
                     Log.i("case", "InstagramAuthView-console:" + consoleMessage);
                 return false;
@@ -54,8 +51,7 @@ public class InstagramAuthView extends Activity {
 
             public void onProgressChanged(WebView view, int newProgress) {
                 if (DEBUGLOG)
-                    Log.d("case", "InstagramAuthView-onProgressChanged:"
-                            + newProgress);
+                    Log.d("case", "InstagramAuthView-onProgressChanged:" + newProgress);
             };
         };
         setContentView(mWebview);
@@ -97,8 +93,7 @@ public class InstagramAuthView extends Activity {
                     progressDialog.dismiss();
                     progressDialog = null;
                 }
-                progressDialog = ProgressDialog.show(InstagramAuthView.this,
-                        "", "Loading...", true);
+                progressDialog = ProgressDialog.show(InstagramAuthView.this, "", "Loading...", true);
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(true);
                 progressDialog.setOnCancelListener(new OnCancelListener() {

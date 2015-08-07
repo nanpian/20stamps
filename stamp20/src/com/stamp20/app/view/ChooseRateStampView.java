@@ -61,8 +61,7 @@ public class ChooseRateStampView extends ZoomImageView {
     /* 790 500 */
     public void setRateBitmapId(final int position, final boolean isH) {
         if (mRateBitmapId != position) {
-            final int sizeOfRateBitmap = isH ? mHorizontalRateBitmap.size()
-                    : mVerticalRateBitmap.size();
+            final int sizeOfRateBitmap = isH ? mHorizontalRateBitmap.size() : mVerticalRateBitmap.size();
             ValueAnimator va = ValueAnimator.ofInt(0, sizeOfRateBitmap);
             va.setDuration(500);
             va.addUpdateListener(new AnimatorUpdateListener() {
@@ -70,8 +69,7 @@ public class ChooseRateStampView extends ZoomImageView {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     int id = (Integer) animation.getAnimatedValue();
                     if (id != sizeOfRateBitmap) {
-                        mRateBitmap = isH ? mHorizontalRateBitmap.get(id)
-                                : mVerticalRateBitmap.get(id);
+                        mRateBitmap = isH ? mHorizontalRateBitmap.get(id) : mVerticalRateBitmap.get(id);
                     }
                     invalidate();
                 }
@@ -87,14 +85,12 @@ public class ChooseRateStampView extends ZoomImageView {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position)
-                            : mVerticalRateBitmap.get(position);
+                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
                 }
 
                 @Override
                 public void onAnimationCancel(Animator animation) {
-                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position)
-                            : mVerticalRateBitmap.get(position);
+                    mRateBitmap = isH ? mHorizontalRateBitmap.get(position) : mVerticalRateBitmap.get(position);
                 }
             });
             va.start();
@@ -137,8 +133,7 @@ public class ChooseRateStampView extends ZoomImageView {
          */
         if (totalTranslateY + movedDistanceY > 0 + height * yEdgeRate) {
             movedDistanceY = 0;
-        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight
-                + height * yEdgeRate) {
+        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight + height * yEdgeRate) {
             movedDistanceY = 0;
         }
         // 调用onDraw()方法绘制图片
@@ -165,8 +160,7 @@ public class ChooseRateStampView extends ZoomImageView {
         // TODO Auto-generated method stub
         super.onFinishInit();
         if (mFirstUpAnimation == null) {
-            mFirstUpAnimation = getTranslationValueAnimator(totalTranslateY,
-                    height * yEdgeRate, 800);
+            mFirstUpAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 800);
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -232,8 +226,7 @@ public class ChooseRateStampView extends ZoomImageView {
         // 先按照已有的缩放比例对图片进行缩放
         m.postScale(totalRatio, totalRatio);
         // 再根据移动距离进行偏移
-        m.postTranslate(translateX + rateXMove * totalRatio, translateY
-                + rateYMove * totalRatio);
+        m.postTranslate(translateX + rateXMove * totalRatio, translateY + rateYMove * totalRatio);
         totalTranslateX = translateX;
         totalTranslateY = translateY;
         canvas.save();
@@ -248,8 +241,7 @@ public class ChooseRateStampView extends ZoomImageView {
         stopDropDownAnim();
     }
 
-    private ValueAnimator getTranslationValueAnimator(final float start,
-            final float end, long duration) {
+    private ValueAnimator getTranslationValueAnimator(final float start, final float end, long duration) {
         ValueAnimator va = ValueAnimator.ofFloat(0f, 1f);
         va.setDuration(duration);
         va.addUpdateListener(new AnimatorUpdateListener() {
@@ -305,9 +297,7 @@ public class ChooseRateStampView extends ZoomImageView {
         mDropDownAnimation.addUpdateListener(new AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                totalTranslateY = totalTranslateY
-                        + ((height * yEdgeRate) - totalTranslateY)
-                        * (Float) animation.getAnimatedValue();
+                totalTranslateY = totalTranslateY + ((height * yEdgeRate) - totalTranslateY) * (Float) animation.getAnimatedValue();
                 // android.util.Log.i("xixia", "(height * yEdgeRate):"+(height *
                 // yEdgeRate)+",totalTranslateY:"+totalTranslateY);
                 if (totalTranslateY > (height * yEdgeRate)) {
@@ -344,8 +334,7 @@ public class ChooseRateStampView extends ZoomImageView {
 
     private void startDropDownAnim() {
         if (mDropDownAnimation == null) {
-            mDropDownAnimation = getTranslationValueAnimator(totalTranslateY,
-                    height * yEdgeRate, 500);
+            mDropDownAnimation = getTranslationValueAnimator(totalTranslateY, height * yEdgeRate, 500);
         }
         mDropDownAnimation.start();
     }
@@ -364,8 +353,7 @@ public class ChooseRateStampView extends ZoomImageView {
 
     public void startBuilRateBitmapTask(final boolean isStampViewIsHorizontal) {
         if (null == BitmapCache.getCache().get()) {
-            android.util.Log.i("xixia",
-                    "BitmapCache.getCache().get() is null, return");
+            android.util.Log.i("xixia", "BitmapCache.getCache().get() is null, return");
             return;
         }
         final Resources res = this.getContext().getResources();
@@ -380,12 +368,10 @@ public class ChooseRateStampView extends ZoomImageView {
              */
             @Override
             protected Void doInBackground(Void... unused) {
-                TypedArray typedArray = res
-                        .obtainTypedArray(R.array.stamp_rate_horizontal);
+                TypedArray typedArray = res.obtainTypedArray(R.array.stamp_rate_horizontal);
                 if (null != typedArray && isStampViewIsHorizontal) {
                     mHorizontalRateBitmap = new ArrayList<Bitmap>();
-                    Constant.LogXixia("pop", "Horizontal typedArray:"
-                            + typedArray.length());
+                    Constant.LogXixia("pop", "Horizontal typedArray:" + typedArray.length());
                     for (int i = 0; i < typedArray.length(); i++) {
                         int id = typedArray.getResourceId(i, 0);
                         mHorizontalRateBitmap.add(buildRateBitmap(id));
@@ -395,8 +381,7 @@ public class ChooseRateStampView extends ZoomImageView {
                 typedArray = res.obtainTypedArray(R.array.stamp_rate_vertical);
                 if (null != typedArray && !isStampViewIsHorizontal) {
                     mVerticalRateBitmap = new ArrayList<Bitmap>();
-                    Constant.LogXixia("pop", "Vertical typedArray:"
-                            + typedArray.length());
+                    Constant.LogXixia("pop", "Vertical typedArray:" + typedArray.length());
                     for (int i = 0; i < typedArray.length(); i++) {
                         int id = typedArray.getResourceId(i, 0);
                         mVerticalRateBitmap.add(buildRateBitmap(id));
@@ -427,18 +412,15 @@ public class ChooseRateStampView extends ZoomImageView {
         Bitmap rt = BitmapFactory.decodeResource(getResources(), id);
         Matrix matrix = new Matrix();
         matrix.postScale(scale, scale);
-        rt = Bitmap.createBitmap(rt, 0, 0, rt.getWidth(), rt.getHeight(),
-                matrix, true);
+        rt = Bitmap.createBitmap(rt, 0, 0, rt.getWidth(), rt.getHeight(), matrix, true);
 
         // scaleRateCanvas.drawBitmap(rt, 0.5f * (scaleRateBitmap.getWidth() -
         // rt.getWidth()), 0.5f * (scaleRateBitmap.getHeight() -
         // rt.getHeight()), null);
         // rt.recycle();
         if (rateXMove == -1 && rateYMove == -1) {
-            rateXMove = (int) (0.5f * (BitmapCache.getCache().get().getWidth() - rt
-                    .getWidth()));
-            rateYMove = (int) (0.5f * (BitmapCache.getCache().get().getHeight() - rt
-                    .getHeight()));
+            rateXMove = (int) (0.5f * (BitmapCache.getCache().get().getWidth() - rt.getWidth()));
+            rateYMove = (int) (0.5f * (BitmapCache.getCache().get().getHeight() - rt.getHeight()));
         }
         return rt;
     }

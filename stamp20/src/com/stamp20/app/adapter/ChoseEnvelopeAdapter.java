@@ -35,9 +35,7 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Bitmap cardBackShape;
     private Bitmap mSourceBitmap;
-    private static int sCardsBackList[] = { R.drawable.card_back_white,
-            R.drawable.card_back_lite_grey, R.drawable.card_back_red,
-            R.drawable.card_back_green };
+    private static int sCardsBackList[] = { R.drawable.card_back_white, R.drawable.card_back_lite_grey, R.drawable.card_back_red, R.drawable.card_back_green };
 
     public class NamePairs {
         public String name1;
@@ -59,12 +57,10 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 
         namepairArray.add(new NamePairs("Linen White", "Linen White"));
         namepairArray.add(new NamePairs("Linen Crean", "Linen Cream"));
-        namepairArray
-                .add(new NamePairs("Holiday Red", "Here comes Santa Claus"));
+        namepairArray.add(new NamePairs("Holiday Red", "Here comes Santa Claus"));
         namepairArray.add(new NamePairs("Holiday Green", "Holiday Green"));
 
-        this.cardBackShape = BitmapFactory.decodeResource(
-                mContext.getResources(), R.drawable.activity_card_back_shape);
+        this.cardBackShape = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.activity_card_back_shape);
     }
 
     public void setImageUri(Uri imageUri) {
@@ -100,8 +96,7 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return position < colorArray.size() ? colorArray.get(position).color
-                : null;
+        return position < colorArray.size() ? colorArray.get(position).color : null;
     }
 
     @Override
@@ -110,25 +105,21 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
     }
 
     public int getColor(int position) {
-        return position < colorArray.size() ? colorArray.get(position).color
-                : null;
+        return position < colorArray.size() ? colorArray.get(position).color : null;
     }
 
     public NamePairs getNamePairs(int position) {
-        return position < namepairArray.size() ? namepairArray.get(position)
-                : null;
+        return position < namepairArray.size() ? namepairArray.get(position) : null;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = mInflater.inflate(R.layout.gallery_choose_color_layout,
-                null);
+        convertView = mInflater.inflate(R.layout.gallery_choose_color_layout, null);
         // FontManager.changeFonts(mContext,
         // (LinearLayout)convertView.findViewById(R.id.root));
         RoundedImageView imageView = null;
         TextView textView = null;
-        imageView = (RoundedImageView) convertView
-                .findViewById(R.id.image_item);
+        imageView = (RoundedImageView) convertView.findViewById(R.id.image_item);
         textView = (TextView) convertView.findViewById(R.id.text_item);
         if (mSourceBitmap != null) {
             if (position == 0) {
@@ -142,10 +133,8 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
         if (selectItem == position) {
             // 处理点击放大效果，注意，这里还要加入边框效果，需要UI
             imageView.setBorderColor(Color.parseColor("#f1c40f"));
-            ObjectAnimator xAnimator = ObjectAnimator.ofFloat(imageView,
-                    "scaleX", 1.1f);
-            ObjectAnimator yAnimator = ObjectAnimator.ofFloat(imageView,
-                    "scaleY", 1.1f);
+            ObjectAnimator xAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1.1f);
+            ObjectAnimator yAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1.1f);
             xAnimator.setDuration(500);
             yAnimator.setDuration(500);
             AnimatorSet animatorSet = new AnimatorSet();
@@ -165,17 +154,14 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
     }
 
     public Bitmap getAlphaSrcBitmap() {
-        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(),
-                mSourceBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(),
-                R.drawable.card_back_view_overlay);
+        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(), mSourceBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_back_view_overlay);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
         paint.setAlpha(200);
         canvas.drawBitmap(mSourceBitmap, 0, 0, null);
         Matrix matrix = new Matrix();
-        matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(),
-                bitmap.getHeight() * 1.0f / cover.getHeight());
+        matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(), bitmap.getHeight() * 1.0f / cover.getHeight());
         canvas.concat(matrix);
         canvas.drawBitmap(cover, 0, 0, paint);
 
@@ -208,10 +194,8 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
                 count++;
             }
         }
-        Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight,
-                Config.ARGB_4444);
-        newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth,
-                mBitmapHeight);
+        Bitmap newBmp = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight, Config.ARGB_4444);
+        newBmp.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth, mBitmapHeight);
         return newBmp;
     }
 

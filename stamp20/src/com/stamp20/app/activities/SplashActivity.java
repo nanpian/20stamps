@@ -64,9 +64,8 @@ public class SplashActivity extends Activity {
     }
 
     private void startNextActivity() {
-        boolean firstStart = SplashActivity.this.getSharedPreferences(
-                Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE)
-                .getBoolean(Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART, true);
+        boolean firstStart = SplashActivity.this.getSharedPreferences(Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE).getBoolean(
+                Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART, true);
 
         /*
          * startActivity(new Intent(SplashActivity.this, MainActivity.class));
