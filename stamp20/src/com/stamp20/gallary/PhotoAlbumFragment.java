@@ -159,14 +159,12 @@ public class PhotoAlbumFragment extends GallaryFragment implements
             updateLayout(position);
         } else {
             String sUri = mPhotos.get(position).getUri();
-            Log.i("wangpeng", "photo open: " + sUri);
             GallaryUtil.goToEffectActivity(mContext, sUri);
         }
     }
 
     @Override
     public List<Album> getAlbums() {
-        Log.i("wangpeng", "getAlbums");
 
         Cursor cursor = mContentResolver.query(
                 Images.Media.EXTERNAL_CONTENT_URI, new String[] { "DISTINCT "
@@ -180,8 +178,6 @@ public class PhotoAlbumFragment extends GallaryFragment implements
             String name = cursor.getString(0);
             String coverUri = this.getBucketCoverPhoto(name);
             int count = this.getBucketPhotoCount(name);
-            // Log.i("wangpeng", "name= " + name + ", count= " + count +
-            // ", uri= " + coverUri);
             albums.add(new Album(name, coverUri, count, name));
         }
         cursor.close();
@@ -219,7 +215,6 @@ public class PhotoAlbumFragment extends GallaryFragment implements
 
     @Override
     public List<Photo> getPhotos(Album a) {
-        Log.i("wangpeng", "getPhotos");
 
         Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI,
                 new String[] { ImageColumns._ID, ImageColumns.DISPLAY_NAME },

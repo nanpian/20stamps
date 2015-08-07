@@ -60,7 +60,6 @@ public class PhotoAdapter extends BaseAdapter {
 
         String uri = photo.getUri();
         // "file://" or "http://"
-        Log.i("wangpeng14", "photo uri: " + uri);
         Picasso.with(mContext).load(uri).resize(200, 200).centerCrop()
                 .placeholder(R.drawable.friends_sends_pictures_no)
                 .into(viewHolder.mImageView);

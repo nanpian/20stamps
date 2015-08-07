@@ -16,16 +16,15 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
 import com.stamp20.app.adapter.ImageEffectAdapter;
-import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.HorizontalListView;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.StampGLSurfaceView;
 import com.stamp20.app.view.StampGLSurfaceView.OnStampBitmapGeneratedListener;
@@ -39,7 +38,6 @@ public class MainEffect extends Activity implements OnTouchListener,
     private static final CharSequence titleName = "Customize";
     public static MainEffect instance;
     public StampGLSurfaceView mGPUImageView;
-    private FrameLayout mStampView;
     private FrameLayout touchArea;
     private static final int MSG_SELECT_PICTURE = 1000;
     private static final String Tag = "MainEffect";
@@ -78,7 +76,6 @@ public class MainEffect extends Activity implements OnTouchListener,
 
         mGPUImageView = (StampGLSurfaceView) findViewById(R.id.zoomgpuimage);
         mStampFrame = (ImageView) findViewById(R.id.background_pic);
-        mStampView = (FrameLayout) findViewById(R.id.stampid);
         mRotateView = (ImageView) findViewById(R.id.rotateimage);
         mRotateView.setOnClickListener(this);
         mFrameLayout = (RelativeLayout) findViewById(R.id.rotateframe);
@@ -95,7 +92,7 @@ public class MainEffect extends Activity implements OnTouchListener,
 
     private void LoadImageFilter(Uri imageUri) {
         // TODO Auto-generated method stub
-        com.stamp20.app.view.HorizontalListView gallery = (com.stamp20.app.view.HorizontalListView) findViewById(R.id.galleryFilter);
+        HorizontalListView gallery = (HorizontalListView) findViewById(R.id.galleryFilter);
         effectAdapter = new ImageEffectAdapter(MainEffect.this, mEffectContext);
         effectAdapter.setImageResource(imageUri);
         effectAdapter.setSelectItem(0);
@@ -123,8 +120,6 @@ public class MainEffect extends Activity implements OnTouchListener,
     private void initImage(Uri uri) {
         bitmap = ImageUtil.loadDownsampledBitmap(mContext, uri, 2);
         mGPUImageView.setSourceBitmap(bitmap);
-        // mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE,
-        // uri));
     }
 
     Handler mHandler = new Handler() {
@@ -215,7 +210,6 @@ public class MainEffect extends Activity implements OnTouchListener,
 
     @Override
     protected void onResume() {
-
         // TODO Auto-generated method stub
         mGPUImageView.onResume();
         super.onResume();
