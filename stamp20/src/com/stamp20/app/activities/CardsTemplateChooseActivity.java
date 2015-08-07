@@ -121,15 +121,16 @@ public class CardsTemplateChooseActivity extends Activity implements
                         .setImageResource(R.drawable.sel_cards_templat_change_shrink_button);
             }
         } else if (v.getId() == mCancel.getId()) {
-            startActivity(new Intent(CardsTemplateChooseActivity.this, HomeActivity.class));
+            startActivity(new Intent(CardsTemplateChooseActivity.this,
+                    HomeActivity.class));
             CardsTemplateChooseActivity.this.setResult(RESULT_CANCELED);
             CardsTemplateChooseActivity.this.finish();
         }
     }
-    
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
             mCancel.performClick();
             finish();
             return true;

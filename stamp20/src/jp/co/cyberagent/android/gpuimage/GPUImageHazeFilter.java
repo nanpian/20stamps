@@ -24,27 +24,24 @@ import android.opengl.GLES20;
  * This is similar to a UV filter.
  */
 public class GPUImageHazeFilter extends GPUImageFilter {
-    public static final String HAZE_FRAGMENT_SHADER = "" +
-            "varying highp vec2 textureCoordinate;\n" +
-            "\n" +
-            "uniform sampler2D inputImageTexture;\n" +
-            "\n" +
-            "uniform lowp float distance;\n" +
-            "uniform highp float slope;\n" +
-            "\n" +
-            "void main()\n" +
-            "{\n" +
-            "	//todo reconsider precision modifiers	 \n" +
-            "	 highp vec4 color = vec4(1.0);//todo reimplement as a parameter\n" +
-            "\n" +
-            "	 highp float  d = textureCoordinate.y * slope  +  distance; \n" +
-            "\n" +
-            "	 highp vec4 c = texture2D(inputImageTexture, textureCoordinate) ; // consider using unpremultiply\n" +
-            "\n" +
-            "	 c = (c - d * color) / (1.0 -d);\n" +
-            "\n" +
-            "	 gl_FragColor = c; //consider using premultiply(c);\n" +
-            "}\n";
+    public static final String HAZE_FRAGMENT_SHADER = ""
+            + "varying highp vec2 textureCoordinate;\n"
+            + "\n"
+            + "uniform sampler2D inputImageTexture;\n"
+            + "\n"
+            + "uniform lowp float distance;\n"
+            + "uniform highp float slope;\n"
+            + "\n"
+            + "void main()\n"
+            + "{\n"
+            + "	//todo reconsider precision modifiers	 \n"
+            + "	 highp vec4 color = vec4(1.0);//todo reimplement as a parameter\n"
+            + "\n"
+            + "	 highp float  d = textureCoordinate.y * slope  +  distance; \n"
+            + "\n"
+            + "	 highp vec4 c = texture2D(inputImageTexture, textureCoordinate) ; // consider using unpremultiply\n"
+            + "\n" + "	 c = (c - d * color) / (1.0 -d);\n" + "\n"
+            + "	 gl_FragColor = c; //consider using premultiply(c);\n" + "}\n";
 
     private float mDistance;
     private int mDistanceLocation;
@@ -64,7 +61,8 @@ public class GPUImageHazeFilter extends GPUImageFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mDistanceLocation = GLES20.glGetUniformLocation(getProgram(), "distance");
+        mDistanceLocation = GLES20.glGetUniformLocation(getProgram(),
+                "distance");
         mSlopeLocation = GLES20.glGetUniformLocation(getProgram(), "slope");
     }
 
@@ -76,9 +74,11 @@ public class GPUImageHazeFilter extends GPUImageFilter {
     }
 
     /**
-     * Strength of the color applied. Default 0. Values between -.3 and .3 are best.
+     * Strength of the color applied. Default 0. Values between -.3 and .3 are
+     * best.
      *
-     * @param distance -0.3 to 0.3 are best, default 0
+     * @param distance
+     *            -0.3 to 0.3 are best, default 0
      */
     public void setDistance(float distance) {
         mDistance = distance;
@@ -88,7 +88,8 @@ public class GPUImageHazeFilter extends GPUImageFilter {
     /**
      * Amount of color change. Default 0. Values between -.3 and .3 are best.
      *
-     * @param slope -0.3 to 0.3 are best, default 0
+     * @param slope
+     *            -0.3 to 0.3 are best, default 0
      */
     public void setSlope(float slope) {
         mSlope = slope;

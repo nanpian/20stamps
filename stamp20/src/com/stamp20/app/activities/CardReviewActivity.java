@@ -81,7 +81,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         activity_envelope_img = (ImageView) findViewById(R.id.activity_envelope_img2);
         // setupImageLocSize();
 
-        waitProgressBar = (WaitProgressBar) this.findViewById(R.id.progress_bar);
+        waitProgressBar = (WaitProgressBar) this
+                .findViewById(R.id.progress_bar);
 
         CardBmpCache mCache = CardBmpCache.getCacheInstance();
         cardBmpFront = mCache.getFront();
@@ -153,15 +154,15 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             // add to cart
             review_button.setEnabled(false);
             waitProgressBar.setVisibility(View.VISIBLE);
-            //new Thread(new Runnable() {
+            // new Thread(new Runnable() {
 
-              //  @Override
-              //  public void run() {
-                    // TODO Auto-generated method stub
-                    Cart cart = Cart.getInstance();
-                    cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
-             //   }
-           // }).start();
+            // @Override
+            // public void run() {
+            // TODO Auto-generated method stub
+            Cart cart = Cart.getInstance();
+            cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
+            // }
+            // }).start();
 
             Intent intent = new Intent();
             intent.setClass(this, ShopCartItemsActivity.class);

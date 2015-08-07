@@ -58,11 +58,8 @@ public class PixelBuffer {
         mHeight = height;
 
         int[] version = new int[2];
-        int[] attribList = new int[] {
-                EGL_WIDTH, mWidth,
-                EGL_HEIGHT, mHeight,
-                EGL_NONE
-        };
+        int[] attribList = new int[] { EGL_WIDTH, mWidth, EGL_HEIGHT, mHeight,
+                EGL_NONE };
 
         // No error checking performed, minimum required code to elucidate logic
         mEGL = (EGL10) EGLContext.getEGL();
@@ -74,13 +71,12 @@ public class PixelBuffer {
         // mEGLContext = mEGL.eglCreateContext(mEGLDisplay, mEGLConfig,
         // EGL_NO_CONTEXT, null);
         int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-        int[] attrib_list = {
-                EGL_CONTEXT_CLIENT_VERSION, 2,
-                EGL10.EGL_NONE
-        };
-        mEGLContext = mEGL.eglCreateContext(mEGLDisplay, mEGLConfig, EGL_NO_CONTEXT, attrib_list);
+        int[] attrib_list = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
+        mEGLContext = mEGL.eglCreateContext(mEGLDisplay, mEGLConfig,
+                EGL_NO_CONTEXT, attrib_list);
 
-        mEGLSurface = mEGL.eglCreatePbufferSurface(mEGLDisplay, mEGLConfig, attribList);
+        mEGLSurface = mEGL.eglCreatePbufferSurface(mEGLDisplay, mEGLConfig,
+                attribList);
         mEGL.eglMakeCurrent(mEGLDisplay, mEGLSurface, mEGLSurface, mEGLContext);
 
         mGL = (GL10) mEGLContext.getGL();
@@ -94,7 +90,8 @@ public class PixelBuffer {
 
         // Does this thread own the OpenGL context?
         if (!Thread.currentThread().getName().equals(mThreadOwner)) {
-            Log.e(TAG, "setRenderer: This thread does not own the OpenGL context.");
+            Log.e(TAG,
+                    "setRenderer: This thread does not own the OpenGL context.");
             return;
         }
 
@@ -112,7 +109,8 @@ public class PixelBuffer {
 
         // Does this thread own the OpenGL context?
         if (!Thread.currentThread().getName().equals(mThreadOwner)) {
-            Log.e(TAG, "getBitmap: This thread does not own the OpenGL context.");
+            Log.e(TAG,
+                    "getBitmap: This thread does not own the OpenGL context.");
             return null;
         }
 
@@ -136,16 +134,9 @@ public class PixelBuffer {
     }
 
     private EGLConfig chooseConfig() {
-        int[] attribList = new int[] {
-                EGL_DEPTH_SIZE, 0,
-                EGL_STENCIL_SIZE, 0,
-                EGL_RED_SIZE, 8,
-                EGL_GREEN_SIZE, 8,
-                EGL_BLUE_SIZE, 8,
-                EGL_ALPHA_SIZE, 8,
-                EGL10.EGL_RENDERABLE_TYPE, 4,
-                EGL_NONE
-        };
+        int[] attribList = new int[] { EGL_DEPTH_SIZE, 0, EGL_STENCIL_SIZE, 0,
+                EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8,
+                EGL_ALPHA_SIZE, 8, EGL10.EGL_RENDERABLE_TYPE, 4, EGL_NONE };
 
         // No error checking performed, minimum required code to elucidate logic
         // Expand on this logic to be more selective in choosing a configuration
@@ -153,7 +144,8 @@ public class PixelBuffer {
         mEGL.eglChooseConfig(mEGLDisplay, attribList, null, 0, numConfig);
         int configSize = numConfig[0];
         mEGLConfigs = new EGLConfig[configSize];
-        mEGL.eglChooseConfig(mEGLDisplay, attribList, mEGLConfigs, configSize, numConfig);
+        mEGL.eglChooseConfig(mEGLDisplay, attribList, mEGLConfigs, configSize,
+                numConfig);
 
         if (LIST_CONFIGS) {
             listConfig();
@@ -175,8 +167,8 @@ public class PixelBuffer {
             g = getConfigAttrib(config, EGL_GREEN_SIZE);
             b = getConfigAttrib(config, EGL_BLUE_SIZE);
             a = getConfigAttrib(config, EGL_ALPHA_SIZE);
-            Log.i(TAG, "    <d,s,r,g,b,a> = <" + d + "," + s + "," +
-                    r + "," + g + "," + b + "," + a + ">");
+            Log.i(TAG, "    <d,s,r,g,b,a> = <" + d + "," + s + "," + r + ","
+                    + g + "," + b + "," + a + ">");
         }
 
         Log.i(TAG, "}");
@@ -184,8 +176,8 @@ public class PixelBuffer {
 
     private int getConfigAttrib(final EGLConfig config, final int attribute) {
         int[] value = new int[1];
-        return mEGL.eglGetConfigAttrib(mEGLDisplay, config,
-                attribute, value) ? value[0] : 0;
+        return mEGL.eglGetConfigAttrib(mEGLDisplay, config, attribute, value) ? value[0]
+                : 0;
     }
 
     private void convertToBitmap() {
@@ -201,7 +193,6 @@ public class PixelBuffer {
                 iat[(mHeight - i - 1) * mWidth + j] = ia[i * mWidth + j];
             }
         }
-        
 
         mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         mBitmap.copyPixelsFromBuffer(IntBuffer.wrap(iat));

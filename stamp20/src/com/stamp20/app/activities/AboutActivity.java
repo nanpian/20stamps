@@ -47,10 +47,10 @@ public class AboutActivity extends Activity implements OnItemClickListener {
         aboutListview.setAdapter(mAboutAdapter);
         aboutListview.setOnItemClickListener(this);
     }
-    
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
             startActivity(new Intent(AboutActivity.this, HomeActivity.class));
             finish();
             return true;

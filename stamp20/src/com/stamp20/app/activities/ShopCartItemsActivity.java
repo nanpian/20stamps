@@ -27,6 +27,7 @@ import com.stamp20.app.util.FontManager;
 /**
  * 
  * 商品列表页
+ * 
  * @author zhudewei
  *
  */
@@ -56,47 +57,48 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_cartitems_activity);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-//        mCache = BitmapCache.getCache();
- //       initListView();
+        // mCache = BitmapCache.getCache();
+        // initListView();
         mDesigns = Cart.getInstance().getDesigns();
         initView();
     }
 
     /*
-    private void initListView() {
-        boolean addNewItems = getIntent().getBooleanExtra(ADD_ITEMS_TOCAET, false);
-        if (addNewItems) {
-            ShopStampItem stapItem = new ShopStampItem(mCache.get(), 0.0f, 0.0f);
-            data.add(stapItem);
-        }
-        
-    }
-*/
+     * private void initListView() { boolean addNewItems =
+     * getIntent().getBooleanExtra(ADD_ITEMS_TOCAET, false); if (addNewItems) {
+     * ShopStampItem stapItem = new ShopStampItem(mCache.get(), 0.0f, 0.0f);
+     * data.add(stapItem); }
+     * 
+     * }
+     */
     public void initView() {
         layoutInflater = getLayoutInflater();
-//        textHeaderTile = (TextView) findViewById(R.id.home_header_title);
-//        textHeaderTile.setVisibility(View.VISIBLE);
-//        backHomeView = (ImageView) findViewById(R.id.home_header_back);
-//        backHomeView.setOnClickListener(this);
+        // textHeaderTile = (TextView) findViewById(R.id.home_header_title);
+        // textHeaderTile.setVisibility(View.VISIBLE);
+        // backHomeView = (ImageView) findViewById(R.id.home_header_back);
+        // backHomeView.setOnClickListener(this);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);
         headerPrevious.setImageResource(R.drawable.main_bottom_tab_home_focus);
         headerPrevious.setOnClickListener(this);
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerTitle.setText(R.string.shop_cartitems_title);
-        
+
         btnPaypal = (Button) findViewById(R.id.shop_cartitems_papal);
         btnPaypal.setOnClickListener(this);
         btnCheckout = (Button) findViewById(R.id.shop_cartitems_checkout);
         btnCheckout.setOnClickListener(this);
-//        textHeaderTile.setText(R.string.shop_cartitems_title);
+        // textHeaderTile.setText(R.string.shop_cartitems_title);
         listCartItems = (ListView) findViewById(R.id.listview_cartitems);
-        layoutListFooter = (LinearLayout) layoutInflater.inflate(R.layout.shop_cartitems_listview_footer, null);
+        layoutListFooter = (LinearLayout) layoutInflater.inflate(
+                R.layout.shop_cartitems_listview_footer, null);
         FontManager.changeFonts(layoutListFooter, this);
-        layoutAddMore = (LinearLayout) layoutListFooter.findViewById(R.id.shop_add_more);
+        layoutAddMore = (LinearLayout) layoutListFooter
+                .findViewById(R.id.shop_add_more);
         layoutAddMore.setOnClickListener(this);
         // listCartItems.addHeaderView(layoutTest);
         listCartItems.addFooterView(layoutListFooter);
-        shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this, mDesigns);
+        shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this,
+                mDesigns);
         listCartItems.setAdapter(shopItemsAdapter);
     }
 
@@ -128,11 +130,12 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         // startActivity(intent);
         // }
     }
-    
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
-            startActivity(new Intent(ShopCartItemsActivity.this, HomeActivity.class));
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
+            startActivity(new Intent(ShopCartItemsActivity.this,
+                    HomeActivity.class));
             finish();
             return true;
         }

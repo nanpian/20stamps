@@ -44,30 +44,31 @@ public final class InstagramUtils {
         return prop;
 
     }
-    
-	public static boolean isUserInstagramLinked(Context mContext) {
-		String token = InstagramTokenKeeper.readAccessToken(mContext);
-		if(token!=null && !StringUtils.isEmptyString(token)) {
-			return true;
-		}
-		return false;
-	}
+
+    public static boolean isUserInstagramLinked(Context mContext) {
+        String token = InstagramTokenKeeper.readAccessToken(mContext);
+        if (token != null && !StringUtils.isEmptyString(token)) {
+            return true;
+        }
+        return false;
+    }
 
     private static InstagramService service = null;
     private static Instagram instagram = null;
-    
-    public static void setInsService(InstagramService s){
-    	service = s;
+
+    public static void setInsService(InstagramService s) {
+        service = s;
     }
-    
-    public static InstagramService getInsService(){
-    	return service;
+
+    public static InstagramService getInsService() {
+        return service;
     }
-    
-    public static void setInstagram(Instagram i){
-    	instagram = i;
+
+    public static void setInstagram(Instagram i) {
+        instagram = i;
     }
-    public static Instagram getInstagram(){
-    	return instagram;
+
+    public static Instagram getInstagram() {
+        return instagram;
     }
 }

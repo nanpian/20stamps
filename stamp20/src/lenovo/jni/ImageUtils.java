@@ -24,5 +24,6 @@ public final class ImageUtils {
         return dest;
     }
 
-    private static native void fastBlur(Bitmap src, Bitmap store, int width, int height, int degree);
+    private static native void fastBlur(Bitmap src, Bitmap store, int width,
+            int height, int degree);
 }

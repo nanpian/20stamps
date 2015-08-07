@@ -59,8 +59,9 @@ public class AboutDetailsActivity extends Activity implements OnClickListener {
         });
     }
 
-    private void showProgressDialog(int progress){
+    private void showProgressDialog(int progress) {
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

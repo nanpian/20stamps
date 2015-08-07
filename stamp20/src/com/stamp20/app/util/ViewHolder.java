@@ -19,9 +19,9 @@ public class ViewHolder {
         }
         return (T) childView;
     }
-    
+
     @SuppressWarnings("unchecked")
-	public static <T extends View> T findChildView(View view, int id) {
+    public static <T extends View> T findChildView(View view, int id) {
         View childView = view.findViewById(id);
         return (T) childView;
     }

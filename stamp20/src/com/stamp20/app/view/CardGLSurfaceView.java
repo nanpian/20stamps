@@ -176,7 +176,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
     public void setCaptureFront() {
         currentStatus = STATUS_CAPTURE;
     }
-    
+
     public Bitmap getSourceBitmap() {
         return this.sourceBitmap;
     }
@@ -337,12 +337,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
                 (surfaceHeight - mHeight) / 2, mWidth, mHeight, mGL);
         Bitmap cardScaledBitmap = Bitmap.createScaledBitmap(cardBitmap, mWidth,
                 mHeight, true);
-        
-        if (resultBitmap!=null) {
+
+        if (resultBitmap != null) {
             resultBitmap.recycle();
             resultBitmap = null;
         }
-        
+
         resultBitmap = Bitmap.createBitmap(mWidth, mHeight, Config.ARGB_8888);
 
         try {
@@ -363,12 +363,12 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         // 放入系统内存中
         Bitmap resultBitmapCorner = toRoundCorner2(resultBitmap);
         CardBmpCache mCache = CardBmpCache.getCacheInstance();
-        
-        if (cardBitmap!=null) {
+
+        if (cardBitmap != null) {
             cardBitmap.recycle();
             cardBitmap = null;
         }
-        
+
         mCache.putFront(resultBitmapCorner);
     }
 
@@ -409,7 +409,7 @@ public class CardGLSurfaceView extends GLSurfaceView implements
         canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rectSrc, rect, paint);
-        
+
         cover.recycle();
         cover = null;
         return output;

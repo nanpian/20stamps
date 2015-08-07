@@ -7,8 +7,8 @@ public class StampPoints {
 
     public StampPoints() {
     }
-    
-    public StampPoints(float x, float y){
+
+    public StampPoints(float x, float y) {
         this.x = x;
         this.y = y;
     }

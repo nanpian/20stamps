@@ -24,17 +24,17 @@ public class StampViewx extends View implements OnTouchListener {
      * 邮票框
      */
     private Bitmap bmpStampBackground = null;
-    
+
     /*
      * 制作邮票所用的图片
      */
     private Bitmap bmpStampPhoto = null;
-    
+
     /*
      * 制作邮票时右上角的旋转按钮
      */
     private Bitmap bmpBtnReversal = null;
-    
+
     /*
      * 最终生成的邮票图案，不包含右上角的旋转按钮
      */
@@ -44,17 +44,17 @@ public class StampViewx extends View implements OnTouchListener {
      * 邮票框的点坐标
      */
     private StampPoints mStampBackgroundPoints = null;
-    
+
     /*
      * 邮票所用图片点坐标
      */
     private StampPoints mStampPoints = null;
-    
+
     /*
      * 旋转按钮点坐标
      */
     private StampPoints mBtnReversalPoints = null;
-    
+
     /*
      * 当前邮票是横屏还是竖屏界面
      */
@@ -64,12 +64,12 @@ public class StampViewx extends View implements OnTouchListener {
      * 画邮票框所用的画笔
      */
     private Paint mStampBackgroundPaint = null;
-    
+
     /*
      * 画邮票所用图片的画笔
      */
     private Paint mStampPaint = null;
-    
+
     /*
      * 画整个画面的背景的画笔
      */
@@ -97,20 +97,17 @@ public class StampViewx extends View implements OnTouchListener {
     /*
      * 背景色
      */
-    private int stampViewCanvasColor = Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY);
+    private int stampViewCanvasColor = Color
+            .parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY);
 
     /*
-     * 手势:
-     * NONE:手指没有操作
-     * DRAG：移动
-     * ZOOM：缩放
-     * mode：当前所处的模式NONE/DRAG/ZOOM
+     * 手势: NONE:手指没有操作 DRAG：移动 ZOOM：缩放 mode：当前所处的模式NONE/DRAG/ZOOM
      */
     private int NONE = 0;
     private int DRAG = 1;
     private int ZOOM = 2;
     private int mode = NONE;
-    
+
     /*
      * 旋转按钮是否被触发
      */
@@ -141,8 +138,10 @@ public class StampViewx extends View implements OnTouchListener {
 
     private void init() {
         Resources res = getResources();
-        bmpStampBackground = BitmapFactory.decodeResource(res, R.drawable.background_stamp_h_transparent_pierced);
-        bmpBtnReversal = BitmapFactory.decodeResource(res, R.drawable.icon_rotation_left);
+        bmpStampBackground = BitmapFactory.decodeResource(res,
+                R.drawable.background_stamp_h_transparent_pierced);
+        bmpBtnReversal = BitmapFactory.decodeResource(res,
+                R.drawable.icon_rotation_left);
 
         mStampBackgroundPoints = new StampPoints();
         mStampPoints = new StampPoints();
@@ -172,8 +171,7 @@ public class StampViewx extends View implements OnTouchListener {
     }
 
     /*
-     * 获取邮票背景框
-     * return：bitmap
+     * 获取邮票背景框 return：bitmap
      */
     public Bitmap getBmpStampBackground() {
         return bmpStampBackground;
@@ -181,6 +179,7 @@ public class StampViewx extends View implements OnTouchListener {
 
     /*
      * 设置邮票背景框
+     * 
      * @para:bmpStampBackground, 邮票框bitmap
      */
     public void setBmpStampBackground(Bitmap bmpStampBackground) {
@@ -196,12 +195,12 @@ public class StampViewx extends View implements OnTouchListener {
     public Bitmap getBmpStampPhoto() {
         return bmpStampPhoto;
     }
-    
-	public void setBmpStampPhoto(Bitmap bitmap, boolean b) {
-		// TODO 使用滤镜的时候不缩放
-	       this.bmpStampPhoto = bmpStamp;
-	        zoomMatrix.postScale(1.0f, 1.0f);
-	}
+
+    public void setBmpStampPhoto(Bitmap bitmap, boolean b) {
+        // TODO 使用滤镜的时候不缩放
+        this.bmpStampPhoto = bmpStamp;
+        zoomMatrix.postScale(1.0f, 1.0f);
+    }
 
     public void setBmpStampPhoto(Bitmap bmpStamp) {
         this.bmpStampPhoto = bmpStamp;
@@ -254,13 +253,18 @@ public class StampViewx extends View implements OnTouchListener {
         Log.d(this, "width:" + getWidth() + ", height:" + getHeight());
         int bmpStampBackgroundWidth = bmpStampBackground.getWidth();
         int bmpStampBackgroundHeight = bmpStampBackground.getHeight();
-        Log.d(this, "bmpStampBackgroundWidth:" + bmpStampBackgroundWidth + "bmpStampBackgroundHeight:" + bmpStampBackgroundHeight);
-        mStampBackgroundPoints.setX(getWidth() / 2 - bmpStampBackgroundWidth / 2);
-        mStampBackgroundPoints.setY(getHeight() / 2 - bmpStampBackgroundHeight / 2);
+        Log.d(this, "bmpStampBackgroundWidth:" + bmpStampBackgroundWidth
+                + "bmpStampBackgroundHeight:" + bmpStampBackgroundHeight);
+        mStampBackgroundPoints.setX(getWidth() / 2 - bmpStampBackgroundWidth
+                / 2);
+        mStampBackgroundPoints.setY(getHeight() / 2 - bmpStampBackgroundHeight
+                / 2);
         mStampPoints.setX(mStampBackgroundPoints.getX() + 20);
         mStampPoints.setY(mStampBackgroundPoints.getY() + 20);
-        mBtnReversalPoints.setX(mStampBackgroundPoints.getX() + bmpStampBackgroundWidth - bmpBtnReversal.getWidth() / 2);
-        mBtnReversalPoints.setY(mStampBackgroundPoints.getY() - bmpBtnReversal.getHeight() / 2);
+        mBtnReversalPoints.setX(mStampBackgroundPoints.getX()
+                + bmpStampBackgroundWidth - bmpBtnReversal.getWidth() / 2);
+        mBtnReversalPoints.setY(mStampBackgroundPoints.getY()
+                - bmpBtnReversal.getHeight() / 2);
 
         int left = getWidth() / 2 - bmpStampBackgroundWidth / 2;
         int top = getHeight() / 2 - bmpStampBackgroundHeight / 2;
@@ -269,7 +273,8 @@ public class StampViewx extends View implements OnTouchListener {
 
         mStampBackgroundRect.set(left, top, right, bottom);
         // mStampRect.set(left, top, right, bottom);
-        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right - DELTA_LEN, bottom - DELTA_LEN);
+        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right
+                - DELTA_LEN, bottom - DELTA_LEN);
 
     }
 
@@ -281,26 +286,33 @@ public class StampViewx extends View implements OnTouchListener {
             if (bmpStamp != null) {
                 // 画出邮票后的白色背景，此处应替换为与邮票背景一样的白色图案
                 canvas.drawRect(mStampCenterRect, mViewBackgroundPaint);
-                bmpStamp = Bitmap.createBitmap(bmpStamp, 0, 0, bmpStamp.getWidth(), bmpStamp.getHeight(), zoomMatrix, true);
+                bmpStamp = Bitmap.createBitmap(bmpStamp, 0, 0,
+                        bmpStamp.getWidth(), bmpStamp.getHeight(), zoomMatrix,
+                        true);
                 if (mode == DRAG || mode == ZOOM) {
-                    canvas.drawBitmap(bmpStamp, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
+                    canvas.drawBitmap(bmpStamp, mStampPoints.getX(),
+                            mStampPoints.getY(), mStampPaint);
                 }
                 // 画出邮票中间部分，让图片在中间区域不透明
                 canvas.save();
                 canvas.clipRect(mStampCenterRect);
                 mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
-                canvas.drawBitmap(bmpStamp, mStampPoints.getX(), mStampPoints.getY(), mStampPaint);
+                canvas.drawBitmap(bmpStamp, mStampPoints.getX(),
+                        mStampPoints.getY(), mStampPaint);
                 canvas.restore();
             }
 
             // 画出最上层的邮票框
-            canvas.drawBitmap(getBmpStampBackground(), mStampBackgroundPoints.getX(), mStampBackgroundPoints.getY(), mStampBackgroundPaint);
+            canvas.drawBitmap(getBmpStampBackground(),
+                    mStampBackgroundPoints.getX(),
+                    mStampBackgroundPoints.getY(), mStampBackgroundPaint);
             // 松开手指，此时产生一张图片，用于review等后续操作，该图案不包含右上角的旋转按钮
             if (bmpStamp != null && mode == NONE) {
                 generateStamp();
             }
             // 画出右上角旋转按钮
-            canvas.drawBitmap(getBmpBtnReversal(), mBtnReversalPoints.getX(), mBtnReversalPoints.getY(), mViewBackgroundPaint);
+            canvas.drawBitmap(getBmpBtnReversal(), mBtnReversalPoints.getX(),
+                    mBtnReversalPoints.getY(), mViewBackgroundPaint);
             canvas.restore();
         }
     }
@@ -349,14 +361,16 @@ public class StampViewx extends View implements OnTouchListener {
             setHorizontal(!isHorizontal);
             rotateStampView();
         } else {
-            mStampBackgroundPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            mStampBackgroundPaint
+                    .setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
             mStampPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
             if (isHorizontal()) {
                 setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
             } else {
                 setBmpStampBackground(R.drawable.background_stamp_v_transparent_pierced);
             }
-            setStampViewCanvasColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
+            setStampViewCanvasColor(Color
+                    .parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
             lastDistance = -1;
             // draw(getBmpStamp());
             invalidate();
@@ -381,9 +395,12 @@ public class StampViewx extends View implements OnTouchListener {
         Log.d(this, "width:" + getWidth() + ", height:" + getHeight());
         int bmpStampBackgroundWidth = bmpStampBackground.getWidth();
         int bmpStampBackgroundHeight = bmpStampBackground.getHeight();
-        Log.d(this, "bmpStampBackgroundWidth:" + bmpStampBackgroundWidth + "bmpStampBackgroundHeight:" + bmpStampBackgroundHeight);
-        mStampBackgroundPoints.setX(getWidth() / 2 - bmpStampBackgroundWidth / 2);
-        mStampBackgroundPoints.setY(getHeight() / 2 - bmpStampBackgroundHeight / 2);
+        Log.d(this, "bmpStampBackgroundWidth:" + bmpStampBackgroundWidth
+                + "bmpStampBackgroundHeight:" + bmpStampBackgroundHeight);
+        mStampBackgroundPoints.setX(getWidth() / 2 - bmpStampBackgroundWidth
+                / 2);
+        mStampBackgroundPoints.setY(getHeight() / 2 - bmpStampBackgroundHeight
+                / 2);
         if (isHorizontal) {
             mStampPoints.setX(mStampBackgroundPoints.getX() + 20);
             mStampPoints.setY(mStampBackgroundPoints.getY() + 40);
@@ -391,8 +408,10 @@ public class StampViewx extends View implements OnTouchListener {
             mStampPoints.setX(mStampBackgroundPoints.getX());
             mStampPoints.setY(mStampBackgroundPoints.getY() + 80);
         }
-        mBtnReversalPoints.setX(mStampBackgroundPoints.getX() + bmpStampBackgroundWidth - bmpBtnReversal.getWidth() / 2);
-        mBtnReversalPoints.setY(mStampBackgroundPoints.getY() - bmpBtnReversal.getHeight() / 2);
+        mBtnReversalPoints.setX(mStampBackgroundPoints.getX()
+                + bmpStampBackgroundWidth - bmpBtnReversal.getWidth() / 2);
+        mBtnReversalPoints.setY(mStampBackgroundPoints.getY()
+                - bmpBtnReversal.getHeight() / 2);
 
         int left = getWidth() / 2 - bmpStampBackgroundWidth / 2;
         int top = getHeight() / 2 - bmpStampBackgroundHeight / 2;
@@ -401,7 +420,8 @@ public class StampViewx extends View implements OnTouchListener {
 
         mStampBackgroundRect.set(left, top, right, bottom);
         // mStampRect.set(left, top, right, bottom);
-        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right - DELTA_LEN, bottom - DELTA_LEN);
+        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right
+                - DELTA_LEN, bottom - DELTA_LEN);
         invalidate();
         // draw(getBmpStamp());
     }
@@ -472,9 +492,14 @@ public class StampViewx extends View implements OnTouchListener {
         x = event.getX();
         y = event.getY();
         Log.d(this, "x:" + x + ", y:" + y);
-        Log.d(this, "x, y:" + mBtnReversalPoints.getX() + ", " + mBtnReversalPoints.getY());
-        if (x >= mBtnReversalPoints.getX() - 5 && x <= mBtnReversalPoints.getX() + getBmpBtnReversal().getWidth() + 5
-                && y >= mBtnReversalPoints.getY() - 5 && y <= mBtnReversalPoints.getY() + getBmpBtnReversal().getHeight() + 5) {
+        Log.d(this, "x, y:" + mBtnReversalPoints.getX() + ", "
+                + mBtnReversalPoints.getY());
+        if (x >= mBtnReversalPoints.getX() - 5
+                && x <= mBtnReversalPoints.getX()
+                        + getBmpBtnReversal().getWidth() + 5
+                && y >= mBtnReversalPoints.getY() - 5
+                && y <= mBtnReversalPoints.getY()
+                        + getBmpBtnReversal().getHeight() + 5) {
             // 点击了旋转按钮
             Log.d(this, "点击了旋转按钮");
             isBtnReversalClicked = true;

@@ -109,15 +109,15 @@ public class ImageEffectAdapter extends BaseAdapter {
 
     public void clearPreviewHashMap() {
         if (mBlutImageMap != null) {
-            for (int i=0;i<mBlutImageMap.size();i++) {
+            for (int i = 0; i < mBlutImageMap.size(); i++) {
                 Bitmap bitmap = mBlutImageMap.get(i);
-                if (bitmap!=null && !bitmap.isRecycled()) {
+                if (bitmap != null && !bitmap.isRecycled()) {
                     bitmap.recycle();
                     bitmap = null;
                 }
             }
             mBlutImageMap.clear();
-            
+
         }
     }
 
@@ -359,10 +359,12 @@ public class ImageEffectAdapter extends BaseAdapter {
                         e.printStackTrace();
                         canPreview = false;
                         viewHolder.mImageView.setImageBitmap(imageBitmap);
-                        Toast.makeText(mContext, "Cannot Preview, just use source image", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext,
+                                "Cannot Preview, just use source image",
+                                Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                        viewHolder.mImageView.setImageBitmap(imageBitmap);
+                    viewHolder.mImageView.setImageBitmap(imageBitmap);
                 }
             }
         } else {

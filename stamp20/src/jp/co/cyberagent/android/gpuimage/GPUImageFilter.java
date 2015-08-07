@@ -26,26 +26,21 @@ import java.nio.FloatBuffer;
 import java.util.LinkedList;
 
 public class GPUImageFilter {
-    public static final String NO_FILTER_VERTEX_SHADER = "" +
-            "attribute vec4 position;\n" +
-            "attribute vec4 inputTextureCoordinate;\n" +
-            " \n" +
-            "varying vec2 textureCoordinate;\n" +
-            " \n" +
-            "void main()\n" +
-            "{\n" +
-            "    gl_Position = position;\n" +
-            "    textureCoordinate = inputTextureCoordinate.xy;\n" +
-            "}";
-    public static final String NO_FILTER_FRAGMENT_SHADER = "" +
-            "varying highp vec2 textureCoordinate;\n" +
-            " \n" +
-            "uniform sampler2D inputImageTexture;\n" +
-            " \n" +
-            "void main()\n" +
-            "{\n" +
-            "     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n" +
-            "}";
+    public static final String NO_FILTER_VERTEX_SHADER = ""
+            + "attribute vec4 position;\n"
+            + "attribute vec4 inputTextureCoordinate;\n" + " \n"
+            + "varying vec2 textureCoordinate;\n" + " \n" + "void main()\n"
+            + "{\n" + "    gl_Position = position;\n"
+            + "    textureCoordinate = inputTextureCoordinate.xy;\n" + "}";
+    public static final String NO_FILTER_FRAGMENT_SHADER = ""
+            + "varying highp vec2 textureCoordinate;\n"
+            + " \n"
+            + "uniform sampler2D inputImageTexture;\n"
+            + " \n"
+            + "void main()\n"
+            + "{\n"
+            + "     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n"
+            + "}";
 
     private final LinkedList<Runnable> mRunOnDraw;
     private final String mVertexShader;
@@ -77,7 +72,8 @@ public class GPUImageFilter {
     public void onInit() {
         mGLProgId = OpenGlUtils.loadProgram(mVertexShader, mFragmentShader);
         mGLAttribPosition = GLES20.glGetAttribLocation(mGLProgId, "position");
-        mGLUniformTexture = GLES20.glGetUniformLocation(mGLProgId, "inputImageTexture");
+        mGLUniformTexture = GLES20.glGetUniformLocation(mGLProgId,
+                "inputImageTexture");
         mGLAttribTextureCoordinate = GLES20.glGetAttribLocation(mGLProgId,
                 "inputTextureCoordinate");
         mIsInitialized = true;
@@ -101,7 +97,7 @@ public class GPUImageFilter {
     }
 
     public void onDraw(final int textureId, final FloatBuffer cubeBuffer,
-                       final FloatBuffer textureBuffer) {
+            final FloatBuffer textureBuffer) {
         GLES20.glUseProgram(mGLProgId);
         runPendingOnDrawTasks();
         if (!mIsInitialized) {
@@ -109,11 +105,12 @@ public class GPUImageFilter {
         }
 
         cubeBuffer.position(0);
-        GLES20.glVertexAttribPointer(mGLAttribPosition, 2, GLES20.GL_FLOAT, false, 0, cubeBuffer);
+        GLES20.glVertexAttribPointer(mGLAttribPosition, 2, GLES20.GL_FLOAT,
+                false, 0, cubeBuffer);
         GLES20.glEnableVertexAttribArray(mGLAttribPosition);
         textureBuffer.position(0);
-        GLES20.glVertexAttribPointer(mGLAttribTextureCoordinate, 2, GLES20.GL_FLOAT, false, 0,
-                textureBuffer);
+        GLES20.glVertexAttribPointer(mGLAttribTextureCoordinate, 2,
+                GLES20.GL_FLOAT, false, 0, textureBuffer);
         GLES20.glEnableVertexAttribArray(mGLAttribTextureCoordinate);
         if (textureId != OpenGlUtils.NO_TEXTURE) {
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -127,7 +124,8 @@ public class GPUImageFilter {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
-    protected void onDrawArraysPre() {}
+    protected void onDrawArraysPre() {
+    }
 
     protected void runPendingOnDrawTasks() {
         while (!mRunOnDraw.isEmpty()) {
@@ -212,7 +210,8 @@ public class GPUImageFilter {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
-                GLES20.glUniform1fv(location, arrayValue.length, FloatBuffer.wrap(arrayValue));
+                GLES20.glUniform1fv(location, arrayValue.length,
+                        FloatBuffer.wrap(arrayValue));
             }
         });
     }

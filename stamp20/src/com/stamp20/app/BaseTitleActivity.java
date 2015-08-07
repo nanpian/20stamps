@@ -24,9 +24,9 @@ public class BaseTitleActivity extends Activity {
         initContentView();
         initTitleBar();
     }
-    
+
     public void onCreateNoTitle() {
-    	super.onCreate(null);
+        super.onCreate(null);
         ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
         content.removeAllViews();
         contentLayout = new LinearLayout(this);
@@ -40,7 +40,8 @@ public class BaseTitleActivity extends Activity {
         contentLayout = new LinearLayout(this);
         contentLayout.setOrientation(LinearLayout.VERTICAL);
         content.addView(contentLayout);
-        LayoutInflater.from(this).inflate(R.layout.common_title_bar, contentLayout, true);
+        LayoutInflater.from(this).inflate(R.layout.common_title_bar,
+                contentLayout, true);
     }
 
     public void initTitleBar() {
@@ -49,18 +50,18 @@ public class BaseTitleActivity extends Activity {
         mButtonLeft.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-               Log.i("dewei","left button cllicked");
-               finish();
+                Log.i("dewei", "left button cllicked");
+                finish();
             }
         });
         mButtonRight = (Button) findViewById(R.id.titlebar_right);
         mButtonLeft.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                finish();
+                // finish();
             }
         });
-        
+
     }
 
     @Override

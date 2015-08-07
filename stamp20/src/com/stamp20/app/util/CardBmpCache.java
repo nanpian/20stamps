@@ -23,7 +23,7 @@ public class CardBmpCache {
 
     public void putFront(Bitmap src) {
         if (src != null && (cardBmpFront == null || !cardBmpFront.sameAs(src))) {
-            if (cardBmpFront!=null) {
+            if (cardBmpFront != null) {
                 cardBmpFront.recycle();
                 cardBmpFront = null;
             }
@@ -33,7 +33,7 @@ public class CardBmpCache {
 
     public void putBack(Bitmap src) {
         if (src != null && (cardBmpBack == null || !cardBmpBack.sameAs(src))) {
-            if (cardBmpBack!=null) {
+            if (cardBmpBack != null) {
                 cardBmpBack.recycle();
                 cardBmpBack = null;
             }
@@ -43,7 +43,7 @@ public class CardBmpCache {
 
     public void putEnve(Bitmap src) {
         if (src != null && (cardBmpEnve == null || !cardBmpEnve.sameAs(src))) {
-            if (cardBmpEnve!=null) {
+            if (cardBmpEnve != null) {
                 cardBmpEnve.recycle();
                 cardBmpEnve = null;
             }

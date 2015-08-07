@@ -24,7 +24,8 @@ import android.view.Display;
 
 public class BitmapUtils {
 
-    public static boolean saveUriInFile(Uri selectedImage, ContentResolver cr, String path) {
+    public static boolean saveUriInFile(Uri selectedImage, ContentResolver cr,
+            String path) {
         boolean result = false;
         InputStream inputStream = null;
         File f = new File(path);
@@ -62,7 +63,8 @@ public class BitmapUtils {
         return result;
     }
 
-    public static Bitmap decodeUri(Uri selectedImage, ContentResolver cr, final int requiredSize) {
+    public static Bitmap decodeUri(Uri selectedImage, ContentResolver cr,
+            final int requiredSize) {
         // Log.d("cases", "BitmapUtils decoce "+selectedImage.toString());
         Bitmap result = null;
         InputStream inputStream = null;
@@ -82,7 +84,8 @@ public class BitmapUtils {
             final int REQUIRED_SIZE = requiredSize;
 
             // Find the correct scale value.
-            int scale = calculateInSampleSize(options, REQUIRED_SIZE, REQUIRED_SIZE);
+            int scale = calculateInSampleSize(options, REQUIRED_SIZE,
+                    REQUIRED_SIZE);
             // Decode with inSampleSize
             options.inSampleSize = scale;
             options.inJustDecodeBounds = false;
@@ -108,7 +111,8 @@ public class BitmapUtils {
      * @param cr
      * @return
      */
-    public static Rect getImageNativeSizeFromUri(Uri selectedImage, ContentResolver cr) {
+    public static Rect getImageNativeSizeFromUri(Uri selectedImage,
+            ContentResolver cr) {
         Rect result = null;
         InputStream inputStream = null;
         try {
@@ -127,13 +131,16 @@ public class BitmapUtils {
             final int width = options.outWidth;
             result = new Rect(0, 0, width, height);
         } catch (FileNotFoundException e) {
-            Log.e("cases", "error getImageSizeFromUri uri " + selectedImage.toString(), e);
+            Log.e("cases",
+                    "error getImageSizeFromUri uri " + selectedImage.toString(),
+                    e);
             inputStream = null;
         }
         return result;
     }
 
-    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options,
+            int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -154,7 +161,8 @@ public class BitmapUtils {
             return ((BitmapDrawable) drawable).getBitmap();
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);

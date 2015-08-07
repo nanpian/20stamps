@@ -23,33 +23,32 @@ import android.opengl.GLES20;
  * Creates a swirl distortion on the image.
  */
 public class GPUImageSwirlFilter extends GPUImageFilter {
-    public static final String SWIRL_FRAGMENT_SHADER = "" +
-            "varying highp vec2 textureCoordinate;\n" +
-            "\n" +
-            "uniform sampler2D inputImageTexture;\n" +
-            "\n" +
-            "uniform highp vec2 center;\n" +
-            "uniform highp float radius;\n" +
-            "uniform highp float angle;\n" +
-            "\n" +
-            "void main()\n" +
-            "{\n" +
-            "highp vec2 textureCoordinateToUse = textureCoordinate;\n" +
-            "highp float dist = distance(center, textureCoordinate);\n" +
-            "if (dist < radius)\n" +
-            "{\n" +
-            "textureCoordinateToUse -= center;\n" +
-            "highp float percent = (radius - dist) / radius;\n" +
-            "highp float theta = percent * percent * angle * 8.0;\n" +
-            "highp float s = sin(theta);\n" +
-            "highp float c = cos(theta);\n" +
-            "textureCoordinateToUse = vec2(dot(textureCoordinateToUse, vec2(c, -s)), dot(textureCoordinateToUse, vec2(s, c)));\n" +
-            "textureCoordinateToUse += center;\n" +
-            "}\n" +
-            "\n" +
-            "gl_FragColor = texture2D(inputImageTexture, textureCoordinateToUse );\n" +
-            "\n" +
-            "}\n";
+    public static final String SWIRL_FRAGMENT_SHADER = ""
+            + "varying highp vec2 textureCoordinate;\n"
+            + "\n"
+            + "uniform sampler2D inputImageTexture;\n"
+            + "\n"
+            + "uniform highp vec2 center;\n"
+            + "uniform highp float radius;\n"
+            + "uniform highp float angle;\n"
+            + "\n"
+            + "void main()\n"
+            + "{\n"
+            + "highp vec2 textureCoordinateToUse = textureCoordinate;\n"
+            + "highp float dist = distance(center, textureCoordinate);\n"
+            + "if (dist < radius)\n"
+            + "{\n"
+            + "textureCoordinateToUse -= center;\n"
+            + "highp float percent = (radius - dist) / radius;\n"
+            + "highp float theta = percent * percent * angle * 8.0;\n"
+            + "highp float s = sin(theta);\n"
+            + "highp float c = cos(theta);\n"
+            + "textureCoordinateToUse = vec2(dot(textureCoordinateToUse, vec2(c, -s)), dot(textureCoordinateToUse, vec2(s, c)));\n"
+            + "textureCoordinateToUse += center;\n"
+            + "}\n"
+            + "\n"
+            + "gl_FragColor = texture2D(inputImageTexture, textureCoordinateToUse );\n"
+            + "\n" + "}\n";
 
     private float mAngle;
     private int mAngleLocation;
@@ -86,9 +85,11 @@ public class GPUImageSwirlFilter extends GPUImageFilter {
     }
 
     /**
-     * The radius of the distortion, ranging from 0.0 to 1.0, with a default of 0.5.
+     * The radius of the distortion, ranging from 0.0 to 1.0, with a default of
+     * 0.5.
      *
-     * @param radius from 0.0 to 1.0, default 0.5
+     * @param radius
+     *            from 0.0 to 1.0, default 0.5
      */
     public void setRadius(float radius) {
         mRadius = radius;
@@ -96,9 +97,11 @@ public class GPUImageSwirlFilter extends GPUImageFilter {
     }
 
     /**
-     * The amount of distortion to apply, with a minimum of 0.0 and a default of 1.0.
+     * The amount of distortion to apply, with a minimum of 0.0 and a default of
+     * 1.0.
      *
-     * @param angle minimum 0.0, default 1.0
+     * @param angle
+     *            minimum 0.0, default 1.0
      */
     public void setAngle(float angle) {
         mAngle = angle;
@@ -106,9 +109,11 @@ public class GPUImageSwirlFilter extends GPUImageFilter {
     }
 
     /**
-     * The center about which to apply the distortion, with a default of (0.5, 0.5).
+     * The center about which to apply the distortion, with a default of (0.5,
+     * 0.5).
      *
-     * @param center default (0.5, 0.5)
+     * @param center
+     *            default (0.5, 0.5)
      */
     public void setCenter(PointF center) {
         mCenter = center;

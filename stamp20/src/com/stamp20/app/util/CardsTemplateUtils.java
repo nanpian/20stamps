@@ -18,8 +18,7 @@ public class CardsTemplateUtils {
             R.drawable.x_new_year5_front, R.drawable.x_new_year6_front,
             R.drawable.x_new_year7_front, R.drawable.x_save_the_date1_front,
             R.drawable.x_thanks1_front, R.drawable.x_thanks2_front,
-            R.drawable.x_thanks3_front,
-    };
+            R.drawable.x_thanks3_front, };
     private static int sTemplateList[] = { R.drawable.xx_christmas2_front,
             R.drawable.xx_christmas3_front, R.drawable.xx_christmas4_front,
             R.drawable.xx_christmas5_front, R.drawable.xx_congrats1_front,
@@ -32,27 +31,27 @@ public class CardsTemplateUtils {
             R.drawable.xx_new_year5_front, R.drawable.xx_new_year6_front,
             R.drawable.xx_new_year7_front, R.drawable.xx_save_the_date1_front,
             R.drawable.xx_thanks1_front, R.drawable.xx_thanks2_front,
-            R.drawable.xx_thanks3_front,};
+            R.drawable.xx_thanks3_front, };
 
-    public static int getTransTemplateId(int position){
+    public static int getTransTemplateId(int position) {
         int templateId = 0;
-        if (sTransTemplateList != null){
+        if (sTransTemplateList != null) {
             templateId = sTransTemplateList[position];
         }
 
         return templateId;
     }
 
-    public static int getTemplateId(int position){
+    public static int getTemplateId(int position) {
         int templateId = 0;
-        if (sTransTemplateList != null){
+        if (sTransTemplateList != null) {
             templateId = sTemplateList[position];
         }
 
         return templateId;
     }
 
-    public static int getTemplateSize(){
+    public static int getTemplateSize() {
         return sTemplateList.length;
     }
 }

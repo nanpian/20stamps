@@ -198,7 +198,7 @@ public class MainEffect extends Activity implements OnTouchListener,
             effectAdapter.clearPreviewHashMap();
         if (mGPUImageView != null) {
             Bitmap tmpForRecycle = mGPUImageView.getSourceBitmap();
-            if (tmpForRecycle!=null) {
+            if (tmpForRecycle != null) {
                 tmpForRecycle.recycle();
                 tmpForRecycle = null;
             }

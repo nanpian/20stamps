@@ -71,7 +71,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
         tailText = (TextView) findViewById(R.id.tail_text);
 
         headerPrevious.setOnClickListener(this);
-        
+
         reviewButton = (RelativeLayout) this.findViewById(R.id.tail);
         reviewButton.setOnClickListener(this);
 

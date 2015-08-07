@@ -11,10 +11,12 @@ public class GPUImageThresholdEdgeDetection extends GPUImageFilterGroup {
     }
 
     public void setLineSize(final float size) {
-        ((GPUImage3x3TextureSamplingFilter) getFilters().get(1)).setLineSize(size);
+        ((GPUImage3x3TextureSamplingFilter) getFilters().get(1))
+                .setLineSize(size);
     }
 
     public void setThreshold(final float threshold) {
-        ((GPUImageSobelThresholdFilter) getFilters().get(1)).setThreshold(threshold);
+        ((GPUImageSobelThresholdFilter) getFilters().get(1))
+                .setThreshold(threshold);
     }
 }

@@ -36,6 +36,7 @@ import com.stamp20.gallary.GallaryActivity;
 /**
  * 
  * 首页动画变化，这里需要关注内存泄露的问题
+ * 
  * @author zhudewei
  *
  */
@@ -158,11 +159,11 @@ public class HomeActivity extends BaseTitleActivity implements
             timer = null;
         }
     }
-    
+
     /**
      * 加载图片
      */
-    private void loadImageMem(){
+    private void loadImageMem() {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(getResources(),
@@ -259,7 +260,7 @@ public class HomeActivity extends BaseTitleActivity implements
         isPaused = true;
         mHandler.removeMessages(SWITCH_CURRENT_PICTURE);
         stopTimerTask();
-        //recycleMem();
+        // recycleMem();
     }
 
     @Override

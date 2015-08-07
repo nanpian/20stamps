@@ -20,7 +20,7 @@ import android.graphics.Rect;
 import com.stamp20.app.R;
 import com.stamp20.app.util.Log;
 
-public class CardBackView2 extends View{
+public class CardBackView2 extends View {
     private static final String TAG = "jiangtao";
     private Bitmap mCardbackBitmap;
     private Bitmap mCardbackBottomBitmap;
@@ -64,34 +64,37 @@ public class CardBackView2 extends View{
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        if (mCardbackBitmap != null){
+        if (mCardbackBitmap != null) {
             imWidth = mCardbackBitmap.getWidth();
             imHeight = mCardbackBitmap.getHeight();
-            radio = imWidth*1.0f/imHeight;
+            radio = imWidth * 1.0f / imHeight;
         }
-        if (widthMode == MeasureSpec.EXACTLY){
+        if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize;
-        }else {
-            width = Math.min(widthSize, imWidth + getPaddingLeft() + getPaddingRight());
+        } else {
+            width = Math.min(widthSize, imWidth + getPaddingLeft()
+                    + getPaddingRight());
         }
 
-        if (heightMode == MeasureSpec.EXACTLY){
+        if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
-        }else {
-            height = Math.min(heightSize, imHeight + getPaddingTop() + getPaddingBottom());
+        } else {
+            height = Math.min(heightSize, imHeight + getPaddingTop()
+                    + getPaddingBottom());
         }
-        if (radio != 0){
-            height = (int)(width*1.0f/radio);
+        if (radio != 0) {
+            height = (int) (width * 1.0f / radio);
         }
         setMeasuredDimension(width, height);
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right,
+            int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (changed){
+        if (changed) {
             Log.i(TAG, "onlayout change");
-            //here we get the viewwidth and viewheight
+            // here we get the viewwidth and viewheight
             mViewWidth = getMeasuredWidth();
             mViewHeight = getMeasuredHeight();
             this.mCardbackBitmap = getRoundAlphaBitmap(getAlphaSrcBitmap());
@@ -102,60 +105,69 @@ public class CardBackView2 extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mCardbackBitmap != null){
-            mRectSrc.set(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
-            mRectDes.set(getPaddingLeft(), getPaddingTop(), mViewWidth-getPaddingLeft() -getPaddingRight(),
-                    mViewHeight-getPaddingTop()-getPaddingBottom());
+        if (mCardbackBitmap != null) {
+            mRectSrc.set(0, 0, mCardbackBitmap.getWidth(),
+                    mCardbackBitmap.getHeight());
+            mRectDes.set(getPaddingLeft(), getPaddingTop(), mViewWidth
+                    - getPaddingLeft() - getPaddingRight(), mViewHeight
+                    - getPaddingTop() - getPaddingBottom());
             canvas.drawBitmap(mCardbackBitmap, mRectSrc, mRectDes, null);
 
-
-            if (mIsShowLine){
-            	Matrix martrix = new Matrix();
-            	Bitmap dstLinebmp = Bitmap.createScaledBitmap(mCardbackLineBitmap, (int)(mViewWidth), (int)(mCardbackLineBitmap.getHeight()), true);
-                canvas.drawBitmap(dstLinebmp, (mViewWidth - dstLinebmp.getWidth())/2, 0, null);
+            if (mIsShowLine) {
+                Matrix martrix = new Matrix();
+                Bitmap dstLinebmp = Bitmap.createScaledBitmap(
+                        mCardbackLineBitmap, (int) (mViewWidth),
+                        (int) (mCardbackLineBitmap.getHeight()), true);
+                canvas.drawBitmap(dstLinebmp,
+                        (mViewWidth - dstLinebmp.getWidth()) / 2, 0, null);
                 dstLinebmp.recycle();
                 dstLinebmp = null;
             }
         }
     }
 
-    public void initView(){
+    public void initView() {
         this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.activity_card_back_shape_white);
-        this.mCardbackBottomBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.activity_card_back_bottom_logo);
+        this.mCardbackBottomBitmap = BitmapFactory.decodeResource(
+                getResources(), R.drawable.activity_card_back_bottom_logo);
         this.mCardbackLineBitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.lines_back_small);
     }
 
-    public void setImageUri(Uri imageUri){
+    public void setImageUri(Uri imageUri) {
         mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
     }
 
-    public Bitmap getAlphaSrcBitmap(){
-        if(mSourceBitmap == null){
+    public Bitmap getAlphaSrcBitmap() {
+        if (mSourceBitmap == null) {
             return null;
         }
-        Bitmap bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888);
-        Bitmap cover = BitmapFactory.decodeResource(getResources(), R.drawable.card_back_view_overlay);
+        Bitmap bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight,
+                Bitmap.Config.ARGB_8888);
+        Bitmap cover = BitmapFactory.decodeResource(getResources(),
+                R.drawable.card_back_view_overlay);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
         paint.setAlpha(200);
-        Rect srcRect = new Rect(0, 0, mSourceBitmap.getWidth(), mSourceBitmap.getHeight());
+        Rect srcRect = new Rect(0, 0, mSourceBitmap.getWidth(),
+                mSourceBitmap.getHeight());
         Rect desRect = new Rect(0, 0, mViewWidth, mViewHeight);
         canvas.drawBitmap(mSourceBitmap, srcRect, desRect, null);
         Matrix matrix = new Matrix();
-        matrix.setScale(bitmap.getWidth()*1.0f/cover.getWidth(), bitmap.getHeight()*1.0f/cover.getHeight());
+        matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(),
+                bitmap.getHeight() * 1.0f / cover.getHeight());
         canvas.concat(matrix);
         canvas.drawBitmap(cover, 0, 0, paint);
 
         return bitmap;
     }
 
-    public Bitmap getRoundAlphaBitmap(Bitmap src){
+    public Bitmap getRoundAlphaBitmap(Bitmap src) {
         if (src == null)
             return null;
-        Bitmap bitmap = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
+        Bitmap bitmap = Bitmap.createBitmap(src.getWidth(), src.getHeight(),
+                src.getConfig());
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true); // 设置抗锯齿,也即是边缘做平滑处理
@@ -163,8 +175,9 @@ public class CardBackView2 extends View{
         Canvas canvas = new Canvas(bitmap);
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         final RectF rectF = new RectF(rect);
-      //  canvas.drawRoundRect(rectF, 100, 100, paint);
-        final Rect rectSrc = new Rect(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
+        // canvas.drawRoundRect(rectF, 100, 100, paint);
+        final Rect rectSrc = new Rect(0, 0, mCardbackBitmap.getWidth(),
+                mCardbackBitmap.getHeight());
         canvas.drawBitmap(mCardbackBitmap, rectSrc, rect, null);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(src, 0, 0, paint);
@@ -172,37 +185,42 @@ public class CardBackView2 extends View{
         int left = 0;
         int top = src.getHeight() - mCardbackBottomBitmap.getHeight();
         Matrix matrix = new Matrix();
-        matrix.setScale(src.getWidth() * 1.0f / mCardbackBottomBitmap.getWidth(), 1.0f);
+        matrix.setScale(
+                src.getWidth() * 1.0f / mCardbackBottomBitmap.getWidth(), 1.0f);
         canvas.concat(matrix);
         canvas.drawBitmap(mCardbackBottomBitmap, left, top, paint);
 
         return bitmap;
     }
 
-    public Bitmap getRoundCornerBitmap(){
-        Bitmap bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
+    public Bitmap getRoundCornerBitmap() {
+        Bitmap bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight,
+                Bitmap.Config.ARGB_4444);
         Paint paint = new Paint();
         paint.setColor(mBackColor);
         paint.setAntiAlias(true); // 设置抗锯齿,也即是边缘做平滑处理
 
         Canvas canvas = new Canvas(bitmap);
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-//        final RectF rectF = new RectF(rect);
-//        canvas.drawRoundRect(rectF, 70, 70, paint);
-        //use colormatrix to set the color
+        // final RectF rectF = new RectF(rect);
+        // canvas.drawRoundRect(rectF, 70, 70, paint);
+        // use colormatrix to set the color
         ColorMatrix colorMatrix = new ColorMatrix();
         int r = Color.red(mBackColor);
         int g = Color.green(mBackColor);
         int b = Color.blue(mBackColor);
-        colorMatrix.setScale(r*1.0f/255, g*1.0f/255, b*1.0f/255, 1.0f);
+        colorMatrix.setScale(r * 1.0f / 255, g * 1.0f / 255, b * 1.0f / 255,
+                1.0f);
         paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-        final Rect rectSrc = new Rect(0, 0, mCardbackBitmap.getWidth(), mCardbackBitmap.getHeight());
+        final Rect rectSrc = new Rect(0, 0, mCardbackBitmap.getWidth(),
+                mCardbackBitmap.getHeight());
         canvas.drawBitmap(mCardbackBitmap, rectSrc, rect, paint);
         paint.reset();
         int left = 0;
         int top = mViewHeight - mCardbackBottomBitmap.getHeight();
         Matrix matrix = new Matrix();
-        matrix.setScale(mViewWidth*1.0f/mCardbackBottomBitmap.getWidth(), 1.0f);
+        matrix.setScale(mViewWidth * 1.0f / mCardbackBottomBitmap.getWidth(),
+                1.0f);
         canvas.concat(matrix);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(mCardbackBottomBitmap, left, top, paint);
@@ -212,11 +230,11 @@ public class CardBackView2 extends View{
 
     public void setCardBackColor(int color, int position) {
         this.mBackColor = color;
-        if (position == 0){
+        if (position == 0) {
             this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
                     R.drawable.activity_card_back_shape_white);
             this.mCardbackBitmap = getRoundAlphaBitmap(getAlphaSrcBitmap());
-        }else{
+        } else {
             this.mCardbackBitmap = BitmapFactory.decodeResource(getResources(),
                     R.drawable.activity_card_back_shape_white);
             this.mCardbackBitmap = getRoundCornerBitmap();
@@ -228,12 +246,15 @@ public class CardBackView2 extends View{
         this.mCardbackLineBitmap = getScaleLineBitmap();
     }
 
-    public Bitmap getScaleLineBitmap(){
+    public Bitmap getScaleLineBitmap() {
         Bitmap bitmap = null;
-        if (mViewHeight != 0 && mCardbackLineBitmap != null){
+        if (mViewHeight != 0 && mCardbackLineBitmap != null) {
             Matrix matrix = new Matrix();
-            matrix.setScale(1.0f, mViewHeight*1.0f/mCardbackLineBitmap.getHeight());
-            bitmap = Bitmap.createBitmap(mCardbackLineBitmap, 0, 0, mCardbackLineBitmap.getWidth(), mCardbackLineBitmap.getHeight(), matrix, false);
+            matrix.setScale(1.0f,
+                    mViewHeight * 1.0f / mCardbackLineBitmap.getHeight());
+            bitmap = Bitmap.createBitmap(mCardbackLineBitmap, 0, 0,
+                    mCardbackLineBitmap.getWidth(),
+                    mCardbackLineBitmap.getHeight(), matrix, false);
         }
         return bitmap;
     }

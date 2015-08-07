@@ -14,8 +14,10 @@ public class GLBaseUtil {
      * @return true, if successful
      */
     public static boolean supportsOpenGLES2(final Context context) {
-        final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
+        final ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo = activityManager
+                .getDeviceConfigurationInfo();
         return configurationInfo.reqGlEsVersion >= 0x20000;
     }
 }

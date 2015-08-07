@@ -25,74 +25,78 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-public class ChooseRatePopupWindow extends PopupWindow{
-    
-    /*private ArrayList<Integer> mRateDrawableHorizontal = new ArrayList<Integer>();
-    private ArrayList<Integer> mRateDrawableVertical = new ArrayList<Integer>();*/
+public class ChooseRatePopupWindow extends PopupWindow {
+
+    /*
+     * private ArrayList<Integer> mRateDrawableHorizontal = new
+     * ArrayList<Integer>(); private ArrayList<Integer> mRateDrawableVertical =
+     * new ArrayList<Integer>();
+     */
     private final String[] mRateTitles;
-    
-    /*private void initRateArrays(){
-        TypedArray typedArray = mContext.getResources().obtainTypedArray(R.array.stamp_rate_horizontal);
-        if( null != typedArray ){
-            Constant.LogXixia("pop", "Horizontal typedArray:"+typedArray.length());
-            for(int i=0; i<typedArray.length(); i++){
-                mRateDrawableHorizontal.add(typedArray.getResourceId(i, 0));
-            }
-        }
-        
-        typedArray = mContext.getResources().obtainTypedArray(R.array.stamp_rate_vertical);
-        if( null != typedArray ){
-            Constant.LogXixia("pop", "Vertical typedArray:"+typedArray.length());
-            for(int i=0; i<typedArray.length(); i++){
-                mRateDrawableVertical.add(typedArray.getResourceId(i, 0));
-            }
-        }
-    }*/
-    
+
+    /*
+     * private void initRateArrays(){ TypedArray typedArray =
+     * mContext.getResources().obtainTypedArray(R.array.stamp_rate_horizontal);
+     * if( null != typedArray ){ Constant.LogXixia("pop",
+     * "Horizontal typedArray:"+typedArray.length()); for(int i=0;
+     * i<typedArray.length(); i++){
+     * mRateDrawableHorizontal.add(typedArray.getResourceId(i, 0)); } }
+     * 
+     * typedArray =
+     * mContext.getResources().obtainTypedArray(R.array.stamp_rate_vertical);
+     * if( null != typedArray ){ Constant.LogXixia("pop",
+     * "Vertical typedArray:"+typedArray.length()); for(int i=0;
+     * i<typedArray.length(); i++){
+     * mRateDrawableVertical.add(typedArray.getResourceId(i, 0)); } } }
+     */
+
     private ListView mListView;
     private Button mCancel;
     private Context mContext;
     private View mAncor;
-    //标识当前邮票是水平还是垂直的
+    // 标识当前邮票是水平还是垂直的
     private boolean isHorizontal = false;
-       
+
     public ChooseRatePopupWindow(Context context, View ancor, Boolean isH) {
         super(context);
         mContext = context;
         mAncor = ancor;
-        View contentView = LayoutInflater.from(context)  
-                .inflate(R.layout.choose_rate_popup_menu, null);  
+        View contentView = LayoutInflater.from(context).inflate(
+                R.layout.choose_rate_popup_menu, null);
         this.setContentView(contentView);
         setWidth(RelativeLayout.LayoutParams.MATCH_PARENT);
         setHeight(RelativeLayout.LayoutParams.WRAP_CONTENT);
-        //必须这样设置，才能实现该PopupWindow是透明背景
+        // 必须这样设置，才能实现该PopupWindow是透明背景
         setBackgroundDrawable(new BitmapDrawable());
-        //设置可以获得焦点
+        // 设置可以获得焦点
         setFocusable(true);
-        //设置弹窗内可点击
-        setTouchable(true); 
-        //设置弹窗外可点击
+        // 设置弹窗内可点击
+        setTouchable(true);
+        // 设置弹窗外可点击
         setOutsideTouchable(true);
-        
+
         this.setAnimationStyle(R.style.popupAnimation);
-        //初始化Rate选择队列名
-        mRateTitles = mContext.getResources().getStringArray(R.array.stamp_rate_title);
-        //initRateArrays();
+        // 初始化Rate选择队列名
+        mRateTitles = mContext.getResources().getStringArray(
+                R.array.stamp_rate_title);
+        // initRateArrays();
         isHorizontal = isH;
-        
-        mListView = com.stamp20.app.util.ViewHolder.findChildView(contentView, R.id.listview);
+
+        mListView = com.stamp20.app.util.ViewHolder.findChildView(contentView,
+                R.id.listview);
         mListView.setAdapter(new ChooseRatePopupWindowListViewAdapter(context));
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                     long arg3) {
-                android.util.Log.i("xixia", "arg2:"+arg2);
-                if(null != listener){
+                android.util.Log.i("xixia", "arg2:" + arg2);
+                if (null != listener) {
                     listener.onRateSelecedListener(arg2, isHorizontal);
                 }
             }
         });
-        mCancel = com.stamp20.app.util.ViewHolder.findChildView(contentView, R.id.cancel);
+        mCancel = com.stamp20.app.util.ViewHolder.findChildView(contentView,
+                R.id.cancel);
         mCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,23 +104,24 @@ public class ChooseRatePopupWindow extends PopupWindow{
             }
         });
     }
-    
-    public void show(){
+
+    public void show() {
         this.showAtLocation(mAncor, Gravity.BOTTOM, 0, 0);
     }
-    
-    public void hidePopupWindow(){
+
+    public void hidePopupWindow() {
         this.dismiss();
     }
-         
-    private class ChooseRatePopupWindowListViewAdapter extends BaseAdapter{
+
+    private class ChooseRatePopupWindowListViewAdapter extends BaseAdapter {
 
         private Context mContext;
+
         public ChooseRatePopupWindowListViewAdapter(Context context) {
             super();
             this.mContext = context;
         }
-        
+
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
@@ -138,18 +143,21 @@ public class ChooseRatePopupWindow extends PopupWindow{
             if (convertView == null) {
                 convertView = LayoutInflater.from(mContext).inflate(
                         R.layout.choose_rate_popupwindow_adapter_item, null);
-            } 
-            Button btn = com.stamp20.app.util.ViewHolder.get(convertView, R.id.item);
+            }
+            Button btn = com.stamp20.app.util.ViewHolder.get(convertView,
+                    R.id.item);
             btn.setText(mRateTitles[position]);
             return convertView;
         }
     }
-    
+
     OnRateSelecedListener listener = null;
-    public void setOnRateSelecedListener(OnRateSelecedListener l){
+
+    public void setOnRateSelecedListener(OnRateSelecedListener l) {
         this.listener = l;
     }
-    public interface OnRateSelecedListener{
+
+    public interface OnRateSelecedListener {
         public void onRateSelecedListener(int id, boolean isH);
     }
 }

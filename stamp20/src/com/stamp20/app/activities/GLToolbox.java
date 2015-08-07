@@ -30,7 +30,8 @@ public class GLToolbox {
             if (compiled[0] == 0) {
                 String info = GLES20.glGetShaderInfoLog(shader);
                 GLES20.glDeleteShader(shader);
-                throw new RuntimeException("Could not compile shader " + shaderType + ":" + info);
+                throw new RuntimeException("Could not compile shader "
+                        + shaderType + ":" + info);
             }
         }
         return shader;
@@ -54,8 +55,7 @@ public class GLToolbox {
             checkGlError("glAttachShader");
             GLES20.glLinkProgram(program);
             int[] linkStatus = new int[1];
-            GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus,
-                    0);
+            GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
             if (linkStatus[0] != GLES20.GL_TRUE) {
                 String info = GLES20.glGetProgramInfoLog(program);
                 GLES20.glDeleteProgram(program);

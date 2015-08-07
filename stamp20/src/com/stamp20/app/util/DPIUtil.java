@@ -1,4 +1,5 @@
 package com.stamp20.app.util;
+
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -15,12 +16,15 @@ public class DPIUtil {
         mDensity = density;
         Log.d("DPIUtil", " -->> density=" + density);
     }
+
     public static float getDensity() {
         return mDensity;
     }
+
     public static Display getDefaultDisplay() {
         if (null == defaultDisplay) {
-            WindowManager systemService = (WindowManager) Stamp20Application.getInstance().getSystemService(Context.WINDOW_SERVICE);
+            WindowManager systemService = (WindowManager) Stamp20Application
+                    .getInstance().getSystemService(Context.WINDOW_SERVICE);
             defaultDisplay = systemService.getDefaultDisplay();
         }
         return defaultDisplay;
@@ -49,24 +53,24 @@ public class DPIUtil {
     public static int getHeight() {
         return getDefaultDisplay().getHeight();
     }
-    
-    public static int px2sp(Context context, float pxValue) {  
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;  
-        return (int) (pxValue / fontScale + 0.5f);  
+
+    public static int px2sp(Context context, float pxValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (pxValue / fontScale + 0.5f);
     }
 
-    public static int sp2px(Context context, float spValue){
+    public static int sp2px(Context context, float spValue) {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int)((spValue-0.5f)*fontScale);
+        return (int) ((spValue - 0.5f) * fontScale);
     }
-    
-    public static int getWidthByDesignValue(int nDesignValue, int nDesignScreenWidth){
+
+    public static int getWidthByDesignValue(int nDesignValue,
+            int nDesignScreenWidth) {
         return getWidth() * nDesignValue / nDesignScreenWidth;
     }
-    
-    public static int getWidthByDesignValue720(int nDesignValue){
+
+    public static int getWidthByDesignValue720(int nDesignValue) {
         return getWidthByDesignValue(nDesignValue, 720);
     }
 
 }
-

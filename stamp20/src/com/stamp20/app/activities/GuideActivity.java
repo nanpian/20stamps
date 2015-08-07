@@ -44,7 +44,7 @@ public class GuideActivity extends Activity implements OnClickListener,
     private int mCurrentViewPagerState = 0;
     private int mCurrentPage = 0;
     private float mCurrentPageMove = 0;
-    
+
     // 底部页面指示器图片
     private ImageView[] mDots;
 
@@ -60,7 +60,7 @@ public class GuideActivity extends Activity implements OnClickListener,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
         // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_guide);
-        FontManager.changeFonts((RelativeLayout)findViewById(R.id.root), this);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         mButton = (Button) findViewById(R.id.button);
         mViews = new ArrayList<View>();
 
@@ -102,38 +102,36 @@ public class GuideActivity extends Activity implements OnClickListener,
                 finish();
             }
         });
-/*        runOnUiThread(new Runnable() {
-            
-            @Override
-            public void run() {
-                if(mCurrentPage == 0 && mCurrentViewPagerState == 0){
-                    ImageView iv = (ImageView) mViews.get(0).findViewById(R.id.pic3);
-                    iv.startAnimation(AnimationUtil.getTranslateAnimation(0,300,0,0,null));
-                    
-                    ImageView iv2 = (ImageView) mViews.get(0).findViewById(R.id.pic2);
-                    iv2.startAnimation(AnimationUtil.getTranslateAnimation(0, 0, 0, -250,null));
-                }
-            }
-        });*/
+        /*
+         * runOnUiThread(new Runnable() {
+         * 
+         * @Override public void run() { if(mCurrentPage == 0 &&
+         * mCurrentViewPagerState == 0){ ImageView iv = (ImageView)
+         * mViews.get(0).findViewById(R.id.pic3);
+         * iv.startAnimation(AnimationUtil
+         * .getTranslateAnimation(0,300,0,0,null));
+         * 
+         * ImageView iv2 = (ImageView) mViews.get(0).findViewById(R.id.pic2);
+         * iv2.startAnimation(AnimationUtil.getTranslateAnimation(0, 0, 0,
+         * -250,null)); } } });
+         */
 
     }
 
     private void initDots() {
-        /*LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-
-        mDots = new ImageView[mPics.length];
-
-        // 循环取得小点图片
-        for (int i = 0; i < mPics.length; i++) {
-            mDots[i] = (ImageView) ll.getChildAt(i);
-            mDots[i].setEnabled(true);// 都设为不选中状态
-            mDots[i].setOnClickListener(this);
-            mDots[i].setTag(i);// 设置位置tag，方便取出与当前位置对应
-        }
-
-        currentIndex = 0;
-        mDots[currentIndex].setEnabled(false);// 设置为白色，表示当前页面
-*/    }
+        /*
+         * LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
+         * 
+         * mDots = new ImageView[mPics.length];
+         * 
+         * // 循环取得小点图片 for (int i = 0; i < mPics.length; i++) { mDots[i] =
+         * (ImageView) ll.getChildAt(i); mDots[i].setEnabled(true);// 都设为不选中状态
+         * mDots[i].setOnClickListener(this); mDots[i].setTag(i);//
+         * 设置位置tag，方便取出与当前位置对应 }
+         * 
+         * currentIndex = 0; mDots[currentIndex].setEnabled(false);//
+         * 设置为白色，表示当前页面
+         */}
 
     /**
      * 设置当前的引导页
@@ -160,10 +158,7 @@ public class GuideActivity extends Activity implements OnClickListener,
 
     // 当滑动状态改变时调用
     /**
-     * arg0:
-     *     1,表示正在滑动
-     *     2,表示滑动完毕
-     *     3,表示什么都没做
+     * arg0: 1,表示正在滑动 2,表示滑动完毕 3,表示什么都没做
      */
     @Override
     public void onPageScrollStateChanged(int arg0) {
@@ -172,18 +167,12 @@ public class GuideActivity extends Activity implements OnClickListener,
 
     // 当当前页面被滑动时调用
     /**
-     * arg0:标识当前页面
-     *      0,第一页
-     *      1,第二页
-     *      2,第三页
-     *      3,第四页
-     * arg1:当前页面偏移的百分比
-     *      从0.0开始变化到1.0
-     * arg2:当前页面偏移的像素位置   
+     * arg0:标识当前页面 0,第一页 1,第二页 2,第三页 3,第四页 arg1:当前页面偏移的百分比 从0.0开始变化到1.0
+     * arg2:当前页面偏移的像素位置
      */
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2) {
-        Log.i("xixia", "arg0:"+arg0+",arg1:"+arg1+",arg2:"+arg2);
+        Log.i("xixia", "arg0:" + arg0 + ",arg1:" + arg1 + ",arg2:" + arg2);
         mCurrentPage = arg0;
         mCurrentPageMove = arg1;
     }
@@ -192,7 +181,7 @@ public class GuideActivity extends Activity implements OnClickListener,
     @Override
     public void onPageSelected(int arg0) {
         // 设置底部小点选中状态
-        /*setCurDot(arg0);*/
+        /* setCurDot(arg0); */
         if (arg0 == 3) {
             mButton.setVisibility(View.VISIBLE);
 
@@ -205,7 +194,7 @@ public class GuideActivity extends Activity implements OnClickListener,
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         setCurView(position);
-        /*setCurDot(position);*/
+        /* setCurDot(position); */
     }
 
     class WelcomeViewPagerAdapter extends PagerAdapter {

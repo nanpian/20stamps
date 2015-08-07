@@ -35,7 +35,8 @@ public class GPUImageMixBlendFilter extends GPUImageTwoInputFilter {
     @Override
     public void onInit() {
         super.onInit();
-        mMixLocation = GLES20.glGetUniformLocation(getProgram(), "mixturePercent");
+        mMixLocation = GLES20.glGetUniformLocation(getProgram(),
+                "mixturePercent");
     }
 
     @Override
@@ -45,7 +46,9 @@ public class GPUImageMixBlendFilter extends GPUImageTwoInputFilter {
     }
 
     /**
-     * @param mix ranges from 0.0 (only image 1) to 1.0 (only image 2), with 0.5 (half of either) as the normal level
+     * @param mix
+     *            ranges from 0.0 (only image 1) to 1.0 (only image 2), with 0.5
+     *            (half of either) as the normal level
      */
     public void setMix(final float mix) {
         mMix = mix;

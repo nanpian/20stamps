@@ -236,15 +236,15 @@ public class StampView extends View {
 
     private void initView() {
         currentStatus = STATUS_INIT;
-        //设置画笔颜色
+        // 设置画笔颜色
         viewBackgroundPaint.setColor(Color.WHITE);
-        //设置邮票图片透明度
+        // 设置邮票图片透明度
         stampPhotoPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
-        //设置背景图片透明度
+        // 设置背景图片透明度
         stampBackgroundPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
-        //设置邮票框资源
+        // 设置邮票框资源
         setBmpStampBackground(R.drawable.background_stamp_h_transparent_pierced);
-        //设置旋转按钮资源
+        // 设置旋转按钮资源
         setBmpBtnReversal(R.drawable.icon_rotation_left);
     }
 
@@ -266,8 +266,9 @@ public class StampView extends View {
             matrix.reset();
             int bitmapWidth = sourceBitmap.getWidth();
             int bitmapHeight = sourceBitmap.getHeight();
-            //计算邮票宽与图片宽比率，背景高与图片高比率，取较大值作为比率，使得缩放宽度与邮票框宽度一致
-            float ratio = Math.max(stampBackgroundWidth / (bitmapWidth * 1.0f), stampBackgroundHeight / (bitmapHeight * 1.0f));
+            // 计算邮票宽与图片宽比率，背景高与图片高比率，取较大值作为比率，使得缩放宽度与邮票框宽度一致
+            float ratio = Math.max(stampBackgroundWidth / (bitmapWidth * 1.0f),
+                    stampBackgroundHeight / (bitmapHeight * 1.0f));
             matrix.postScale(ratio, ratio);
             float translateX = (width - (bitmapWidth * ratio)) / 2f;
             float translateY = (height - (bitmapHeight * ratio)) / 2f;
@@ -287,20 +288,26 @@ public class StampView extends View {
         int bottom = height - top;
         // // 初始化邮票框
         stampbackgroundMatrix.reset();
-        float stampBackgroundTranslateX = (width - bmpStampBackground.getWidth()) / 2f;
-        float stampBackgroundTranslateY = (height - bmpStampBackground.getHeight()) / 2f;
-        stampbackgroundMatrix.postTranslate(stampBackgroundTranslateX, stampBackgroundTranslateY);
+        float stampBackgroundTranslateX = (width - bmpStampBackground
+                .getWidth()) / 2f;
+        float stampBackgroundTranslateY = (height - bmpStampBackground
+                .getHeight()) / 2f;
+        stampbackgroundMatrix.postTranslate(stampBackgroundTranslateX,
+                stampBackgroundTranslateY);
 
-        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right - DELTA_LEN, bottom - DELTA_LEN);
+        mStampCenterRect.set(left + DELTA_LEN, top + DELTA_LEN, right
+                - DELTA_LEN, bottom - DELTA_LEN);
         // 设置右上角旋转按钮图片，默认为水平方向
         btnRotateMatrix.reset();
         btnRotatePoints.setX(right - getBmpBtnReversal().getWidth() / 2);
         btnRotatePoints.setY(top - getBmpBtnReversal().getHeight() / 2);
-        btnRotateMatrix.postTranslate(right - getBmpBtnReversal().getWidth() / 2, top - getBmpBtnReversal().getHeight() / 2);
+        btnRotateMatrix.postTranslate(right - getBmpBtnReversal().getWidth()
+                / 2, top - getBmpBtnReversal().getHeight() / 2);
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right,
+            int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         Log.d(this, "onLayout...");
         if (changed) {
@@ -375,7 +382,8 @@ public class StampView extends View {
                 lastXMove = -1;
                 lastYMove = -1;
             }
-            stampBackgroundPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            stampBackgroundPaint
+                    .setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
             currentStatus = STATUS_NONE;
             invalidate();
             break;
@@ -383,7 +391,8 @@ public class StampView extends View {
             // 手指离开屏幕时将临时值还原
             lastXMove = -1;
             lastYMove = -1;
-            stampBackgroundPaint.setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
+            stampBackgroundPaint
+                    .setAlpha(StampViewConstants.PAINT_NO_TRANSPRANT);
             currentStatus = STATUS_NONE;
             invalidate();
             break;
@@ -396,8 +405,12 @@ public class StampView extends View {
     private void onTouchDown(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
-        if (x >= btnRotatePoints.getX() - 5 && x <= btnRotatePoints.getX() + getBmpBtnReversal().getWidth() + 5 && y >= btnRotatePoints.getY() - 5
-                && y <= btnRotatePoints.getY() + getBmpBtnReversal().getHeight() + 5) {
+        if (x >= btnRotatePoints.getX() - 5
+                && x <= btnRotatePoints.getX() + getBmpBtnReversal().getWidth()
+                        + 5
+                && y >= btnRotatePoints.getY() - 5
+                && y <= btnRotatePoints.getY()
+                        + getBmpBtnReversal().getHeight() + 5) {
             Log.d(this, "rotate....");
             isBtnReversalClicked = true;
             setHorizontal(!isHorizontal);
@@ -422,11 +435,13 @@ public class StampView extends View {
         case STATUS_INIT:
             initBitmap(canvas);
             canvas.drawBitmap(sourceBitmap, matrix, stampPhotoPaint);
-            canvas.drawColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
+            canvas.drawColor(Color
+                    .parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
             canvas.drawRect(mStampCenterRect, viewBackgroundPaint);
             break;
         case STATUS_NONE:
-            canvas.drawColor(Color.parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
+            canvas.drawColor(Color
+                    .parseColor(StampViewConstants.COLOR_BACKGROUND_GRAY));
             canvas.drawRect(mStampCenterRect, viewBackgroundPaint);
             break;
         case STATUS_ZOOM_OUT:
@@ -441,7 +456,8 @@ public class StampView extends View {
             if (needDraw) {
                 Log.d(this, "onDraw,move");
                 stampPhotoPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
-                stampBackgroundPaint.setAlpha(StampViewConstants.PAINT_TRANSPRANT);
+                stampBackgroundPaint
+                        .setAlpha(StampViewConstants.PAINT_TRANSPRANT);
                 move(canvas);
             }
             break;
@@ -453,7 +469,8 @@ public class StampView extends View {
         canvas.drawBitmap(sourceBitmap, matrix, stampPhotoPaint);
         canvas.restore();
         // 画出邮票框
-        canvas.drawBitmap(getStampBackground(), stampbackgroundMatrix, stampBackgroundPaint);
+        canvas.drawBitmap(getStampBackground(), stampbackgroundMatrix,
+                stampBackgroundPaint);
         if (currentStatus == STATUS_INIT || currentStatus == STATUS_NONE) {
             generateStamp();
         }
@@ -484,8 +501,10 @@ public class StampView extends View {
         float scaledHeight = sourceBitmap.getHeight() * totalRatio;
         float translateX = 0f;
         float translateY = 0f;
-        translateX = totalTranslateX * scaledRatio + centerPointX * (1 - scaledRatio);
-        translateY = totalTranslateY * scaledRatio + centerPointY * (1 - scaledRatio);
+        translateX = totalTranslateX * scaledRatio + centerPointX
+                * (1 - scaledRatio);
+        translateY = totalTranslateY * scaledRatio + centerPointY
+                * (1 - scaledRatio);
         // 缩放后对图片进行偏移，以保证缩放后中心点位置不变
         matrix.postTranslate(translateX, translateY);
         totalTranslateX = translateX;
@@ -508,7 +527,8 @@ public class StampView extends View {
         matrix.reset();
         // 根据手指移动的距离计算出总偏移值
         float translateX = totalTranslateX + movedDistanceX;
-        Log.d(this, "move,totalX:" + totalTranslateX + ", movedX:" + movedDistanceX + ", X:" + translateX);
+        Log.d(this, "move,totalX:" + totalTranslateX + ", movedX:"
+                + movedDistanceX + ", X:" + translateX);
         float translateY = totalTranslateY + movedDistanceY;
         // 先按照已有的缩放比例对图片进行缩放
         matrix.postScale(totalRatio, totalRatio);

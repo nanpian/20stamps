@@ -65,10 +65,10 @@ public class CouponsActivity extends Activity implements OnClickListener {
         super.finish();
         overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
     }
-    
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { //按下的如果是BACK，同时没有重复
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
             startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
             finish();
             return true;

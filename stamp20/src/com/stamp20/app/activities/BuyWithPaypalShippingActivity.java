@@ -25,7 +25,8 @@ import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 import com.stamp20.app.util.UserProfile;
 
-public class BuyWithPaypalShippingActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener{
+public class BuyWithPaypalShippingActivity extends Activity implements
+        View.OnClickListener, View.OnFocusChangeListener {
 
     private ImageView headerPrevious;
     private TextView headerTitle;
@@ -51,7 +52,8 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         paystyle = getIntent().getIntExtra(Constant.PAY_STYLE, 0);
         setContentView(R.layout.activity_buy_with_paypay_shipping);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
         paymethod = Constant.Pay_method.Standard;
         init();
     }
@@ -72,40 +74,44 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
 
         emailTextViewHint = (TextView) findViewById(R.id.confirmation_email_hint);
         emailTextView = (TextView) findViewById(R.id.editText_confirmation_email);
-        getData(UserProfile.EMAIL, emailTextViewHint, R.string.email_confirmed, emailTextView);
+        getData(UserProfile.EMAIL, emailTextViewHint, R.string.email_confirmed,
+                emailTextView);
         emailTextView.addTextChangedListener(emailTextViewWatcher);
         emailTextView.setOnFocusChangeListener(this);
-        
+
         shippingMethodStandard = (TextView) findViewById(R.id.shipping_method_standard);
         shippingMethodPriority = (TextView) findViewById(R.id.shipping_method_priority);
         shippingMethodOneday = (TextView) findViewById(R.id.shipping_method_oneday);
-        
+
         shippingMethodStandard.setOnClickListener(this);
         shippingMethodPriority.setOnClickListener(this);
         shippingMethodOneday.setOnClickListener(this);
-        
-        if(mShippingAddressFragment == null){
-            mShippingAddressFragment = (ShippingAddressFragment) getFragmentManager().findFragmentById(R.id.shipping_address_fragment);
+
+        if (mShippingAddressFragment == null) {
+            mShippingAddressFragment = (ShippingAddressFragment) getFragmentManager()
+                    .findFragmentById(R.id.shipping_address_fragment);
         }
         setActivityColor();
     }
-    
+
     TextWatcher emailTextViewWatcher = new TextWatcher() {
-        
+
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        public void onTextChanged(CharSequence s, int start, int before,
+                int count) {
             // TODO Auto-generated method stub
         }
-        
+
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                int after) {
             // TODO Auto-generated method stub
         }
-        
+
         @Override
         public void afterTextChanged(Editable s) {
             // TODO Auto-generated method stub
-            if(s.length() != 0){
+            if (s.length() != 0) {
                 emailTextViewHint.setText(R.string.email_confirmed);
             } else {
                 emailTextViewHint.setText("");
@@ -113,7 +119,8 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         }
     };
 
-    private void getData(String userProfile, TextView hint, int resId, TextView editText) {
+    private void getData(String userProfile, TextView hint, int resId,
+            TextView editText) {
         String value = mSharedPreferences.getString(UserProfile.EMAIL, "");
         if (!value.isEmpty()) {
             hint.setText(resId);
@@ -122,6 +129,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
             hint.setText("");
         }
     }
+
     private void setActivityColor() {
         // TODO Auto-generated method stub
         switch (paystyle) {
@@ -146,7 +154,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        Log.d(this, "onClick, v" +v + ", " + v.getId());
+        Log.d(this, "onClick, v" + v + ", " + v.getId());
         switch (v.getId()) {
         case R.id.header_previous:
             finish();
@@ -154,14 +162,18 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         case R.id.header_right:
         case R.id.tail:
             saveUserProfile();
-//            if (ValidityCheckUtil.isValidityEmailAddress(emailEditText.getText().toString())) {
-                Intent reviewIntent = new Intent(this, paystyle == 0 ? BuyWithPaypalReviewActivity.class : PaymentInfoActivity.class);
-                startActivity(reviewIntent);
-//            } else {
-//                emailHint.setTextColor(Color.RED);
-//                emailHint.setBackgroundColor(Color.parseColor("#FFC0CB"));
-//                emailEditText.setBackgroundColor(Color.parseColor("#FFC0CB"));
-//            }
+            // if
+            // (ValidityCheckUtil.isValidityEmailAddress(emailEditText.getText().toString()))
+            // {
+            Intent reviewIntent = new Intent(this,
+                    paystyle == 0 ? BuyWithPaypalReviewActivity.class
+                            : PaymentInfoActivity.class);
+            startActivity(reviewIntent);
+            // } else {
+            // emailHint.setTextColor(Color.RED);
+            // emailHint.setBackgroundColor(Color.parseColor("#FFC0CB"));
+            // emailEditText.setBackgroundColor(Color.parseColor("#FFC0CB"));
+            // }
             break;
         case R.id.shipping_method_standard:
             paymethod = Constant.Pay_method.Standard;
@@ -178,39 +190,50 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
 
         }
     }
-    
+
     private void saveUserProfile() {
-        Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(this)
+                .edit();
         editor.putString(UserProfile.EMAIL, emailTextView.getText().toString())
-        .putString(UserProfile.SHIP_METHOD, paymethod.toString())
-        .commit();
+                .putString(UserProfile.SHIP_METHOD, paymethod.toString())
+                .commit();
         Log.d(this, "paymethod:" + paymethod.toString());
         mShippingAddressFragment.saveUserProfile();
     }
 
-    private void resetPaymethodUI(Pay_method method){
+    private void resetPaymethodUI(Pay_method method) {
         Log.d(this, "resetPaymethodUI method:" + method);
-        shippingMethodStandard.setCompoundDrawablesRelative(null, null, null, null);
-        shippingMethodPriority.setCompoundDrawablesRelative(null, null, null, null);
-        shippingMethodOneday.setCompoundDrawablesRelative(null, null, null, null);
-        Drawable drawable = getResources().getDrawable(R.drawable.icon_checkmark);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        if(method == Constant.Pay_method.Standard){
-            shippingMethodStandard.setCompoundDrawablesRelative(null, null, drawable, null);
-        } else if (method == Constant.Pay_method.Priority){
-            shippingMethodPriority.setCompoundDrawablesRelative(null, null, drawable, null);
-        } else if (method == Constant.Pay_method.Oneday){
-            shippingMethodOneday.setCompoundDrawablesRelative(null, null, drawable, null);
+        shippingMethodStandard.setCompoundDrawablesRelative(null, null, null,
+                null);
+        shippingMethodPriority.setCompoundDrawablesRelative(null, null, null,
+                null);
+        shippingMethodOneday.setCompoundDrawablesRelative(null, null, null,
+                null);
+        Drawable drawable = getResources().getDrawable(
+                R.drawable.icon_checkmark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                drawable.getMinimumHeight());
+        if (method == Constant.Pay_method.Standard) {
+            shippingMethodStandard.setCompoundDrawablesRelative(null, null,
+                    drawable, null);
+        } else if (method == Constant.Pay_method.Priority) {
+            shippingMethodPriority.setCompoundDrawablesRelative(null, null,
+                    drawable, null);
+        } else if (method == Constant.Pay_method.Oneday) {
+            shippingMethodOneday.setCompoundDrawablesRelative(null, null,
+                    drawable, null);
         }
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         // TODO Auto-generated method stub
-        if(hasFocus){
-            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color_blue_focus));
+        if (hasFocus) {
+            emailTextViewHint.setTextColor(getResources().getColor(
+                    R.color.paypal_text_hint_color_blue_focus));
         } else {
-            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color));
+            emailTextViewHint.setTextColor(getResources().getColor(
+                    R.color.paypal_text_hint_color));
         }
     }
 

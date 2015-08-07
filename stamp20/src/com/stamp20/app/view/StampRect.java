@@ -8,7 +8,7 @@ public class StampRect extends RectF {
     private int top;
     private int right;
     private int bottom;
-    
+
     public StampRect() {
     }
 
@@ -50,5 +50,5 @@ public class StampRect extends RectF {
     public void setBottom(int bottom) {
         this.bottom = bottom;
     }
-    
+
 }

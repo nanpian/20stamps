@@ -3,7 +3,7 @@ package com.stamp20.app.util;
 import android.graphics.Bitmap;
 
 public class BitmapCache {
-    
+
     private Bitmap date;
 
     private BitmapCache() {
@@ -18,7 +18,7 @@ public class BitmapCache {
 
     public void put(Bitmap src) {
         if (src != null && (date == null || !date.sameAs(src))) {
-            if (date!=null) {
+            if (date != null) {
                 date.recycle();
                 date = null;
             }
