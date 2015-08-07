@@ -25,9 +25,7 @@ import android.widget.RelativeLayout;
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
 import com.stamp20.app.data.Cart;
-import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
-import com.stamp20.app.util.Log;
 import com.stamp20.app.util.PhotoFromWhoRecorder;
 import com.stamp20.app.view.ImageUtil;
 import com.stamp20.app.view.RoundNumber;
@@ -92,7 +90,6 @@ public class HomeActivity extends BaseTitleActivity implements
         }
     };
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -163,6 +160,7 @@ public class HomeActivity extends BaseTitleActivity implements
     /**
      * 加载图片
      */
+    @SuppressWarnings("deprecation")
     private void loadImageMem() {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
@@ -198,9 +196,6 @@ public class HomeActivity extends BaseTitleActivity implements
         TypedArray typedArray = getResources().obtainTypedArray(
                 R.array.home_background);
         if (null != typedArray) {
-            if (Constant.debugXixiaLog()) {
-                Log.i("xixia", "typedArray:" + typedArray.length());
-            }
             for (int i = 0; i < typedArray.length(); i++) {
                 mDrawableIDs.add(typedArray.getResourceId(i, 0));
             }
