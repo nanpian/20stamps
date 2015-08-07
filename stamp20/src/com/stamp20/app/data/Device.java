@@ -2,19 +2,10 @@ package com.stamp20.app.data;
 
 public class Device {
 
-    public static final String DeviceIdCustomStamp = "Custom Stamp";
     public static final String DeviceIdFlatPhotoCard = "Greeting Card";
+    public static final String DeviceIdCustomStamp = "Custom Stamp";
 
     // stamps是个奇葩, 选了rate之后,要利用DeviceStamp重新设定Price, TaxableAmount和Name
-
-    static public String getDeviceName(String deviceId) {
-        if (deviceId.equals(DeviceIdFlatPhotoCard)) {
-            return "Greeting Card";
-        } else if (deviceId.equals(DeviceIdCustomStamp)) {
-            return "Custom Postage";
-        }
-        return "Unknown";
-    }
 
     static public int getPrice(String deviceId) {
         if (deviceId.equals(DeviceIdFlatPhotoCard)) {
@@ -27,5 +18,14 @@ public class Device {
 
     static public int getTaxableAmount(String deviceId) {
         return getPrice(deviceId);
+    }
+
+    static public String getDeviceName(String deviceId) {
+        if (deviceId.equals(DeviceIdFlatPhotoCard)) {
+            return "Greeting Card";
+        } else if (deviceId.equals(DeviceIdCustomStamp)) {
+            return "Custom Postage";
+        }
+        return "Unknown";
     }
 }

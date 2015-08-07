@@ -1,7 +1,6 @@
 package com.stamp20.app.data;
 
 import java.util.ArrayList;
-
 import android.util.Log;
 
 import com.parse.DeleteCallback;
@@ -18,8 +17,8 @@ import com.parse.SaveCallback;
  * */
 public class OrderItemProvider {
 
-    private static final String CART_LABEL = "loalCart";
     private static final String LogTag = "20stamps";
+    private static final String CART_LABEL = "loalCart";
 
     /*
      * Add one orderItem to local store
@@ -35,18 +34,18 @@ public class OrderItemProvider {
         });
     }
 
-    // may take long time. Don't run on UI thread
-    public ArrayList<OrderItem> getAllOrderItemInCart() {
-        ParseQuery<OrderItem> query = ParseQuery.getQuery(OrderItem.OrderItem);
-        query.fromPin(CART_LABEL);
-        ArrayList<OrderItem> result = new ArrayList<OrderItem>();
-        try {
-            result.addAll(query.find());
-        } catch (ParseException e) {
-            Log.e("LogTag", "Error query order items in cart from local store");
-            e.printStackTrace();
-        }
-        return result;
+    /*
+     * Remove one orderItem from local store
+     */
+    public void removeOrderItemFromCart(OrderItem orderItem) {
+        orderItem.unpinInBackground(CART_LABEL, new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e("LogTag", "Error removeOrderItemFromCart local store " + e.getMessage());
+                }
+            }
+        });
     }
 
     public OrderItem getOrderItemByDesignLocalId(String designLocalId) {
@@ -63,18 +62,18 @@ public class OrderItemProvider {
         return result;
     }
 
-    /*
-     * Remove one orderItem from local store
-     */
-    public void removeOrderItemFromCart(OrderItem orderItem) {
-        orderItem.unpinInBackground(CART_LABEL, new DeleteCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e("LogTag", "Error removeOrderItemFromCart local store " + e.getMessage());
-                }
-            }
-        });
+    // may take long time. Don't run on UI thread
+    public ArrayList<OrderItem> getAllOrderItemInCart() {
+        ParseQuery<OrderItem> query = ParseQuery.getQuery(OrderItem.OrderItem);
+        query.fromPin(CART_LABEL);
+        ArrayList<OrderItem> result = new ArrayList<OrderItem>();
+        try {
+            result.addAll(query.find());
+        } catch (ParseException e) {
+            Log.e("LogTag", "Error query order items in cart from local store");
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

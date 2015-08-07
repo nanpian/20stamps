@@ -20,8 +20,8 @@ import android.opengl.GLES20;
 
 public class GPUImageMixBlendFilter extends GPUImageTwoInputFilter {
 
-    private float mMix;
     private int mMixLocation;
+    private float mMix;
 
     public GPUImageMixBlendFilter(String fragmentShader) {
         this(fragmentShader, 0.5f);

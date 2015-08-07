@@ -19,17 +19,14 @@ package jp.co.cyberagent.android.gpuimage;
 import android.opengl.GLES20;
 
 public class GPUImageTwoPassTextureSamplingFilter extends GPUImageTwoPassFilter {
-    public GPUImageTwoPassTextureSamplingFilter(String firstVertexShader, String firstFragmentShader,
-            String secondVertexShader, String secondFragmentShader) {
+    public GPUImageTwoPassTextureSamplingFilter(String firstVertexShader, String firstFragmentShader, String secondVertexShader, String secondFragmentShader) {
         super(firstVertexShader, firstFragmentShader, secondVertexShader, secondFragmentShader);
     }
 
-    public float getHorizontalTexelOffsetRatio() {
-        return 1f;
-    }
-
-    public float getVerticalTexelOffsetRatio() {
-        return 1f;
+    @Override
+    public void onInit() {
+        super.onInit();
+        initTexelOffsets();
     }
 
     protected void initTexelOffsets() {
@@ -49,14 +46,16 @@ public class GPUImageTwoPassTextureSamplingFilter extends GPUImageTwoPassFilter 
     }
 
     @Override
-    public void onInit() {
-        super.onInit();
-        initTexelOffsets();
-    }
-
-    @Override
     public void onOutputSizeChanged(int width, int height) {
         super.onOutputSizeChanged(width, height);
         initTexelOffsets();
+    }
+
+    public float getVerticalTexelOffsetRatio() {
+        return 1f;
+    }
+
+    public float getHorizontalTexelOffsetRatio() {
+        return 1f;
     }
 }

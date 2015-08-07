@@ -65,12 +65,12 @@ public class GPUImageChromaKeyBlendFilter extends GPUImageTwoInputFilter {
             + "     gl_FragColor = vec4(baseColor.rgb * (1.0 - overlayColor.a) + setlum(overlayColor.rgb, lum(baseColor.rgb)) * overlayColor.a, baseColor.a);\n"
             + " }";
 
-    private float[] mColorToReplace = new float[] { 0.0f, 1.0f, 0.0f };
+    private int mThresholdSensitivityLocation;
+    private int mSmoothingLocation;
     private int mColorToReplaceLocation;
     private float mSmoothing = 0.1f;
-    private int mSmoothingLocation;
     private float mThresholdSensitivity = 0.3f;
-    private int mThresholdSensitivityLocation;
+    private float[] mColorToReplace = new float[] { 0.0f, 1.0f, 0.0f };
 
     public GPUImageChromaKeyBlendFilter() {
         super(CHROMA_KEY_BLEND_FRAGMENT_SHADER);
@@ -94,23 +94,6 @@ public class GPUImageChromaKeyBlendFilter extends GPUImageTwoInputFilter {
     }
 
     /**
-     * The color to be replaced is specified using individual red, green, and
-     * blue components (normalized to 1.0). The default is green: (0.0, 1.0,
-     * 0.0).
-     *
-     * @param redComponent
-     *            Red component of color to be replaced
-     * @param greenComponent
-     *            Green component of color to be replaced
-     * @param blueComponent
-     *            Blue component of color to be replaced
-     */
-    public void setColorToReplace(float redComponent, float greenComponent, float blueComponent) {
-        mColorToReplace = new float[] { redComponent, greenComponent, blueComponent };
-        setFloatVec3(mColorToReplaceLocation, mColorToReplace);
-    }
-
-    /**
      * The degree of smoothing controls how gradually similar colors are
      * replaced in the image The default value is 0.1
      */
@@ -126,5 +109,22 @@ public class GPUImageChromaKeyBlendFilter extends GPUImageTwoInputFilter {
     public void setThresholdSensitivity(final float thresholdSensitivity) {
         mThresholdSensitivity = thresholdSensitivity;
         setFloat(mThresholdSensitivityLocation, mThresholdSensitivity);
+    }
+
+    /**
+     * The color to be replaced is specified using individual red, green, and
+     * blue components (normalized to 1.0). The default is green: (0.0, 1.0,
+     * 0.0).
+     *
+     * @param redComponent
+     *            Red component of color to be replaced
+     * @param greenComponent
+     *            Green component of color to be replaced
+     * @param blueComponent
+     *            Blue component of color to be replaced
+     */
+    public void setColorToReplace(float redComponent, float greenComponent, float blueComponent) {
+        mColorToReplace = new float[] { redComponent, greenComponent, blueComponent };
+        setFloatVec3(mColorToReplaceLocation, mColorToReplace);
     }
 }

@@ -33,24 +33,43 @@ import com.stamp20.app.util.FontManager;
  */
 public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
-    public static final String ADD_ITEMS_TOCAET = "add_new_items";
     private static final String TAG = "ShopCartItemsActivity";
-    private ImageView backHomeView;
-    private Button btnCheckout;
-    private Button btnPaypal;
-    private Boolean fromHome = false;
-    private ImageView headerPrevious;
-    private TextView headerTitle;
-    private LinearLayout layoutAddMore;
+    private TextView textHeaderTile;
+    private ListView listCartItems;
     private LayoutInflater layoutInflater;
     private LinearLayout layoutListFooter;
-    private ListView listCartItems;
-    private BitmapCache mCache = null;
-    private List<Design> mDesigns;
+    private LinearLayout layoutAddMore;
+    public static final String ADD_ITEMS_TOCAET = "add_new_items";
     private ShopCartItemsAdapter shopItemsAdapter;
-    private TextView textHeaderTile;
+    private List<Design> mDesigns;
+    private BitmapCache mCache = null;
+    private ImageView backHomeView;
+    private Button btnPaypal;
+    private Button btnCheckout;
+    private ImageView headerPrevious;
+    private TextView headerTitle;
+    private Boolean fromHome = false;
 
     public ShopCartItemsActivity() {
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.shop_cartitems_activity);
+        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
+        // mCache = BitmapCache.getCache();
+        // initListView();
+        mDesigns = Cart.getInstance().getDesigns();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            if (intent.getStringExtra("from") != null && intent.getStringExtra("from").equals("home")) {
+                fromHome = true;
+            }
+        }
+
+        initView();
     }
 
     /*
@@ -116,25 +135,6 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         // intent.setClass(ShopCartItemsActivity.this, HomeActivity.class);
         // startActivity(intent);
         // }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.shop_cartitems_activity);
-        FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
-        // mCache = BitmapCache.getCache();
-        // initListView();
-        mDesigns = Cart.getInstance().getDesigns();
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            if (intent.getStringExtra("from") != null && intent.getStringExtra("from").equals("home")) {
-                fromHome = true;
-            }
-        }
-
-        initView();
     }
 
     @Override

@@ -11,10 +11,10 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ScrollView;
 
 public class ElasticScrollView extends ScrollView {
-    private boolean animationFinish = true;
     private View inner;
-    private Rect normal = new Rect();
     private float y;
+    private Rect normal = new Rect();
+    private boolean animationFinish = true;
 
     public ElasticScrollView(Context context) {
         super(context);
@@ -24,32 +24,26 @@ public class ElasticScrollView extends ScrollView {
         super(context, attrs);
     }
 
-    public void animation() {
-        // 开启移动动画
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, normal.top - inner.getTop());
-        ta.setDuration(200);
-        ta.setAnimationListener(new AnimationListener() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                inner.clearAnimation();
-                // 设置回到正常的布局位置
-                inner.layout(normal.left, normal.top, normal.right, normal.bottom);
-                normal.setEmpty();
-                animationFinish = true;
-            }
+    @Override
+    protected void onFinishInflate() {
+        if (getChildCount() > 0) {
+            inner = getChildAt(0);
+        }
+    }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return super.onInterceptTouchEvent(ev);
+    }
 
-            }
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-                animationFinish = false;
-
-            }
-        });
-        inner.startAnimation(ta);
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (inner == null) {
+            return super.onTouchEvent(ev);
+        } else {
+            commOnTouchEvent(ev);
+        }
+        return super.onTouchEvent(ev);
     }
 
     public void commOnTouchEvent(MotionEvent ev) {
@@ -85,8 +79,7 @@ public class ElasticScrollView extends ScrollView {
                         normal.set(inner.getLeft(), inner.getTop(), inner.getRight(), inner.getBottom());
                     }
                     // 移动布局
-                    inner.layout(inner.getLeft(), inner.getTop() - deltaY / 2, inner.getRight(), inner.getBottom()
-                            - deltaY / 2);
+                    inner.layout(inner.getLeft(), inner.getTop() - deltaY / 2, inner.getRight(), inner.getBottom() - deltaY / 2);
                 } else {
                     super.onTouchEvent(ev);
                 }
@@ -95,6 +88,36 @@ public class ElasticScrollView extends ScrollView {
                 break;
             }
         }
+    }
+
+    // 开启动画移动
+
+    public void animation() {
+        // 开启移动动画
+        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, normal.top - inner.getTop());
+        ta.setDuration(200);
+        ta.setAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                animationFinish = false;
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                inner.clearAnimation();
+                // 设置回到正常的布局位置
+                inner.layout(normal.left, normal.top, normal.right, normal.bottom);
+                normal.setEmpty();
+                animationFinish = true;
+            }
+        });
+        inner.startAnimation(ta);
     }
 
     // 是否需要开启动画
@@ -110,30 +133,6 @@ public class ElasticScrollView extends ScrollView {
             return true;
         }
         return false;
-    }
-
-    // 开启动画移动
-
-    @Override
-    protected void onFinishInflate() {
-        if (getChildCount() > 0) {
-            inner = getChildAt(0);
-        }
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return super.onInterceptTouchEvent(ev);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        if (inner == null) {
-            return super.onTouchEvent(ev);
-        } else {
-            commOnTouchEvent(ev);
-        }
-        return super.onTouchEvent(ev);
     }
 
 }

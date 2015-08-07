@@ -29,14 +29,14 @@ import com.stamp20.app.util.Log;
 
 public class BuyWithPaypalReviewActivity extends Activity implements View.OnClickListener {
 
-    private static PayPalConfiguration config = new PayPalConfiguration().environment(CONFIG_ENVIRONMENT)
-            .clientId(CONFIG_CLIENT_ID)
-            // The following are only used in PayPalFuturePaymentActivity.
-            .merchantName("Hipster Store").merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
-            .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
-    // note that these credentials will differ between live & sandbox
-    // environments.
-    private static final String CONFIG_CLIENT_ID = "AWbLyslZ28sq-VkbWOs1jpCHyE-i6HON8-LMD4gIE7t2olYiGcIKi8n6yZ0NBKRY8XLTHWp5LGPX8n9j";
+    private ImageView headerPrevious;
+    private TextView headerTitle;
+    private ImageView tailPrevious;
+    private TextView tailTitle;
+    private ViewGroup header;
+    private ViewGroup tail;
+    private int payStyle;
+
     /**
      * - Set to PayPalConfiguration.ENVIRONMENT_PRODUCTION to move real money.
      * 
@@ -47,23 +47,29 @@ public class BuyWithPaypalReviewActivity extends Activity implements View.OnClic
      * without communicating to PayPal's servers.
      */
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
-    private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
+
+    // note that these credentials will differ between live & sandbox
+    // environments.
+    private static final String CONFIG_CLIENT_ID = "AWbLyslZ28sq-VkbWOs1jpCHyE-i6HON8-LMD4gIE7t2olYiGcIKi8n6yZ0NBKRY8XLTHWp5LGPX8n9j";
+
     private static final int REQUEST_CODE_PAYMENT = 1;
+    private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final int REQUEST_CODE_PROFILE_SHARING = 3;
-    private ViewGroup header;
 
-    private ImageView headerPrevious;
+    private static PayPalConfiguration config = new PayPalConfiguration().environment(CONFIG_ENVIRONMENT).clientId(CONFIG_CLIENT_ID)
+            // The following are only used in PayPalFuturePaymentActivity.
+            .merchantName("Hipster Store").merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
+            .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
-    private TextView headerTitle;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
 
-    private int payStyle;
-    private ViewGroup tail;
-    private ImageView tailPrevious;
-
-    private TextView tailTitle;
-
-    private PayPalPayment getThingToBuy(String paymentIntent) {
-        return new PayPalPayment(new BigDecimal("1.75"), "USD", "Order#1003352", paymentIntent);
+        setContentView(R.layout.activity_buy_with_paypay_review);
+        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
+        initView();
+        startPayService();
     }
 
     private void initView() {
@@ -82,90 +88,21 @@ public class BuyWithPaypalReviewActivity extends Activity implements View.OnClic
         tailTitle.setText(R.string.pay);
     }
 
+    private void startPayService() {
+        Intent intent = new Intent(this, PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        startService(intent);
+    }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_PAYMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                if (confirm != null) {
-                    try {
-                        Log.d(this, confirm.toJSONObject().toString(4));
-                        Log.i(this, confirm.getPayment().toJSONObject().toString(4));
-                        /**
-                         * TODO: send 'confirm' (and possibly
-                         * confirm.getPayment() to your server for verification
-                         * or consent completion. See
-                         * https://developer.paypal.com
-                         * /webapps/developer/docs/integration
-                         * /mobile/verify-mobile-payment/ for more details.
-                         *
-                         * For sample mobile backend interactions, see
-                         * https://github
-                         * .com/paypal/rest-api-sdk-python/tree/master
-                         * /samples/mobile_backend
-                         */
-                        Toast.makeText(getApplicationContext(), "PaymentConfirmation info received from PayPal",
-                                Toast.LENGTH_LONG).show();
-
-                    } catch (JSONException e) {
-                        Log.e(this, "an extremely unlikely failure occurred: ", e);
-                    }
-                }
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.i(this, "The user canceled.");
-            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-                Log.i(this, "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
-            }
-        } else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                PayPalAuthorization auth = data
-                        .getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
-                if (auth != null) {
-                    try {
-                        Log.i("FuturePaymentExample", auth.toJSONObject().toString(4));
-
-                        String authorization_code = auth.getAuthorizationCode();
-                        Log.i("FuturePaymentExample", authorization_code);
-
-                        sendAuthorizationToServer(auth);
-                        Toast.makeText(getApplicationContext(), "Future Payment code received from PayPal",
-                                Toast.LENGTH_LONG).show();
-
-                    } catch (JSONException e) {
-                        Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
-                    }
-                }
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.i("FuturePaymentExample", "The user canceled.");
-            } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
-                Log.i("FuturePaymentExample",
-                        "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-            }
-        } else if (requestCode == REQUEST_CODE_PROFILE_SHARING) {
-            if (resultCode == Activity.RESULT_OK) {
-                PayPalAuthorization auth = data
-                        .getParcelableExtra(PayPalProfileSharingActivity.EXTRA_RESULT_AUTHORIZATION);
-                if (auth != null) {
-                    try {
-                        Log.i("ProfileSharingExample", auth.toJSONObject().toString(4));
-
-                        String authorization_code = auth.getAuthorizationCode();
-                        Log.i("ProfileSharingExample", authorization_code);
-
-                        sendAuthorizationToServer(auth);
-                        Toast.makeText(getApplicationContext(), "Profile Sharing code received from PayPal",
-                                Toast.LENGTH_LONG).show();
-
-                    } catch (JSONException e) {
-                        Log.e("ProfileSharingExample", "an extremely unlikely failure occurred: ", e);
-                    }
-                }
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.i("ProfileSharingExample", "The user canceled.");
-            } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
-                Log.i("ProfileSharingExample",
-                        "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-            }
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.header_previous:
+            finish();
+            break;
+        case R.id.tail:
+            onBuyPressed();
+            break;
         }
     }
 
@@ -196,27 +133,90 @@ public class BuyWithPaypalReviewActivity extends Activity implements View.OnClic
         startActivityForResult(intent, REQUEST_CODE_PAYMENT);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.header_previous:
-            finish();
-            break;
-        case R.id.tail:
-            onBuyPressed();
-            break;
-        }
+    private PayPalPayment getThingToBuy(String paymentIntent) {
+        return new PayPalPayment(new BigDecimal("1.75"), "USD", "Order#1003352", paymentIntent);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PAYMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                if (confirm != null) {
+                    try {
+                        Log.d(this, confirm.toJSONObject().toString(4));
+                        Log.i(this, confirm.getPayment().toJSONObject().toString(4));
+                        /**
+                         * TODO: send 'confirm' (and possibly
+                         * confirm.getPayment() to your server for verification
+                         * or consent completion. See
+                         * https://developer.paypal.com
+                         * /webapps/developer/docs/integration
+                         * /mobile/verify-mobile-payment/ for more details.
+                         *
+                         * For sample mobile backend interactions, see
+                         * https://github
+                         * .com/paypal/rest-api-sdk-python/tree/master
+                         * /samples/mobile_backend
+                         */
+                        Toast.makeText(getApplicationContext(), "PaymentConfirmation info received from PayPal", Toast.LENGTH_LONG).show();
 
-        setContentView(R.layout.activity_buy_with_paypay_review);
-        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
-        initView();
-        startPayService();
+                    } catch (JSONException e) {
+                        Log.e(this, "an extremely unlikely failure occurred: ", e);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i(this, "The user canceled.");
+            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                Log.i(this, "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+            }
+        } else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                PayPalAuthorization auth = data.getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
+                if (auth != null) {
+                    try {
+                        Log.i("FuturePaymentExample", auth.toJSONObject().toString(4));
+
+                        String authorization_code = auth.getAuthorizationCode();
+                        Log.i("FuturePaymentExample", authorization_code);
+
+                        sendAuthorizationToServer(auth);
+                        Toast.makeText(getApplicationContext(), "Future Payment code received from PayPal", Toast.LENGTH_LONG).show();
+
+                    } catch (JSONException e) {
+                        Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i("FuturePaymentExample", "The user canceled.");
+            } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
+                Log.i("FuturePaymentExample",
+                        "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+            }
+        } else if (requestCode == REQUEST_CODE_PROFILE_SHARING) {
+            if (resultCode == Activity.RESULT_OK) {
+                PayPalAuthorization auth = data.getParcelableExtra(PayPalProfileSharingActivity.EXTRA_RESULT_AUTHORIZATION);
+                if (auth != null) {
+                    try {
+                        Log.i("ProfileSharingExample", auth.toJSONObject().toString(4));
+
+                        String authorization_code = auth.getAuthorizationCode();
+                        Log.i("ProfileSharingExample", authorization_code);
+
+                        sendAuthorizationToServer(auth);
+                        Toast.makeText(getApplicationContext(), "Profile Sharing code received from PayPal", Toast.LENGTH_LONG).show();
+
+                    } catch (JSONException e) {
+                        Log.e("ProfileSharingExample", "an extremely unlikely failure occurred: ", e);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i("ProfileSharingExample", "The user canceled.");
+            } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
+                Log.i("ProfileSharingExample",
+                        "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+            }
+        }
     }
 
     private void sendAuthorizationToServer(PayPalAuthorization authorization) {
@@ -234,12 +234,6 @@ public class BuyWithPaypalReviewActivity extends Activity implements View.OnClic
          * rest-api-sdk-python/tree/master/samples/mobile_backend
          */
 
-    }
-
-    private void startPayService() {
-        Intent intent = new Intent(this, PayPalService.class);
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-        startService(intent);
     }
 
 }

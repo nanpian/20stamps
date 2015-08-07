@@ -7,9 +7,11 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,54 +27,33 @@ import com.stamp20.app.util.UserProfile;
 
 public class BuyWithPaypalShippingActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener {
 
-    private TextView emailTextView;
-    private TextView emailTextViewHint;
-    TextWatcher emailTextViewWatcher = new TextWatcher() {
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-            if (s.length() != 0) {
-                emailTextViewHint.setText(R.string.email_confirmed);
-            } else {
-                emailTextViewHint.setText("");
-            }
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
-        }
-    };
-    private ViewGroup header;
-    private TextView headerButton;
     private ImageView headerPrevious;
     private TextView headerTitle;
+    private TextView tailTitle;
+    private TextView headerButton;
+    private ViewGroup header;
+    private ViewGroup tail;
+    private TextView emailTextViewHint;
+    private TextView emailTextView;
+    private TextView shippingMethodStandard;
+    private TextView shippingMethodPriority;
+    private TextView shippingMethodOneday;
     private SharedPreferences mSharedPreferences;
     private ShippingAddressFragment mShippingAddressFragment;
-    private Pay_method paymethod;
+
     private int paystyle;
-    private TextView shippingMethodOneday;
-    private TextView shippingMethodPriority;
+    private Pay_method paymethod;
 
-    private TextView shippingMethodStandard;
-    private ViewGroup tail;
-
-    private TextView tailTitle;
-
-    private void getData(String userProfile, TextView hint, int resId, TextView editText) {
-        String value = mSharedPreferences.getString(UserProfile.EMAIL, "");
-        if (!value.isEmpty()) {
-            hint.setText(resId);
-            editText.setText(value);
-        } else {
-            hint.setText("");
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        paystyle = getIntent().getIntExtra(Constant.PAY_STYLE, 0);
+        setContentView(R.layout.activity_buy_with_paypay_shipping);
+        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        paymethod = Constant.Pay_method.Standard;
+        init();
     }
 
     private void init() {
@@ -104,10 +85,64 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         shippingMethodOneday.setOnClickListener(this);
 
         if (mShippingAddressFragment == null) {
-            mShippingAddressFragment = (ShippingAddressFragment) getFragmentManager().findFragmentById(
-                    R.id.shipping_address_fragment);
+            mShippingAddressFragment = (ShippingAddressFragment) getFragmentManager().findFragmentById(R.id.shipping_address_fragment);
         }
         setActivityColor();
+    }
+
+    TextWatcher emailTextViewWatcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() != 0) {
+                emailTextViewHint.setText(R.string.email_confirmed);
+            } else {
+                emailTextViewHint.setText("");
+            }
+        }
+    };
+
+    private void getData(String userProfile, TextView hint, int resId, TextView editText) {
+        String value = mSharedPreferences.getString(UserProfile.EMAIL, "");
+        if (!value.isEmpty()) {
+            hint.setText(resId);
+            editText.setText(value);
+        } else {
+            hint.setText("");
+        }
+    }
+
+    private void setActivityColor() {
+        // TODO Auto-generated method stub
+        switch (paystyle) {
+        case 0:
+            header.setBackgroundResource(R.color.tabbar_blue_background);
+            tail.setBackgroundResource(R.color.tabbar_blue_background);
+            break;
+
+        case 1:
+            header.setBackgroundResource(R.color.activity_background_gray);
+            tail.setBackgroundResource(R.color.tabbar_green_background);
+            break;
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
     }
 
     @Override
@@ -123,8 +158,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
             // if
             // (ValidityCheckUtil.isValidityEmailAddress(emailEditText.getText().toString()))
             // {
-            Intent reviewIntent = new Intent(this, paystyle == 0 ? BuyWithPaypalReviewActivity.class
-                    : PaymentInfoActivity.class);
+            Intent reviewIntent = new Intent(this, paystyle == 0 ? BuyWithPaypalReviewActivity.class : PaymentInfoActivity.class);
             startActivity(reviewIntent);
             // } else {
             // emailHint.setTextColor(Color.RED);
@@ -148,32 +182,11 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        paystyle = getIntent().getIntExtra(Constant.PAY_STYLE, 0);
-        setContentView(R.layout.activity_buy_with_paypay_shipping);
-        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        paymethod = Constant.Pay_method.Standard;
-        init();
-    }
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        // TODO Auto-generated method stub
-        if (hasFocus) {
-            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color_blue_focus));
-        } else {
-            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color));
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
+    private void saveUserProfile() {
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString(UserProfile.EMAIL, emailTextView.getText().toString()).putString(UserProfile.SHIP_METHOD, paymethod.toString()).commit();
+        Log.d(this, "paymethod:" + paymethod.toString());
+        mShippingAddressFragment.saveUserProfile();
     }
 
     private void resetPaymethodUI(Pay_method method) {
@@ -192,28 +205,14 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
         }
     }
 
-    private void saveUserProfile() {
-        Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        editor.putString(UserProfile.EMAIL, emailTextView.getText().toString())
-                .putString(UserProfile.SHIP_METHOD, paymethod.toString()).commit();
-        Log.d(this, "paymethod:" + paymethod.toString());
-        mShippingAddressFragment.saveUserProfile();
-    }
-
-    private void setActivityColor() {
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
         // TODO Auto-generated method stub
-        switch (paystyle) {
-        case 0:
-            header.setBackgroundResource(R.color.tabbar_blue_background);
-            tail.setBackgroundResource(R.color.tabbar_blue_background);
-            break;
-
-        case 1:
-            header.setBackgroundResource(R.color.activity_background_gray);
-            tail.setBackgroundResource(R.color.tabbar_green_background);
-            break;
+        if (hasFocus) {
+            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color_blue_focus));
+        } else {
+            emailTextViewHint.setTextColor(getResources().getColor(R.color.paypal_text_hint_color));
         }
-
     }
 
 }

@@ -24,27 +24,6 @@ public class FontManager {
     private static Typeface mTypefaceBold = null;
     private static Typeface mTypefaceNormal = null;
 
-    public static void changeFonts(Context mContext, View view) {
-
-        mTypefaceNormal = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans.ttf");
-
-        if (view instanceof TextView) {
-            ((TextView) view).setTypeface(mTypefaceNormal);
-        }
-    }
-
-    public static void changeFonts(Context mContext, ViewGroup root) {
-
-        mTypefaceNormal = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans.ttf");
-
-        for (int i = 0; i < root.getChildCount(); i++) {
-            View v = root.getChildAt(i);
-            if (v instanceof TextView) {
-                ((TextView) v).setTypeface(mTypefaceNormal);
-            }
-        }
-    }
-
     public static void changeFonts(ViewGroup root, Activity activity) {
 
         mTypefaceBold = Typeface.createFromAsset(activity.getAssets(), "fonts/OpenSans-Semibold.ttf");
@@ -53,8 +32,7 @@ public class FontManager {
         for (int i = 0; i < root.getChildCount(); i++) {
             View v = root.getChildAt(i);
             if (v instanceof TextView) {
-                if (v.getId() == R.id.header_title || v.getId() == R.id.tail_text
-                        || (v.getTag() != null && v.getTag().equals("forBoldText"))) {
+                if (v.getId() == R.id.header_title || v.getId() == R.id.tail_text || (v.getTag() != null && v.getTag().equals("forBoldText"))) {
                     ((TextView) v).setTypeface(mTypefaceBold);
                 } else {
                     ((TextView) v).setTypeface(mTypefaceNormal);
@@ -74,6 +52,27 @@ public class FontManager {
             } else if (v instanceof ViewGroup) {
                 changeFonts((ViewGroup) v, activity);
             }
+        }
+    }
+
+    public static void changeFonts(Context mContext, ViewGroup root) {
+
+        mTypefaceNormal = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans.ttf");
+
+        for (int i = 0; i < root.getChildCount(); i++) {
+            View v = root.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTypeface(mTypefaceNormal);
+            }
+        }
+    }
+
+    public static void changeFonts(Context mContext, View view) {
+
+        mTypefaceNormal = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans.ttf");
+
+        if (view instanceof TextView) {
+            ((TextView) view).setTypeface(mTypefaceNormal);
         }
     }
 

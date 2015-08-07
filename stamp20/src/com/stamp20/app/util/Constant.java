@@ -4,17 +4,33 @@ import android.util.Log;
 
 public class Constant {
 
-    public enum Pay_method {
-        Oneday, Priority, Standard
-    }
     private static final boolean DEBUG = false;
-    public static final String PAY_STYLE = "pay_with_paypal_or_checkout";
     /* 用来监测是否是初次启动的 SharedPreferences_Guide */
     public static final String SHAREDPREFERENCES_GUIDE = "SharedPreferences_Guide";
     public static final String SHAREDPREFERENCES_GUIDE_FIRSTSTART = "SharedPreferences_Guide_FirstStart";
-
     // MainActivity向ChooseRateActivity传递的Extra，判断当前Stamp的方向
     public static final String STAMP_IS_HORIZONTAL = "stamp_is_horizontal";
+    public static final String PAY_STYLE = "pay_with_paypal_or_checkout";
+
+    public enum Pay_method {
+        Standard, Priority, Oneday
+    }
+
+    // adb shell setprop log.tag.propertyName V : open this property
+    // adb shell setprop log.tag.propertyName S : close this property
+    public static boolean isPropertyEnabled(String propertyName) {
+        return DEBUG && Log.isLoggable(propertyName, Log.VERBOSE);
+    }
+
+    public static boolean debugGuideActivity() {
+        /* 是否调试GuideActivity */
+        // adb shell setprop log.tag.stamp20_first_start V : make this return
+        // true
+        // adb shell setprop log.tag.stamp20_first_start S : make this return
+        // false
+        final String STAMP20_FIRST_START = "stamp20_first_start";
+        return Constant.isPropertyEnabled(STAMP20_FIRST_START);
+    }
 
     public static boolean debugCardsActivity() {
         /* 是否调试debugCardsActivity */
@@ -36,16 +52,6 @@ public class Constant {
         return Constant.isPropertyEnabled(STAMP20_CARDS_TEMPLATE_CHOOSE_START);
     }
 
-    public static boolean debugGuideActivity() {
-        /* 是否调试GuideActivity */
-        // adb shell setprop log.tag.stamp20_first_start V : make this return
-        // true
-        // adb shell setprop log.tag.stamp20_first_start S : make this return
-        // false
-        final String STAMP20_FIRST_START = "stamp20_first_start";
-        return Constant.isPropertyEnabled(STAMP20_FIRST_START);
-    }
-
     public static boolean debugMainActivity() {
         /* 是否调试debugCardsActivity */
         // adb shell setprop log.tag.stamp20_main_start V : make this return
@@ -63,12 +69,6 @@ public class Constant {
         // false
         final String STAMP20_XIXIA_LOG = "stamp20_xixia_log";
         return Constant.isPropertyEnabled(STAMP20_XIXIA_LOG);
-    }
-
-    // adb shell setprop log.tag.propertyName V : open this property
-    // adb shell setprop log.tag.propertyName S : close this property
-    public static boolean isPropertyEnabled(String propertyName) {
-        return DEBUG && Log.isLoggable(propertyName, Log.VERBOSE);
     }
 
     public static void LogXixia(String... str) {

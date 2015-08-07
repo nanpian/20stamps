@@ -5,7 +5,6 @@ package com.stamp20.app.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-
 import com.stamp20.app.R;
 
 /**

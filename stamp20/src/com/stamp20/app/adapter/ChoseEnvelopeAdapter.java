@@ -1,7 +1,10 @@
 package com.stamp20.app.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -13,7 +16,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +31,12 @@ import com.stamp20.app.view.ImageUtil;
 
 public class ChoseEnvelopeAdapter extends BaseAdapter {
 
-    private class ColorArray {
-        int color; // 颜色
+    private Context mContext;
+    private LayoutInflater mInflater;
+    private Bitmap cardBackShape;
+    private Bitmap mSourceBitmap;
+    private static int sCardsBackList[] = { R.drawable.card_back_white, R.drawable.card_back_lite_grey, R.drawable.card_back_red, R.drawable.card_back_green };
 
-        public ColorArray(int colorxx) {
-            this.color = colorxx;
-        }
-    }
     public class NamePairs {
         public String name1;
         public String name2;
@@ -42,19 +46,7 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
             name2 = name22;
         }
     }
-    private static int sCardsBackList[] = { R.drawable.card_back_white, R.drawable.card_back_lite_grey,
-            R.drawable.card_back_red, R.drawable.card_back_green };
-    private Bitmap cardBackShape;
-    private List<ColorArray> colorArray = new ArrayList<ColorArray>();
 
-    private Context mContext;
-
-    private LayoutInflater mInflater;
-
-    private Bitmap mSourceBitmap;
-
-    private List<NamePairs> namepairArray = new ArrayList<NamePairs>();
-    private int selectItem;
     public ChoseEnvelopeAdapter(Context c) {
         mContext = c;
         mInflater = LayoutInflater.from(mContext);
@@ -71,24 +63,30 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
         this.cardBackShape = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.activity_card_back_shape);
     }
 
-    public Bitmap getAlphaSrcBitmap() {
-        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(), mSourceBitmap.getHeight(),
-                Bitmap.Config.ARGB_8888);
-        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_back_view_overlay);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        paint.setAlpha(200);
-        canvas.drawBitmap(mSourceBitmap, 0, 0, null);
-        Matrix matrix = new Matrix();
-        matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(), bitmap.getHeight() * 1.0f / cover.getHeight());
-        canvas.concat(matrix);
-        canvas.drawBitmap(cover, 0, 0, paint);
-
-        return bitmap;
+    public void setImageUri(Uri imageUri) {
+        mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
+        // here we use for add the blur image
+        if (mSourceBitmap != null) {
+            colorArray.add(0, new ColorArray(Color.WHITE));
+            mSourceBitmap = getAlphaSrcBitmap();
+        }
     }
 
-    public int getColor(int position) {
-        return position < colorArray.size() ? colorArray.get(position).color : null;
+    private List<ColorArray> colorArray = new ArrayList<ColorArray>();
+    private List<NamePairs> namepairArray = new ArrayList<NamePairs>();
+    private int selectItem;
+
+    public void setSelectItem(int selectId) {
+        this.selectItem = selectId;
+        notifyDataSetChanged();
+    }
+
+    private class ColorArray {
+        int color; // 颜色
+
+        public ColorArray(int colorxx) {
+            this.color = colorxx;
+        }
     }
 
     @Override
@@ -104,6 +102,10 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public int getColor(int position) {
+        return position < colorArray.size() ? colorArray.get(position).color : null;
     }
 
     public NamePairs getNamePairs(int position) {
@@ -151,6 +153,21 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public Bitmap getAlphaSrcBitmap() {
+        Bitmap bitmap = Bitmap.createBitmap(mSourceBitmap.getWidth(), mSourceBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap cover = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.card_back_view_overlay);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setAlpha(200);
+        canvas.drawBitmap(mSourceBitmap, 0, 0, null);
+        Matrix matrix = new Matrix();
+        matrix.setScale(bitmap.getWidth() * 1.0f / cover.getWidth(), bitmap.getHeight() * 1.0f / cover.getHeight());
+        canvas.concat(matrix);
+        canvas.drawBitmap(cover, 0, 0, paint);
+
+        return bitmap;
+    }
+
     public Bitmap maskWithColor(Bitmap cardBackBitmapSource, int maskcolor) {
         int mBitmapHeight = cardBackBitmapSource.getHeight();
         int mBitmapWidth = cardBackBitmapSource.getWidth();
@@ -161,9 +178,11 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
             for (int j = 0; j < mBitmapWidth; j++) {
                 // 获得Bitmap 图片中每一个点的color颜色值
                 int color = cardBackBitmapSource.getPixel(j, i);
-                Color.red(color);
-                Color.green(color);
-                Color.blue(color);
+                // 将颜色值存在一个数组中 方便后面修改
+                // 如果你想做的更细致的话 可以把颜色值的R G B 拿到做响应的处理 笔者在这里就不做更多解释
+                int r = Color.red(color);
+                int g = Color.green(color);
+                int b = Color.blue(color);
                 int alpha = Color.alpha(color);
                 // 如果透明保持，不透明变为白色
                 if (alpha < 120) {
@@ -182,19 +201,5 @@ public class ChoseEnvelopeAdapter extends BaseAdapter {
 
     public Bitmap maskWithTransparent(Bitmap cardBackBitmapSource) {
         return cardBackBitmapSource;
-    }
-
-    public void setImageUri(Uri imageUri) {
-        mSourceBitmap = ImageUtil.loadDownsampledBitmap(mContext, imageUri, 2);
-        // here we use for add the blur image
-        if (mSourceBitmap != null) {
-            colorArray.add(0, new ColorArray(Color.WHITE));
-            mSourceBitmap = getAlphaSrcBitmap();
-        }
-    }
-
-    public void setSelectItem(int selectId) {
-        this.selectItem = selectId;
-        notifyDataSetChanged();
     }
 }

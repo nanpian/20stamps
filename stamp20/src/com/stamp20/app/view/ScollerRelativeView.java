@@ -8,15 +8,11 @@ import android.widget.Scroller;
 
 public class ScollerRelativeView extends RelativeLayout {
 
-    public interface ScrollFinishListener {
-        public void scrollFinish(boolean finish);
-    }
-    private boolean isScrollFinish = false;
-    private boolean isViewBeMoved = false;
     public Scroller mScroller;
-    private ScrollFinishListener mScrollFinishListener;
-
     private String TAG = "ScollerRelativeView";
+    private boolean isViewBeMoved = false;
+    private ScrollFinishListener mScrollFinishListener;
+    private boolean isScrollFinish = false;
 
     public ScollerRelativeView(Context context) {
         super(context);
@@ -36,38 +32,18 @@ public class ScollerRelativeView extends RelativeLayout {
         init();
     }
 
-    @Override
-    protected boolean checkLayoutParams(android.view.ViewGroup.LayoutParams p) {
-        // TODO Auto-generated method stub
-        return super.checkLayoutParams(p);
-    }
-
-    @Override
-    public void computeScroll() {
-        // TODO Auto-generated method stub
-        super.computeScroll();
-        if (!mScroller.isFinished()) {
-            if (mScroller.computeScrollOffset()) {
-                int oldX = getScrollX();
-                int oldY = getScrollY();
-                int x = mScroller.getCurrX();
-                int y = mScroller.getCurrY();
-                if (oldX != x || oldY != y) {
-                    scrollTo(x, y);
-                }
-                // Keep on drawing until the animation has finished.
-                invalidate();
-            }
-        } else {
-            Log.i("jiangtao4", "in");
-            if (mScrollFinishListener != null) {
-                mScrollFinishListener.scrollFinish(true);
-            }
-        }
+    public void setScollListener(ScrollFinishListener listener) {
+        mScrollFinishListener = listener;
     }
 
     public void init() {
         mScroller = new Scroller(getContext());
+    }
+
+    @Override
+    protected boolean checkLayoutParams(android.view.ViewGroup.LayoutParams p) {
+        // TODO Auto-generated method stub
+        return super.checkLayoutParams(p);
     }
 
     @Override
@@ -110,9 +86,9 @@ public class ScollerRelativeView extends RelativeLayout {
                 int leftMargin = params.leftMargin;
                 int rightMargin = params.rightMargin;
                 int topMargin = params.topMargin;
+                int bottomMargin = params.bottomMargin;
                 Log.i(TAG, "Top is : " + getChildAt(i - 1).getBottom());
-                getChildAt(i).layout(leftMargin, getChildAt(i - 1).getBottom() + topMargin,
-                        getChildAt(i - 1).getWidth() - rightMargin,
+                getChildAt(i).layout(leftMargin, getChildAt(i - 1).getBottom() + topMargin, getChildAt(i - 1).getWidth() - rightMargin,
                         getChildAt(i - 1).getBottom() + topMargin + getChildAt(i).getMeasuredHeight());
             }
         }
@@ -129,14 +105,34 @@ public class ScollerRelativeView extends RelativeLayout {
     }
 
     @Override
+    public void computeScroll() {
+        // TODO Auto-generated method stub
+        super.computeScroll();
+        if (!mScroller.isFinished()) {
+            if (mScroller.computeScrollOffset()) {
+                int oldX = getScrollX();
+                int oldY = getScrollY();
+                int x = mScroller.getCurrX();
+                int y = mScroller.getCurrY();
+                if (oldX != x || oldY != y) {
+                    scrollTo(x, y);
+                }
+                // Keep on drawing until the animation has finished.
+                invalidate();
+            }
+        } else {
+            Log.i("jiangtao4", "in");
+            if (mScrollFinishListener != null) {
+                mScrollFinishListener.scrollFinish(true);
+            }
+        }
+    }
+
+    @Override
     public void scrollTo(int x, int y) {
         // TODO Auto-generated method stub
         super.scrollTo(x, y);
         postInvalidate();
-    }
-
-    public void setScollListener(ScrollFinishListener listener) {
-        mScrollFinishListener = listener;
     }
 
     public void smoothScollToY(int yDis, int duration) {
@@ -147,5 +143,9 @@ public class ScollerRelativeView extends RelativeLayout {
             isViewBeMoved = true;
             invalidate();
         }
+    }
+
+    public interface ScrollFinishListener {
+        public void scrollFinish(boolean finish);
     }
 }

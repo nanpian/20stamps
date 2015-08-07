@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
@@ -14,25 +15,7 @@ import com.stamp20.app.data.Design;
 
 public class ParseUtil {
 
-    public static List<Design> getMyLocalDesign() {
-        ParseQuery<Design> query = ParseQuery.getQuery("Design");
-        query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<Design>() {
-            @Override
-            public void done(List<Design> objects, ParseException e) {
-                if (e == null) {
-                    Log.d(this, "getMyLocalDesign: success...");
-                    // objectsWereRetrievedSuccessfully(objects);
-                } else {
-                    Log.d(this, "getMyLocalDesign: failed...");
-                }
-            }
-
-        });
-        return null;
-    }
     private Bitmap bitmap;
-
     private Design mDesign = Design.getInstance();
 
     public ParseUtil(Bitmap bitmap) {
@@ -72,5 +55,22 @@ public class ParseUtil {
                 }
             }
         });
+    }
+
+    public static List<Design> getMyLocalDesign() {
+        ParseQuery<Design> query = ParseQuery.getQuery("Design");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<Design>() {
+            public void done(List<Design> objects, ParseException e) {
+                if (e == null) {
+                    Log.d(this, "getMyLocalDesign: success...");
+                    // objectsWereRetrievedSuccessfully(objects);
+                } else {
+                    Log.d(this, "getMyLocalDesign: failed...");
+                }
+            }
+
+        });
+        return null;
     }
 }

@@ -20,11 +20,20 @@ import android.opengl.GLES20;
 
 public class GLToolbox {
 
-    public static void checkGlError(String op) {
-        int error;
-        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-            throw new RuntimeException(op + ": glError " + error);
+    public static int loadShader(int shaderType, String source) {
+        int shader = GLES20.glCreateShader(shaderType);
+        if (shader != 0) {
+            GLES20.glShaderSource(shader, source);
+            GLES20.glCompileShader(shader);
+            int[] compiled = new int[1];
+            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
+            if (compiled[0] == 0) {
+                String info = GLES20.glGetShaderInfoLog(shader);
+                GLES20.glDeleteShader(shader);
+                throw new RuntimeException("Could not compile shader " + shaderType + ":" + info);
+            }
         }
+        return shader;
     }
 
     public static int createProgram(String vertexSource, String fragmentSource) {
@@ -55,27 +64,18 @@ public class GLToolbox {
         return program;
     }
 
+    public static void checkGlError(String op) {
+        int error;
+        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+            throw new RuntimeException(op + ": glError " + error);
+        }
+    }
+
     public static void initTexParams() {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-    }
-
-    public static int loadShader(int shaderType, String source) {
-        int shader = GLES20.glCreateShader(shaderType);
-        if (shader != 0) {
-            GLES20.glShaderSource(shader, source);
-            GLES20.glCompileShader(shader);
-            int[] compiled = new int[1];
-            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-            if (compiled[0] == 0) {
-                String info = GLES20.glGetShaderInfoLog(shader);
-                GLES20.glDeleteShader(shader);
-                throw new RuntimeException("Could not compile shader " + shaderType + ":" + info);
-            }
-        }
-        return shader;
     }
 
 }

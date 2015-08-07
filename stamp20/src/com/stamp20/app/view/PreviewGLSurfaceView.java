@@ -3,17 +3,17 @@ package com.stamp20.app.view;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.stamp20.app.util.GLBaseUtil;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import com.stamp20.app.util.GLBaseUtil;
-
 public class PreviewGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
-    private int bmpHeight;
     private int bmpWidth;
+    private int bmpHeight;
     private Context mContext;
 
     public PreviewGLSurfaceView(Context context, AttributeSet attrs) {
@@ -26,6 +26,11 @@ public class PreviewGLSurfaceView extends GLSurfaceView implements GLSurfaceView
         this.setEGLContextClientVersion(2);
         this.setRenderer(this);
         this.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+    public void setSourceBitmap(Bitmap sourceBitmap) {
+        bmpWidth = sourceBitmap.getWidth();
+        bmpHeight = sourceBitmap.getHeight();
     }
 
     @Override
@@ -44,11 +49,6 @@ public class PreviewGLSurfaceView extends GLSurfaceView implements GLSurfaceView
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // TODO Auto-generated method stub
 
-    }
-
-    public void setSourceBitmap(Bitmap sourceBitmap) {
-        bmpWidth = sourceBitmap.getWidth();
-        bmpHeight = sourceBitmap.getHeight();
     }
 
 }

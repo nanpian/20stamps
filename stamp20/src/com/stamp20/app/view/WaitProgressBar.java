@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.stamp20.app.R;
-import com.stamp20.app.util.DPIUtil;
+import com.stamp20.app.util.*;
 
 public class WaitProgressBar extends ProgressBar {
 

@@ -15,16 +15,13 @@ import org.jinstagram.Instagram;
 import org.jinstagram.auth.oauth.InstagramService;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.stamp20.app.util.StringUtils;
 
 public final class InstagramUtils {
 
     private static final String CONFIG_PROPERTIES = "/config.properties";
-
-    private static Instagram instagram = null;
-
-    private static InstagramService service = null;
 
     public static Properties getConfigProperties() {
         InputStream input = null;
@@ -47,13 +44,6 @@ public final class InstagramUtils {
         return prop;
 
     }
-    public static InstagramService getInsService() {
-        return service;
-    }
-
-    public static Instagram getInstagram() {
-        return instagram;
-    }
 
     public static boolean isUserInstagramLinked(Context mContext) {
         String token = InstagramTokenKeeper.readAccessToken(mContext);
@@ -63,11 +53,22 @@ public final class InstagramUtils {
         return false;
     }
 
+    private static InstagramService service = null;
+    private static Instagram instagram = null;
+
     public static void setInsService(InstagramService s) {
         service = s;
     }
 
+    public static InstagramService getInsService() {
+        return service;
+    }
+
     public static void setInstagram(Instagram i) {
         instagram = i;
+    }
+
+    public static Instagram getInstagram() {
+        return instagram;
     }
 }

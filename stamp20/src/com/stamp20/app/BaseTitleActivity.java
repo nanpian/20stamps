@@ -13,10 +13,26 @@ import android.widget.TextView;
 
 public class BaseTitleActivity extends Activity {
 
-    private LinearLayout contentLayout;
+    private TextView mTitleTx;
     private Button mButtonLeft;
     private Button mButtonRight;
-    private TextView mTitleTx;
+    private LinearLayout contentLayout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initContentView();
+        initTitleBar();
+    }
+
+    public void onCreateNoTitle() {
+        super.onCreate(null);
+        ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
+        content.removeAllViews();
+        contentLayout = new LinearLayout(this);
+        contentLayout.setOrientation(LinearLayout.VERTICAL);
+        content.addView(contentLayout);
+    }
 
     private void initContentView() {
         ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
@@ -45,22 +61,6 @@ public class BaseTitleActivity extends Activity {
             }
         });
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initContentView();
-        initTitleBar();
-    }
-
-    public void onCreateNoTitle() {
-        super.onCreate(null);
-        ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
-        content.removeAllViews();
-        contentLayout = new LinearLayout(this);
-        contentLayout.setOrientation(LinearLayout.VERTICAL);
-        content.addView(contentLayout);
     }
 
     @Override

@@ -12,23 +12,25 @@ import com.stamp20.app.Setting;
  */
 public class InstagramTokenKeeper {
 
-    private static final String KEY_TOKEN = "token";
     private static final String PREFERENCES_NAME = Setting.KEY_INSTAGRAM_TOKEN;
+    private static final String KEY_TOKEN = "token";
 
     /**
-     * 清空 SharedPreferences 中 Token信息。
+     * 保存 Token 对象到 SharedPreferences。
      * 
      * @param context
      *            应用程序上下文环境
+     * @param token
+     *            Token 对象
      */
-    public static void clear(Context context) {
-        if (null == context) {
+    public static void writeAccessToken(Context context, String token) {
+        if (null == context || null == token) {
             return;
         }
 
         SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_APPEND);
         Editor editor = pref.edit();
-        editor.clear();
+        editor.putString(KEY_TOKEN, token);
         editor.commit();
     }
 
@@ -52,21 +54,19 @@ public class InstagramTokenKeeper {
     }
 
     /**
-     * 保存 Token 对象到 SharedPreferences。
+     * 清空 SharedPreferences 中 Token信息。
      * 
      * @param context
      *            应用程序上下文环境
-     * @param token
-     *            Token 对象
      */
-    public static void writeAccessToken(Context context, String token) {
-        if (null == context || null == token) {
+    public static void clear(Context context) {
+        if (null == context) {
             return;
         }
 
         SharedPreferences pref = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_APPEND);
         Editor editor = pref.edit();
-        editor.putString(KEY_TOKEN, token);
+        editor.clear();
         editor.commit();
     }
 }

@@ -20,19 +20,103 @@ import com.stamp20.app.R;
 import com.stamp20.app.anim.Rotate3dAnimation;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
+import com.stamp20.gallary.GallaryActivity;
 
 public class CouponsActivity extends Activity implements OnClickListener {
 
-    private TextView btnCancel;
+    private ImageView headClose;
     private Button btnGetCouponCode;
     private Button btnShareOnFacebook;
     private Button btnShareOnTwitter;
-    private ViewGroup getCouponsViewGroup;
+    private TextView btnCancel;
 
-    private ImageView headClose;
+    private ViewGroup getCouponsViewGroup;
+    private ViewGroup shareCouponsViewGroup;
+
     private boolean isInGetCoupons = true;
 
-    private ViewGroup shareCouponsViewGroup;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_coupons);
+        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
+        initView();
+    }
+
+    private void initView() {
+        headClose = (ImageView) findViewById(R.id.header_previous);
+        btnGetCouponCode = (Button) findViewById(R.id.btn_get_coupons);
+        btnShareOnFacebook = (Button) findViewById(R.id.btn_share_on_facebook);
+        btnShareOnTwitter = (Button) findViewById(R.id.btn_share_on_twitter);
+        btnCancel = (TextView) findViewById(R.id.cancel_share);
+        getCouponsViewGroup = (LinearLayout) findViewById(R.id.get_coupons);
+        shareCouponsViewGroup = (LinearLayout) findViewById(R.id.share_coupons);
+
+        headClose.setOnClickListener(this);
+        btnGetCouponCode.setOnClickListener(this);
+        btnShareOnFacebook.setOnClickListener(this);
+        btnShareOnTwitter.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
+            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.header_previous:
+            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
+            finish();
+            break;
+        case R.id.btn_get_coupons:
+            getCoupons();
+            break;
+        case R.id.btn_share_on_facebook:
+            shareOnFacebook();
+            break;
+        case R.id.btn_share_on_twitter:
+            shareOnTwitter();
+            break;
+        case R.id.cancel_share:
+            cancel_share();
+            break;
+        }
+    }
+
+    private void cancel_share() {
+        applyRotation(shareCouponsViewGroup, 0, 90, false);
+        // applyRotation(shareCouponsViewGroup, -90, 0, false);
+
+    }
+
+    private void shareOnTwitter() {
+
+    }
+
+    private void shareOnFacebook() {
+
+    }
+
+    private void getCoupons() {
+        applyRotation(getCouponsViewGroup, 0, 90, true);
+        // applyRotation(shareCouponsViewGroup, -90, 0, true);
+
+    }
 
     private void applyRotation(final ViewGroup v, float start, float end, final boolean isFront) {
         final float centerX = getCouponsViewGroup.getVisibility() == View.VISIBLE ? getCouponsViewGroup.getWidth() / 2.0f
@@ -58,8 +142,7 @@ public class CouponsActivity extends Activity implements OnClickListener {
                         }
                         btnCancel.setVisibility(shareCouponsViewGroup.getVisibility());
 
-                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f,
-                                false);
+                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f, false);
                         rotatiomAnimation.setDuration(500);
                         rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
                         if (isFront) {
@@ -83,89 +166,6 @@ public class CouponsActivity extends Activity implements OnClickListener {
             }
         });
         v.startAnimation(rotation);
-
-    }
-
-    private void cancel_share() {
-        applyRotation(shareCouponsViewGroup, 0, 90, false);
-        // applyRotation(shareCouponsViewGroup, -90, 0, false);
-
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
-    }
-
-    private void getCoupons() {
-        applyRotation(getCouponsViewGroup, 0, 90, true);
-        // applyRotation(shareCouponsViewGroup, -90, 0, true);
-
-    }
-
-    private void initView() {
-        headClose = (ImageView) findViewById(R.id.header_previous);
-        btnGetCouponCode = (Button) findViewById(R.id.btn_get_coupons);
-        btnShareOnFacebook = (Button) findViewById(R.id.btn_share_on_facebook);
-        btnShareOnTwitter = (Button) findViewById(R.id.btn_share_on_twitter);
-        btnCancel = (TextView) findViewById(R.id.cancel_share);
-        getCouponsViewGroup = (LinearLayout) findViewById(R.id.get_coupons);
-        shareCouponsViewGroup = (LinearLayout) findViewById(R.id.share_coupons);
-
-        headClose.setOnClickListener(this);
-        btnGetCouponCode.setOnClickListener(this);
-        btnShareOnFacebook.setOnClickListener(this);
-        btnShareOnTwitter.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.header_previous:
-            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
-            finish();
-            break;
-        case R.id.btn_get_coupons:
-            getCoupons();
-            break;
-        case R.id.btn_share_on_facebook:
-            shareOnFacebook();
-            break;
-        case R.id.btn_share_on_twitter:
-            shareOnTwitter();
-            break;
-        case R.id.cancel_share:
-            cancel_share();
-            break;
-        }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coupons);
-        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
-        initView();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
-            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
-            finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private void shareOnFacebook() {
-
-    }
-
-    private void shareOnTwitter() {
 
     }
 }

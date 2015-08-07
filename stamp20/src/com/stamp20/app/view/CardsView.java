@@ -45,35 +45,6 @@ public class CardsView extends ZoomImageView {
         canvas.drawBitmap(mMaskBitmap, 0, 0, null);
     }
 
-    @Override
-    protected void onTouchEventSingleFingerMove(MotionEvent event) {
-        // 只有单指按在屏幕上移动时，为拖动状态
-        float xMove = event.getX();
-        float yMove = event.getY();
-        if (lastXMove == -1 && lastYMove == -1) {
-            lastXMove = xMove;
-            lastYMove = yMove;
-        }
-        currentStatus = STATUS_MOVE;
-        movedDistanceX = xMove - lastXMove;
-        movedDistanceY = yMove - lastYMove;
-        // 进行边界检查，不允许将图片拖出边界
-        if (totalTranslateX + movedDistanceX > width * 0.5f) {
-            movedDistanceX = 0;
-        } else if (width - (totalTranslateX + movedDistanceX) > currentBitmapWidth + width * 0.5f) {
-            movedDistanceX = 0;
-        }
-        if (totalTranslateY + movedDistanceY > height * 0.5f) {
-            movedDistanceY = 0;
-        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight + height * 0.5f) {
-            movedDistanceY = 0;
-        }
-        // 调用onDraw()方法绘制图片
-        invalidate();
-        lastXMove = xMove;
-        lastYMove = yMove;
-    }
-
     /**
      * 对图片进行缩放处理。
      * 
@@ -117,5 +88,34 @@ public class CardsView extends ZoomImageView {
         currentBitmapWidth = scaledWidth;
         currentBitmapHeight = scaledHeight;
         canvas.drawBitmap(sourceBitmap, matrix, null);
+    }
+
+    @Override
+    protected void onTouchEventSingleFingerMove(MotionEvent event) {
+        // 只有单指按在屏幕上移动时，为拖动状态
+        float xMove = event.getX();
+        float yMove = event.getY();
+        if (lastXMove == -1 && lastYMove == -1) {
+            lastXMove = xMove;
+            lastYMove = yMove;
+        }
+        currentStatus = STATUS_MOVE;
+        movedDistanceX = xMove - lastXMove;
+        movedDistanceY = yMove - lastYMove;
+        // 进行边界检查，不允许将图片拖出边界
+        if (totalTranslateX + movedDistanceX > width * 0.5f) {
+            movedDistanceX = 0;
+        } else if (width - (totalTranslateX + movedDistanceX) > currentBitmapWidth + width * 0.5f) {
+            movedDistanceX = 0;
+        }
+        if (totalTranslateY + movedDistanceY > height * 0.5f) {
+            movedDistanceY = 0;
+        } else if (height - (totalTranslateY + movedDistanceY) > currentBitmapHeight + height * 0.5f) {
+            movedDistanceY = 0;
+        }
+        // 调用onDraw()方法绘制图片
+        invalidate();
+        lastXMove = xMove;
+        lastYMove = yMove;
     }
 }

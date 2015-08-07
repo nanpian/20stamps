@@ -35,11 +35,11 @@ public class GPUImageSobelThresholdFilter extends GPUImage3x3TextureSamplingFilt
             + "    float topIntensity = texture2D(inputImageTexture, topTextureCoordinate).r;\n"
             + "    float h = -topLeftIntensity - 2.0 * topIntensity - topRightIntensity + bottomLeftIntensity + 2.0 * bottomIntensity + bottomRightIntensity;\n"
             + "    float v = -bottomLeftIntensity - 2.0 * leftIntensity - topLeftIntensity + bottomRightIntensity + 2.0 * rightIntensity + topRightIntensity;\n"
-            + "\n" + "    float mag = 1.0 - length(vec2(h, v));\n" + "    mag = step(threshold, mag);\n" + "\n"
-            + "    gl_FragColor = vec4(vec3(mag), 1.0);\n" + "}\n";
+            + "\n" + "    float mag = 1.0 - length(vec2(h, v));\n" + "    mag = step(threshold, mag);\n" + "\n" + "    gl_FragColor = vec4(vec3(mag), 1.0);\n"
+            + "}\n";
 
-    private float mThreshold = 0.9f;
     private int mUniformThresholdLocation;
+    private float mThreshold = 0.9f;
 
     public GPUImageSobelThresholdFilter() {
         this(0.9f);

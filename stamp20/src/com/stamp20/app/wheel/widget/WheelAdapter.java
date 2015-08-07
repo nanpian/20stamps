@@ -21,8 +21,14 @@ package com.stamp20.app.wheel.widget;
  * 
  * @deprecated Use WheelViewAdapter
  */
-@Deprecated
 public interface WheelAdapter {
+    /**
+     * Gets items count
+     * 
+     * @return the count of wheel items
+     */
+    public int getItemsCount();
+
     /**
      * Gets a wheel item by index.
      * 
@@ -31,13 +37,6 @@ public interface WheelAdapter {
      * @return the wheel item text or null
      */
     public String getItem(int index);
-
-    /**
-     * Gets items count
-     * 
-     * @return the count of wheel items
-     */
-    public int getItemsCount();
 
     /**
      * Gets maximum item length. It is used to determine the wheel width. If -1

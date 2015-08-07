@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import com.stamp20.app.R;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
+import com.stamp20.app.util.Log;
 
 public class SplashActivity extends Activity {
 
@@ -63,7 +64,7 @@ public class SplashActivity extends Activity {
     }
 
     private void startNextActivity() {
-        SplashActivity.this.getSharedPreferences(Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE).getBoolean(
+        boolean firstStart = SplashActivity.this.getSharedPreferences(Constant.SHAREDPREFERENCES_GUIDE, Context.MODE_PRIVATE).getBoolean(
                 Constant.SHAREDPREFERENCES_GUIDE_FIRSTSTART, true);
 
         /*

@@ -19,8 +19,8 @@ import com.parse.SaveCallback;
 
 public class DesignProvider {
 
-    private static final String DESIGN_LABEL = "localDesigns";
     private static final String LogTag = "20stamps";
+    private static final String DESIGN_LABEL = "localDesigns";
 
     /*
      * Add one design to local store
@@ -36,18 +36,18 @@ public class DesignProvider {
         });
     }
 
-    // may take long time. Don't run on UI thread
-    public ArrayList<Design> getAllDesign() {
-        ParseQuery<Design> query = ParseQuery.getQuery(Design.Design);
-        query.fromPin(DESIGN_LABEL);
-        ArrayList<Design> result = new ArrayList<Design>();
-        try {
-            result.addAll(query.find());
-        } catch (ParseException e) {
-            Log.e("LogTag", "Error query designs from local store");
-            e.printStackTrace();
-        }
-        return result;
+    /*
+     * Remove one design from local store
+     */
+    public void removeDesign(Design design) {
+        design.unpinInBackground(DESIGN_LABEL, new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e("LogTag", "Error remove design from local store " + e.getMessage());
+                }
+            }
+        });
     }
 
     public Design getDesignByLocalId(String designLocalId) {
@@ -64,18 +64,18 @@ public class DesignProvider {
         return result;
     }
 
-    /*
-     * Remove one design from local store
-     */
-    public void removeDesign(Design design) {
-        design.unpinInBackground(DESIGN_LABEL, new DeleteCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e("LogTag", "Error remove design from local store " + e.getMessage());
-                }
-            }
-        });
+    // may take long time. Don't run on UI thread
+    public ArrayList<Design> getAllDesign() {
+        ParseQuery<Design> query = ParseQuery.getQuery(Design.Design);
+        query.fromPin(DESIGN_LABEL);
+        ArrayList<Design> result = new ArrayList<Design>();
+        try {
+            result.addAll(query.find());
+        } catch (ParseException e) {
+            Log.e("LogTag", "Error query designs from local store");
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

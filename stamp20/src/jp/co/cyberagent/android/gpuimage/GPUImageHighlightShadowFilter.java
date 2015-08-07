@@ -43,10 +43,10 @@ public class GPUImageHighlightShadowFilter extends GPUImageFilter {
             + " 	lowp vec3 result = vec3(0.0, 0.0, 0.0) + ((luminance + shadow + highlight) - 0.0) * ((source.rgb - vec3(0.0, 0.0, 0.0))/(luminance - 0.0));\n"
             + " \n" + " 	gl_FragColor = vec4(result.rgb, source.a);\n" + " }";
 
-    private float mHighlights;
-    private int mHighlightsLocation;
-    private float mShadows;
     private int mShadowsLocation;
+    private float mShadows;
+    private int mHighlightsLocation;
+    private float mHighlights;
 
     public GPUImageHighlightShadowFilter() {
         this(0.0f, 1.0f);

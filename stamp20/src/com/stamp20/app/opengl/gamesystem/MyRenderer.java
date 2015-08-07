@@ -1,14 +1,21 @@
 package com.stamp20.app.opengl.gamesystem;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLSurfaceView.Renderer;
+import android.graphics.Bitmap;
 import android.opengl.GLU;
+import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 
 public class MyRenderer implements Renderer {
 
-    @Override
     public void onDrawFrame(GL10 gl) {
         // 清除屏幕和深度缓存
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -19,7 +26,6 @@ public class MyRenderer implements Renderer {
         GameSystem.getInstance().glVisit(gl);
     }
 
-    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         // 设置 OpenGL 场景的大小
         gl.glViewport(0, 0, width, height);
@@ -37,7 +43,6 @@ public class MyRenderer implements Renderer {
 
     }
 
-    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // 告诉系统对透视进行修正
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);

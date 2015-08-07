@@ -16,77 +16,43 @@
 
 package com.stamp20.app.activities;
 
+import android.opengl.GLES20;
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import android.opengl.GLES20;
-import android.util.Log;
-
 public class TextureRenderer {
 
-    private static final int FLOAT_SIZE_BYTES = 4;
-    private static final String FRAGMENT_SHADER = "precision mediump float;\n" + "uniform sampler2D tex_sampler;\n"
-            + "varying vec2 v_texcoord;\n" + "void main() {\n"
-            + "  gl_FragColor = texture2D(tex_sampler, v_texcoord);\n" + "}\n";
-    private static final float[] POS_VERTICES = { -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f };
-    private static final String Tag = "TextureRender";
-
-    private static final float[] TEX_VERTICES = { 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
-    private static final String VERTEX_SHADER = "attribute vec4 a_position;\n" + "attribute vec2 a_texcoord;\n"
-            + "varying vec2 v_texcoord;\n" + "void main() {\n" + "  gl_Position = a_position;\n"
-            + "  v_texcoord = a_texcoord;\n" + "}\n";
-
-    private int mPosCoordHandle;
-    private FloatBuffer mPosVertices;
-
     private int mProgram;
-    private int mstampFrameHeight;
-    private int mstampFrameWidth;
-    private int mTexCoordHandle;
-
-    private int mTexHeight;
-
     private int mTexSamplerHandle;
+    private int mTexCoordHandle;
+    private int mPosCoordHandle;
 
     private FloatBuffer mTexVertices;
+    private FloatBuffer mPosVertices;
+
+    private int mViewWidth;
+    private int mViewHeight;
 
     private int mTexWidth;
+    private int mTexHeight;
+    private int mstampFrameWidth;
+    private int mstampFrameHeight;
 
-    private int mViewHeight;
-    private int mViewWidth;
+    private static final String VERTEX_SHADER = "attribute vec4 a_position;\n" + "attribute vec2 a_texcoord;\n" + "varying vec2 v_texcoord;\n"
+            + "void main() {\n" + "  gl_Position = a_position;\n" + "  v_texcoord = a_texcoord;\n" + "}\n";
 
-    private void computeOutputVertices() {
-        if (mPosVertices != null) {
-            float imgAspectRatio = mTexWidth / (float) mTexHeight;
-            float viewAspectRatio = mViewWidth / (float) mViewHeight;
-            float relativeAspectRatio = viewAspectRatio / imgAspectRatio;
-            float x0, y0, x1, y1;
-            if (relativeAspectRatio > 1.0f) {
-                // x0 = -1.0f / relativeAspectRatio;
-                x0 = -1.0f * mstampFrameWidth / mViewWidth;
-                // x0 =
-                // -1.0f*(float)mstampFrameWidth*relativeAspectRatio/(float)mViewWidth;
-                y0 = -1.0f * mstampFrameWidth * relativeAspectRatio / mViewWidth;
-                x1 = 1.0f * mstampFrameWidth / mViewWidth;
-                // x1 = 1.0f;
-                y1 = mstampFrameWidth * relativeAspectRatio / mViewWidth;
-                Log.i(Tag, ">1, mstampFrameWidth is " + mstampFrameWidth + " mViewWidth is " + mViewWidth + "x0 is "
-                        + x0 + " y0 is" + y0 + " x1 is" + x1 + " y1 is" + y1);
-            } else {
-                x0 = -1.0f * mstampFrameWidth / mViewWidth;
-                // y0 = -relativeAspectRatio;
-                y0 = -1.0f * mstampFrameWidth * relativeAspectRatio / mViewWidth;
-                x1 = 1.0f * mstampFrameWidth / mViewWidth;
-                y1 = 1.0f * mstampFrameWidth * relativeAspectRatio / mViewWidth;
-                // y1 = relativeAspectRatio;
-                Log.i(Tag, "<1, mstampFrameWidth is " + mstampFrameWidth + " mViewWidth is " + mViewWidth + "x0 is "
-                        + x0 + " y0 is" + y0 + " x1 is" + x1 + " y1 is" + y1);
-            }
-            float[] coords = new float[] { x0, y0, x1, y0, x0, y1, x1, y1 };
-            mPosVertices.put(coords).position(0);
-        }
-    }
+    private static final String FRAGMENT_SHADER = "precision mediump float;\n" + "uniform sampler2D tex_sampler;\n" + "varying vec2 v_texcoord;\n"
+            + "void main() {\n" + "  gl_FragColor = texture2D(tex_sampler, v_texcoord);\n" + "}\n";
+
+    private static final float[] TEX_VERTICES = { 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
+
+    private static final float[] POS_VERTICES = { -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f };
+
+    private static final int FLOAT_SIZE_BYTES = 4;
+    private static final String Tag = "TextureRender";
 
     public void init() {
         // Create program
@@ -98,15 +64,30 @@ public class TextureRenderer {
         mPosCoordHandle = GLES20.glGetAttribLocation(mProgram, "a_position");
 
         // Setup coordinate buffers
-        mTexVertices = ByteBuffer.allocateDirect(TEX_VERTICES.length * FLOAT_SIZE_BYTES).order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
+        mTexVertices = ByteBuffer.allocateDirect(TEX_VERTICES.length * FLOAT_SIZE_BYTES).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mTexVertices.put(TEX_VERTICES).position(0);
-        mPosVertices = ByteBuffer.allocateDirect(POS_VERTICES.length * FLOAT_SIZE_BYTES).order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
+        mPosVertices = ByteBuffer.allocateDirect(POS_VERTICES.length * FLOAT_SIZE_BYTES).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mPosVertices.put(POS_VERTICES).position(0);
     }
 
-    public void renderTexture(int texId) {
+    public void tearDown() {
+        GLES20.glDeleteProgram(mProgram);
+    }
+
+    public void updateTextureSize(int texWidth, int texHeight) {
+        mTexWidth = texWidth;
+        mTexHeight = texHeight;
+        computeOutputVertices();
+    }
+
+    public void updateViewSize(int viewWidth, int viewHeight) {
+        mViewWidth = viewWidth;
+        mViewHeight = viewHeight;
+        // computeOutputVertices();
+    }
+
+    public void renderTexture(int texId, float totalRatio, int totalTranslateX, int totalTranslateY) {
+        // TODO Auto-generated method stub
         // Bind default FBO
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
 
@@ -115,7 +96,8 @@ public class TextureRenderer {
         GLToolbox.checkGlError("glUseProgram");
 
         // Set viewport
-        GLES20.glViewport(0, 0, mViewWidth, mViewHeight);
+        Log.i(Tag, "total translate x is " + totalTranslateX + "total translate y is " + totalTranslateY + " totalratio is " + totalRatio);
+        GLES20.glViewport(totalTranslateX, -totalTranslateY, (int) (mViewWidth * totalRatio), (int) (mViewHeight * totalRatio));
         GLToolbox.checkGlError("glViewport");
 
         // Disable blending
@@ -136,7 +118,9 @@ public class TextureRenderer {
         GLES20.glUniform1i(mTexSamplerHandle, 0);
 
         // Draw
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        // Background color value ff282828
+        // GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glClearColor(0.15686f, 0.15686f, 0.15686f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
     }
@@ -176,8 +160,7 @@ public class TextureRenderer {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    public void renderTexture(int texId, float totalRatio, int totalTranslateX, int totalTranslateY) {
-        // TODO Auto-generated method stub
+    public void renderTexture(int texId) {
         // Bind default FBO
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
 
@@ -186,10 +169,7 @@ public class TextureRenderer {
         GLToolbox.checkGlError("glUseProgram");
 
         // Set viewport
-        Log.i(Tag, "total translate x is " + totalTranslateX + "total translate y is " + totalTranslateY
-                + " totalratio is " + totalRatio);
-        GLES20.glViewport(totalTranslateX, -totalTranslateY, (int) (mViewWidth * totalRatio),
-                (int) (mViewHeight * totalRatio));
+        GLES20.glViewport(0, 0, mViewWidth, mViewHeight);
         GLToolbox.checkGlError("glViewport");
 
         // Disable blending
@@ -210,21 +190,41 @@ public class TextureRenderer {
         GLES20.glUniform1i(mTexSamplerHandle, 0);
 
         // Draw
-        // Background color value ff282828
-        // GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        GLES20.glClearColor(0.15686f, 0.15686f, 0.15686f, 1.0f);
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    public void tearDown() {
-        GLES20.glDeleteProgram(mProgram);
-    }
-
-    public void updateTextureSize(int texWidth, int texHeight) {
-        mTexWidth = texWidth;
-        mTexHeight = texHeight;
-        computeOutputVertices();
+    private void computeOutputVertices() {
+        if (mPosVertices != null) {
+            float imgAspectRatio = mTexWidth / (float) mTexHeight;
+            float viewAspectRatio = mViewWidth / (float) mViewHeight;
+            float relativeAspectRatio = viewAspectRatio / imgAspectRatio;
+            float x0, y0, x1, y1;
+            if (relativeAspectRatio > 1.0f) {
+                // x0 = -1.0f / relativeAspectRatio;
+                x0 = -1.0f * (float) mstampFrameWidth / (float) mViewWidth;
+                // x0 =
+                // -1.0f*(float)mstampFrameWidth*relativeAspectRatio/(float)mViewWidth;
+                y0 = -1.0f * (float) mstampFrameWidth * relativeAspectRatio / (float) mViewWidth;
+                x1 = 1.0f * (float) mstampFrameWidth / (float) mViewWidth;
+                // x1 = 1.0f;
+                y1 = (float) mstampFrameWidth * relativeAspectRatio / (float) mViewWidth;
+                Log.i(Tag, ">1, mstampFrameWidth is " + mstampFrameWidth + " mViewWidth is " + mViewWidth + "x0 is " + x0 + " y0 is" + y0 + " x1 is" + x1
+                        + " y1 is" + y1);
+            } else {
+                x0 = -1.0f * (float) mstampFrameWidth / (float) mViewWidth;
+                // y0 = -relativeAspectRatio;
+                y0 = -1.0f * (float) mstampFrameWidth * relativeAspectRatio / (float) mViewWidth;
+                x1 = 1.0f * (float) mstampFrameWidth / (float) mViewWidth;
+                y1 = 1.0f * (float) mstampFrameWidth * relativeAspectRatio / (float) mViewWidth;
+                // y1 = relativeAspectRatio;
+                Log.i(Tag, "<1, mstampFrameWidth is " + mstampFrameWidth + " mViewWidth is " + mViewWidth + "x0 is " + x0 + " y0 is" + y0 + " x1 is" + x1
+                        + " y1 is" + y1);
+            }
+            float[] coords = new float[] { x0, y0, x1, y0, x0, y1, x1, y1 };
+            mPosVertices.put(coords).position(0);
+        }
     }
 
     public void updateTextureSize(int mImageWidth, int mImageHeight, int stampFrameWidth, int stampFrameHeight) {
@@ -232,12 +232,6 @@ public class TextureRenderer {
         mstampFrameWidth = stampFrameWidth;
         mstampFrameHeight = stampFrameHeight;
 
-    }
-
-    public void updateViewSize(int viewWidth, int viewHeight) {
-        mViewWidth = viewWidth;
-        mViewHeight = viewHeight;
-        // computeOutputVertices();
     }
 
 }

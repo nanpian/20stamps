@@ -47,8 +47,8 @@ public class GPUImageWeakPixelInclusionFilter extends GPUImage3x3TextureSampling
             + "float centerIntensity = texture2D(inputImageTexture, textureCoordinate).r;\n"
             + "\n"
             + "float pixelIntensitySum = bottomLeftIntensity + topRightIntensity + topLeftIntensity + bottomRightIntensity + leftIntensity + rightIntensity + bottomIntensity + topIntensity + centerIntensity;\n"
-            + "float sumTest = step(1.5, pixelIntensitySum);\n" + "float pixelTest = step(0.01, centerIntensity);\n"
-            + "\n" + "gl_FragColor = vec4(vec3(sumTest * pixelTest), 1.0);\n" + "}\n";
+            + "float sumTest = step(1.5, pixelIntensitySum);\n" + "float pixelTest = step(0.01, centerIntensity);\n" + "\n"
+            + "gl_FragColor = vec4(vec3(sumTest * pixelTest), 1.0);\n" + "}\n";
 
     public GPUImageWeakPixelInclusionFilter() {
         super(WEAKPIXEL_FRAGMENT_SHADER);

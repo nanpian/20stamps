@@ -24,14 +24,13 @@ import android.opengl.GLES20;
  * the default)
  */
 public class GPUImageOpacityFilter extends GPUImageFilter {
-    public static final String OPACITY_FRAGMENT_SHADER = "" + "  varying highp vec2 textureCoordinate;\n" + "  \n"
-            + "  uniform sampler2D inputImageTexture;\n" + "  uniform lowp float opacity;\n" + "  \n"
-            + "  void main()\n" + "  {\n"
+    public static final String OPACITY_FRAGMENT_SHADER = "" + "  varying highp vec2 textureCoordinate;\n" + "  \n" + "  uniform sampler2D inputImageTexture;\n"
+            + "  uniform lowp float opacity;\n" + "  \n" + "  void main()\n" + "  {\n"
             + "      lowp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" + "      \n"
             + "      gl_FragColor = vec4(textureColor.rgb, textureColor.a * opacity);\n" + "  }\n";
 
-    private float mOpacity;
     private int mOpacityLocation;
+    private float mOpacity;
 
     public GPUImageOpacityFilter() {
         this(1.0f);

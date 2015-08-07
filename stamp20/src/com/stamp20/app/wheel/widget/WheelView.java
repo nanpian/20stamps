@@ -45,8 +45,8 @@ import com.stamp20.app.wheel.adapter.WheelViewAdapter;
  */
 public class WheelView extends View {
 
-    /** Default count of visible items */
-    private static final int DEF_VISIBLE_ITEMS = 5;
+    /** Top and bottom shadows colors */
+    private int[] SHADOWS_COLORS = new int[] { 0x00D0D6DB, 0x00D0D6DB, 0x00D0D6DB };
 
     /** Top and bottom items offset (to hide that) */
     private static final int ITEM_OFFSET_PERCENT = 0;
@@ -54,69 +54,97 @@ public class WheelView extends View {
     /** Left and right padding value */
     private static final int PADDING = 10;
 
-    private GradientDrawable bottomShadow;
-
-    // Center Line
-    private Drawable centerDrawable;
-
-    // Listeners
-    private List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
-
-    private List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
+    /** Default count of visible items */
+    private static final int DEF_VISIBLE_ITEMS = 5;
 
     // Wheel Values
     private int currentItem = 0;
 
-    // Adapter listener
-    private DataSetObserver dataObserver = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            invalidateWheel(false);
-        }
-
-        @Override
-        public void onInvalidated() {
-            invalidateWheel(true);
-        }
-    };
-    // Draw Shadows
-    private boolean drawShadows = true;
-
-    // The number of first item in layout
-    private int firstItem;
-    // Cyclic
-    boolean isCyclic = false;
-
-    private boolean isScrollingPerformed;
+    // Count of visible items
+    private int visibleItems = DEF_VISIBLE_ITEMS;
 
     // Item height
     private int itemHeight = 0;
-    // Items layout
-    private LinearLayout itemsLayout;
-    // Recycle
-    private WheelRecycle recycle = new WheelRecycle(this);
+
+    // Center Line
+    private Drawable centerDrawable;
+
+    // Wheel drawables
+    private int wheelBackground = R.drawable.wheel_bg;
+    private int wheelForeground = R.drawable.wheel_val;
+
+    // Shadows drawables
+    private GradientDrawable topShadow;
+    private GradientDrawable bottomShadow;
+
+    // Draw Shadows
+    private boolean drawShadows = true;
 
     // Scrolling
     private WheelScroller scroller;
+    private boolean isScrollingPerformed;
+    private int scrollingOffset;
+
+    // Cyclic
+    boolean isCyclic = false;
+
+    // Items layout
+    private LinearLayout itemsLayout;
+
+    // The number of first item in layout
+    private int firstItem;
+
+    // View adapter
+    private WheelViewAdapter viewAdapter;
+
+    // Recycle
+    private WheelRecycle recycle = new WheelRecycle(this);
+
+    // Listeners
+    private List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
+    private List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
+    private List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
+
+    /**
+     * Constructor
+     */
+    public WheelView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initData(context);
+    }
+
+    /**
+     * Constructor
+     */
+    public WheelView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initData(context);
+    }
+
+    /**
+     * Constructor
+     */
+    public WheelView(Context context) {
+        super(context);
+        initData(context);
+    }
+
+    /**
+     * Initializes class data
+     * 
+     * @param context
+     *            the context
+     */
+    private void initData(Context context) {
+        scroller = new WheelScroller(getContext(), scrollingListener);
+    }
 
     // Scrolling listener
     WheelScroller.ScrollingListener scrollingListener = new WheelScroller.ScrollingListener() {
         @Override
-        public void onFinished() {
-            if (isScrollingPerformed) {
-                notifyScrollingListenersAboutEnd();
-                isScrollingPerformed = false;
-            }
-
-            scrollingOffset = 0;
-            invalidate();
-        }
-
-        @Override
-        public void onJustify() {
-            if (Math.abs(scrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
-                scroller.scroll(scrollingOffset, 0);
-            }
+        public void onStarted() {
+            isScrollingPerformed = true;
+            notifyScrollingListenersAboutStart();
         }
 
         @Override
@@ -134,53 +162,94 @@ public class WheelView extends View {
         }
 
         @Override
-        public void onStarted() {
-            isScrollingPerformed = true;
-            notifyScrollingListenersAboutStart();
+        public void onFinished() {
+            if (isScrollingPerformed) {
+                notifyScrollingListenersAboutEnd();
+                isScrollingPerformed = false;
+            }
+
+            scrollingOffset = 0;
+            invalidate();
+        }
+
+        @Override
+        public void onJustify() {
+            if (Math.abs(scrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
+                scroller.scroll(scrollingOffset, 0);
+            }
         }
     };
 
-    private List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
-
-    private int scrollingOffset;
-
-    /** Top and bottom shadows colors */
-    private int[] SHADOWS_COLORS = new int[] { 0x00D0D6DB, 0x00D0D6DB, 0x00D0D6DB };
-
-    // Shadows drawables
-    private GradientDrawable topShadow;
-    // View adapter
-    private WheelViewAdapter viewAdapter;
-    // Count of visible items
-    private int visibleItems = DEF_VISIBLE_ITEMS;
-
-    // Wheel drawables
-    private int wheelBackground = R.drawable.wheel_bg;
-
-    private int wheelForeground = R.drawable.wheel_val;
-
     /**
-     * Constructor
+     * Set the the specified scrolling interpolator
+     * 
+     * @param interpolator
+     *            the interpolator
      */
-    public WheelView(Context context) {
-        super(context);
-        initData(context);
+    public void setInterpolator(Interpolator interpolator) {
+        scroller.setInterpolator(interpolator);
     }
 
     /**
-     * Constructor
+     * Gets count of visible items
+     * 
+     * @return the count of visible items
      */
-    public WheelView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initData(context);
+    public int getVisibleItems() {
+        return visibleItems;
     }
 
     /**
-     * Constructor
+     * Sets the desired count of visible items. Actual amount of visible items
+     * depends on wheel layout parameters. To apply changes and rebuild view
+     * call measure().
+     * 
+     * @param count
+     *            the desired count for visible items
      */
-    public WheelView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        initData(context);
+    public void setVisibleItems(int count) {
+        visibleItems = count;
+    }
+
+    /**
+     * Gets view adapter
+     * 
+     * @return the view adapter
+     */
+    public WheelViewAdapter getViewAdapter() {
+        return viewAdapter;
+    }
+
+    // Adapter listener
+    private DataSetObserver dataObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            invalidateWheel(false);
+        }
+
+        @Override
+        public void onInvalidated() {
+            invalidateWheel(true);
+        }
+    };
+
+    /**
+     * Sets view adapter. Usually new adapters contain different views, so it
+     * needs to rebuild view by calling measure().
+     * 
+     * @param viewAdapter
+     *            the view adapter
+     */
+    public void setViewAdapter(WheelViewAdapter viewAdapter) {
+        if (this.viewAdapter != null) {
+            this.viewAdapter.unregisterDataSetObserver(dataObserver);
+        }
+        this.viewAdapter = viewAdapter;
+        if (this.viewAdapter != null) {
+            this.viewAdapter.registerDataSetObserver(dataObserver);
+        }
+
+        invalidateWheel(true);
     }
 
     /**
@@ -194,13 +263,27 @@ public class WheelView extends View {
     }
 
     /**
-     * Adds wheel clicking listener
+     * Removes wheel changing listener
      * 
      * @param listener
      *            the listener
      */
-    public void addClickingListener(OnWheelClickedListener listener) {
-        clickingListeners.add(listener);
+    public void removeChangingListener(OnWheelChangedListener listener) {
+        changingListeners.remove(listener);
+    }
+
+    /**
+     * Notifies changing listeners
+     * 
+     * @param oldValue
+     *            the old wheel value
+     * @param newValue
+     *            the new wheel value
+     */
+    protected void notifyChangingListeners(int oldValue, int newValue) {
+        for (OnWheelChangedListener listener : changingListeners) {
+            listener.onChanged(this, oldValue, newValue);
+        }
     }
 
     /**
@@ -214,47 +297,272 @@ public class WheelView extends View {
     }
 
     /**
-     * Adds view for item to items layout
+     * Removes wheel scrolling listener
      * 
-     * @param index
-     *            the item index
-     * @param first
-     *            the flag indicates if view should be first
-     * @return true if corresponding item exists and is added
+     * @param listener
+     *            the listener
      */
-    private boolean addViewItem(int index, boolean first) {
-        View view = getItemView(index);
-        if (view != null) {
-            if (first) {
-                itemsLayout.addView(view, 0);
-            } else {
-                itemsLayout.addView(view);
-            }
-
-            return true;
-        }
-
-        return false;
+    public void removeScrollingListener(OnWheelScrollListener listener) {
+        scrollingListeners.remove(listener);
     }
 
     /**
-     * Builds view for measuring
+     * Notifies listeners about starting scrolling
      */
-    private void buildViewForMeasuring() {
-        // clear all items
-        if (itemsLayout != null) {
-            recycle.recycleItems(itemsLayout, firstItem, new ItemsRange());
-        } else {
-            createItemsLayout();
+    protected void notifyScrollingListenersAboutStart() {
+        for (OnWheelScrollListener listener : scrollingListeners) {
+            listener.onScrollingStarted(this);
+        }
+    }
+
+    /**
+     * Notifies listeners about ending scrolling
+     */
+    protected void notifyScrollingListenersAboutEnd() {
+        for (OnWheelScrollListener listener : scrollingListeners) {
+            listener.onScrollingFinished(this);
+        }
+    }
+
+    /**
+     * Adds wheel clicking listener
+     * 
+     * @param listener
+     *            the listener
+     */
+    public void addClickingListener(OnWheelClickedListener listener) {
+        clickingListeners.add(listener);
+    }
+
+    /**
+     * Removes wheel clicking listener
+     * 
+     * @param listener
+     *            the listener
+     */
+    public void removeClickingListener(OnWheelClickedListener listener) {
+        clickingListeners.remove(listener);
+    }
+
+    /**
+     * Notifies listeners about clicking
+     */
+    protected void notifyClickListenersAboutClick(int item) {
+        for (OnWheelClickedListener listener : clickingListeners) {
+            listener.onItemClicked(this, item);
+        }
+    }
+
+    /**
+     * Gets current value
+     * 
+     * @return the current value
+     */
+    public int getCurrentItem() {
+        return currentItem;
+    }
+
+    /**
+     * Sets the current item. Does nothing when index is wrong.
+     * 
+     * @param index
+     *            the item index
+     * @param animated
+     *            the animation flag
+     */
+    public void setCurrentItem(int index, boolean animated) {
+        if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
+            return; // throw?
         }
 
-        // add views
-        int addItems = visibleItems / 2;
-        for (int i = currentItem + addItems; i >= currentItem - addItems; i--) {
-            if (addViewItem(i, true)) {
-                firstItem = i;
+        int itemCount = viewAdapter.getItemsCount();
+        if (index < 0 || index >= itemCount) {
+            if (isCyclic) {
+                while (index < 0) {
+                    index += itemCount;
+                }
+                index %= itemCount;
+            } else {
+                return; // throw?
             }
         }
+        if (index != currentItem) {
+            if (animated) {
+                int itemsToScroll = index - currentItem;
+                if (isCyclic) {
+                    int scroll = itemCount + Math.min(index, currentItem) - Math.max(index, currentItem);
+                    if (scroll < Math.abs(itemsToScroll)) {
+                        itemsToScroll = itemsToScroll < 0 ? scroll : -scroll;
+                    }
+                }
+                scroll(itemsToScroll, 0);
+            } else {
+                scrollingOffset = 0;
+
+                int old = currentItem;
+                currentItem = index;
+
+                notifyChangingListeners(old, currentItem);
+
+                invalidate();
+            }
+        }
+    }
+
+    /**
+     * Sets the current item w/o animation. Does nothing when index is wrong.
+     * 
+     * @param index
+     *            the item index
+     */
+    public void setCurrentItem(int index) {
+        setCurrentItem(index, false);
+    }
+
+    /**
+     * Tests if wheel is cyclic. That means before the 1st item there is shown
+     * the last one
+     * 
+     * @return true if wheel is cyclic
+     */
+    public boolean isCyclic() {
+        return isCyclic;
+    }
+
+    /**
+     * Set wheel cyclic flag
+     * 
+     * @param isCyclic
+     *            the flag to set
+     */
+    public void setCyclic(boolean isCyclic) {
+        this.isCyclic = isCyclic;
+        invalidateWheel(false);
+    }
+
+    /**
+     * Determine whether shadows are drawn
+     * 
+     * @return true is shadows are drawn
+     */
+    public boolean drawShadows() {
+        return drawShadows;
+    }
+
+    /**
+     * Set whether shadows should be drawn
+     * 
+     * @param drawShadows
+     *            flag as true or false
+     */
+    public void setDrawShadows(boolean drawShadows) {
+        this.drawShadows = drawShadows;
+    }
+
+    /**
+     * Set the shadow gradient color
+     * 
+     * @param start
+     * @param middle
+     * @param end
+     */
+    public void setShadowColor(int start, int middle, int end) {
+        SHADOWS_COLORS = new int[] { start, middle, end };
+    }
+
+    /**
+     * Sets the drawable for the wheel background
+     * 
+     * @param resource
+     */
+    public void setWheelBackground(int resource) {
+        wheelBackground = resource;
+        setBackgroundResource(wheelBackground);
+    }
+
+    /**
+     * Sets the drawable for the wheel foreground
+     * 
+     * @param resource
+     */
+    public void setWheelForeground(int resource) {
+        wheelForeground = resource;
+        centerDrawable = getContext().getResources().getDrawable(wheelForeground);
+    }
+
+    /**
+     * Invalidates wheel
+     * 
+     * @param clearCaches
+     *            if true then cached views will be clear
+     */
+    public void invalidateWheel(boolean clearCaches) {
+        if (clearCaches) {
+            recycle.clearAll();
+            if (itemsLayout != null) {
+                itemsLayout.removeAllViews();
+            }
+            scrollingOffset = 0;
+        } else if (itemsLayout != null) {
+            // cache all items
+            recycle.recycleItems(itemsLayout, firstItem, new ItemsRange());
+        }
+
+        invalidate();
+    }
+
+    /**
+     * Initializes resources
+     */
+    private void initResourcesIfNecessary() {
+        if (centerDrawable == null) {
+            centerDrawable = getContext().getResources().getDrawable(wheelForeground);
+        }
+
+        if (topShadow == null) {
+            topShadow = new GradientDrawable(Orientation.TOP_BOTTOM, SHADOWS_COLORS);
+        }
+
+        if (bottomShadow == null) {
+            bottomShadow = new GradientDrawable(Orientation.BOTTOM_TOP, SHADOWS_COLORS);
+        }
+
+        setBackgroundResource(wheelBackground);
+    }
+
+    /**
+     * Calculates desired height for layout
+     * 
+     * @param layout
+     *            the source layout
+     * @return the desired layout height
+     */
+    private int getDesiredHeight(LinearLayout layout) {
+        if (layout != null && layout.getChildAt(0) != null) {
+            itemHeight = layout.getChildAt(0).getMeasuredHeight();
+        }
+
+        int desired = itemHeight * visibleItems - itemHeight * ITEM_OFFSET_PERCENT / 50;
+
+        return Math.max(desired, getSuggestedMinimumHeight());
+    }
+
+    /**
+     * Returns height of wheel item
+     * 
+     * @return the item height
+     */
+    private int getItemHeight() {
+        if (itemHeight != 0) {
+            return itemHeight;
+        }
+
+        if (itemsLayout != null && itemsLayout.getChildAt(0) != null) {
+            itemHeight = itemsLayout.getChildAt(0).getHeight();
+            return itemHeight;
+        }
+
+        return getHeight() / visibleItems;
     }
 
     /**
@@ -271,8 +579,7 @@ public class WheelView extends View {
 
         // TODO: make it static
         itemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        itemsLayout.measure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        itemsLayout.measure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         int width = itemsLayout.getMeasuredWidth();
 
         if (mode == MeasureSpec.EXACTLY) {
@@ -288,20 +595,145 @@ public class WheelView extends View {
             }
         }
 
-        itemsLayout.measure(MeasureSpec.makeMeasureSpec(width - 2 * PADDING, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        itemsLayout.measure(MeasureSpec.makeMeasureSpec(width - 2 * PADDING, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 
         return width;
     }
 
-    /**
-     * Creates item layouts if necessary
-     */
-    private void createItemsLayout() {
-        if (itemsLayout == null) {
-            itemsLayout = new LinearLayout(getContext());
-            itemsLayout.setOrientation(LinearLayout.VERTICAL);
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        buildViewForMeasuring();
+
+        int width = calculateLayoutWidth(widthSize, widthMode);
+
+        int height;
+        if (heightMode == MeasureSpec.EXACTLY) {
+            height = heightSize;
+        } else {
+            height = getDesiredHeight(itemsLayout);
+
+            if (heightMode == MeasureSpec.AT_MOST) {
+                height = Math.min(height, heightSize);
+            }
         }
+
+        setMeasuredDimension(width, height);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        layout(r - l, b - t);
+    }
+
+    /**
+     * Sets layouts width and height
+     * 
+     * @param width
+     *            the layout width
+     * @param height
+     *            the layout height
+     */
+    private void layout(int width, int height) {
+        int itemsWidth = width - 2 * PADDING;
+
+        itemsLayout.layout(0, 0, itemsWidth, height);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
+            updateView();
+
+            drawItems(canvas);
+            drawCenterRect(canvas);
+        }
+
+        if (drawShadows)
+            drawShadows(canvas);
+    }
+
+    /**
+     * Draws shadows on top and bottom of control
+     * 
+     * @param canvas
+     *            the canvas for drawing
+     */
+    private void drawShadows(Canvas canvas) {
+        int height = (int) (1.5 * getItemHeight());
+        topShadow.setBounds(0, 0, getWidth(), height);
+        topShadow.draw(canvas);
+
+        bottomShadow.setBounds(0, getHeight() - height, getWidth(), getHeight());
+        bottomShadow.draw(canvas);
+    }
+
+    /**
+     * Draws items
+     * 
+     * @param canvas
+     *            the canvas for drawing
+     */
+    private void drawItems(Canvas canvas) {
+        canvas.save();
+
+        int top = (currentItem - firstItem) * getItemHeight() + (getItemHeight() - getHeight()) / 2;
+        canvas.translate(PADDING, -top + scrollingOffset);
+
+        itemsLayout.draw(canvas);
+
+        canvas.restore();
+    }
+
+    /**
+     * Draws rect for current value
+     * 
+     * @param canvas
+     *            the canvas for drawing
+     */
+    private void drawCenterRect(Canvas canvas) {
+        int center = getHeight() / 2;
+        int offset = (int) (getItemHeight() / 2 * 1.2);
+        centerDrawable.setBounds(0, center - offset, getWidth(), center + offset);
+        centerDrawable.draw(canvas);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!isEnabled() || getViewAdapter() == null) {
+            return true;
+        }
+
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_MOVE:
+            if (getParent() != null) {
+                getParent().requestDisallowInterceptTouchEvent(true);
+            }
+            break;
+
+        case MotionEvent.ACTION_UP:
+            if (!isScrollingPerformed) {
+                int distance = (int) event.getY() - getHeight() / 2;
+                if (distance > 0) {
+                    distance += getItemHeight() / 2;
+                } else {
+                    distance -= getItemHeight() / 2;
+                }
+                int items = distance / getItemHeight();
+                if (items != 0 && isValidItemIndex(currentItem + items)) {
+                    notifyClickListenersAboutClick(currentItem + items);
+                }
+            }
+            break;
+        }
+
+        return scroller.onTouchEvent(event);
     }
 
     /**
@@ -368,101 +800,16 @@ public class WheelView extends View {
     }
 
     /**
-     * Draws rect for current value
+     * Scroll the wheel
      * 
-     * @param canvas
-     *            the canvas for drawing
+     * @param itemsToSkip
+     *            items to scroll
+     * @param time
+     *            scrolling duration
      */
-    private void drawCenterRect(Canvas canvas) {
-        int center = getHeight() / 2;
-        int offset = (int) (getItemHeight() / 2 * 1.2);
-        centerDrawable.setBounds(0, center - offset, getWidth(), center + offset);
-        centerDrawable.draw(canvas);
-    }
-
-    /**
-     * Draws items
-     * 
-     * @param canvas
-     *            the canvas for drawing
-     */
-    private void drawItems(Canvas canvas) {
-        canvas.save();
-
-        int top = (currentItem - firstItem) * getItemHeight() + (getItemHeight() - getHeight()) / 2;
-        canvas.translate(PADDING, -top + scrollingOffset);
-
-        itemsLayout.draw(canvas);
-
-        canvas.restore();
-    }
-
-    /**
-     * Determine whether shadows are drawn
-     * 
-     * @return true is shadows are drawn
-     */
-    public boolean drawShadows() {
-        return drawShadows;
-    }
-
-    /**
-     * Draws shadows on top and bottom of control
-     * 
-     * @param canvas
-     *            the canvas for drawing
-     */
-    private void drawShadows(Canvas canvas) {
-        int height = (int) (1.5 * getItemHeight());
-        topShadow.setBounds(0, 0, getWidth(), height);
-        topShadow.draw(canvas);
-
-        bottomShadow.setBounds(0, getHeight() - height, getWidth(), getHeight());
-        bottomShadow.draw(canvas);
-    }
-
-    /**
-     * Gets current value
-     * 
-     * @return the current value
-     */
-    public int getCurrentItem() {
-        return currentItem;
-    }
-
-    /**
-     * Calculates desired height for layout
-     * 
-     * @param layout
-     *            the source layout
-     * @return the desired layout height
-     */
-    private int getDesiredHeight(LinearLayout layout) {
-        if (layout != null && layout.getChildAt(0) != null) {
-            itemHeight = layout.getChildAt(0).getMeasuredHeight();
-        }
-
-        int desired = itemHeight * visibleItems - itemHeight * ITEM_OFFSET_PERCENT / 50;
-
-        return Math.max(desired, getSuggestedMinimumHeight());
-    }
-
-    /**
-     * Returns height of wheel item
-     * 
-     * @return the item height
-     */
-    private int getItemHeight() {
-        if (itemHeight != 0) {
-            return itemHeight;
-        }
-
-        if (itemsLayout != null && itemsLayout.getChildAt(0) != null) {
-            itemHeight = itemsLayout.getChildAt(0).getHeight();
-            return itemHeight;
-        }
-
-        return getHeight() / visibleItems;
+    public void scroll(int itemsToScroll, int time) {
+        int distance = itemsToScroll * getItemHeight() - scrollingOffset;
+        scroller.scroll(distance, time);
     }
 
     /**
@@ -495,252 +842,6 @@ public class WheelView extends View {
             count += Math.asin(emptyItems);
         }
         return new ItemsRange(first, count);
-    }
-
-    /**
-     * Returns view for specified item
-     * 
-     * @param index
-     *            the item index
-     * @return item view or empty view if index is out of bounds
-     */
-    private View getItemView(int index) {
-        if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
-            return null;
-        }
-        int count = viewAdapter.getItemsCount();
-        if (!isValidItemIndex(index)) {
-            return viewAdapter.getEmptyItem(recycle.getEmptyItem(), itemsLayout);
-        } else {
-            while (index < 0) {
-                index = count + index;
-            }
-        }
-
-        index %= count;
-        return viewAdapter.getItem(index, recycle.getItem(), itemsLayout);
-    }
-
-    /**
-     * Gets view adapter
-     * 
-     * @return the view adapter
-     */
-    public WheelViewAdapter getViewAdapter() {
-        return viewAdapter;
-    }
-
-    /**
-     * Gets count of visible items
-     * 
-     * @return the count of visible items
-     */
-    public int getVisibleItems() {
-        return visibleItems;
-    }
-
-    /**
-     * Initializes class data
-     * 
-     * @param context
-     *            the context
-     */
-    private void initData(Context context) {
-        scroller = new WheelScroller(getContext(), scrollingListener);
-    }
-
-    /**
-     * Initializes resources
-     */
-    private void initResourcesIfNecessary() {
-        if (centerDrawable == null) {
-            centerDrawable = getContext().getResources().getDrawable(wheelForeground);
-        }
-
-        if (topShadow == null) {
-            topShadow = new GradientDrawable(Orientation.TOP_BOTTOM, SHADOWS_COLORS);
-        }
-
-        if (bottomShadow == null) {
-            bottomShadow = new GradientDrawable(Orientation.BOTTOM_TOP, SHADOWS_COLORS);
-        }
-
-        setBackgroundResource(wheelBackground);
-    }
-
-    /**
-     * Invalidates wheel
-     * 
-     * @param clearCaches
-     *            if true then cached views will be clear
-     */
-    public void invalidateWheel(boolean clearCaches) {
-        if (clearCaches) {
-            recycle.clearAll();
-            if (itemsLayout != null) {
-                itemsLayout.removeAllViews();
-            }
-            scrollingOffset = 0;
-        } else if (itemsLayout != null) {
-            // cache all items
-            recycle.recycleItems(itemsLayout, firstItem, new ItemsRange());
-        }
-
-        invalidate();
-    }
-
-    /**
-     * Tests if wheel is cyclic. That means before the 1st item there is shown
-     * the last one
-     * 
-     * @return true if wheel is cyclic
-     */
-    public boolean isCyclic() {
-        return isCyclic;
-    }
-
-    /**
-     * Checks whether intem index is valid
-     * 
-     * @param index
-     *            the item index
-     * @return true if item index is not out of bounds or the wheel is cyclic
-     */
-    private boolean isValidItemIndex(int index) {
-        return viewAdapter != null && viewAdapter.getItemsCount() > 0
-                && (isCyclic || index >= 0 && index < viewAdapter.getItemsCount());
-    }
-
-    /**
-     * Sets layouts width and height
-     * 
-     * @param width
-     *            the layout width
-     * @param height
-     *            the layout height
-     */
-    private void layout(int width, int height) {
-        int itemsWidth = width - 2 * PADDING;
-
-        itemsLayout.layout(0, 0, itemsWidth, height);
-    }
-
-    /**
-     * Notifies changing listeners
-     * 
-     * @param oldValue
-     *            the old wheel value
-     * @param newValue
-     *            the new wheel value
-     */
-    protected void notifyChangingListeners(int oldValue, int newValue) {
-        for (OnWheelChangedListener listener : changingListeners) {
-            listener.onChanged(this, oldValue, newValue);
-        }
-    }
-
-    /**
-     * Notifies listeners about clicking
-     */
-    protected void notifyClickListenersAboutClick(int item) {
-        for (OnWheelClickedListener listener : clickingListeners) {
-            listener.onItemClicked(this, item);
-        }
-    }
-
-    /**
-     * Notifies listeners about ending scrolling
-     */
-    protected void notifyScrollingListenersAboutEnd() {
-        for (OnWheelScrollListener listener : scrollingListeners) {
-            listener.onScrollingFinished(this);
-        }
-    }
-
-    /**
-     * Notifies listeners about starting scrolling
-     */
-    protected void notifyScrollingListenersAboutStart() {
-        for (OnWheelScrollListener listener : scrollingListeners) {
-            listener.onScrollingStarted(this);
-        }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (viewAdapter != null && viewAdapter.getItemsCount() > 0) {
-            updateView();
-
-            drawItems(canvas);
-            drawCenterRect(canvas);
-        }
-
-        if (drawShadows)
-            drawShadows(canvas);
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        layout(r - l, b - t);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        buildViewForMeasuring();
-
-        int width = calculateLayoutWidth(widthSize, widthMode);
-
-        int height;
-        if (heightMode == MeasureSpec.EXACTLY) {
-            height = heightSize;
-        } else {
-            height = getDesiredHeight(itemsLayout);
-
-            if (heightMode == MeasureSpec.AT_MOST) {
-                height = Math.min(height, heightSize);
-            }
-        }
-
-        setMeasuredDimension(width, height);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!isEnabled() || getViewAdapter() == null) {
-            return true;
-        }
-
-        switch (event.getAction()) {
-        case MotionEvent.ACTION_MOVE:
-            if (getParent() != null) {
-                getParent().requestDisallowInterceptTouchEvent(true);
-            }
-            break;
-
-        case MotionEvent.ACTION_UP:
-            if (!isScrollingPerformed) {
-                int distance = (int) event.getY() - getHeight() / 2;
-                if (distance > 0) {
-                    distance += getItemHeight() / 2;
-                } else {
-                    distance -= getItemHeight() / 2;
-                }
-                int items = distance / getItemHeight();
-                if (items != 0 && isValidItemIndex(currentItem + items)) {
-                    notifyClickListenersAboutClick(currentItem + items);
-                }
-            }
-            break;
-        }
-
-        return scroller.onTouchEvent(event);
     }
 
     /**
@@ -787,206 +888,6 @@ public class WheelView extends View {
     }
 
     /**
-     * Removes wheel changing listener
-     * 
-     * @param listener
-     *            the listener
-     */
-    public void removeChangingListener(OnWheelChangedListener listener) {
-        changingListeners.remove(listener);
-    }
-
-    /**
-     * Removes wheel clicking listener
-     * 
-     * @param listener
-     *            the listener
-     */
-    public void removeClickingListener(OnWheelClickedListener listener) {
-        clickingListeners.remove(listener);
-    }
-
-    /**
-     * Removes wheel scrolling listener
-     * 
-     * @param listener
-     *            the listener
-     */
-    public void removeScrollingListener(OnWheelScrollListener listener) {
-        scrollingListeners.remove(listener);
-    }
-
-    /**
-     * Scroll the wheel
-     * 
-     * @param itemsToSkip
-     *            items to scroll
-     * @param time
-     *            scrolling duration
-     */
-    public void scroll(int itemsToScroll, int time) {
-        int distance = itemsToScroll * getItemHeight() - scrollingOffset;
-        scroller.scroll(distance, time);
-    }
-
-    /**
-     * Sets the current item w/o animation. Does nothing when index is wrong.
-     * 
-     * @param index
-     *            the item index
-     */
-    public void setCurrentItem(int index) {
-        setCurrentItem(index, false);
-    }
-
-    /**
-     * Sets the current item. Does nothing when index is wrong.
-     * 
-     * @param index
-     *            the item index
-     * @param animated
-     *            the animation flag
-     */
-    public void setCurrentItem(int index, boolean animated) {
-        if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
-            return; // throw?
-        }
-
-        int itemCount = viewAdapter.getItemsCount();
-        if (index < 0 || index >= itemCount) {
-            if (isCyclic) {
-                while (index < 0) {
-                    index += itemCount;
-                }
-                index %= itemCount;
-            } else {
-                return; // throw?
-            }
-        }
-        if (index != currentItem) {
-            if (animated) {
-                int itemsToScroll = index - currentItem;
-                if (isCyclic) {
-                    int scroll = itemCount + Math.min(index, currentItem) - Math.max(index, currentItem);
-                    if (scroll < Math.abs(itemsToScroll)) {
-                        itemsToScroll = itemsToScroll < 0 ? scroll : -scroll;
-                    }
-                }
-                scroll(itemsToScroll, 0);
-            } else {
-                scrollingOffset = 0;
-
-                int old = currentItem;
-                currentItem = index;
-
-                notifyChangingListeners(old, currentItem);
-
-                invalidate();
-            }
-        }
-    }
-
-    /**
-     * Set wheel cyclic flag
-     * 
-     * @param isCyclic
-     *            the flag to set
-     */
-    public void setCyclic(boolean isCyclic) {
-        this.isCyclic = isCyclic;
-        invalidateWheel(false);
-    }
-
-    /**
-     * Set whether shadows should be drawn
-     * 
-     * @param drawShadows
-     *            flag as true or false
-     */
-    public void setDrawShadows(boolean drawShadows) {
-        this.drawShadows = drawShadows;
-    }
-
-    /**
-     * Set the the specified scrolling interpolator
-     * 
-     * @param interpolator
-     *            the interpolator
-     */
-    public void setInterpolator(Interpolator interpolator) {
-        scroller.setInterpolator(interpolator);
-    }
-
-    /**
-     * Set the shadow gradient color
-     * 
-     * @param start
-     * @param middle
-     * @param end
-     */
-    public void setShadowColor(int start, int middle, int end) {
-        SHADOWS_COLORS = new int[] { start, middle, end };
-    }
-
-    /**
-     * Sets view adapter. Usually new adapters contain different views, so it
-     * needs to rebuild view by calling measure().
-     * 
-     * @param viewAdapter
-     *            the view adapter
-     */
-    public void setViewAdapter(WheelViewAdapter viewAdapter) {
-        if (this.viewAdapter != null) {
-            this.viewAdapter.unregisterDataSetObserver(dataObserver);
-        }
-        this.viewAdapter = viewAdapter;
-        if (this.viewAdapter != null) {
-            this.viewAdapter.registerDataSetObserver(dataObserver);
-        }
-
-        invalidateWheel(true);
-    }
-
-    /**
-     * Sets the desired count of visible items. Actual amount of visible items
-     * depends on wheel layout parameters. To apply changes and rebuild view
-     * call measure().
-     * 
-     * @param count
-     *            the desired count for visible items
-     */
-    public void setVisibleItems(int count) {
-        visibleItems = count;
-    }
-
-    /**
-     * Sets the drawable for the wheel background
-     * 
-     * @param resource
-     */
-    public void setWheelBackground(int resource) {
-        wheelBackground = resource;
-        setBackgroundResource(wheelBackground);
-    }
-
-    /**
-     * Sets the drawable for the wheel foreground
-     * 
-     * @param resource
-     */
-    public void setWheelForeground(int resource) {
-        wheelForeground = resource;
-        centerDrawable = getContext().getResources().getDrawable(wheelForeground);
-    }
-
-    /**
-     * Stops scrolling
-     */
-    public void stopScrolling() {
-        scroller.stopScrolling();
-    }
-
-    /**
      * Updates view. Rebuilds items and label if necessary, recalculate items
      * sizes.
      */
@@ -995,5 +896,101 @@ public class WheelView extends View {
             calculateLayoutWidth(getWidth(), MeasureSpec.EXACTLY);
             layout(getWidth(), getHeight());
         }
+    }
+
+    /**
+     * Creates item layouts if necessary
+     */
+    private void createItemsLayout() {
+        if (itemsLayout == null) {
+            itemsLayout = new LinearLayout(getContext());
+            itemsLayout.setOrientation(LinearLayout.VERTICAL);
+        }
+    }
+
+    /**
+     * Builds view for measuring
+     */
+    private void buildViewForMeasuring() {
+        // clear all items
+        if (itemsLayout != null) {
+            recycle.recycleItems(itemsLayout, firstItem, new ItemsRange());
+        } else {
+            createItemsLayout();
+        }
+
+        // add views
+        int addItems = visibleItems / 2;
+        for (int i = currentItem + addItems; i >= currentItem - addItems; i--) {
+            if (addViewItem(i, true)) {
+                firstItem = i;
+            }
+        }
+    }
+
+    /**
+     * Adds view for item to items layout
+     * 
+     * @param index
+     *            the item index
+     * @param first
+     *            the flag indicates if view should be first
+     * @return true if corresponding item exists and is added
+     */
+    private boolean addViewItem(int index, boolean first) {
+        View view = getItemView(index);
+        if (view != null) {
+            if (first) {
+                itemsLayout.addView(view, 0);
+            } else {
+                itemsLayout.addView(view);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether intem index is valid
+     * 
+     * @param index
+     *            the item index
+     * @return true if item index is not out of bounds or the wheel is cyclic
+     */
+    private boolean isValidItemIndex(int index) {
+        return viewAdapter != null && viewAdapter.getItemsCount() > 0 && (isCyclic || index >= 0 && index < viewAdapter.getItemsCount());
+    }
+
+    /**
+     * Returns view for specified item
+     * 
+     * @param index
+     *            the item index
+     * @return item view or empty view if index is out of bounds
+     */
+    private View getItemView(int index) {
+        if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
+            return null;
+        }
+        int count = viewAdapter.getItemsCount();
+        if (!isValidItemIndex(index)) {
+            return viewAdapter.getEmptyItem(recycle.getEmptyItem(), itemsLayout);
+        } else {
+            while (index < 0) {
+                index = count + index;
+            }
+        }
+
+        index %= count;
+        return viewAdapter.getItem(index, recycle.getItem(), itemsLayout);
+    }
+
+    /**
+     * Stops scrolling
+     */
+    public void stopScrolling() {
+        scroller.stopScrolling();
     }
 }

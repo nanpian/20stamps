@@ -19,19 +19,14 @@ package jp.co.cyberagent.android.gpuimage;
 import android.opengl.GLES20;
 
 public class GPUImage3x3TextureSamplingFilter extends GPUImageFilter {
-    public static final String THREE_X_THREE_TEXTURE_SAMPLING_VERTEX_SHADER = "" + "attribute vec4 position;\n"
-            + "attribute vec4 inputTextureCoordinate;\n" + "\n" + "uniform highp float texelWidth; \n"
-            + "uniform highp float texelHeight; \n" + "\n" + "varying vec2 textureCoordinate;\n"
-            + "varying vec2 leftTextureCoordinate;\n" + "varying vec2 rightTextureCoordinate;\n" + "\n"
-            + "varying vec2 topTextureCoordinate;\n" + "varying vec2 topLeftTextureCoordinate;\n"
-            + "varying vec2 topRightTextureCoordinate;\n" + "\n" + "varying vec2 bottomTextureCoordinate;\n"
-            + "varying vec2 bottomLeftTextureCoordinate;\n" + "varying vec2 bottomRightTextureCoordinate;\n" + "\n"
-            + "void main()\n" + "{\n" + "    gl_Position = position;\n" + "\n"
-            + "    vec2 widthStep = vec2(texelWidth, 0.0);\n" + "    vec2 heightStep = vec2(0.0, texelHeight);\n"
-            + "    vec2 widthHeightStep = vec2(texelWidth, texelHeight);\n"
-            + "    vec2 widthNegativeHeightStep = vec2(texelWidth, -texelHeight);\n" + "\n"
-            + "    textureCoordinate = inputTextureCoordinate.xy;\n"
-            + "    leftTextureCoordinate = inputTextureCoordinate.xy - widthStep;\n"
+    public static final String THREE_X_THREE_TEXTURE_SAMPLING_VERTEX_SHADER = "" + "attribute vec4 position;\n" + "attribute vec4 inputTextureCoordinate;\n"
+            + "\n" + "uniform highp float texelWidth; \n" + "uniform highp float texelHeight; \n" + "\n" + "varying vec2 textureCoordinate;\n"
+            + "varying vec2 leftTextureCoordinate;\n" + "varying vec2 rightTextureCoordinate;\n" + "\n" + "varying vec2 topTextureCoordinate;\n"
+            + "varying vec2 topLeftTextureCoordinate;\n" + "varying vec2 topRightTextureCoordinate;\n" + "\n" + "varying vec2 bottomTextureCoordinate;\n"
+            + "varying vec2 bottomLeftTextureCoordinate;\n" + "varying vec2 bottomRightTextureCoordinate;\n" + "\n" + "void main()\n" + "{\n"
+            + "    gl_Position = position;\n" + "\n" + "    vec2 widthStep = vec2(texelWidth, 0.0);\n" + "    vec2 heightStep = vec2(0.0, texelHeight);\n"
+            + "    vec2 widthHeightStep = vec2(texelWidth, texelHeight);\n" + "    vec2 widthNegativeHeightStep = vec2(texelWidth, -texelHeight);\n" + "\n"
+            + "    textureCoordinate = inputTextureCoordinate.xy;\n" + "    leftTextureCoordinate = inputTextureCoordinate.xy - widthStep;\n"
             + "    rightTextureCoordinate = inputTextureCoordinate.xy + widthStep;\n" + "\n"
             + "    topTextureCoordinate = inputTextureCoordinate.xy - heightStep;\n"
             + "    topLeftTextureCoordinate = inputTextureCoordinate.xy - widthHeightStep;\n"
@@ -40,13 +35,13 @@ public class GPUImage3x3TextureSamplingFilter extends GPUImageFilter {
             + "    bottomLeftTextureCoordinate = inputTextureCoordinate.xy - widthNegativeHeightStep;\n"
             + "    bottomRightTextureCoordinate = inputTextureCoordinate.xy + widthHeightStep;\n" + "}";
 
-    private boolean mHasOverriddenImageSizeFactor = false;
-    private float mLineSize = 1.0f;
-
-    private float mTexelHeight;
-    private float mTexelWidth;
-    private int mUniformTexelHeightLocation;
     private int mUniformTexelWidthLocation;
+    private int mUniformTexelHeightLocation;
+
+    private boolean mHasOverriddenImageSizeFactor = false;
+    private float mTexelWidth;
+    private float mTexelHeight;
+    private float mLineSize = 1.0f;
 
     public GPUImage3x3TextureSamplingFilter() {
         this(NO_FILTER_VERTEX_SHADER);
@@ -74,11 +69,10 @@ public class GPUImage3x3TextureSamplingFilter extends GPUImageFilter {
         }
     }
 
-    public void setLineSize(final float size) {
-        mLineSize = size;
-        mTexelWidth = size / getOutputWidth();
-        mTexelHeight = size / getOutputHeight();
-        updateTexelValues();
+    public void setTexelWidth(final float texelWidth) {
+        mHasOverriddenImageSizeFactor = true;
+        mTexelWidth = texelWidth;
+        setFloat(mUniformTexelWidthLocation, texelWidth);
     }
 
     public void setTexelHeight(final float texelHeight) {
@@ -87,10 +81,11 @@ public class GPUImage3x3TextureSamplingFilter extends GPUImageFilter {
         setFloat(mUniformTexelHeightLocation, texelHeight);
     }
 
-    public void setTexelWidth(final float texelWidth) {
-        mHasOverriddenImageSizeFactor = true;
-        mTexelWidth = texelWidth;
-        setFloat(mUniformTexelWidthLocation, texelWidth);
+    public void setLineSize(final float size) {
+        mLineSize = size;
+        mTexelWidth = size / getOutputWidth();
+        mTexelHeight = size / getOutputHeight();
+        updateTexelValues();
     }
 
     private void updateTexelValues() {

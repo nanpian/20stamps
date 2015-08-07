@@ -5,30 +5,56 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 public class Texture2D {
+    private int mWidth;
+    private int mHeight;
+    private int mPow2Width;
+    private int mPow2Height;
+    private float maxU = 1.0f;
+    private float maxV = 1.0f;
+
+    public int getWidth() {
+        return mWidth;
+    }
+
+    public int getHeight() {
+        return mHeight;
+    }
+
+    private Bitmap mBitmap = null;
+
+    private int textureId = 0;
+
+    // 删除纹理数据
+    public void delete(GL10 gl) {
+        if (textureId != 0) {
+            gl.glDeleteTextures(1, new int[] { textureId }, 0);
+            textureId = 0;
+        }
+
+        // bitmap
+        if (mBitmap != null) {
+            if (mBitmap.isRecycled())
+                mBitmap.recycle();
+            mBitmap = null;
+        }
+
+    }
+
     public static int pow2(int size) {
-        int small = (int) (Math.log(size) / Math.log(2.0f));
+        int small = (int) (Math.log((double) size) / Math.log(2.0f));
         if ((1 << small) >= size)
             return 1 << small;
         else
             return 1 << (small + 1);
     }
-    private float maxU = 1.0f;
-    private float maxV = 1.0f;
-    private Bitmap mBitmap = null;
-    private int mHeight;
-    private int mPow2Height;
-
-    private int mPow2Width;
-
-    private int mWidth;
-
-    private int textureId = 0;
 
     // 构建，推迟到第一次绑定时
     public Texture2D(Bitmap bmp) {
@@ -45,8 +71,7 @@ public class Texture2D {
         maxU = mWidth / (float) mPow2Width;
         maxV = mHeight / (float) mPow2Height;
 
-        Bitmap bitmap = Bitmap.createBitmap(mPow2Width, mPow2Height, bmp.hasAlpha() ? Bitmap.Config.ARGB_8888
-                : Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(mPow2Width, mPow2Height, bmp.hasAlpha() ? Bitmap.Config.ARGB_8888 : Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawBitmap(bmp, 0, 0, null);
         mBitmap = bitmap;
@@ -73,22 +98,6 @@ public class Texture2D {
         gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
     }
 
-    // 删除纹理数据
-    public void delete(GL10 gl) {
-        if (textureId != 0) {
-            gl.glDeleteTextures(1, new int[] { textureId }, 0);
-            textureId = 0;
-        }
-
-        // bitmap
-        if (mBitmap != null) {
-            if (mBitmap.isRecycled())
-                mBitmap.recycle();
-            mBitmap = null;
-        }
-
-    }
-
     // 绘制到屏幕上
     public void draw(GL10 gl, float x, float y) {
         gl.glEnable(GL10.GL_TEXTURE_2D);
@@ -99,8 +108,7 @@ public class Texture2D {
         this.bind(gl);
 
         // 映射
-        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y, x + mWidth, 0, x, y + mHeight, x + mWidth,
-                y + mHeight, });
+        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y, x + mWidth, 0, x, y + mHeight, x + mWidth, y + mHeight, });
         FloatBuffer coordBuffer = floatBufferUtil(new float[] { 0, 0, maxU, 0, 0, maxV, maxU, maxV, });
 
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, coordBuffer);
@@ -122,8 +130,7 @@ public class Texture2D {
 
         // 映射
         // 映射
-        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y, x + width, 0, x, y + height, x + width,
-                y + height, });
+        FloatBuffer verticleBuffer = floatBufferUtil(new float[] { x, y, x + width, 0, x, y + height, x + width, y + height, });
         FloatBuffer coordBuffer = floatBufferUtil(new float[] { 0, 0, maxU, 0, 0, maxV, maxU, maxV, });
 
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, coordBuffer);
@@ -151,13 +158,5 @@ public class Texture2D {
         mBuffer.put(arr);
         mBuffer.position(0);
         return mBuffer;
-    }
-
-    public int getHeight() {
-        return mHeight;
-    }
-
-    public int getWidth() {
-        return mWidth;
     }
 }

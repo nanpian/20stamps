@@ -31,6 +31,81 @@ import com.stamp20.app.util.Log;
 import com.stamp20.gallary.ChildAdapter;
 
 public class ShowFBImageActivity extends Activity implements OnItemClickListener {
+    private static final String TAG = "Show_Facebook_ImageActivity";
+    private final static int LOAD_OK = 1;
+    private final static int FILE_TMP_OK = 2;
+
+    private GridView mGridView;
+    private String mParseCmd;
+    private ChildAdapter adapter;
+    private ImageView headerPrevious = null;
+    private TextView headerTitle = null;
+
+    FbPhotoResult mAlbumPhotos = null;
+    private Dialog progressDialog;
+
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+            case LOAD_OK:
+                Log.d(TAG, "Receive Msg LOAD_OK");
+                adapter = new ChildAdapter(ShowFBImageActivity.this, mAlbumPhotos, mGridView);
+                mGridView.setAdapter(adapter);
+                mGridView.setOnItemClickListener(ShowFBImageActivity.this);
+                break;
+            case FILE_TMP_OK:
+                Log.d(TAG, "Recevie Msg FILE_TMP_OK");
+                break;
+            }
+        }
+
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_show_image_grid);
+        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
+
+        headerPrevious = (ImageView) findViewById(R.id.header_previous);
+        headerPrevious.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        headerTitle = (TextView) findViewById(R.id.header_title);
+        headerTitle.setText(R.string.select_a_picture);
+
+        mGridView = (GridView) findViewById(R.id.child_grid);
+        mParseCmd = getIntent().getStringExtra("parse_cmd");
+
+        Log.d(TAG, "receiver cmd: " + mParseCmd);
+
+        getFacebookPhotos();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        String url = mAlbumPhotos.get(position).getSourceImageUrl();
+
+        Log.d(TAG, "photo position: " + position + " url: " + url);
+
+        progressDialog = ProgressDialog.show(this, "", "Download...", true);
+
+        new DownloadImageTask().execute(url);
+    }
+
     private class DownloadImageTask extends AsyncTask<String, Void, Intent> {
 
         @Override
@@ -69,39 +144,6 @@ public class ShowFBImageActivity extends Activity implements OnItemClickListener
         }
 
     }
-    private final static int FILE_TMP_OK = 2;
-    private final static int LOAD_OK = 1;
-
-    private static final String TAG = "Show_Facebook_ImageActivity";
-    private ChildAdapter adapter;
-    private ImageView headerPrevious = null;
-    private TextView headerTitle = null;
-    FbPhotoResult mAlbumPhotos = null;
-
-    private GridView mGridView;
-    private Handler mHandler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-            case LOAD_OK:
-                Log.d(TAG, "Receive Msg LOAD_OK");
-                adapter = new ChildAdapter(ShowFBImageActivity.this, mAlbumPhotos, mGridView);
-                mGridView.setAdapter(adapter);
-                mGridView.setOnItemClickListener(ShowFBImageActivity.this);
-                break;
-            case FILE_TMP_OK:
-                Log.d(TAG, "Recevie Msg FILE_TMP_OK");
-                break;
-            }
-        }
-
-    };
-
-    private String mParseCmd;
-
-    private Dialog progressDialog;
 
     private void getFacebookPhotos() {
         new Thread(new Runnable() {
@@ -113,47 +155,5 @@ public class ShowFBImageActivity extends Activity implements OnItemClickListener
             }
 
         }).start();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_image_grid);
-        FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
-
-        headerPrevious = (ImageView) findViewById(R.id.header_previous);
-        headerPrevious.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        headerTitle = (TextView) findViewById(R.id.header_title);
-        headerTitle.setText(R.string.select_a_picture);
-
-        mGridView = (GridView) findViewById(R.id.child_grid);
-        mParseCmd = getIntent().getStringExtra("parse_cmd");
-
-        Log.d(TAG, "receiver cmd: " + mParseCmd);
-
-        getFacebookPhotos();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        String url = mAlbumPhotos.get(position).getSourceImageUrl();
-
-        Log.d(TAG, "photo position: " + position + " url: " + url);
-
-        progressDialog = ProgressDialog.show(this, "", "Download...", true);
-
-        new DownloadImageTask().execute(url);
     }
 }

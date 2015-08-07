@@ -19,8 +19,8 @@ import com.j256.ormlite.table.TableUtils;
  */
 public class ShopInfoDao {
 
-    private Dao<ShopInfoData, Integer> dao;
     private com.stamp20.app.db.DatabaseHelper helper;
+    private Dao<ShopInfoData, Integer> dao;
 
     public ShopInfoDao(Context mContext) {
         try {
@@ -50,13 +50,33 @@ public class ShopInfoDao {
     }
 
     /**
-     * 删除所有数据
+     * 更新一条数据
+     * 
+     * @param user
      */
-    public void deleteAll() {
+    public void update(ShopInfoData dataInfo) {
+
+        if (dataInfo == null)
+            return;
+
         try {
-            TableUtils.clearTable(helper.getConnectionSource(), ShopInfoData.class);
+            dao.update(dataInfo);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 查询所有数据
+     * 
+     * @return
+     */
+    public List<ShopInfoData> queryAll() {
+        try {
+            return dao.queryForAll();
         } catch (SQLException e) {
             // TODO: handle exception
+            return null;
         }
     }
 
@@ -79,33 +99,13 @@ public class ShopInfoDao {
     }
 
     /**
-     * 查询所有数据
-     * 
-     * @return
+     * 删除所有数据
      */
-    public List<ShopInfoData> queryAll() {
+    public void deleteAll() {
         try {
-            return dao.queryForAll();
+            TableUtils.clearTable(helper.getConnectionSource(), ShopInfoData.class);
         } catch (SQLException e) {
             // TODO: handle exception
-            return null;
-        }
-    }
-
-    /**
-     * 更新一条数据
-     * 
-     * @param user
-     */
-    public void update(ShopInfoData dataInfo) {
-
-        if (dataInfo == null)
-            return;
-
-        try {
-            dao.update(dataInfo);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 

@@ -35,6 +35,21 @@ public abstract class AbstractWheelAdapter implements WheelViewAdapter {
         return null;
     }
 
+    @Override
+    public void registerDataSetObserver(DataSetObserver observer) {
+        if (datasetObservers == null) {
+            datasetObservers = new LinkedList<DataSetObserver>();
+        }
+        datasetObservers.add(observer);
+    }
+
+    @Override
+    public void unregisterDataSetObserver(DataSetObserver observer) {
+        if (datasetObservers != null) {
+            datasetObservers.remove(observer);
+        }
+    }
+
     /**
      * Notifies observers about data changing
      */
@@ -54,21 +69,6 @@ public abstract class AbstractWheelAdapter implements WheelViewAdapter {
             for (DataSetObserver observer : datasetObservers) {
                 observer.onInvalidated();
             }
-        }
-    }
-
-    @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-        if (datasetObservers == null) {
-            datasetObservers = new LinkedList<DataSetObserver>();
-        }
-        datasetObservers.add(observer);
-    }
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-        if (datasetObservers != null) {
-            datasetObservers.remove(observer);
         }
     }
 }

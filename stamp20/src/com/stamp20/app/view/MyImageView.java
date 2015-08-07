@@ -5,11 +5,11 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class MyImageView extends ImageView {
-    public interface OnMeasureListener {
-        public void onMeasureSize(int width, int height);
-    }
-
     private OnMeasureListener onMeasureListener;
+
+    public void setOnMeasureListener(OnMeasureListener onMeasureListener) {
+        this.onMeasureListener = onMeasureListener;
+    }
 
     public MyImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,8 +29,8 @@ public class MyImageView extends ImageView {
         }
     }
 
-    public void setOnMeasureListener(OnMeasureListener onMeasureListener) {
-        this.onMeasureListener = onMeasureListener;
+    public interface OnMeasureListener {
+        public void onMeasureSize(int width, int height);
     }
 
 }

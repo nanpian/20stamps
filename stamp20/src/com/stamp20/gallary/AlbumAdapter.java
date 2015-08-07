@@ -2,6 +2,11 @@ package com.stamp20.gallary;
 
 import java.util.List;
 
+import com.squareup.picasso.Picasso;
+import com.stamp20.app.R;
+import com.stamp20.app.util.FontManager;
+import com.stamp20.app.view.MyImageView;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,20 +16,9 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.stamp20.app.R;
-import com.stamp20.app.util.FontManager;
-import com.stamp20.app.view.MyImageView;
-
 public class AlbumAdapter extends BaseAdapter {
-    public static class ViewHolder {
-        public MyImageView mImageView;
-        public TextView mTextViewCounts;
-        public TextView mTextViewTitle;
-    }
     private List<Album> mAlbums;
     private Context mContext;
-
     private LayoutInflater mInflater;
 
     public AlbumAdapter(Context context, List<Album> albums) {
@@ -77,10 +71,15 @@ public class AlbumAdapter extends BaseAdapter {
         String uri = album.getCoverUri();
         // "file://" or "http://"
         Log.i("wangpeng14", "album cover uri: " + uri);
-        Picasso.with(mContext).load(uri).resize(200, 200).centerCrop()
-                .placeholder(R.drawable.friends_sends_pictures_no).into(viewHolder.mImageView);
+        Picasso.with(mContext).load(uri).resize(200, 200).centerCrop().placeholder(R.drawable.friends_sends_pictures_no).into(viewHolder.mImageView);
 
         return convertView;
+    }
+
+    public static class ViewHolder {
+        public MyImageView mImageView;
+        public TextView mTextViewTitle;
+        public TextView mTextViewCounts;
     }
 
 }

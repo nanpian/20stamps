@@ -23,95 +23,35 @@ import com.stamp20.app.view.ZoomImageView;
 
 public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoomListener, View.OnClickListener {
 
-    public static final int ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE = ACTIVITY_RESULT_FOR_SELECT_PIC + 1;
-
-    public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
-
-    private static final int ACTIVITY_RESULT_FOR_SELECT_PIC = 1;
-    private static final int MSG_CHANGE_DESIGN = MSG_SELECT_PICTURE + 1;
-    private static final int MSG_SELECT_PICTURE = 1000;
-    private static final CharSequence titleName = "Customize Front";
-    boolean bCurrentBackgroundPicAlhaFlag = false;
-    /**
-     * 待展示的图片
-     */
-    private Bitmap bitmap;
-    private ImageView headerPrevious;
-    private TextView headerTitle;
-
-    private ImageView mBackgroundPic;
-
-    private Button mChoosePhoto;
-    private Button mChooseTemplate;
-    private RelativeLayout mCross;
-    private int mCurrentBackgroundPicId = R.drawable.cards_new_year;
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-            case MSG_SELECT_PICTURE:
-                Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
-                Uri uri = (Uri) msg.obj;
-                bitmap = ImageUtil.loadDownsampledBitmap(CardsActivity.this, uri, 2);
-                zoomImageView.setImageBitmap(bitmap);
-                break;
-            case MSG_CHANGE_DESIGN:
-                Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
-                int templateId = (Integer) msg.obj;
-                if (templateId != -1) {
-                    mBackgroundPic.setImageResource(templateId);
-                }
-                break;
-            default:
-                break;
-            }
-        }
-
-    };
-    private RelativeLayout mTextTip;
-
-    private TextView mTextViewCurrentRatio;
-
-    private TextView mTextViewInitRatio;
-
     /**
      * 自定义的ImageView控制，可对图片进行多点触控缩放和拖动
      */
     private ZoomImageView zoomImageView;
 
-    private void changeTemplate() {
-        Intent intent = new Intent();
-        intent.setClass(CardsActivity.this, CardsTemplateChooseActivity.class);
-        startActivityForResult(new Intent(CardsActivity.this, CardsTemplateChooseActivity.class),
-                ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE);
-    }
+    /**
+     * 待展示的图片
+     */
+    private Bitmap bitmap;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ACTIVITY_RESULT_FOR_SELECT_PIC && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
-        } else if (requestCode == ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE && resultCode == RESULT_OK) {
-            int temPos = data.getIntExtra(ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN,
-                    CardsTemplateUtils.getTransTemplateId(temPos)));
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+    private Button mChoosePhoto;
+    private Button mChooseTemplate;
+    private ImageView mBackgroundPic;
+    private RelativeLayout mCross;
+    private RelativeLayout mTextTip;
+    private TextView mTextViewInitRatio;
+    private TextView mTextViewCurrentRatio;
+    private int mCurrentBackgroundPicId = R.drawable.cards_new_year;
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == mChoosePhoto.getId()) {
-            com.stamp20.app.util.Log.d(this, "mChoosePhoto.click");
-            selectPicture();
-        } else if (id == mChooseTemplate.getId()) {
-            com.stamp20.app.util.Log.d(this, "mChooseTemplate.click");
-            changeTemplate();
-        } else if (id == R.id.header_previous) {
-            finish();
-        }
-    }
+    private ImageView headerPrevious;
+
+    private TextView headerTitle;
+    private static final int ACTIVITY_RESULT_FOR_SELECT_PIC = 1;
+    public static final int ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE = ACTIVITY_RESULT_FOR_SELECT_PIC + 1;
+    private static final int MSG_SELECT_PICTURE = 1000;
+    private static final int MSG_CHANGE_DESIGN = MSG_SELECT_PICTURE + 1;
+    public static final String ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID = "activity_result_for_change_template_extra_template_id";
+
+    private static final CharSequence titleName = "Customize Front";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +87,55 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
 
     }
 
+    private void changeTemplate() {
+        Intent intent = new Intent();
+        intent.setClass(CardsActivity.this, CardsTemplateChooseActivity.class);
+        startActivityForResult(new Intent(CardsActivity.this, CardsTemplateChooseActivity.class), ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE);
+    }
+
+    private void selectPicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, ACTIVITY_RESULT_FOR_SELECT_PIC);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACTIVITY_RESULT_FOR_SELECT_PIC && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_SELECT_PICTURE, uri));
+        } else if (requestCode == ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE && resultCode == RESULT_OK) {
+            int temPos = data.getIntExtra(ACTIVITY_RESULT_FOR_CHANGE_TEMPLATE_EXTRA_TEMPLATE_ID, -1);
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_CHANGE_DESIGN, CardsTemplateUtils.getTransTemplateId(temPos)));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case MSG_SELECT_PICTURE:
+                Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
+                Uri uri = (Uri) msg.obj;
+                bitmap = ImageUtil.loadDownsampledBitmap(CardsActivity.this, uri, 2);
+                zoomImageView.setImageBitmap(bitmap);
+                break;
+            case MSG_CHANGE_DESIGN:
+                Log.d(this, "handleMessage--MSG_SELECT_PICTURE");
+                int templateId = (Integer) msg.obj;
+                if (templateId != -1) {
+                    mBackgroundPic.setImageResource(templateId);
+                }
+                break;
+            default:
+                break;
+            }
+        }
+
+    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -155,6 +144,8 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
             bitmap.recycle();
         }
     }
+
+    boolean bCurrentBackgroundPicAlhaFlag = false;
 
     @Override
     public void onMoveOrZoomListener(boolean flag, float initRatio, float totalRatio) {
@@ -180,10 +171,17 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
         }
     }
 
-    private void selectPicture() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, ACTIVITY_RESULT_FOR_SELECT_PIC);
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == mChoosePhoto.getId()) {
+            com.stamp20.app.util.Log.d(this, "mChoosePhoto.click");
+            selectPicture();
+        } else if (id == mChooseTemplate.getId()) {
+            com.stamp20.app.util.Log.d(this, "mChooseTemplate.click");
+            changeTemplate();
+        } else if (id == R.id.header_previous) {
+            finish();
+        }
     }
 }

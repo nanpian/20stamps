@@ -24,20 +24,18 @@ import android.opengl.GLES20;
  * the default. green: blue:
  */
 public class GPUImageRGBFilter extends GPUImageFilter {
-    public static final String RGB_FRAGMENT_SHADER = "" + "  varying highp vec2 textureCoordinate;\n" + "  \n"
-            + "  uniform sampler2D inputImageTexture;\n" + "  uniform highp float red;\n"
-            + "  uniform highp float green;\n" + "  uniform highp float blue;\n" + "  \n" + "  void main()\n" + "  {\n"
+    public static final String RGB_FRAGMENT_SHADER = "" + "  varying highp vec2 textureCoordinate;\n" + "  \n" + "  uniform sampler2D inputImageTexture;\n"
+            + "  uniform highp float red;\n" + "  uniform highp float green;\n" + "  uniform highp float blue;\n" + "  \n" + "  void main()\n" + "  {\n"
             + "      highp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);\n" + "      \n"
-            + "      gl_FragColor = vec4(textureColor.r * red, textureColor.g * green, textureColor.b * blue, 1.0);\n"
-            + "  }\n";
+            + "      gl_FragColor = vec4(textureColor.r * red, textureColor.g * green, textureColor.b * blue, 1.0);\n" + "  }\n";
 
-    private float mBlue;
-    private int mBlueLocation;
-    private float mGreen;
-    private int mGreenLocation;
-    private boolean mIsInitialized = false;
-    private float mRed;
     private int mRedLocation;
+    private float mRed;
+    private int mGreenLocation;
+    private float mGreen;
+    private int mBlueLocation;
+    private float mBlue;
+    private boolean mIsInitialized = false;
 
     public GPUImageRGBFilter() {
         this(1.0f, 1.0f, 1.0f);
@@ -62,10 +60,10 @@ public class GPUImageRGBFilter extends GPUImageFilter {
         setBlue(mBlue);
     }
 
-    public void setBlue(final float blue) {
-        mBlue = blue;
+    public void setRed(final float red) {
+        mRed = red;
         if (mIsInitialized) {
-            setFloat(mBlueLocation, mBlue);
+            setFloat(mRedLocation, mRed);
         }
     }
 
@@ -76,10 +74,10 @@ public class GPUImageRGBFilter extends GPUImageFilter {
         }
     }
 
-    public void setRed(final float red) {
-        mRed = red;
+    public void setBlue(final float blue) {
+        mBlue = blue;
         if (mIsInitialized) {
-            setFloat(mRedLocation, mRed);
+            setFloat(mBlueLocation, mBlue);
         }
     }
 }

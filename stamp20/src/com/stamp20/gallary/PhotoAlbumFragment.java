@@ -8,10 +8,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
-import android.provider.MediaStore.MediaColumns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,112 +25,18 @@ import com.stamp20.app.util.Log;
 
 public class PhotoAlbumFragment extends GallaryFragment implements OnItemClickListener, GallaryLoader {
 
-    private boolean isGridChildView = false;
-    private List<Album> mAlbums;
-    private ListView mAlbumsView;
-    private ContentResolver mContentResolver;
     private Context mContext;
-    private Album mCurrentAlbum;
-    private List<Photo> mPhotos;
+    private ContentResolver mContentResolver;
+    private boolean isGridChildView = false;
+    private ListView mAlbumsView;
+    private List<Album> mAlbums;
     // private AlbumAdapter mAlbumsAdapter;
     private GridView mPhotosView;
-
+    private List<Photo> mPhotos;
     // private PhotoAdapter mPhotosAdapter;
     private View parentView;
 
-    @Override
-    public List<Album> getAlbums() {
-
-        Cursor cursor = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, new String[] { "DISTINCT "
-                + ImageColumns.BUCKET_DISPLAY_NAME }, null, null, ImageColumns.BUCKET_DISPLAY_NAME + " ASC");
-        if (cursor == null)
-            return null;
-
-        List<Album> albums = new ArrayList<Album>(10);
-        while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            String coverUri = this.getBucketCoverPhoto(name);
-            int count = this.getBucketPhotoCount(name);
-            albums.add(new Album(name, coverUri, count, name));
-        }
-        cursor.close();
-        return albums;
-    }
-
-    private String getBucketCoverPhoto(String bucket) {
-        Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
-        Uri query = baseUri.buildUpon().appendQueryParameter("limit", "1").build();
-        Cursor c = mContentResolver.query(query, new String[] { BaseColumns._ID }, ImageColumns.BUCKET_DISPLAY_NAME
-                + "='" + bucket + "'", null, ImageColumns.DATE_TAKEN + " DESC");
-        if (c != null && c.moveToFirst()) {
-            String uri = "content://media/external/images/media/" + c.getLong(0);
-            c.close();
-            return uri;
-        }
-        return null;
-    }
-
-    private int getBucketPhotoCount(String bucket) {
-        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, null, ImageColumns.BUCKET_DISPLAY_NAME
-                + "='" + bucket + "'", null, null);
-        if (c != null) {
-            int count = c.getCount();
-            c.close();
-            return count;
-        }
-        return 0;
-    }
-
-    public boolean getIsGridView() {
-        return isGridChildView;
-    }
-
-    @Override
-    public List<Photo> getPhotos(Album a) {
-
-        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, new String[] { BaseColumns._ID,
-                MediaColumns.DISPLAY_NAME }, ImageColumns.BUCKET_DISPLAY_NAME + "='" + a.getContent() + "'", null,
-                ImageColumns.DATE_TAKEN + " DESC");
-        if (c == null)
-            return null;
-
-        List<Photo> photos = new ArrayList<Photo>(200);
-        while (c.moveToNext()) {
-            photos.add(new Photo(c.getString(1), "content://media/external/images/media/" + c.getLong(0),
-                    Photo.PHOTO_LOC_TYPE));
-        }
-        c.close();
-        return photos;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // getImages();
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    return onBackClick();
-                }
-
-                return false;
-            }
-        });
-    };
-
-    @Override
-    public boolean onBackClick() {
-        if (isGridChildView) {
-            isGridChildView = false;
-            updateLayout(0);
-            return true;
-        }
-        return super.onBackClick();
-    }
+    private Album mCurrentAlbum;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -160,40 +64,6 @@ public class PhotoAlbumFragment extends GallaryFragment implements OnItemClickLi
         return parent;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        isGridChildView = false;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Design.clearInstance();
-        if (!isGridChildView) {
-            isGridChildView = true;
-            updateLayout(position);
-        } else {
-            String sUri = mPhotos.get(position).getUri();
-            GallaryUtil.goToEffectActivity(mContext, sUri);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (!isGridChildView) {
-            mAlbumsView.setAdapter(new AlbumAdapter(mContext, mAlbums = getAlbums()));
-        } else {
-            mPhotosView.setAdapter(new PhotoAdapter(mContext, mPhotos = getPhotos(mCurrentAlbum)));
-        }
-
-    }
-
-    public void setIsGridView(boolean isGridView) {
-        this.isGridChildView = isGridView;
-    }
-
     public void updateLayout(int position) {
         if (isGridChildView) {
             if (mPhotosView == null) {
@@ -213,6 +83,131 @@ public class PhotoAlbumFragment extends GallaryFragment implements OnItemClickLi
             mAlbumsView.setAdapter(new AlbumAdapter(mContext, mAlbums = getAlbums()));
             mAlbumsView.setOnItemClickListener(this);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // getImages();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    return onBackClick();
+                }
+
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!isGridChildView) {
+            mAlbumsView.setAdapter(new AlbumAdapter(mContext, mAlbums = getAlbums()));
+        } else {
+            mPhotosView.setAdapter(new PhotoAdapter(mContext, mPhotos = getPhotos(mCurrentAlbum)));
+        }
+
+    }
+
+    @Override
+    public boolean onBackClick() {
+        if (isGridChildView) {
+            isGridChildView = false;
+            updateLayout(0);
+            return true;
+        }
+        return super.onBackClick();
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isGridChildView = false;
+    }
+
+    public boolean getIsGridView() {
+        return isGridChildView;
+    }
+
+    public void setIsGridView(boolean isGridView) {
+        this.isGridChildView = isGridView;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Design.clearInstance();
+        if (!isGridChildView) {
+            isGridChildView = true;
+            updateLayout(position);
+        } else {
+            String sUri = mPhotos.get(position).getUri();
+            GallaryUtil.goToEffectActivity(mContext, sUri);
+        }
+    }
+
+    @Override
+    public List<Album> getAlbums() {
+
+        Cursor cursor = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, new String[] { "DISTINCT " + ImageColumns.BUCKET_DISPLAY_NAME }, null, null,
+                ImageColumns.BUCKET_DISPLAY_NAME + " ASC");
+        if (cursor == null)
+            return null;
+
+        List<Album> albums = new ArrayList<Album>(10);
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            String coverUri = this.getBucketCoverPhoto(name);
+            int count = this.getBucketPhotoCount(name);
+            albums.add(new Album(name, coverUri, count, name));
+        }
+        cursor.close();
+        return albums;
+    }
+
+    private String getBucketCoverPhoto(String bucket) {
+        Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
+        Uri query = baseUri.buildUpon().appendQueryParameter("limit", "1").build();
+        Cursor c = mContentResolver.query(query, new String[] { ImageColumns._ID }, ImageColumns.BUCKET_DISPLAY_NAME + "='" + bucket + "'", null,
+                ImageColumns.DATE_TAKEN + " DESC");
+        if (c != null && c.moveToFirst()) {
+            String uri = "content://media/external/images/media/" + c.getLong(0);
+            c.close();
+            return uri;
+        }
+        return null;
+    }
+
+    private int getBucketPhotoCount(String bucket) {
+        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, null, ImageColumns.BUCKET_DISPLAY_NAME + "='" + bucket + "'", null, null);
+        if (c != null) {
+            int count = c.getCount();
+            c.close();
+            return count;
+        }
+        return 0;
+    }
+
+    @Override
+    public List<Photo> getPhotos(Album a) {
+
+        Cursor c = mContentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, new String[] { ImageColumns._ID, ImageColumns.DISPLAY_NAME },
+                ImageColumns.BUCKET_DISPLAY_NAME + "='" + a.getContent() + "'", null, ImageColumns.DATE_TAKEN + " DESC");
+        if (c == null)
+            return null;
+
+        List<Photo> photos = new ArrayList<Photo>(200);
+        while (c.moveToNext()) {
+            photos.add(new Photo(c.getString(1), "content://media/external/images/media/" + c.getLong(0), Photo.PHOTO_LOC_TYPE));
+        }
+        c.close();
+        return photos;
     }
 
 }
