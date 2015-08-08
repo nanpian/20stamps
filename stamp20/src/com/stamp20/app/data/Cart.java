@@ -71,16 +71,21 @@ public class Cart {
         }
     }
 
-    public void addDesign(Bitmap src, int rate, String type) {
+    public Boolean addDesign(Bitmap src, int rate, String type) {
         Design design = Design.getInstance();
+        try {
+            byte[] data = BitmapUtils.Bitmap2Bytes(src);
+            design.setReview(data);
+            design.setRate(rate);
+            design.setUnitPrice(2 * rate + 3);
+            design.setType(type);
+            this.addDesign(design);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
-        byte[] data = BitmapUtils.Bitmap2Bytes(src);
-        design.setReview(data);
-        design.setRate(rate);
-        design.setUnitPrice(2 * rate + 3);
-        design.setType(type);
-
-        this.addDesign(design);
     }
 
     public void deleteDesign(Design d) {

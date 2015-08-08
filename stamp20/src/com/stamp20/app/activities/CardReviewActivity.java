@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.RelativeLayout.LayoutParams;
 
 import java.io.File;
@@ -152,17 +153,29 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             // public void run() {
             // TODO Auto-generated method stub
             Cart cart = Cart.getInstance();
-            cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
+            boolean addSuccess = cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
+            if (addSuccess) {
+                Intent intent = new Intent();
+                intent.setClass(this, ShopCartItemsActivity.class);
+                intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
+                waitProgressBar.setVisibility(View.GONE);
+                startActivity(intent);
+                review_button.setEnabled(true);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Add to cart failed", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(this, ShopCartItemsActivity.class);
+                intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
+                waitProgressBar.setVisibility(View.GONE);
+                startActivity(intent);
+                review_button.setEnabled(true);
+                finish();
+            }
             // }
             // }).start();
 
-            Intent intent = new Intent();
-            intent.setClass(this, ShopCartItemsActivity.class);
-            intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
-            waitProgressBar.setVisibility(View.GONE);
-            startActivity(intent);
-            review_button.setEnabled(true);
-            finish();
+
             break;
         case R.id.card_back_share:
             File file = saveFontBitmap(CardBmpCache.getCacheInstance().getFront());
