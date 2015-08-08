@@ -193,7 +193,7 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
         // position);
         LayoutParams lp = (LayoutParams) mImageSelectedIndicator.getLayoutParams();
         if (mCurrentPageIndex == 0 && position == 0) {// 0->1
-            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset + margin_left * mScreen1_4);
+            lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + positionOffset + margin_left );
         } else if (mCurrentPageIndex == 1 && position == 0) {// 1->0
             lp.leftMargin = (int) (mCurrentPageIndex * mScreen1_4 + (positionOffset - 1) * mScreen1_4) + margin_left;
         } else if (mCurrentPageIndex == 1 && position == 1) {// 1->2
