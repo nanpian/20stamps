@@ -1,6 +1,7 @@
 package com.stamp20.app.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.RelativeLayout;
@@ -38,6 +39,7 @@ public class ScollerRelativeView extends RelativeLayout {
 
     public void init() {
         mScroller = new Scroller(getContext());
+        this.setBackgroundColor(Color.argb(0, 0, 0, 0));
     }
 
     @Override
@@ -121,7 +123,6 @@ public class ScollerRelativeView extends RelativeLayout {
                 invalidate();
             }
         } else {
-            Log.i("jiangtao4", "in");
             if (mScrollFinishListener != null) {
                 mScrollFinishListener.scrollFinish(true);
             }
