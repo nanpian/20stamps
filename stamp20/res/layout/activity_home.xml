@@ -53,7 +53,6 @@
 
             <Button
                 android:id="@+id/btn_postage"
-                android:tag="forBoldText"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginEnd="5dp"
@@ -62,6 +61,7 @@
                 android:drawableStart="@drawable/icon_stamps"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
+                android:tag="forBoldText"
                 android:text="@string/postage"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
@@ -69,7 +69,6 @@
 
             <Button
                 android:id="@+id/btn_cards"
-                android:tag="forBoldText"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="5dp"
@@ -78,6 +77,7 @@
                 android:drawableStart="@drawable/icon_cards"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
+                android:tag="forBoldText"
                 android:text="@string/cards"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
@@ -85,22 +85,24 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btn_viewcart_layout"
             android:layout_width="260dp"
             android:layout_height="45dp"
             android:layout_marginBottom="50dp"
+            android:background="@drawable/sel_home_view_cart_button"
             android:orientation="horizontal" >
 
-            <Button
+            <TextView
                 android:id="@+id/btn_view_cart"
                 android:layout_width="200dp"
                 android:layout_height="45dp"
-                android:tag="forBoldText"
-                android:background="@drawable/sel_home_view_cart_button"
-                android:drawableStart="@drawable/icon_cart"
+                android:background="@color/image_button_background"
                 android:drawablePadding="30dp"
+                android:drawableStart="@drawable/icon_cart"
                 android:gravity="center"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
+                android:tag="forBoldText"
                 android:text="@string/view_cart"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
@@ -110,10 +112,10 @@
                 android:id="@+id/local_design_number"
                 android:layout_width="60dp"
                 android:layout_height="45dp"
-                android:tag="forBoldText"
+                android:background="@color/image_button_background"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
-                android:background="@drawable/sel_home_view_cart_number"
+                android:tag="forBoldText"
                 stamp20:cycleColor="#ff4c34"
                 stamp20:radius="12dp"
                 stamp20:text="0"
@@ -137,11 +139,11 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginBottom="20dp"
-            android:tag="forBoldText"
             android:background="@drawable/sel_home_green_button"
             android:drawableStart="@drawable/icon_stamps"
             android:paddingEnd="15dp"
             android:paddingStart="15dp"
+            android:tag="forBoldText"
             android:text="@string/postage_stamps"
             android:textAllCaps="true"
             android:textColor="@android:color/white" />
@@ -149,13 +151,13 @@
         <Button
             android:id="@+id/btn_getting_cards"
             android:layout_width="match_parent"
-            android:tag="forBoldText"
             android:layout_height="55dp"
             android:layout_marginBottom="50dp"
             android:background="@drawable/sel_home_red_button"
             android:drawableStart="@drawable/icon_cards"
             android:paddingEnd="15dp"
             android:paddingStart="15dp"
+            android:tag="forBoldText"
             android:text="@string/getting_cards"
             android:textAllCaps="true"
             android:textColor="@android:color/white" />

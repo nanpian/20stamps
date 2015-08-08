@@ -14,12 +14,15 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.stamp20.app.BaseTitleActivity;
@@ -58,6 +61,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     private Button btnViewCart;
     private ImageButton btnCoupons, btnAbout;
     private RoundNumber mLocalDesignNumber;
+    private LinearLayout btn_viewcart_layout;
 
     private final static int ANIMATION_DURATION = 1000;
     private final static int CHANGE_PICTURE_DURATION = 2000;
@@ -100,16 +104,31 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         btnPostageStamp = (Button) findViewById(R.id.btn_postage_stamp);
         btnCards = (Button) findViewById(R.id.btn_cards);
         btnGettingCards = (Button) findViewById(R.id.btn_getting_cards);
-        btnViewCart = (Button) findViewById(R.id.btn_view_cart);
+        //btnViewCart = (Button) findViewById(R.id.btn_view_cart);
         mLocalDesignNumber = (RoundNumber) findViewById(R.id.local_design_number);
+        btn_viewcart_layout = (LinearLayout) findViewById(R.id.btn_viewcart_layout);
 
+        btn_viewcart_layout.setOnClickListener(this);
+        btn_viewcart_layout.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    btn_viewcart_layout.setBackgroundResource(R.drawable.dra_home_view_cart_button_pressed_true);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    btn_viewcart_layout.setBackgroundResource(R.drawable.dra_home_view_cart_button_pressed_false);
+                }
+                return false;
+            }
+        });
+        FontManager.changeFonts((LinearLayout) findViewById(R.id.btn_viewcart_layout), this);
+        
+        
         btnCoupons.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
         btnPostage.setOnClickListener(this);
         btnPostageStamp.setOnClickListener(this);
         btnCards.setOnClickListener(this);
         btnGettingCards.setOnClickListener(this);
-        btnViewCart.setOnClickListener(this);
 
         mBackgroundImageView = (ImageView) this.findViewById(R.id.background);
         mBackgroundImageView.setScaleType(ScaleType.FIT_XY);
@@ -217,7 +236,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
             PhotoFromWhoRecorder.recordFromWhich(getApplicationContext(), "stamp");
             finish();
             break;
-        case R.id.btn_view_cart:
+        case R.id.btn_viewcart_layout:
             Intent intent = new Intent(HomeActivity.this, ShopCartItemsActivity.class);
             intent.putExtra("from", "home");
             startActivity(intent);
