@@ -1,6 +1,5 @@
 package com.stamp20.app.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -9,19 +8,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.parse.ParseFile;
-import com.squareup.picasso.Picasso;
 import com.stamp20.app.R;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;

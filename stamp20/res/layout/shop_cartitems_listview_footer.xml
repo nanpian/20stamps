@@ -9,8 +9,8 @@
         android:id="@+id/shop_add_more"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        android:gravity="center_horizontal"
         android:background="@drawable/shop_additem_background"
+        android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <ImageView
@@ -58,23 +58,36 @@
 
         <EditText
             android:id="@+id/shop_cartitems_coupon"
-            android:layout_width="0dip"
             style="@style/paypal_edittext_style"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint=""
-            />
+            android:hint="" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/shop_cartitems_getcoupon"
-        android:layout_width="match_parent"
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="10dip"
-        android:text="@string/shop_cartitems_getcoupon"
-        android:textColor="#f58220"
-        android:textSize="16sp" />
+        android:orientation="vertical"
+         >
+
+        <TextView
+            android:id="@+id/shop_cartitems_getcoupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:text="@string/shop_cartitems_getcoupon"
+            android:textColor="#f58220"
+            android:textSize="16sp" />
+        <View
+            android:id="@+id/coupon_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/line_shape"
+            />
+    </LinearLayout>
 
 </LinearLayout>

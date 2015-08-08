@@ -1,7 +1,7 @@
 package com.stamp20.app.activities;
 
 import java.util.List;
-
+import android.view.ViewGroup.LayoutParams;  
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +21,6 @@ import com.stamp20.app.R;
 import com.stamp20.app.adapter.ShopCartItemsAdapter;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
-import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 
@@ -33,8 +33,7 @@ import com.stamp20.app.util.FontManager;
  */
 public class ShopCartItemsActivity extends Activity implements OnClickListener {
 
-    private static final String TAG = "ShopCartItemsActivity";
-    private TextView textHeaderTile;
+    private TextView textCoupon;
     private ListView listCartItems;
     private LayoutInflater layoutInflater;
     private LinearLayout layoutListFooter;
@@ -42,12 +41,12 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
     public static final String ADD_ITEMS_TOCAET = "add_new_items";
     private ShopCartItemsAdapter shopItemsAdapter;
     private List<Design> mDesigns;
-    private BitmapCache mCache = null;
-    private ImageView backHomeView;
     private Button btnPaypal;
     private Button btnCheckout;
     private ImageView headerPrevious;
     private TextView headerTitle;
+    private View coupon_line;
+
     private Boolean fromHome = false;
 
     public ShopCartItemsActivity() {
@@ -102,6 +101,11 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         FontManager.changeFonts(layoutListFooter, this);
         layoutAddMore = (LinearLayout) layoutListFooter.findViewById(R.id.shop_add_more);
         layoutAddMore.setOnClickListener(this);
+        coupon_line = (View) layoutListFooter.findViewById(R.id.coupon_line);
+
+        textCoupon = (TextView) layoutListFooter.findViewById(R.id.shop_cartitems_getcoupon);
+        textCoupon.setOnClickListener(this);
+
         // listCartItems.addHeaderView(layoutTest);
         listCartItems.addFooterView(layoutListFooter);
         shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this, mDesigns);
@@ -127,6 +131,11 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         case R.id.shop_cartitems_checkout:
             intent.putExtra(Constant.PAY_STYLE, 1);
             intent.setClass(this, BuyWithPaypalShippingActivity.class);
+            startActivity(intent);
+            break;
+        case R.id.shop_cartitems_getcoupon:
+            intent.putExtra("from", "shopitem");
+            intent.setClass(ShopCartItemsActivity.this, CouponsActivity.class);
             startActivity(intent);
             break;
         }

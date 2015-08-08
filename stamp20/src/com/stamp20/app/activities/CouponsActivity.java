@@ -32,6 +32,7 @@ public class CouponsActivity extends Activity implements OnClickListener {
 
     private ViewGroup getCouponsViewGroup;
     private ViewGroup shareCouponsViewGroup;
+    String from;
 
     private boolean isInGetCoupons = true;
 
@@ -41,6 +42,9 @@ public class CouponsActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_coupons);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
         initView();
+
+        Intent fromIntent = getIntent();
+        from = fromIntent.getStringExtra("from");
     }
 
     private void initView() {
@@ -69,8 +73,13 @@ public class CouponsActivity extends Activity implements OnClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 按下的如果是BACK，同时没有重复
-            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
-            finish();
+            if (from == null) {
+                startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(CouponsActivity.this, ShopCartItemsActivity.class));
+                finish();
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -80,8 +89,13 @@ public class CouponsActivity extends Activity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.header_previous:
-            startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
-            finish();
+            if (from == null) {
+                startActivity(new Intent(CouponsActivity.this, HomeActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(CouponsActivity.this, ShopCartItemsActivity.class));
+                finish();
+            }
             break;
         case R.id.btn_get_coupons:
             getCoupons();
@@ -142,7 +156,8 @@ public class CouponsActivity extends Activity implements OnClickListener {
                         }
                         btnCancel.setVisibility(shareCouponsViewGroup.getVisibility());
 
-                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f, false);
+                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f,
+                                false);
                         rotatiomAnimation.setDuration(500);
                         rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
                         if (isFront) {
