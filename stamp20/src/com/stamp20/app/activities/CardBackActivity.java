@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.adapter.ChooseBackColorAdapter;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
@@ -41,6 +42,7 @@ public class CardBackActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_card_back);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         instance = this;

@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.anim.ListView2GridViewLayoutAnimationController;
 import com.stamp20.app.util.CardsTemplateUtils;
 import com.stamp20.app.util.FontManager;
@@ -46,6 +47,7 @@ public class CardsTemplateChooseActivity extends Activity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_cards_template_choose);
         RelativeLayout root = (RelativeLayout) this.findViewById(R.id.root);
         FontManager.changeFonts(root, this);

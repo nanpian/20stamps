@@ -3,6 +3,7 @@ package com.stamp20.app.activities;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.opengl.gamesystem.GameSystem;
 import com.stamp20.app.opengl.gamesystem.GlObject;
 import com.stamp20.app.opengl.gamesystem.MyRenderer;
@@ -30,7 +31,7 @@ public class OpenGL10ZoomMoveDemo extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Stamp20Application.getInstance().addActivity(this);
         // 游戏全屏幕
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

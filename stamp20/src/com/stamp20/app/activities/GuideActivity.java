@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
@@ -52,7 +53,9 @@ public class GuideActivity extends Activity implements OnClickListener, OnPageCh
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);// 去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
         // this.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.FrameLayout;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
@@ -18,6 +19,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_splash);
         FontManager.changeFonts((FrameLayout) findViewById(R.id.root), this);
         new Thread(new Runnable() {

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
@@ -27,6 +28,7 @@ public class AboutDetailsActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_about_details);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
         mWebView = (WebView) findViewById(R.id.webview_details);

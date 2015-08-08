@@ -1,11 +1,13 @@
 package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.anim.Rotate3dAnimation;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -92,6 +94,7 @@ public class CardReviewActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_card_review);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         initView();

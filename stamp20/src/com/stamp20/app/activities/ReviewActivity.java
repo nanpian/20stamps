@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
@@ -82,7 +83,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // getActionBar().hide();
-
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.review_activity);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
 

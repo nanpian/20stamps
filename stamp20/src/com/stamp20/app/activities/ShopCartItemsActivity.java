@@ -1,6 +1,7 @@
 package com.stamp20.app.activities;
 
 import java.util.List;
+
 import android.view.ViewGroup.LayoutParams;  
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.adapter.ShopCartItemsAdapter;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
@@ -55,6 +57,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.shop_cartitems_activity);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         // mCache = BitmapCache.getCache();

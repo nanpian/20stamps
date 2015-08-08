@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.fragments.ShippingAddressFragment;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.Constant.Pay_method;
@@ -48,6 +49,7 @@ public class BuyWithPaypalShippingActivity extends Activity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         paystyle = getIntent().getIntExtra(Constant.PAY_STYLE, 0);
         setContentView(R.layout.activity_buy_with_paypay_shipping);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);

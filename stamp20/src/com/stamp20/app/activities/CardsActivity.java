@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.util.CardsTemplateUtils;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
@@ -57,6 +58,7 @@ public class CardsActivity extends Activity implements ZoomImageView.OnMoveOrZoo
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_cards_main);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);

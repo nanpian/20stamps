@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.adapter.ImageEffectAdapter;
 import com.stamp20.app.util.Constant;
 import com.stamp20.app.util.FontManager;
@@ -57,7 +58,9 @@ public class MainEffect extends Activity implements OnTouchListener, OnStampBitm
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         mContext = this;
         setContentView(R.layout.main_effects_view);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);

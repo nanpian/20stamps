@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.gallary.FeaturedAlbumFragment;
 import com.stamp20.gallary.PhotoAlbumFragment;
 import com.stamp20.app.activities.HomeActivity;
@@ -57,6 +58,7 @@ public class GallaryActivity extends FragmentActivity implements OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // getActionBar().hide();
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_load_image_main);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
         headerPrevious = (ImageView) findViewById(R.id.header_previous);

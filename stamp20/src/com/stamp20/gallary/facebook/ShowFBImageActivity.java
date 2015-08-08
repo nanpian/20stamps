@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.activities.MainEffect;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Image;
@@ -67,6 +68,7 @@ public class ShowFBImageActivity extends Activity implements OnItemClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_show_image_grid);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
 

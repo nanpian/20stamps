@@ -146,23 +146,21 @@
         <activity
             android:name="com.stamp20.app.activities.CardEffect"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            />
-        <activity 
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.stamp20.app.activities.CardBackActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.stamp20.app.activities.CardEnvelopeActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.stamp20.app.activities.CardReviewActivity"
             android:screenOrientation="portrait" />
+
         <service
             android:name="com.paypal.android.sdk.payments.PayPalService"
             android:exported="false" />

@@ -24,6 +24,7 @@ import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
 
@@ -65,7 +66,7 @@ public class BuyWithPaypalReviewActivity extends Activity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_buy_with_paypay_review);
         FontManager.changeFonts((LinearLayout) findViewById(R.id.root), this);
         initView();

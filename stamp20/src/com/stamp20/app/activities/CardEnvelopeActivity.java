@@ -1,6 +1,7 @@
 package com.stamp20.app.activities;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.adapter.ChoseEnvelopeAdapter;
 import com.stamp20.app.adapter.ChoseEnvelopeAdapter.NamePairs;
 import com.stamp20.app.util.FontManager;
@@ -43,6 +44,7 @@ public class CardEnvelopeActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_card_envelope);
         envolopBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_envelope_1);
         Envelopcache.getCacheInstance().putEnve(envolopBitmap);

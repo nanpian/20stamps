@@ -14,6 +14,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,11 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.stamp20.app.BaseTitleActivity;
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.PhotoFromWhoRecorder;
@@ -51,6 +54,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
      * R.drawable.background_home_save_the_date,
      * R.drawable.background_home_wedding };
      */
+    private long firstTime = 0;
     private BitmapDrawable[] mDrawables;
     private ImageView mBackgroundImageView;
     private int mCurrentPicNum = 0;
@@ -80,7 +84,8 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
                 return;
             if (msg.what == SWITCH_CURRENT_PICTURE) {
                 TransitionDrawable transitionDrawable = null;
-                transitionDrawable = new TransitionDrawable(new Drawable[] { mDrawables[mCurrentPicNum % mDrawableIDs.size()],
+                transitionDrawable = new TransitionDrawable(new Drawable[] {
+                        mDrawables[mCurrentPicNum % mDrawableIDs.size()],
                         mDrawables[(mCurrentPicNum + 1) % mDrawableIDs.size()] });
                 mCurrentPicNum++;
                 mBackgroundImageView.setImageDrawable(transitionDrawable);
@@ -94,6 +99,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreateNoTitle();
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.activity_home);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
         btnCoupons = (ImageButton) findViewById(R.id.btn_coupons);
@@ -104,7 +110,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
         btnPostageStamp = (Button) findViewById(R.id.btn_postage_stamp);
         btnCards = (Button) findViewById(R.id.btn_cards);
         btnGettingCards = (Button) findViewById(R.id.btn_getting_cards);
-        //btnViewCart = (Button) findViewById(R.id.btn_view_cart);
+        // btnViewCart = (Button) findViewById(R.id.btn_view_cart);
         mLocalDesignNumber = (RoundNumber) findViewById(R.id.local_design_number);
         btn_viewcart_layout = (LinearLayout) findViewById(R.id.btn_viewcart_layout);
 
@@ -121,8 +127,7 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
             }
         });
         FontManager.changeFonts((LinearLayout) findViewById(R.id.btn_viewcart_layout), this);
-        
-        
+
         btnCoupons.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
         btnPostage.setOnClickListener(this);
@@ -298,5 +303,22 @@ public class HomeActivity extends BaseTitleActivity implements View.OnClickListe
             }
             mDrawables = null;
         }
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            long secondTime = System.currentTimeMillis();
+            if (secondTime - firstTime > 2000) {
+                // 如果两次按键时间间隔大于2秒，则不退出
+                Toast.makeText(this, "Press once more time to exit app!", Toast.LENGTH_SHORT).show();
+                firstTime = secondTime;// 更新firstTime
+                return true;
+            } else {
+                // 两次按键小于2秒时，退出应用
+                Stamp20Application.getInstance().exit();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

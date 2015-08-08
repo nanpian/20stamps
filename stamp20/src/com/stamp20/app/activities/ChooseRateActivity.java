@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow.OnDismissListener;
 
 import com.stamp20.app.R;
+import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
@@ -46,6 +47,7 @@ public class ChooseRateActivity extends Activity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stamp20Application.getInstance().addActivity(this);
         setContentView(R.layout.choose_rate);
         chooseRateStampView = (ChooseRateStampView) findViewById(R.id.view_stamp);
         FontManager.changeFonts((RelativeLayout) findViewById(R.id.root), this);
