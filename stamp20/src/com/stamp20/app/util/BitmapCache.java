@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 public class BitmapCache {
 
-    private Bitmap date;
+    private static Bitmap date;
 
     private BitmapCache() {
         date = null;
