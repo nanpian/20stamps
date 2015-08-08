@@ -16,14 +16,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.stamp20.app.R;
 import com.stamp20.app.anim.AnimationUtil;
 import com.stamp20.app.data.Cart;
@@ -31,8 +35,6 @@ import com.stamp20.app.data.Design;
 import com.stamp20.app.util.BitmapCache;
 import com.stamp20.app.util.FontManager;
 import com.stamp20.app.util.Log;
-import com.stamp20.app.util.ParseUtil;
-import com.stamp20.app.view.WaitProgressBar;
 
 public class ReviewActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "ReviewActivity";
@@ -51,12 +53,30 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
 
     private ImageView blurBlackground;
     private View reviewForeground;
-    private boolean isFirstBlur = true;
     private BlurBackground blurProcess = null;
 
-    private ParseUtil mUploadToParse;
-    private WaitProgressBar waitProgressBar;
+    private ProgressBar waitProgressBar;
     private RelativeLayout reviewButton;
+
+    private static final int ADD_TO_CART_SUCCESS = 1001;
+
+    Handler uiHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case ADD_TO_CART_SUCCESS:
+                Intent intent = new Intent();
+                intent.setClass(ReviewActivity.this, ShopCartItemsActivity.class);
+                waitProgressBar.setVisibility(View.GONE);
+                tailText.setVisibility(View.VISIBLE);
+                reviewButton.setEnabled(true);
+                startActivity(intent);
+                // finish();
+                break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +108,7 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
         // mUploadToParse = new UploadToParse(mCache.get());
         // mUploadToParse.uploadImage();
 
-        waitProgressBar = (WaitProgressBar) findViewById(R.id.progress_bar);
+        waitProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         blurBlackground = (ImageView) findViewById(R.id.blur_background);
         reviewForeground = findViewById(R.id.review_root);
@@ -108,20 +128,24 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
             finish();
             break;
         case R.id.tail:
+            tailText.setVisibility(View.GONE);
             reviewButton.setEnabled(false);
             waitProgressBar.setVisibility(View.VISIBLE);
-            Cart cart = Cart.getInstance();
-            Intent intent = new Intent();
-            if (cart.isEmpty()) {
-                intent.setClass(this, ShopCartActivity.class);
-            } else {
-                cart.addDesign(mCache.get(), 20, Design.TYPE_STAMP);
-                intent.setClass(this, ShopCartItemsActivity.class);
-            }
-            waitProgressBar.setVisibility(View.GONE);
-            reviewButton.setEnabled(true);
-            startActivity(intent);
-            finish();
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    Cart cart = Cart.getInstance();
+                    if (!cart.isEmpty()) {
+                        cart.addDesign(mCache.get(), 20, Design.TYPE_STAMP);
+                        Message message = new Message();
+                        message.what = ADD_TO_CART_SUCCESS;
+                        uiHandler.sendMessageDelayed(message, 50);
+                    }
+                }
+            }).start();
+
             break;
         // case R.id.btn_save_design:
         // File pic = saveBitmapToPic(mCache.get());
@@ -164,43 +188,45 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     private long mDuration = 1000;
 
     private void closeBlurWindow() {
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration, new AnimationListener() {
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mEndAlpha, mStartAlpha, false, mDuration,
+                new AnimationListener() {
 
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                blurBlackground.setClickable(false);
-                blurBlackground.setVisibility(View.GONE);
-                reviewForeground.setVisibility(View.VISIBLE);
-            }
-        }));
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        blurBlackground.setClickable(false);
+                        blurBlackground.setVisibility(View.GONE);
+                        reviewForeground.setVisibility(View.VISIBLE);
+                    }
+                }));
     }
 
     private void startBlurWindow() {
         reviewForeground.setVisibility(View.GONE);
         blurBlackground.setVisibility(View.VISIBLE);
-        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration, new AnimationListener() {
+        blurBlackground.startAnimation(AnimationUtil.getAlphaAnimation(mStartAlpha, mEndAlpha, false, mDuration,
+                new AnimationListener() {
 
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                blurBlackground.setClickable(true);
-            }
-        }));
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        blurBlackground.setClickable(true);
+                    }
+                }));
     }
 
     private class BlurBackground extends AsyncTask<View, Void, Bitmap> {
@@ -225,7 +251,8 @@ public class ReviewActivity extends Activity implements View.OnClickListener {
     }
 
     private File saveBitmapToPic(Bitmap src) {
-        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .getAbsolutePath() + "/stamp20");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
         String name = "stamp20_" + sdf.format(new Date(System.currentTimeMillis())) + ".jpeg";
         Log.d(TAG, "path: " + path + ", name: " + name);

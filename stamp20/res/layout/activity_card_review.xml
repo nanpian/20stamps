@@ -113,13 +113,15 @@
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
 
-            <com.stamp20.app.view.WaitProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="34dip"
-                android:layout_height="34dip"
-                android:layout_centerInParent="true"
-                android:max="100"
-                android:visibility="gone" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                style="@android:style/Widget.Holo.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" >
+            </ProgressBar>
         </RelativeLayout>
     </RelativeLayout>
 

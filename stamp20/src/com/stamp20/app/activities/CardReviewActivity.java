@@ -6,8 +6,6 @@ import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.CardBmpCache;
 import com.stamp20.app.util.FontManager;
-import com.stamp20.app.view.WaitProgressBar;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
@@ -25,6 +25,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,43 @@ public class CardReviewActivity extends Activity implements OnClickListener {
     private boolean isFrontNow;
     private ImageView backgroundEvelopImage;
     private Button mShareDesign;
-    private WaitProgressBar waitProgressBar;
+    private ProgressBar waitProgressBar;
+    private TextView tailText;
+
+    private static final int ADD_TO_CART_SUCCESS = 1001;
+    private static final int ADD_TO_CART_FAILED = 1002;
+
+    Handler uiHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case ADD_TO_CART_SUCCESS:
+                waitProgressBar.setVisibility(View.GONE);
+                tailText.setVisibility(View.VISIBLE);
+                Intent intent2 = new Intent();
+                intent2.setClass(CardReviewActivity.this, ShopCartItemsActivity.class);
+                waitProgressBar.setVisibility(View.GONE);
+                review_button.setEnabled(true);
+                tailText.setVisibility(View.VISIBLE);
+                startActivity(intent2);
+                // finish();
+                break;
+            case ADD_TO_CART_FAILED:
+                Toast.makeText(getApplicationContext(), "Add to cart failed", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(CardReviewActivity.this, ShopCartItemsActivity.class);
+                intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
+                waitProgressBar.setVisibility(View.GONE);
+                startActivity(intent);
+                review_button.setEnabled(true);
+                tailText.setVisibility(View.VISIBLE);
+                finish();
+                break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +118,9 @@ public class CardReviewActivity extends Activity implements OnClickListener {
         activity_envelope_img = (ImageView) findViewById(R.id.activity_envelope_img2);
         // setupImageLocSize();
 
-        waitProgressBar = (WaitProgressBar) this.findViewById(R.id.progress_bar);
+        // 控制加入购物车时，add to cart的显示
+        waitProgressBar = (ProgressBar) this.findViewById(R.id.progressBar);
+        tailText = (TextView) this.findViewById(R.id.tail_text);
 
         CardBmpCache mCache = CardBmpCache.getCacheInstance();
         cardBmpFront = mCache.getFront();
@@ -145,37 +184,27 @@ public class CardReviewActivity extends Activity implements OnClickListener {
             break;
         case R.id.tail:
             // add to cart
+            tailText.setVisibility(View.GONE);
             review_button.setEnabled(false);
             waitProgressBar.setVisibility(View.VISIBLE);
-            // new Thread(new Runnable() {
+            new Thread(new Runnable() {
 
-            // @Override
-            // public void run() {
-            // TODO Auto-generated method stub
-            Cart cart = Cart.getInstance();
-            boolean addSuccess = cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
-            if (addSuccess) {
-                Intent intent = new Intent();
-                intent.setClass(this, ShopCartItemsActivity.class);
-                intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
-                waitProgressBar.setVisibility(View.GONE);
-                startActivity(intent);
-                review_button.setEnabled(true);
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "Add to cart failed", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-                intent.setClass(this, ShopCartItemsActivity.class);
-                intent.putExtra(ShopCartItemsActivity.ADD_ITEMS_TOCAET, true);
-                waitProgressBar.setVisibility(View.GONE);
-                startActivity(intent);
-                review_button.setEnabled(true);
-                finish();
-            }
-            // }
-            // }).start();
+                @Override
+                public void run() {
+                    Cart cart = Cart.getInstance();
+                    boolean addSuccess = cart.addDesign(cardBmpFront, 20, Design.TYPE_CARD);
+                    if (addSuccess) {
+                        Message message = new Message();
+                        message.what = ADD_TO_CART_SUCCESS;
+                        uiHandler.sendMessageDelayed(message, 50);
+                    } else {
+                        Message message = new Message();
+                        message.what = ADD_TO_CART_FAILED;
+                        uiHandler.sendMessageDelayed(message, 50);
+                    }
 
-
+                }
+            }).start();
             break;
         case R.id.card_back_share:
             File file = saveFontBitmap(CardBmpCache.getCacheInstance().getFront());
@@ -195,7 +224,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
      * @return
      */
     public File saveFontBitmap(Bitmap bitmap) {
-        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/stamp20");
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .getAbsolutePath() + "/stamp20");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String name = "stamp20_" + dateFormat.format(new Date()) + ".png";
         File file = new File(path, name);
@@ -245,7 +275,8 @@ public class CardReviewActivity extends Activity implements OnClickListener {
                             // setupImageLocSize();
                             activity_envelope_img.setImageBitmap(cardBmpFront);
                         }
-                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f, false);
+                        Rotate3dAnimation rotatiomAnimation = new Rotate3dAnimation(-90, 0, centerX, centerY, 300.0f,
+                                false);
                         rotatiomAnimation.setDuration(500);
                         rotatiomAnimation.setInterpolator(new DecelerateInterpolator());
                         activity_envelope_img.startAnimation(rotatiomAnimation);
