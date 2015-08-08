@@ -4,10 +4,13 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.stamp20.app.R;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
@@ -24,8 +28,10 @@ import com.stamp20.app.util.Log;
 public class ShopCartItemsAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
+    private ProgressDialog progressDialog = null;
     private Context mContext;
     private List<Design> mDesigns;
+    private static final int REMOVE_ITEM_SUCCESS  = 1001;
 
     public ShopCartItemsAdapter(Context context, List<Design> designs) {
         // TODO Auto-generated constructor stub
@@ -39,6 +45,22 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         // TODO Auto-generated method stub
         return mDesigns.size() < 0 ? 0 : mDesigns.size();
     }
+
+    private Handler uiHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case REMOVE_ITEM_SUCCESS:
+                if (progressDialog!=null && progressDialog.isShowing()) {
+                    // 删除成功，隐藏进度
+                    progressDialog.dismiss();
+                }
+                notifyDataSetChanged();
+                break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     public Object getItem(int arg0) {
@@ -142,9 +164,25 @@ public class ShopCartItemsAdapter extends BaseAdapter {
     }
 
     private void deleteItems(int posotion) {
-        Cart.getInstance().deleteDesign(mDesigns.get(posotion));
-        mDesigns.remove(posotion);
-        notifyDataSetChanged();
+        progressDialog = new ProgressDialog(mContext,R.style.CustomProgressDialog);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置水平进度条
+        progressDialog.setCancelable(true);// 设置是否可以通过点击Back键取消
+        progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+        progressDialog.setMessage("Removing the design...");
+        progressDialog.show();
+        final int position = posotion;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                Cart.getInstance().deleteDesign(mDesigns.get(position));
+                mDesigns.remove(position);
+                Message msg = new Message();
+                msg.what = REMOVE_ITEM_SUCCESS;
+                uiHandler.sendMessageDelayed(msg, 20);
+            }
+        }).start();
+
     }
 
     static class ViewHolder {
