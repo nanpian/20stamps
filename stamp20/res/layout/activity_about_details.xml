@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
     android:background="@color/activity_background_gray"
     android:orientation="vertical" >
 
     <include layout="@layout/header" />
+
+    <ProgressBar
+        android:id="@+id/webProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" >
+    </ProgressBar>
 
     <WebView
         android:id="@+id/webview_details"

@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.stamp20.app.R;
@@ -22,6 +23,8 @@ public class AboutDetailsActivity extends Activity implements OnClickListener {
     WebView mWebView;
     private TextView headerTitle;
     private ImageView headerBack;
+    private ProgressBar webProgressBar;
+    
     String url;
     String title;
 
@@ -35,6 +38,7 @@ public class AboutDetailsActivity extends Activity implements OnClickListener {
         headerTitle = (TextView) findViewById(R.id.header_title);
         headerBack = (ImageView) findViewById(R.id.header_previous);
         headerBack.setOnClickListener(this);
+        webProgressBar = (ProgressBar) findViewById(R.id.webProgressBar);
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
         headerTitle.setText(title);
@@ -62,6 +66,14 @@ public class AboutDetailsActivity extends Activity implements OnClickListener {
     }
 
     private void showProgressDialog(int progress) {
+        if (progress == 100 ) {
+            webProgressBar.setVisibility(View.GONE);
+        } else {
+            if (webProgressBar.getVisibility() == View.GONE) {
+                webProgressBar.setVisibility(View.VISIBLE);
+            }
+            webProgressBar.setProgress(progress);
+        }
     }
 
     @Override
