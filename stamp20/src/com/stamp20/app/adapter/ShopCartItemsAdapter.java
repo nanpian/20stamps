@@ -1,5 +1,6 @@
 package com.stamp20.app.adapter;
 
+import java.net.InterfaceAddress;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -31,12 +32,15 @@ public class ShopCartItemsAdapter extends BaseAdapter {
     private ProgressDialog progressDialog = null;
     private Context mContext;
     private List<Design> mDesigns;
-    private static final int REMOVE_ITEM_SUCCESS  = 1001;
+    private static final int REMOVE_ITEM_SUCCESS = 1001;
 
     public ShopCartItemsAdapter(Context context, List<Design> designs) {
         // TODO Auto-generated constructor stub
         mContext = context;
         this.mDesigns = designs;
+        // 更新mDesigns并通知activity更新
+        if (calculateTotalMoneyInterface != null)
+            calculateTotalMoneyInterface.calculateTotalMoney(mDesigns);
         layoutInflater = LayoutInflater.from(context);
     }
 
@@ -51,10 +55,13 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case REMOVE_ITEM_SUCCESS:
-                if (progressDialog!=null && progressDialog.isShowing()) {
+                if (progressDialog != null && progressDialog.isShowing()) {
                     // 删除成功，隐藏进度
                     progressDialog.dismiss();
                 }
+                // 更新mDesigns并通知activity更新
+                if (calculateTotalMoneyInterface != null)
+                    calculateTotalMoneyInterface.calculateTotalMoney(mDesigns);
                 notifyDataSetChanged();
                 break;
             }
@@ -110,6 +117,12 @@ public class ShopCartItemsAdapter extends BaseAdapter {
             viewHolder.stampItemView.setImageResource(R.drawable.activity_card_review_click);
         }
 
+        // if the type is card ,then change the price to 54.95
+        if (mDesigns != null && mDesigns.get(position) != null
+                && mDesigns.get(position).getType().equals(Design.TYPE_CARD)) {
+            viewHolder.itemPrice.setText("$54.95");
+        }
+
         viewHolder.addView.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -118,8 +131,11 @@ public class ShopCartItemsAdapter extends BaseAdapter {
                 int stampSize = mDesigns.get(pos).getCount();
                 stampSize += 1;
                 mDesigns.get(pos).setCount(stampSize);
+                // notify activity to re-calculate total money.
+                if (calculateTotalMoneyInterface != null)
+                    calculateTotalMoneyInterface.calculateTotalMoney(mDesigns);
                 Cart.getInstance().updateDesignCount(mDesigns.get(pos), stampSize);
-                // 更新方式？？
+                // 更新
                 notifyDataSetChanged();
             }
         });
@@ -134,6 +150,9 @@ public class ShopCartItemsAdapter extends BaseAdapter {
                     stampSize = 1;
                 }
                 mDesigns.get(pos).setCount(stampSize);
+                // notify activity to re-calculate total money.
+                if (calculateTotalMoneyInterface != null)
+                    calculateTotalMoneyInterface.calculateTotalMoney(mDesigns);
                 Cart.getInstance().updateDesignCount(mDesigns.get(pos), stampSize);
                 // 更新方式？？
                 notifyDataSetChanged();
@@ -164,7 +183,7 @@ public class ShopCartItemsAdapter extends BaseAdapter {
     }
 
     private void deleteItems(int posotion) {
-        progressDialog = new ProgressDialog(mContext,R.style.CustomProgressDialog);
+        progressDialog = new ProgressDialog(mContext, R.style.CustomProgressDialog);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置水平进度条
         progressDialog.setCancelable(true);// 设置是否可以通过点击Back键取消
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
@@ -195,6 +214,17 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         private TextView itemPrice;
         private TextView itemPersheet;
         private TextView itemUnitPrice;
+    }
+
+    private CalculateTotalMoneyInterface calculateTotalMoneyInterface;
+
+    public void setCalculateTotalMoneyInterface(CalculateTotalMoneyInterface calculateTotalMoneyInterface2) {
+        this.calculateTotalMoneyInterface = calculateTotalMoneyInterface2;
+        this.calculateTotalMoneyInterface.calculateTotalMoney(mDesigns);
+    }
+
+    public interface CalculateTotalMoneyInterface {
+        public void calculateTotalMoney(List<Design> designs);
     }
 
 }

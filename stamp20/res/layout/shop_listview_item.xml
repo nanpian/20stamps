@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@color/white"
-                android:text="$22.95"
+                android:text="$19.95"
                 android:textColor="@color/black" />
         </RelativeLayout>
 
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@color/white"
-                android:text="unit price: $1.14"
+                android:text="unit price: $2.19"
                 android:textColor="@color/black" />
         </RelativeLayout>
 

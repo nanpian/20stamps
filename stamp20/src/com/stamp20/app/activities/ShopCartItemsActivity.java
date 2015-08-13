@@ -2,7 +2,7 @@ package com.stamp20.app.activities;
 
 import java.util.List;
 
-import android.view.ViewGroup.LayoutParams;  
+import android.view.ViewGroup.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.stamp20.app.R;
 import com.stamp20.app.Stamp20Application;
 import com.stamp20.app.adapter.ShopCartItemsAdapter;
+import com.stamp20.app.adapter.ShopCartItemsAdapter.CalculateTotalMoneyInterface;
 import com.stamp20.app.data.Cart;
 import com.stamp20.app.data.Design;
 import com.stamp20.app.util.Constant;
@@ -33,7 +34,7 @@ import com.stamp20.app.util.FontManager;
  * @author zhudewei
  *
  */
-public class ShopCartItemsActivity extends Activity implements OnClickListener {
+public class ShopCartItemsActivity extends Activity implements OnClickListener, CalculateTotalMoneyInterface {
 
     private TextView textCoupon;
     private ListView listCartItems;
@@ -48,6 +49,7 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
     private ImageView headerPrevious;
     private TextView headerTitle;
     private View coupon_line;
+    private TextView totalMoney;
 
     private Boolean fromHome = false;
 
@@ -109,9 +111,14 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
         textCoupon = (TextView) layoutListFooter.findViewById(R.id.shop_cartitems_getcoupon);
         textCoupon.setOnClickListener(this);
 
+        // 计算totalMoney, set original 0
+        totalMoney = (TextView) this.findViewById(R.id.shop_cartitems_totalmoney);
+        totalMoney.setText("Sub-total: " + "0");
+
         // listCartItems.addHeaderView(layoutTest);
         listCartItems.addFooterView(layoutListFooter);
         shopItemsAdapter = new ShopCartItemsAdapter(ShopCartItemsActivity.this, mDesigns);
+        shopItemsAdapter.setCalculateTotalMoneyInterface(this);
         listCartItems.setAdapter(shopItemsAdapter);
     }
 
@@ -160,6 +167,23 @@ public class ShopCartItemsActivity extends Activity implements OnClickListener {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void calculateTotalMoney(List<Design> designs) {
+        // TODO Auto-generated method stub
+        float totalMoneyNum = 0.0f;
+        if (designs != null && designs.size() > 0) {
+            for (int i = 0; i < designs.size(); i++) {
+                if (designs.get(i).getType().equals(Design.TYPE_STAMP)) {
+                    totalMoneyNum =  totalMoneyNum + (float) (designs.get(i).getCount()*designs.get(i).getCount() * 19.95);
+                } else if (designs.get(i).getType().equals(Design.TYPE_CARD)) {
+                    totalMoneyNum =  totalMoneyNum + (float) (designs.get(i).getCount()*designs.get(i).getCount() * 54.95);
+                }
+            }
+        }
+        
+        totalMoney.setText("Sub-total: $" + totalMoneyNum);
     }
 
 }
