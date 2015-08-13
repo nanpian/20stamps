@@ -116,11 +116,12 @@ public class ShopCartItemsAdapter extends BaseAdapter {
         else {
             viewHolder.stampItemView.setImageResource(R.drawable.activity_card_review_click);
         }
-
         // if the type is card ,then change the price to 54.95
         if (mDesigns != null && mDesigns.get(position) != null
                 && mDesigns.get(position).getType().equals(Design.TYPE_CARD)) {
             viewHolder.itemPrice.setText("$54.95");
+        } else {
+            viewHolder.itemPrice.setText("$19.95");
         }
 
         viewHolder.addView.setOnClickListener(new OnClickListener() {
