@@ -387,6 +387,8 @@ public class ChooseRateStampView extends ZoomImageView {
                         mVerticalRateBitmap.add(buildRateBitmap(id));
                     }
                 }
+                
+                typedArray.recycle();
                 return null;
             }
 
